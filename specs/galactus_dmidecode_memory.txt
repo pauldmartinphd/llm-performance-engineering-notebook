@@ -1,0 +1,49 @@
+root@galactus:~/STREAM# dmidecode -t memory | grep -E 'Locator|^\s+Size|Configured Memory Speed|^\s+Speed|Rank' | grep -v 'No Module'
+        Size: 128 GB
+        Locator: DIMM 0
+        Bank Locator: P0 CHANNEL A
+        Speed: 2666 MT/s
+        Rank: 8
+        Configured Memory Speed: 2933 MT/s
+        Size: 128 GB
+        Locator: DIMM 0
+        Bank Locator: P0 CHANNEL B
+        Speed: 2666 MT/s
+        Rank: 8
+        Configured Memory Speed: 2933 MT/s
+        Size: 128 GB
+        Locator: DIMM 0
+        Bank Locator: P0 CHANNEL C
+        Speed: 2666 MT/s
+        Rank: 8
+        Configured Memory Speed: 2933 MT/s
+        Size: 128 GB
+        Locator: DIMM 0
+        Bank Locator: P0 CHANNEL D
+        Speed: 2666 MT/s
+        Rank: 8
+        Configured Memory Speed: 2933 MT/s
+        Size: 128 GB
+        Locator: DIMM 0
+        Bank Locator: P0 CHANNEL E
+        Speed: 2666 MT/s
+        Rank: 8
+        Configured Memory Speed: 2933 MT/s
+        Size: 128 GB
+        Locator: DIMM 0
+        Bank Locator: P0 CHANNEL F
+        Speed: 2666 MT/s
+        Rank: 8
+        Configured Memory Speed: 2933 MT/s
+        Size: 128 GB
+        Locator: DIMM 0
+        Bank Locator: P0 CHANNEL G
+        Speed: 2666 MT/s
+        Rank: 8
+        Configured Memory Speed: 2933 MT/s
+        Size: 128 GB
+        Locator: DIMM 0
+        Bank Locator: P0 CHANNEL H
+        Speed: 2666 MT/s
+        Rank: 8
+        Configured Memory Speed: 2933 MT/s

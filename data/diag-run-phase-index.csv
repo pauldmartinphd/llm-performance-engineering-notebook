@@ -1,0 +1,32 @@
+log_line,phase_header,elapsed_at_start
+8,"THE MACHINE (""Galactus"")",
+28,MEMORY BANDWIDTH — SETTLED,
+43,"THE MODEL — MEASURED, NOT ESTIMATED",
+66,THE BUDGET — AND THE HOLE,
+85,WHY EVERY v2 PHASE CRASHED (and what was done about it),
+112,"THE THREE MODEL CONFIGURATIONS (a ""reload"" happens only when these change)",
+126,-C / --cpu-strict SEMANTICS (verified in ggml_thread_cpumask_next),
+138,OTHER SETTLED FACTS — DO NOT RE-INVESTIGATE,
+153,HOW TO READ THE RESULTS,
+186,PHASE 0 — SYSTEM INVENTORY,
+499,PHASE 1 — BACKGROUND MONITORS,
+508,PHASE 2 — PREWARM (pull the model into cache once),
+535,A1  SMOKE TEST — does anything run now that ZenDNN is gone?,0h06m
+3259,A2  SMOKE TEST — with -C / --cpu-strict (the flags every crashed run had),0h31m
+5981,"B  *** THE MAIN EVENT *** — hybrid, thread x poll sweep",0h33m
+11974,B2  hybrid — prefill at the best thread counts,0h50m
+15205,C  hybrid — CCD PLACEMENT at fixed thread count,0h58m
+18933,D  -ngl 0 CPU-ONLY DENOMINATOR,1h11m
+23317,E  GRAPH SPLIT COUNT — re-verify 155 with ZenDNN gone,1h43m
+26898,"F  op_offload ON, ubatch ladder (M1 = pageable H2D)",1h45m
+30405,G  op_offload ON + HIP MANAGED MEMORY (OOM escape hatch),1h54m
+33075,H  -sm row,2h03m
+33307,I  GGML_CUDA_GRAPH_OPT=1,2h03m
+35889,J  FILL THE IDLE VRAM (fitter),2h05m
+159310,K  decode at CONTEXT DEPTH,2h10m
+162350,SLOW PHASES — these use -mmp 0 and each load costs 5-15 minutes,
+162353,L  *** THE PRODUCTION CANDIDATE *** M2 = -mmp 0 --no-host 1,2h24m
+167870,M  M3 = -mmp 0 default (411 GiB PINNED host buffer) + op_offload,2h45m
+170809,"N  M3 control — same load, op_offload OFF",2h56m
+175408,SUMMARY — READ IN THIS ORDER,
+175436,TEARDOWN,

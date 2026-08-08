@@ -1,0 +1,95 @@
+phase,source_line,model,size,params,backend,ngl,threads,cpu_mask,cpu_strict,poll,n_batch,n_ubatch,sm,fa,ot,mmap,nopo,noh,fitt,fitc,test,t/s
+A1  SMOKE TEST — does anything run now that ZenDNN is gone?,3014,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,,,,100,,2048,,1,exps=CPU,,1,,,,pp512,34.65 ± 0.00
+A1  SMOKE TEST — does anything run now that ZenDNN is gone?,3237,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,,,,100,,2048,,1,exps=CPU,,1,,,,tg32,5.35 ± 0.00
+A2  SMOKE TEST — with -C / --cpu-strict (the flags every crashed run had),5736,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,,ffffffffffffffffffffffffffffffff,1,100,,2048,,1,exps=CPU,,1,,,,pp512,34.29 ± 0.00
+A2  SMOKE TEST — with -C / --cpu-strict (the flags every crashed run had),5959,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,,ffffffffffffffffffffffffffffffff,1,100,,2048,,1,exps=CPU,,1,,,,tg32,5.39 ± 0.00
+"B  *** THE MAIN EVENT *** — hybrid, thread x poll sweep",8547,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,8,,,0,,2048,,1,exps=CPU,,1,,,,tg64,3.89 ± 0.01
+"B  *** THE MAIN EVENT *** — hybrid, thread x poll sweep",8774,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,8,,,100,,2048,,1,exps=CPU,,1,,,,tg64,3.90 ± 0.01
+"B  *** THE MAIN EVENT *** — hybrid, thread x poll sweep",9001,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,16,,,0,,2048,,1,exps=CPU,,1,,,,tg64,5.27 ± 0.02
+"B  *** THE MAIN EVENT *** — hybrid, thread x poll sweep",9228,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,16,,,100,,2048,,1,exps=CPU,,1,,,,tg64,5.28 ± 0.01
+"B  *** THE MAIN EVENT *** — hybrid, thread x poll sweep",9455,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,24,,,0,,2048,,1,exps=CPU,,1,,,,tg64,5.53 ± 0.01
+"B  *** THE MAIN EVENT *** — hybrid, thread x poll sweep",9682,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,24,,,100,,2048,,1,exps=CPU,,1,,,,tg64,5.54 ± 0.00
+"B  *** THE MAIN EVENT *** — hybrid, thread x poll sweep",9909,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,32,,,0,,2048,,1,exps=CPU,,1,,,,tg64,5.53 ± 0.03
+"B  *** THE MAIN EVENT *** — hybrid, thread x poll sweep",10136,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,32,,,100,,2048,,1,exps=CPU,,1,,,,tg64,5.46 ± 0.09
+"B  *** THE MAIN EVENT *** — hybrid, thread x poll sweep",10363,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,48,,,0,,2048,,1,exps=CPU,,1,,,,tg64,5.49 ± 0.01
+"B  *** THE MAIN EVENT *** — hybrid, thread x poll sweep",10590,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,48,,,100,,2048,,1,exps=CPU,,1,,,,tg64,5.48 ± 0.01
+"B  *** THE MAIN EVENT *** — hybrid, thread x poll sweep",10817,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,64,,,0,,2048,,1,exps=CPU,,1,,,,tg64,5.40 ± 0.06
+"B  *** THE MAIN EVENT *** — hybrid, thread x poll sweep",11044,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,64,,,100,,2048,,1,exps=CPU,,1,,,,tg64,4.84 ± 1.01
+"B  *** THE MAIN EVENT *** — hybrid, thread x poll sweep",11271,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,96,,,0,,2048,,1,exps=CPU,,1,,,,tg64,2.76 ± 0.01
+"B  *** THE MAIN EVENT *** — hybrid, thread x poll sweep",11498,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,96,,,100,,2048,,1,exps=CPU,,1,,,,tg64,2.76 ± 0.01
+"B  *** THE MAIN EVENT *** — hybrid, thread x poll sweep",11725,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,128,,,0,,2048,,1,exps=CPU,,1,,,,tg64,1.29 ± 0.06
+"B  *** THE MAIN EVENT *** — hybrid, thread x poll sweep",11952,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,128,,,100,,2048,,1,exps=CPU,,1,,,,tg64,1.31 ± 0.10
+B2  hybrid — prefill at the best thread counts,14453,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,16,,,100,,2048,,1,exps=CPU,,1,,,,pp512,12.81 ± 0.00
+B2  hybrid — prefill at the best thread counts,14599,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,32,,,100,,2048,,1,exps=CPU,,1,,,,pp512,21.17 ± 0.02
+B2  hybrid — prefill at the best thread counts,14745,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,48,,,100,,2048,,1,exps=CPU,,1,,,,pp512,26.91 ± 0.03
+B2  hybrid — prefill at the best thread counts,14891,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,64,,,100,,2048,,1,exps=CPU,,1,,,,pp512,30.73 ± 0.06
+B2  hybrid — prefill at the best thread counts,15037,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,96,,,100,,2048,,1,exps=CPU,,1,,,,pp512,32.92 ± 0.04
+B2  hybrid — prefill at the best thread counts,15183,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,128,,,100,,2048,,1,exps=CPU,,1,,,,pp512,32.48 ± 0.79
+C  hybrid — CCD PLACEMENT at fixed thread count,17776,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,16,0303030303030303,1,100,,2048,,1,exps=CPU,,1,,,,tg64,3.09 ± 0.01
+C  hybrid — CCD PLACEMENT at fixed thread count,18003,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,16,0f0f0f0f0f0f0f0f,1,100,,2048,,1,exps=CPU,,1,,,,tg64,3.14 ± 0.01
+C  hybrid — CCD PLACEMENT at fixed thread count,18230,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,16,00000000ffffffff,1,100,,2048,,1,exps=CPU,,1,,,,tg64,3.13 ± 0.01
+C  hybrid — CCD PLACEMENT at fixed thread count,18457,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,32,0303030303030303,1,100,,2048,,1,exps=CPU,,1,,,,tg64,0.44 ± 0.00
+C  hybrid — CCD PLACEMENT at fixed thread count,18684,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,32,0f0f0f0f0f0f0f0f,1,100,,2048,,1,exps=CPU,,1,,,,tg64,5.53 ± 0.01
+C  hybrid — CCD PLACEMENT at fixed thread count,18911,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,32,00000000ffffffff,1,100,,2048,,1,exps=CPU,,1,,,,tg64,5.07 ± 0.01
+D  -ngl 0 CPU-ONLY DENOMINATOR,21180,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,0,16,,,0,,2048,,1,,,1,,,,pp512,8.32 ± 0.00
+D  -ngl 0 CPU-ONLY DENOMINATOR,21321,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,0,16,,,0,,2048,,1,,,1,,,,tg64,3.62 ± 0.00
+D  -ngl 0 CPU-ONLY DENOMINATOR,21462,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,0,16,,,100,,2048,,1,,,1,,,,pp512,8.32 ± 0.00
+D  -ngl 0 CPU-ONLY DENOMINATOR,21603,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,0,16,,,100,,2048,,1,,,1,,,,tg64,3.62 ± 0.00
+D  -ngl 0 CPU-ONLY DENOMINATOR,21744,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,0,32,,,0,,2048,,1,,,1,,,,pp512,14.20 ± 0.01
+D  -ngl 0 CPU-ONLY DENOMINATOR,21885,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,0,32,,,0,,2048,,1,,,1,,,,tg64,3.87 ± 0.01
+D  -ngl 0 CPU-ONLY DENOMINATOR,22026,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,0,32,,,100,,2048,,1,,,1,,,,pp512,14.18 ± 0.01
+D  -ngl 0 CPU-ONLY DENOMINATOR,22167,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,0,32,,,100,,2048,,1,,,1,,,,tg64,3.87 ± 0.02
+D  -ngl 0 CPU-ONLY DENOMINATOR,22308,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,0,48,,,0,,2048,,1,,,1,,,,pp512,18.40 ± 0.02
+D  -ngl 0 CPU-ONLY DENOMINATOR,22449,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,0,48,,,0,,2048,,1,,,1,,,,tg64,3.72 ± 0.00
+D  -ngl 0 CPU-ONLY DENOMINATOR,22590,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,0,48,,,100,,2048,,1,,,1,,,,pp512,17.27 ± 0.02
+D  -ngl 0 CPU-ONLY DENOMINATOR,22731,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,0,48,,,100,,2048,,1,,,1,,,,tg64,1.53 ± 0.00
+D  -ngl 0 CPU-ONLY DENOMINATOR,22872,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,0,64,,,0,,2048,,1,,,1,,,,pp512,20.04 ± 0.09
+D  -ngl 0 CPU-ONLY DENOMINATOR,23013,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,0,64,,,0,,2048,,1,,,1,,,,tg64,1.44 ± 0.02
+D  -ngl 0 CPU-ONLY DENOMINATOR,23154,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,0,64,,,100,,2048,,1,,,1,,,,pp512,19.73 ± 0.08
+D  -ngl 0 CPU-ONLY DENOMINATOR,23295,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,0,64,,,100,,2048,,1,,,1,,,,tg64,1.42 ± 0.00
+E  GRAPH SPLIT COUNT — re-verify 155 with ZenDNN gone,26876,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,,,,100,,2048,,1,exps=CPU,,1,,,,tg1,1.30 ± 0.00
+"F  op_offload ON, ubatch ladder (M1 = pageable H2D)",29649,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,,,,100,4096,128,,1,exps=CPU,,,,,,pp512,9.35 ± 0.14
+"F  op_offload ON, ubatch ladder (M1 = pageable H2D)",29799,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,,,,100,4096,256,,1,exps=CPU,,,,,,pp512,15.76 ± 1.58
+"F  op_offload ON, ubatch ladder (M1 = pageable H2D)",29945,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,,,,100,4096,512,,1,exps=CPU,,,,,,pp512,25.77 ± 5.58
+"F  op_offload ON, ubatch ladder (M1 = pageable H2D)",30091,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,,,,100,4096,1024,,1,exps=CPU,,,,,,pp512,25.94 ± 5.60
+"F  op_offload ON, ubatch ladder (M1 = pageable H2D)",30237,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,,,,100,4096,2048,,1,exps=CPU,,,,,,pp512,25.95 ± 5.58
+"F  op_offload ON, ubatch ladder (M1 = pageable H2D)",30383,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,,,,100,4096,4096,,1,exps=CPU,,,,,,pp512,25.87 ± 5.63
+G  op_offload ON + HIP MANAGED MEMORY (OOM escape hatch),32907,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,,,,100,,512,,1,exps=CPU,,,,,,pp512,7.24 ± 0.05
+G  op_offload ON + HIP MANAGED MEMORY (OOM escape hatch),33053,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,,,,100,,2048,,1,exps=CPU,,,,,,pp512,7.18 ± 0.30
+I  GGML_CUDA_GRAPH_OPT=1,35867,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,,,,100,,2048,,1,exps=CPU,,1,,,,tg64,5.40 ± 0.02
+J  FILL THE IDLE VRAM (fitter),97598,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,-1,,,,100,,2048,,1,,,1,,2048,8192,pp512,40.11 ± 0.14
+J  FILL THE IDLE VRAM (fitter),159288,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,-1,,,,100,,2048,,1,,,1,,2048,8192,tg128,6.01 ± 0.05
+K  decode at CONTEXT DEPTH,161866,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,,,,100,,2048,,1,exps=CPU,,1,,,,tg64,5.41 ± 0.00
+K  decode at CONTEXT DEPTH,162095,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,,,,100,,2048,,1,exps=CPU,,1,,,,tg64 @ d4096,5.29 ± 0.01
+L  *** THE PRODUCTION CANDIDATE *** M2 = -mmp 0 --no-host 1,164992,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,16,,,0,,2048,,1,exps=CPU,0,1,1,,,pp512,13.73 ± 0.00
+L  *** THE PRODUCTION CANDIDATE *** M2 = -mmp 0 --no-host 1,165219,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,16,,,0,,2048,,1,exps=CPU,0,1,1,,,tg64,5.39 ± 0.01
+L  *** THE PRODUCTION CANDIDATE *** M2 = -mmp 0 --no-host 1,165367,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,16,,,100,,2048,,1,exps=CPU,0,1,1,,,pp512,13.74 ± 0.00
+L  *** THE PRODUCTION CANDIDATE *** M2 = -mmp 0 --no-host 1,165594,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,16,,,100,,2048,,1,exps=CPU,0,1,1,,,tg64,5.40 ± 0.01
+L  *** THE PRODUCTION CANDIDATE *** M2 = -mmp 0 --no-host 1,165742,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,32,,,0,,2048,,1,exps=CPU,0,1,1,,,pp512,23.13 ± 0.00
+L  *** THE PRODUCTION CANDIDATE *** M2 = -mmp 0 --no-host 1,165969,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,32,,,0,,2048,,1,exps=CPU,0,1,1,,,tg64,5.52 ± 0.01
+L  *** THE PRODUCTION CANDIDATE *** M2 = -mmp 0 --no-host 1,166117,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,32,,,100,,2048,,1,exps=CPU,0,1,1,,,pp512,23.13 ± 0.01
+L  *** THE PRODUCTION CANDIDATE *** M2 = -mmp 0 --no-host 1,166344,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,32,,,100,,2048,,1,exps=CPU,0,1,1,,,tg64,5.52 ± 0.01
+L  *** THE PRODUCTION CANDIDATE *** M2 = -mmp 0 --no-host 1,166492,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,48,,,0,,2048,,1,exps=CPU,0,1,1,,,pp512,28.84 ± 0.00
+L  *** THE PRODUCTION CANDIDATE *** M2 = -mmp 0 --no-host 1,166719,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,48,,,0,,2048,,1,exps=CPU,0,1,1,,,tg64,5.42 ± 0.02
+L  *** THE PRODUCTION CANDIDATE *** M2 = -mmp 0 --no-host 1,166867,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,48,,,100,,2048,,1,exps=CPU,0,1,1,,,pp512,28.85 ± 0.01
+L  *** THE PRODUCTION CANDIDATE *** M2 = -mmp 0 --no-host 1,167094,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,48,,,100,,2048,,1,exps=CPU,0,1,1,,,tg64,5.41 ± 0.01
+L  *** THE PRODUCTION CANDIDATE *** M2 = -mmp 0 --no-host 1,167242,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,64,,,0,,2048,,1,exps=CPU,0,1,1,,,pp512,34.64 ± 0.14
+L  *** THE PRODUCTION CANDIDATE *** M2 = -mmp 0 --no-host 1,167469,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,64,,,0,,2048,,1,exps=CPU,0,1,1,,,tg64,5.39 ± 0.01
+L  *** THE PRODUCTION CANDIDATE *** M2 = -mmp 0 --no-host 1,167617,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,64,,,100,,2048,,1,exps=CPU,0,1,1,,,pp512,34.28 ± 0.26
+L  *** THE PRODUCTION CANDIDATE *** M2 = -mmp 0 --no-host 1,167844,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,64,,,100,,2048,,1,exps=CPU,0,1,1,,,tg64,5.38 ± 0.02
+M  M3 = -mmp 0 default (411 GiB PINNED host buffer) + op_offload,170349,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,,,,100,4096,512,,1,exps=CPU,0,,,,,pp512,29.72 ± 0.21
+M  M3 = -mmp 0 default (411 GiB PINNED host buffer) + op_offload,170495,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,,,,100,4096,1024,,1,exps=CPU,0,,,,,pp512,29.54 ± 0.76
+M  M3 = -mmp 0 default (411 GiB PINNED host buffer) + op_offload,170641,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,,,,100,4096,2048,,1,exps=CPU,0,,,,,pp512,29.60 ± 0.17
+M  M3 = -mmp 0 default (411 GiB PINNED host buffer) + op_offload,170787,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,,,,100,4096,4096,,1,exps=CPU,0,,,,,pp512,29.80 ± 0.11
+"N  M3 control — same load, op_offload OFF",173284,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,16,,,0,,2048,,1,exps=CPU,0,1,,,,pp512,13.10 ± 0.00
+"N  M3 control — same load, op_offload OFF",173511,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,16,,,0,,2048,,1,exps=CPU,0,1,,,,tg64,5.27 ± 0.02
+"N  M3 control — same load, op_offload OFF",173659,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,16,,,100,,2048,,1,exps=CPU,0,1,,,,pp512,13.06 ± 0.00
+"N  M3 control — same load, op_offload OFF",173886,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,16,,,100,,2048,,1,exps=CPU,0,1,,,,tg64,5.28 ± 0.01
+"N  M3 control — same load, op_offload OFF",174034,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,32,,,0,,2048,,1,exps=CPU,0,1,,,,pp512,22.34 ± 0.02
+"N  M3 control — same load, op_offload OFF",174261,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,32,,,0,,2048,,1,exps=CPU,0,1,,,,tg64,5.52 ± 0.04
+"N  M3 control — same load, op_offload OFF",174409,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,32,,,100,,2048,,1,exps=CPU,0,1,,,,pp512,22.34 ± 0.01
+"N  M3 control — same load, op_offload OFF",174636,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,32,,,100,,2048,,1,exps=CPU,0,1,,,,tg64,5.54 ± 0.02
+"N  M3 control — same load, op_offload OFF",174784,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,64,,,0,,2048,,1,exps=CPU,0,1,,,,pp512,34.60 ± 0.06
+"N  M3 control — same load, op_offload OFF",175011,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,64,,,0,,2048,,1,exps=CPU,0,1,,,,tg64,5.40 ± 0.07
+"N  M3 control — same load, op_offload OFF",175159,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,64,,,100,,2048,,1,exps=CPU,0,1,,,,pp512,34.46 ± 0.04
+"N  M3 control — same load, op_offload OFF",175386,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,64,,,100,,2048,,1,exps=CPU,0,1,,,,tg64,5.38 ± 0.05

@@ -1,0 +1,9 @@
+source_line,model,size,params,backend,ngl,threads,cpu_mask,cpu_strict,poll,n_batch,n_ubatch,sm,fa,ot,mmap,nopo,noh,fitt,fitc,test,t/s
+550,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,"ROCm,Vulkan",99,32,,,,8192,8192,,1,exps=CPU,0,,,,,pp8192,105.71 ± 0.56
+698,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,32,,,,8192,8192,,1,exps=CPU,0,,,,,pp8192,119.36 ± 0.12
+769,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,32,,,,8192,8192,,1,exps=CPU,0,,,,,pp16384,86.11 ± 0.10
+805,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,32,,,,8192,8192,,1,exps=CPU,0,,,,,pp16384,86.11 ± 0.10
+806,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,32,,,,8192,8192,,1,exps=CPU,0,,,,,pp32768,55.76 ± 0.03
+901,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,32,,,,8192,8192,,1,exps=CPU,0,,,,,pp16384,86.02 ± 0.00
+938,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,32,,,,8192,8192,,1,exps=CPU,0,,,,,pp16384,86.12 ± 0.08
+1211,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,32,,,,,,,1,exps=CPU,0,,,,,tg64,5.51

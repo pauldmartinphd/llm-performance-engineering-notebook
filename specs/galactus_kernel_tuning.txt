@@ -1,0 +1,3 @@
+root@galactus:~/STREAM# echo always      > /sys/kernel/mm/transparent_hugepage/enabled
+root@galactus:~/STREAM# echo defer+madvise > /sys/kernel/mm/transparent_hugepage/defrag
+root@galactus:~/STREAM# cpupower idle-set -D 0        # disable C-states deeper than C0

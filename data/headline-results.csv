@@ -1,0 +1,32 @@
+date_et,time_et,experiment,configuration,metric,value,unit,source
+2026-07-14,07:00,baseline llama-bench,"build 9942 ROCm+ZenDNN, -ngl 99 -ot exps=CPU -t 64, ub clamped",pp512,37.63,t/s,conversation line 1530
+2026-07-14,07:00,baseline llama-bench,"build 9942 ROCm+ZenDNN, -ngl 99 -ot exps=CPU -t 64, ub clamped",tg128,5.15,t/s,conversation line 1531
+2026-07-14,07:44,config B (-nopo 1 --no-host 1),"build 9942, -t 64",pp512,37.29,t/s,conversation line 1912
+2026-07-14,07:44,config B (-nopo 1 --no-host 1),"build 9942, -t 64",tg128,4.97,t/s,conversation line 1913
+2026-07-14,08:02,STREAM host sweep,"bare metal, t=16 spread",Triad best rate,112513.9,MB/s,galactus_triad.txt
+2026-07-14,08:07,STREAM RFO-corrected platform bandwidth,all kernels converge,DRAM bandwidth,152,GB/s,galactus_triad.txt + analysis
+2026-07-14,11:41,v3 Phase B thread sweep,"build 10001 no ZenDNN, hybrid exps=CPU, t=24-32",tg64 best,5.54,t/s,results.txt Phase B
+2026-07-14,11:41,v3 Phase B thread sweep,SMT oversubscription t=128,tg64,1.29,t/s,results.txt Phase B
+2026-07-14,12:19,v3 Phase D CPU-only denominator,"-ngl 0 -t 32, splits=1",tg64,3.87,t/s,results.txt Phase D
+2026-07-14,12:51,v3 Phase E split count,hybrid exps=CPU,graph splits per token,155,splits,results.txt Phase E
+2026-07-14,12:53,v3 Phase F op_offload pageable,"M1 mmap, ub ladder at -p 512 (clamped)",pp512,25.9,t/s,results.txt Phase F
+2026-07-14,13:13,v3 Phase J fitter,"no manual placement, ~106 GiB VRAM filled, splits 137",tg128,6.01,t/s,results.txt Phase J
+2026-07-14,13:13,v3 Phase J fitter,"no manual placement, ~106 GiB VRAM filled",pp512,40.11,t/s,results.txt Phase J
+2026-07-14,13:32,v3 Phase L production candidate M2,"-mmp 0 --no-host 1, t=32",tg64,5.52,t/s,results.txt Phase L
+2026-07-14,15:21,v4 ubatch ladder,"op_offload on, exps=CPU, -b 8192, ub=512",pp8192,25.90,t/s,conversation line 6441
+2026-07-14,15:36,v4 ubatch ladder,ub=1024,pp8192,41.68,t/s,conversation line 6999
+2026-07-14,15:38,v4 ubatch ladder,ub=2048,pp8192,62.64,t/s,conversation line 7160
+2026-07-14,15:44,v4 ubatch ladder,ub=4096,pp8192,84.62,t/s,conversation line 7407
+2026-07-14,15:44,v4 ubatch ladder,ub=8192,pp8192,104.97,t/s,conversation line 7410
+2026-07-14,18:24,resident-experts -ot test,"blk.3-10 experts on ROCm1/2, ub 2048",pp2048,51.74,t/s,conversation line 8402
+2026-07-14,18:29,peer-to-peer bandwidth,single pair,peer copy,16.2,GB/s,conversation (Session 7)
+2026-07-14,18:31,peer-to-peer bandwidth,four concurrent pairs,aggregate,49.4,GB/s,conversation (Session 7)
+2026-07-14,19:10,GGML_SCHED_DEBUG split histogram,"stock scheduler, prefill graph",ROCm0 share of GPU splits,731 of 1186,splits,conversation (Session 7)
+2026-07-14,19:25,host-to-device bandwidth probe,four concurrent streams,aggregate H2D,65.7,GB/s,conversation (Session 8)
+2026-07-14,15:22,host-to-device bandwidth,single stream (back-calculated + confirmed),H2D,22.3,GB/s,conversation (Sessions 5/7)
+2026-07-21,,patched llama.cpp Edit 2 only,layer-keyed distribution alone,pp8192,105.71,t/s,llamacpp_patch.md line 550
+2026-07-21,,patched llama.cpp Edit 2+3,distribution + ids-read bypass,pp8192,119.36,t/s,llamacpp_patch.md line 698
+2026-07-21,,patched llama.cpp Edit 2+3,prompt scaling,pp16384,86.11,t/s,llamacpp_patch.md line 769
+2026-07-21,,patched llama.cpp Edit 2+3,prompt scaling,pp32768,55.76,t/s,llamacpp_patch.md line 806
+2026-07-21,,patched llama.cpp Edit 2+3,decode unchanged by patch,tg64,5.51,t/s,llamacpp_patch.md
+2026-07-21,,patched split histogram,post-patch distribution ROCm0/1/2/3,GPU splits,285/300/294/292,splits,llamacpp_patch.md

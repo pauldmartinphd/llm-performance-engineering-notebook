@@ -1,0 +1,17 @@
+# macOS
+.DS_Store
+
+# Private material, excluded by design.
+# The full conversation exports, the exported state archive, and the
+# 10 MB raw diagnostic log (results.txt) stay in the private vault.
+# Do not copy them into this repo.
+**/conversation-exports/
+*State Export*.zip
+results.txt
+
+# Editor/tool working folders
+.idea/
+.vscode/
+
+# Large logs. Publish as a GitHub Release instead.
+*.log

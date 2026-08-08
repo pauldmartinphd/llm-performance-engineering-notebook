@@ -1,0 +1,17 @@
+source_line,model,size,params,backend,ngl,threads,cpu_mask,cpu_strict,poll,n_batch,n_ubatch,sm,fa,ot,mmap,nopo,noh,fitt,fitc,test,t/s
+1530,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,"ROCm,ZenDNN",,64,,,,4096,4096,,1,exps=CPU,0,1,,,,pp512,37.63 ± 3.69
+1531,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,"ROCm,ZenDNN",,64,,,,4096,4096,,1,exps=CPU,0,1,,,,tg128,5.15 ± 0.40
+1912,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,"ROCm,ZenDNN",,64,,,,4096,4096,,1,exps=CPU,0,1,1,,,pp512,37.29 ± 3.24
+1913,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,"ROCm,ZenDNN",,64,,,,4096,4096,,1,exps=CPU,0,1,1,,,tg128,4.97 ± 0.45
+6441,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,,,,,8192,512,,1,exps=CPU,,0,,,,pp8192,25.90 ± 0.36
+6996,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,,,,,8192,512,,1,exps=CPU,,0,,,,pp8192,25.90 ± 0.36
+6999,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,,,,,8192,1024,,1,exps=CPU,,0,,,,pp8192,41.68 ± 0.12
+7154,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,,,,,8192,512,,1,exps=CPU,,0,,,,pp8192,25.90 ± 0.36
+7157,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,,,,,8192,1024,,1,exps=CPU,,0,,,,pp8192,41.68 ± 0.12
+7160,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,,,,,8192,2048,,1,exps=CPU,,0,,,,pp8192,62.64 ± 0.13
+7398,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,,,,,8192,512,,1,exps=CPU,,0,,,,pp8192,25.90 ± 0.36
+7401,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,,,,,8192,1024,,1,exps=CPU,,0,,,,pp8192,41.68 ± 0.12
+7404,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,,,,,8192,2048,,1,exps=CPU,,0,,,,pp8192,62.64 ± 0.13
+7407,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,,,,,8192,4096,,1,exps=CPU,,0,,,,pp8192,84.62 ± 3.58
+7410,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,,,,,8192,8192,,1,exps=CPU,,0,,,,pp8192,104.97 ± 0.53
+8402,glm-dsa ?B Q4_K - Medium,435.19 GiB,753.86 B,ROCm,99,32,,,,,2048,,1,blk\.[3-6]\.ffn_.*_exps\.=ROCm1;blk\.[7-9]\.ffn_.*_exps\.=ROCm2;blk\.10\.ffn_.*_exps\.=ROCm2;exps=CPU,,,,,,pp2048,51.74 ± 0.00
