@@ -3,7 +3,7 @@
 **Model:** DeepSeek-V4-Flash-0731, Unsloth UD-Q8_K_XL — 162 GB, MXFP4 routed experts (~13 B active).
 **System:** Galactus (EPYC 7713, 2 TB DDR4-2933 8-channel, 4 × Radeon Pro V620). See [platform-and-method](../platform-and-method.md).
 **Drafter:** am17an `DeepseekV4-Flash-20260731-DSpark.gguf` — `dflash` arch, block size 5, ~10.9 GB, in VRAM.
-**Date:** 2026-08-08 (Session 10). Full narrative: `../lab-notebook/dspark-deepseek-v4-flash.md`.
+**Date:** 2026-08-08 (Session 10). Full narrative: `../lab-notebook/10-dspark-deepseek-v4-flash.md`.
 
 ## Result in one line
 
