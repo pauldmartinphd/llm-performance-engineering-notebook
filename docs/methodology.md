@@ -19,7 +19,7 @@ Run a STREAM thread sweep and apply the **read-for-ownership (RFO) correction**:
 
 ## 2. Compute the theoretical peak, then predict decode
 
-Theoretical DRAM peak = `channels × MT/s × 8 bytes`. Galactus: `8 × 2933 × 8 = 187.7 GB/s` per the JEDEC rate (204.8 at the configured rate). Knowing you get 74% of it tells you the platform is healthy and sets the ceiling.
+Compute the theoretical DRAM peak (`channels × transfers/s × 8 bytes`) and check what fraction you reach. Galactus's measured ~152 GB/s is **74% of a ~204.8 GB/s ceiling** — a healthy platform, and the number that sets the roof. Getting only ~50% of theoretical would mean "fix the memory topology," not "tune the software."
 
 Now predict decode *before* measuring it, with a two-term model:
 
