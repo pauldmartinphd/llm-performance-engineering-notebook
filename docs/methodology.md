@@ -4,7 +4,7 @@ A repeatable procedure for finding a system's real inference limits and moving t
 
 The one-sentence version: **establish the physical ceiling, predict what the software should reach, then change one variable at a time and explain every number — keeping the refuted hypotheses.**
 
-> A narrative walkthrough of this method — the same steps told as the Galactus story, with the patch discovery in full — is on the Technicomp Labs blog: [Finding the Wall](https://technicomplabs.io/posts/2026/08/finding-the-wall/).
+> A companion article on the Technicomp Labs blog presents this method as a narrative, with the full patch investigation: [A Scientific Method for Measuring the Limits of Local LLM Inference Speed](https://technicomplabs.io/posts/2026/08/measuring-local-llm-inference-limits/).
 
 ---
 
