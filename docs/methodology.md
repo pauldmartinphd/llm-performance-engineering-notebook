@@ -4,7 +4,7 @@ A repeatable procedure for finding a system's real inference limits and moving t
 
 The one-sentence version: **establish the physical ceiling, predict what the software should reach, then change one variable at a time and explain every number — keeping the refuted hypotheses.**
 
-> A narrative walkthrough of this method — the same steps told as the Galactus story, with the patch discovery in full — is on the Technicomp Labs blog: [Finding the Wall](https://technicomplabs.com/posts/2026/08/finding-the-wall/).
+> A narrative walkthrough of this method — the same steps told as the Galactus story, with the patch discovery in full — is on the Technicomp Labs blog: [Finding the Wall](https://technicomplabs.io/posts/2026/08/finding-the-wall/).
 
 ---
 
@@ -15,11 +15,11 @@ For CPU-resident MoE, decode is bounded by how fast the active experts stream fr
 Run a STREAM thread sweep and apply the **read-for-ownership (RFO) correction**: STREAM undercounts write traffic because ordinary stores first read the cache line they overwrite. Correct Scale ×1.5 and Add/Triad ×4/3; Copy needs no correction *if* it compiled to non-temporal stores.
 
 - **Sanity check:** uncorrected-Copy + RFO must not exceed the theoretical ceiling. If it does, Copy used non-temporal stores and needs no correction.
-- **Galactus:** all four kernels converge on **~152 GB/s** after correction — 74% of the 204.8 GB/s theoretical peak for 8-channel DDR4-2933. Bandwidth saturates at 16 threads and *declines* beyond.
+- **Galactus:** all four kernels converge on **~152 GB/s** after correction — 81% of the 187.7 GB/s theoretical peak for 8-channel DDR4-2933. Bandwidth saturates at 16 threads and *declines* beyond.
 
 ## 2. Compute the theoretical peak, then predict decode
 
-Compute the theoretical DRAM peak (`channels × transfers/s × 8 bytes`) and check what fraction you reach. Galactus's measured ~152 GB/s is **74% of a ~204.8 GB/s ceiling** — a healthy platform, and the number that sets the roof. Getting only ~50% of theoretical would mean "fix the memory topology," not "tune the software."
+Compute the theoretical DRAM peak (`channels × transfers/s × 8 bytes`) and check what fraction you reach. Galactus's measured ~152 GB/s is **81% of a ~187.7 GB/s ceiling** — a healthy platform, and the number that sets the roof. Getting only ~50% of theoretical would mean "fix the memory topology," not "tune the software."
 
 Now predict decode *before* measuring it, with a two-term model:
 

@@ -63,7 +63,7 @@ Every flag in the baseline command was audited and llama.cpp master surveyed for
 
 Config B cannot use op_offload at all: the repack buffer reports `is_host = nullptr`, so the scheduler's offload path (`ggml_backend_buffer_is_host`) never fires. The actual regime is verifiable from the `load_tensors:` lines — `ROCm_Host model buffer size` versus `CPU_REPACK model buffer size`.
 
-**Decode bandwidth.** tg128 = 5.15 t/s = 194 ms/token. Per token: 8 experts × 3 matrices × 6144 × 2048 ≈ 302 M params per MoE layer; × 75 CPU-resident layers at ~4.5–5.0 bpw = ~13–14 GB/token → effective ~65–72 GB/s (byte figures ±15% due to the mixed-precision UD layout). Against 204.8 GB/s theoretical for 8-channel DDR4-3200 and "typically 150–170 GB/s achievable" (a claim corrected at 07:56): "You are at roughly a third of peak." Causes proposed, in order: (1) missing repack; (2) NUMA — `--physcpubind` sets no memory policy, and with `-mmp 0` weights fault in under the default local-node policy; if the BIOS were NPS2/NPS4, a large fraction of 435 GiB could sit on the wrong node. "Run `numactl --hardware` first." If >1 node: prepend `numactl --interleave=all` and add `--numa numactl`. Also: confirm 0–63 are distinct physical cores via `lscpu -e | head -70` or `cat /sys/devices/system/cpu/cpu1/topology/thread_siblings_list`.
+**Decode bandwidth.** tg128 = 5.15 t/s = 194 ms/token. Per token: 8 experts × 3 matrices × 6144 × 2048 ≈ 302 M params per MoE layer; × 75 CPU-resident layers at ~4.5–5.0 bpw = ~13–14 GB/token → effective ~65–72 GB/s (byte figures ±15% due to the mixed-precision UD layout). Against 187.7 GB/s theoretical for 8-channel DDR4-2933 and "typically 150–170 GB/s achievable" (a claim corrected at 07:56): "You are at roughly a third of peak." Causes proposed, in order: (1) missing repack; (2) NUMA — `--physcpubind` sets no memory policy, and with `-mmp 0` weights fault in under the default local-node policy; if the BIOS were NPS2/NPS4, a large fraction of 435 GiB could sit on the wrong node. "Run `numactl --hardware` first." If >1 node: prepend `numactl --interleave=all` and add `--numa numactl`. Also: confirm 0–63 are distinct physical cores via `lscpu -e | head -70` or `cat /sys/devices/system/cpu/cpu1/topology/thread_siblings_list`.
 
 **Idle VRAM.** 4 × 30,704 MiB = 119.9 GiB total; `-ot "exps=CPU"` leaves ~25 GiB on GPU (attention, norms, shared experts, 3 dense layers, embeddings) → ~95 GiB idle. Each MoE layer's routed experts ~5.4 GiB → 14–16 layers of experts fit in VRAM. (Both numbers corrected at 08:00 to ~107 GiB / 17–18 layers.) Warning: do not just add `-ncmoe N` — it keeps experts of layers 0…N−1 on CPU; with `--tensor-split` unset, layers ~59–77 all go to ROCm3; `-ncmoe 62` would put 16 heavy layers (~86 GiB) on one 30 GiB card → OOM. Instead use the fitter:
 
@@ -477,7 +477,7 @@ watch -n5 "grep -E 'AnonHugePages|Hugepagesize' /proc/meminfo"
 dmidecode -t memory | grep -E 'Locator|^\s+Size|Configured Memory Speed|^\s+Speed|Rank' | grep -v 'No Module'
 ```
 
-Want 8 or 16 populated DIMMs at `Configured Memory Speed: 3200 MT/s`. If 4 DIMMs, or 2666/2400 MT/s: peak is 102 or 170 GB/s rather than 204.8, and 69 GB/s effective is an ordinary 65–70% — "no software bug exists and this whole line of inquiry closes."
+Want 8 or 16 populated DIMMs at `Configured Memory Speed: 2933 MT/s`. If 4 DIMMs, or 2666/2400 MT/s: peak is 102 or 170 GB/s rather than 187.7, and 69 GB/s effective is an ordinary 65–70% — "no software bug exists and this whole line of inquiry closes."
 
 2. STREAM build and run:
 
@@ -593,7 +593,7 @@ Analysis of the partial sweep: the STREAM numbers are better than they look. The
 | Add | 111.9 | 24 | 32 (RFO) | 149 GB/s |
 | Triad | 112.5 | 24 | 32 (RFO) | 150 GB/s |
 
-"All four converge on ~150 GB/s. That is 73% of the 204.8 GB/s theoretical for eight channels of DDR4-3200 — a healthy, normal figure, and it confirms all eight channels are populated and running at speed. Skip the dmidecode; the memory subsystem is fine." Caveat (marked): the NT/RFO reading is inference from the shape of the numbers, not verified in the binary — but Copy at 151.8 GB/s is a hard floor either way, and llama.cpp weight reads are pure-read, which on Milan typically runs above Triad: "call the ceiling ~150–170 GB/s."
+"All four converge on ~150 GB/s. That is 80% of the 187.7 GB/s theoretical for eight channels of DDR4-2933 — a healthy, normal figure, and it confirms all eight channels are populated and running at speed. Skip the dmidecode; the memory subsystem is fine." Caveat (marked): the NT/RFO reading is inference from the shape of the numbers, not verified in the binary — but Copy at 151.8 GB/s is a hard floor either way, and llama.cpp weight reads are pure-read, which on Milan typically runs above Triad: "call the ceiling ~150–170 GB/s."
 
 "Bandwidth peaks at ≤16 threads and is already declining at 24." Going 16 → 24 threads costs 6% on every kernel — the memory subsystem saturates and then degrades under queueing pressure. "You are running llama.cpp with 64." llama.cpp's Q4_K kernel has real compute per byte (nibble unpack, 6-bit scale unpack, maddubs/madd chains), so its optimum will be higher than STREAM's — but thread count is "a first-class tuning axis, not a rounding error." Let the sweep finish to 128.
 
@@ -745,7 +745,7 @@ for t in 16 24 32 40 48 56 64 80 96 112 128; do   echo "===== THREADS=$t =====";
 
 ### 08:09 — Sweep decoded: saturation at 16 threads; the -ngl 0 experiment proposed
 
-The full sweep was decoded. The RFO artifact is provable from the numbers: if Copy paid RFO, its real traffic would be 227.7 GB/s — above the 204.8 GB/s theoretical ceiling, which is impossible. So GCC turned the Copy loop into `memcpy`, glibc used non-temporal stores (threshold ~192 MB), and Copy's counted bytes equal its actual bytes; Scale/Add/Triad keep ordinary vector stores and pay uncounted RFO. Applying the corrections (Copy ×1.0, Scale ×1.5, Add/Triad ×1.333):
+The full sweep was decoded. The RFO artifact is provable from the numbers: if Copy paid RFO, its real traffic would be 227.7 GB/s — above the 187.7 GB/s theoretical ceiling, which is impossible. So GCC turned the Copy loop into `memcpy`, glibc used non-temporal stores (threshold ~192 MB), and Copy's counted bytes equal its actual bytes; Scale/Add/Triad keep ordinary vector stores and pay uncounted RFO. Applying the corrections (Copy ×1.0, Scale ×1.5, Add/Triad ×1.333):
 
 | threads | Copy | Scale | Add | Triad |
 |---:|---:|---:|---:|---:|
@@ -1151,7 +1151,7 @@ Either MAIN.log stands alone (self-contained briefing), but both are wanted: the
 
 - Baseline established (hybrid `-ngl 99 -ot "exps=CPU"`, `-nopo 1`): pp512 = 37.63 ± 3.69 t/s, tg128 = 5.15 ± 0.40 t/s; Config B (`-nopo 1 --no-host 1`) is flat at 37.29 ± 3.24 / 4.97 ± 0.45 — the repack lever is refuted or never engaged; enabling op_offload crashes with a generic `ROCm error` at ggml-cuda.cu:104 after the 1041.9 s load, cause unconfirmed (VRAM-exhaustion and 415-GiB-pinned-host hypotheses outstanding).
 - Platform characterized: EPYC 7713 Zen3, 64C/128T, single socket, NPS1 (node 0: 1019408 MB), SMT pairs (i, i+64) confirmed; AVX2+FMA only (no AVX-512/VNNI); 8 CCDs at ~50 GB/s GMI2 read each, so ≥3–4 CCDs are needed to saturate DRAM.
-- Memory ceiling measured, not assumed: STREAM with RFO correction converges on ~150 GB/s on the host and 152 GB/s in the container (73% of the 204.8 GB/s theoretical); bandwidth saturates at 16 spread threads (16→64 −4%, 16→128 −6%); the container is exonerated (cgroups: `cpu.max = max 100000`, `cpuset.cpus.effective = 0-127`, `memory.max = max`).
+- Memory ceiling measured, not assumed: STREAM with RFO correction converges on ~150 GB/s on the host and 152 GB/s in the container (73% of the 187.7 GB/s theoretical); bandwidth saturates at 16 spread threads (16→64 −4%, 16→128 −6%); the container is exonerated (cgroups: `cpu.max = max 100000`, `cpuset.cpus.effective = 0-127`, `memory.max = max`).
 - The decode budget: 201 ms/token actual versus ~126–128 ms ideal (CPU experts 13.9 GB @ 152 GB/s ≈ 91–93 ms; GPU dense ~13.3 GB ≈ 33–35 ms) → ~73–75 ms/token unaccounted (~36%); prefill is separately CPU-compute-bound at 1.69 TFLOP/s.
 - Corrected sizing: experts ≈ 4.92 bpw → 5.53 GiB per MoE layer, ~415 GiB resident; non-expert only ~13 GiB; ~107 GiB VRAM idle (17–18 expert layers would fit) — deliberately deferred by Paul until throughput is understood.
 - Ruled out this session: NUMA misplacement, container throttling, HIP-graphs-off, ZenDNN as a factor (inert for 256-expert Q4_K), `GGML_CUDA_REGISTER_HOST` (dead code), `-sm tensor` (unsupported for glm-dsa), and MTP self-speculation (blk.78 TENSOR_SKIP).

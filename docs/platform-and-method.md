@@ -8,7 +8,7 @@ Everything here is **not model-specific**: the machine, the measurement method, 
 
 ## 1. Platform characterization (settled facts)
 
-**Memory bandwidth.** STREAM with the RFO correction (Scale ×1.5, Add/Triad ×4/3; Copy needs none — it compiles to non-temporal stores) converges on **~152 GB/s**, 74% of the 204.8 GB/s theoretical ceiling for 8-channel DDR4-2933. Bandwidth saturates at 16 threads and declines beyond. Packed thread binding at 16 threads collapses to ~90 GB/s Copy / ~68 GB/s Triad (each Milan CCD reaches the IO die over one GMI2 link, so 3–4+ CCDs must be active). The LXC container is free: in-container STREAM equals host within 1%.
+**Memory bandwidth.** STREAM with the RFO correction (Scale ×1.5, Add/Triad ×4/3; Copy needs none — it compiles to non-temporal stores) converges on **~152 GB/s**, 81% of the 187.7 GB/s theoretical ceiling for 8-channel DDR4-2933. Bandwidth saturates at 16 threads and declines beyond. Packed thread binding at 16 threads collapses to ~90 GB/s Copy / ~68 GB/s Triad (each Milan CCD reaches the IO die over one GMI2 link, so 3–4+ CCDs must be active). The LXC container is free: in-container STREAM equals host within 1%.
 
 **Topology.** Single NUMA node (NPS1). CPUs 0–63 are physical cores (CCD *k* = CPUs 8k…8k+7); 64–127 are SMT siblings. ISA: AVX2 + FMA (no AVX-512).
 
