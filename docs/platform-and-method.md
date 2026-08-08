@@ -54,7 +54,7 @@ Three edits to `ggml/src/ggml-backend.cpp`: distribute offloaded expert matmuls 
 
 ## 6. Economics
 
-Build $9,050. RAM $5,600 (62%) at $5.47/GB for 1 TB DDR4 3DS RDIMM (now 2 TB after the Aug 2026 upgrade). Four V620s $1,600. At July 2026 street prices DDR4 ≈ $5.15/GB vs DDR5 ≈ $30.94/GB; a DDR5/Genoa counterfactual was a $16–21k machine for an estimated +46% decode — evaluated and declined. The V620s' ~120 GiB aggregate VRAM is what makes resident-expert offload and the prefill patch worthwhile.
+The original 1 TB build cost $9,050 (RAM $5,600 at $5.47/GB). RAM is now **2 TB** (8 × 256 GB DDR4-2933 3DS RDIMM) at **$7,800** (≈ $3.81/GB), upgraded August 2026. Four V620s $1,600. At July 2026 street prices DDR4 ≈ $5.15/GB vs DDR5 ≈ $30.94/GB; a DDR5/Genoa counterfactual was a $16–21k machine for an estimated +46% decode — evaluated and declined. The V620s' ~120 GiB aggregate VRAM is what makes resident-expert offload and the prefill patch worthwhile.
 
 ---
 

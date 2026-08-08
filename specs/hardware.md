@@ -11,11 +11,11 @@ Galactus is a lab server. One Proxmox host. All inference runs in one LXC contai
 | **GPU fabric** | Single-pair peer copy 16.2 GB/s. Four concurrent pairs 49.4 GB/s. Host to device 22.3 GB/s on one stream (about PCIe 4.0 ×16), and **65.7 GB/s across 4 concurrent streams**. The prefill patch uses this 4-stream headroom. |
 | **Storage** | ZFS on SATA SSD. 1.5 GB/s direct, 2.1 GB/s buffered. It never limited an mmap load. |
 | **Software** | llama.cpp and ROCm, in an LXC container on Proxmox. In-container STREAM equals host STREAM to within 1%. The cgroups are unlimited, so the container adds no measurable cost. |
-| **Kernel tuning applied** | THP `always` and `defer+madvise`. C-states deeper than C0 disabled. See [galactus_kernel_tuning.txt](galactus_kernel_tuning.txt). Note: THP showed no measured effect for this workload, because the mmap-backed weights are file pages, not anonymous pages. |
+| **Kernel tuning applied** | THP `always` and `defer+madvise`. C-state disabling was considered but not ultimately kept. See [galactus_kernel_tuning.txt](galactus_kernel_tuning.txt). Note: THP showed no measured effect for this workload, because the mmap-backed weights are file pages, not anonymous pages. |
 
 ## Cost (July 2026)
 
-The build cost $9,050 in total. RAM was $5,600 (62%), at $5.47/GB for 1 TB of DDR4 3DS RDIMM. The four V620s cost $1,600 in total. At July 2026 street prices, DDR4 was about $5.15/GB and DDR5 about $30.94/GB. A DDR5 or Genoa machine would cost $16–21k for an estimated +46% decode. This project evaluated that option and declined it. See the full reasoning in [../docs/platform-and-method.md §6](../docs/platform-and-method.md).
+The original 1 TB build cost $9,050 in total (RAM $5,600 at $5.47/GB). RAM is now 2 TB (8 × 256 GB DDR4-2933 3DS RDIMM) at $7,800 (≈ $3.81/GB), upgraded August 2026. The four V620s cost $1,600 in total. At July 2026 street prices, DDR4 was about $5.15/GB and DDR5 about $30.94/GB. A DDR5 or Genoa machine would cost $16–21k for an estimated +46% decode. This project evaluated that option and declined it. See the full reasoning in [../docs/platform-and-method.md §6](../docs/platform-and-method.md).
 
 ## Models tested
 
