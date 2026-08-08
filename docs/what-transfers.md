@@ -41,7 +41,7 @@ These are properties of llama.cpp, not of Galactus. Each one cost us time:
 - **Decode two-term model:** `time_per_token ≈ C + (bytes_read_per_token ÷ your_bandwidth)`. `C` is a GPU-side constant (about 90 ms on Galactus). `bytes_read_per_token` is your active-expert size at your quant. On Galactus the model predicted 5.5 / 6.2 / 3.9 t/s against measured 5.53 / 6.01 / 3.87. Measure your bandwidth (STREAM) and your bytes per token. The form holds; the constants are yours.
 - **Prefill ubatch ladder:** `t_ubatch ≈ (fixed streaming term) + (linear GEMM term × ub)`. On Galactus both terms came from the single card that the unpatched scheduler used. Your ladder will differ, but it should still fit two terms.
 - **Prompt-length scaling:** a quadratic attention term plus the linear expert terms. Attention was 72% of a 32k prefill pass here. Your split depends on your attention implementation and your context depth.
-- **Cost:** the $/GB and $/decode-token method in [results §7](results-and-takeaways.md) is a template. Your prices and your parts will differ.
+- **Cost:** the $/GB and $/decode-token method in [platform economics](platform-and-method.md) is a template. Your prices and your parts will differ.
 
 ---
 

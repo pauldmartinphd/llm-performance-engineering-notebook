@@ -15,7 +15,7 @@ Galactus is a lab server. One Proxmox host. All inference runs in one LXC contai
 
 ## Cost (July 2026)
 
-The build cost $9,050 in total. RAM was $5,600 (62%), at $5.47/GB for 1 TB of DDR4 3DS RDIMM. The four V620s cost $1,600 in total. At July 2026 street prices, DDR4 was about $5.15/GB and DDR5 about $30.94/GB. A DDR5 or Genoa machine would cost $16–21k for an estimated +46% decode. This project evaluated that option and declined it. See the full reasoning in [../docs/results-and-takeaways.md §7](../docs/results-and-takeaways.md).
+The build cost $9,050 in total. RAM was $5,600 (62%), at $5.47/GB for 1 TB of DDR4 3DS RDIMM. The four V620s cost $1,600 in total. At July 2026 street prices, DDR4 was about $5.15/GB and DDR5 about $30.94/GB. A DDR5 or Genoa machine would cost $16–21k for an estimated +46% decode. This project evaluated that option and declined it. See the full reasoning in [../docs/platform-and-method.md §6](../docs/platform-and-method.md).
 
 ## Models tested
 

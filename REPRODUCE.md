@@ -37,4 +37,4 @@ Follow [patch/README.md](patch/README.md). Run step 3 again first, and confirm t
 - Measure through the `llama-server` JSON timings, or with `script -q`. Do not pipe `llama-cli` to a file; it drops the timing lines.
 
 ## What to record
-Use the CSV schema in [data/](data/): date, experiment, configuration (with the exact flags and build), metric, value, source. The configuration column is what makes a number reproducible. A t/s figure without its configuration has no value. Record the dead ends too. The [refuted-hypotheses table](docs/results-and-takeaways.md) saved more time than any single gain.
+Use the CSV schema in [data/](data/): date, experiment, configuration (with the exact flags and build), metric, value, source. The configuration column is what makes a number reproducible. A t/s figure without its configuration has no value. Record the dead ends too. The [refuted-hypotheses table](docs/platform-and-method.md) saved more time than any single gain.
