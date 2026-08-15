@@ -1,6 +1,6 @@
 # What transfers to your system
 
-Every result in this repo comes from one machine (Galactus; see [../README.md](../README.md) and [../specs/hardware.md](../specs/hardware.md)). This page sorts the results by how far they carry. It tells you which parts to copy, which to measure again, and which to ignore as ours.
+Every result in this repo comes from one machine (Galactus; see [../README.md](../README.md) and [../hardware/galactus/README.md](../hardware/galactus/README.md)). This page sorts the results by how far they carry. It tells you which parts to copy, which to measure again, and which to ignore as ours.
 
 The whole project has one workload shape: **a large MoE model with the routed experts in system RAM (`-ot exps=CPU` or `--cpu-moe`) and the dense path — attention, shared experts, and the KV cache — on GPUs.** If this is your setup, most of the method below applies. Your CPU, RAM, and cards do not have to match ours.
 
@@ -25,7 +25,7 @@ These are properties of llama.cpp, not of Galactus. Each one cost us time:
 - **Do not use `llama-cli` to measure speed.** `| tee` breaks its terminal display. `--log-file` clamps the log to error level and drops the timing lines. Capture with `script -q`, or measure through the JSON timings from `llama-server`.
 
 ### Diagnostic method
-- **Run STREAM with the RFO correction** to find your true memory bandwidth (Scale ×1.5, Add/Triad ×4/3; Copy needs no correction if it compiles to non-temporal stores. Check: uncorrected Copy plus RFO must not exceed your theoretical limit.) See [../scripts/galactus-diag.sh](../scripts/galactus-diag.sh) and [../specs/galactus_triad.txt](../specs/galactus_triad.txt).
+- **Run STREAM with the RFO correction** to find your true memory bandwidth (Scale ×1.5, Add/Triad ×4/3; Copy needs no correction if it compiles to non-temporal stores. Check: uncorrected Copy plus RFO must not exceed your theoretical limit.) See [../scripts/galactus-diag.sh](../scripts/galactus-diag.sh) and [../hardware/galactus/galactus_triad.txt](../hardware/galactus/galactus_triad.txt).
 - **Run `GGML_SCHED_DEBUG=2 ... -v` and count the split histogram** (`grep '## SPLIT' | sort | uniq -c`). This shows whether the offload goes to one card. This check justified the patch. It also tells you whether the patch will help you.
 - **Confirm the histogram first, then the throughput.** An equal histogram and a faster prefill are separate facts. Confirm that the mechanism changed before you trust the number.
 

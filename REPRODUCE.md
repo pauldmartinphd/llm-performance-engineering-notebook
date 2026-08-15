@@ -8,7 +8,7 @@ You do not need Galactus's exact parts. You need the same workload shape: a larg
 - STREAM (`stream.c`), compiled for your core count.
 
 ## 1. Find your memory-bandwidth limit (this limits decode)
-Run STREAM across a thread sweep. Apply the RFO correction (Scale ×1.5, Add/Triad ×4/3; Copy usually needs no correction — confirm it does not exceed your theoretical limit). This gives your decode limit. See [scripts/galactus-diag.sh](scripts/galactus-diag.sh) for the exact command, and [specs/galactus_triad.txt](specs/galactus_triad.txt) for a sample of the output.
+Run STREAM across a thread sweep. Apply the RFO correction (Scale ×1.5, Add/Triad ×4/3; Copy usually needs no correction — confirm it does not exceed your theoretical limit). This gives your decode limit. See [scripts/galactus-diag.sh](scripts/galactus-diag.sh) for the exact command, and [hardware/galactus/galactus_triad.txt](hardware/galactus/galactus_triad.txt) for a sample of the output.
 
 Predict decode before you measure it: `t/token ≈ C + bytes_per_token ÷ bandwidth`. `bytes_per_token` is the active-expert size at your quant. `C` is your GPU-side constant, about 90 ms on Galactus; measure it once and reuse it. If your measured decode is far below this prediction, a setting is wrong. Fix it before you tune further.
 

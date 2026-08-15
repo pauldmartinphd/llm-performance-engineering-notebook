@@ -25,7 +25,7 @@ The GLM-5.2 investigation is the deepest: prefill went from 37.63 to **119.36 t/
 
 This project measured both limits; it did not guess them. Memory bandwidth limits decode: STREAM measured 152 GB/s after the RFO correction. A two-term model predicted three separate configurations to within a few percent. Two faults in the llama.cpp scheduler limited prefill. This project fixed both.
 
-Note: the July GLM-5.2 results ran on the earlier 1 TB memory (8 × 128 GB). Galactus now has 2 TB (8 × 256 GB DDR4-2933 3DS RDIMM), installed August 2026. The STREAM re-baseline on the 2 TB DIMMs is still an open item, so the 152 GB/s figure comes from the 1 TB population. See [specs/hardware.md](specs/hardware.md).
+Note: the July GLM-5.2 results ran on the earlier 1 TB memory (8 × 128 GB). Galactus now has 2 TB (8 × 256 GB DDR4-2933 3DS RDIMM), installed August 2026. The STREAM re-baseline on the 2 TB DIMMs is still an open item, so the 152 GB/s figure comes from the 1 TB population. See [hardware/galactus/README.md](hardware/galactus/README.md).
 
 ## The three changes most likely to help your system
 
@@ -44,7 +44,7 @@ Note: the July GLM-5.2 results ran on the earlier 1 TB memory (8 × 128 GB). Gal
 | [patch/](patch/) | The llama.cpp scheduler patch (Edits 1–3), and how to apply and check it. |
 | [scripts/galactus-diag.sh](scripts/galactus-diag.sh) | The 16-phase diagnostic run. |
 | [data/](data/) | CSV files. Every benchmark row. |
-| [specs/](specs/) | Hardware sheet and the raw `dmidecode`, STREAM, and kernel-tuning captures. |
+| [hardware/](hardware/) | Per-machine hardware notes and raw captures: [galactus/](hardware/galactus/), [borg/](hardware/borg/). |
 | [raw-logs/](raw-logs/) | The `-ot` OOM failure, the raw MTP A/B capture, and the per-model benchmark logs. |
 | [REPRODUCE.md](REPRODUCE.md) | How to run the same measurements on your own hardware. |
 
@@ -54,7 +54,7 @@ Active, and now spanning five models. The production decode configurations are s
 
 ## License
 
-This repo uses two licenses. The code (`patch/`, `scripts/`) is **MIT** — see [LICENSE](LICENSE). The text and data (`docs/`, `data/`, `specs/`, `raw-logs/`, and the root Markdown files) are **CC BY 4.0** — see [LICENSE-CC-BY-4.0.txt](LICENSE-CC-BY-4.0.txt). [LICENSING.md](LICENSING.md) states which license covers which path and how to attribute the text and data.
+This repo uses two licenses. The code (`patch/`, `scripts/`) is **MIT** — see [LICENSE](LICENSE). The text and data (`docs/`, `data/`, `hardware/`, `raw-logs/`, and the root Markdown files) are **CC BY 4.0** — see [LICENSE-CC-BY-4.0.txt](LICENSE-CC-BY-4.0.txt). [LICENSING.md](LICENSING.md) states which license covers which path and how to attribute the text and data.
 
 ---
 
