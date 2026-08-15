@@ -1,4 +1,4 @@
-# What transfers to your system
+# General principles
 
 Every result in this repo comes from one machine (Galactus; see [../README.md](../README.md) and [../hardware/galactus/README.md](../hardware/galactus/README.md)). This page sorts the results by how far they carry. It tells you which parts to copy, which to measure again, and which to ignore as ours.
 
@@ -7,13 +7,6 @@ The whole project has one workload shape: **a large MoE model with the routed ex
 ---
 
 ## Tier 1 — Copy these (they transfer in full)
-
-### The prefill patch
-Three edits to `ggml/src/ggml-backend.cpp` (see [../patch/README.md](../patch/README.md)):
-- **Spread the offloaded expert matmuls across all eligible GPUs**, keyed on the layer index. The default llama.cpp scheduler returns backend 0 for every offloaded op. On any multi-GPU offload setup, the scheduler sends the offload to one card. On Galactus, 731 of 1,186 GPU splits went to ROCm0.
-- **Skip the expert-ids read from GPU to host at prefill batch sizes.** At large microbatches almost every expert is selected, so the read saves no bandwidth. It only adds a host-blocking `synchronize` that chains each layer's expert copy behind the previous layer's GEMM. Decode does not change; the selective path still runs at batch 1.
-
-The method is architectural, not specific to Galactus. The size of the gain depends on your GPU count and your interconnect.
 
 ### Benchmark faults
 These are properties of llama.cpp, not of Galactus. Each one cost us time:
@@ -25,8 +18,8 @@ These are properties of llama.cpp, not of Galactus. Each one cost us time:
 - **Do not use `llama-cli` to measure speed.** `| tee` breaks its terminal display. `--log-file` clamps the log to error level and drops the timing lines. Capture with `script -q`, or measure through the JSON timings from `llama-server`.
 
 ### Diagnostic method
-- **Run STREAM with the RFO correction** to find your true memory bandwidth (Scale ×1.5, Add/Triad ×4/3; Copy needs no correction if it compiles to non-temporal stores. Check: uncorrected Copy plus RFO must not exceed your theoretical limit.) See [../scripts/galactus-diag.sh](../scripts/galactus-diag.sh) and [../hardware/galactus/galactus_triad.txt](../hardware/galactus/galactus_triad.txt).
-- **Run `GGML_SCHED_DEBUG=2 ... -v` and count the split histogram** (`grep '## SPLIT' | sort | uniq -c`). This shows whether the offload goes to one card. This check justified the patch. It also tells you whether the patch will help you.
+- **Run STREAM with the RFO correction** to find your true memory bandwidth (Scale ×1.5, Add/Triad ×4/3; Copy needs no correction if it compiles to non-temporal stores. Check: uncorrected Copy plus RFO must not exceed your theoretical limit.) See [../experiments/galactus-diag.sh](../experiments/galactus-diag.sh) and [../hardware/galactus/galactus_triad.txt](../hardware/galactus/galactus_triad.txt).
+- **Run `GGML_SCHED_DEBUG=2 ... -v` and count the split histogram** (`grep '## SPLIT' | sort | uniq -c`). This shows whether the offload goes to one card. This check tells you whether the scheduler concentrates the offload on one card (and whether [../patches/prefill/README.md](../patches/prefill/README.md) will help you).
 - **Confirm the histogram first, then the throughput.** An equal histogram and a faster prefill are separate facts. Confirm that the mechanism changed before you trust the number.
 
 ### Speculative-decode settings

@@ -5,7 +5,7 @@ Notes on tuning large Mixture-of-Experts (MoE) models on **Galactus**, one lab s
 
 This is one machine, tested in detail. The exact speeds belong to this machine. The method, the llama.cpp patch, and the list of changes that did not help apply to any server that runs MoE models with the routed experts in system RAM and the dense layers on GPUs. If you run large MoE models this way, this repo shows how to find the speed limit and how to raise it.
 
-**Read [takeaways/what-transfers.md](takeaways/what-transfers.md) first.** It sorts every result into three groups: method you can copy, models where you supply your own numbers, and numbers that apply only to Galactus.
+**Read [takeaways/general-principles.md](takeaways/general-principles.md) first.** It sorts every result into three groups: method you can copy, models where you supply your own numbers, and numbers that apply only to Galactus.
 
 ---
 
@@ -29,19 +29,19 @@ Note: the July GLM-5.2 results ran on the earlier 1 TB memory (8 × 128 GB). Gal
 
 ## The three changes most likely to help your system
 
-1. **The prefill patch** — [patch/README.md](patch/README.md). Three small edits to `ggml/src/ggml-backend.cpp`. The edits spread the offloaded expert matmuls across all GPUs, instead of sending every one to backend 0. They also skip the expert-ids read from GPU to host during prefill, when every expert is used in any case. On Galactus this raised prefill by 13.7%. The method applies to any CPU-MoE offload setup.
-2. **The benchmark faults** — [takeaways/what-transfers.md](takeaways/what-transfers.md#benchmark-faults). The largest error in this project was that `-p` limits `n_ubatch`. Many `op_offload` tests had run at ub 512 without our knowledge.
+1. **The prefill patch** — [patches/prefill/README.md](patches/prefill/README.md). Three small edits to `ggml/src/ggml-backend.cpp`: spread the offloaded expert matmuls across all GPUs instead of sending every one to backend 0, and skip the expert-ids read from GPU to host during prefill, when every expert is used in any case. On Galactus this raised prefill by 13.7%; the method applies to any CPU-MoE offload setup. Being submitted upstream to llama.cpp.
+2. **The benchmark faults** — [takeaways/general-principles.md](takeaways/general-principles.md#benchmark-faults). The largest error in this project was that `-p` limits `n_ubatch`. Many `op_offload` tests had run at ub 512 without our knowledge.
 3. **The refuted-hypotheses table** — [takeaways/refuted-hypotheses.md](takeaways/refuted-hypotheses.md). NUMA, CPU affinity, `--poll`, CPU_REPACK, THP, ZenDNN, `-sm row`, pipeline parallelism, and managed memory. This project measured each one. Each was null or worse for this workload. The table shows you what to skip.
 
 ## Repo map
 
 | Path | Content |
 |---|---|
-| [takeaways/](takeaways/) | **What carries to your system.** [what-transfers.md](takeaways/what-transfers.md) (read this first), the [refuted-hypotheses table](takeaways/refuted-hypotheses.md), and [speculative decoding](takeaways/speculative-decoding.md). |
+| [takeaways/](takeaways/) | **What carries to your system.** [general-principles.md](takeaways/general-principles.md) (read this first), the [refuted-hypotheses table](takeaways/refuted-hypotheses.md), and [speculative decoding](takeaways/speculative-decoding.md). |
 | [results/](results/) | The empirical record: one note per model, the [methodology](results/methodology.md), the [lab notebook](results/lab-notebook/) (Sessions 1–10), [raw logs](results/raw-logs/), and [CSV data](results/data/). |
 | [hardware/](hardware/) | Per-machine hardware notes and raw captures: [galactus/](hardware/galactus/), [borg/](hardware/borg/). |
-| [patch/](patch/) | The llama.cpp scheduler patch (Edits 1–3), and how to apply and check it. |
-| [scripts/](scripts/) | The 16-phase diagnostic run and the Session-10 rerun protocol. |
+| [patches/](patches/) | The llama.cpp scheduler patch (Edits 1–3), and how to apply and check it. Being submitted upstream. |
+| [experiments/](experiments/) | Measurement harnesses: the 16-phase diagnostic run and the Session-10 rerun protocol. |
 | [REPRODUCE.md](REPRODUCE.md) | How to run the same measurements on your own hardware. |
 
 ## Status
@@ -50,7 +50,7 @@ Active, and now spanning five models. The production decode configurations are s
 
 ## License
 
-This repo uses two licenses. The code (`patch/`, `scripts/`) is **MIT** — see [LICENSE](LICENSE). The text and data (`results/`, `takeaways/`, `hardware/`, and the root Markdown files) are **CC BY 4.0** — see [LICENSE-CC-BY-4.0.txt](LICENSE-CC-BY-4.0.txt). [LICENSING.md](LICENSING.md) states which license covers which path and how to attribute the text and data.
+This repo uses two licenses. The code (`patches/`, `experiments/`) is **MIT** — see [LICENSE](LICENSE). The text and data (`results/`, `takeaways/`, `hardware/`, and the root Markdown files) are **CC BY 4.0** — see [LICENSE-CC-BY-4.0.txt](LICENSE-CC-BY-4.0.txt). [LICENSING.md](LICENSING.md) states which license covers which path and how to attribute the text and data.
 
 ---
 

@@ -16,4 +16,4 @@ Every entry below was measured on Galactus and came back null or worse for the h
 | HIP managed memory | Disaster | 7.2 t/s prefill |
 | SMT oversubscription (t=128) | Refuted (harmful) | Decode collapses on every model tested |
 
-The distinction that matters when reading this table: these are refutations **for this workload shape** on one machine class. NUMA imbalance is real on multi-socket boards; THP helps anonymous-page workloads; ZenDNN helps Q8_0-on-CPU paths. None of that contradicts the table — the table says they did nothing *here*, measured, and the burden of proof for your system is one benchmark away. See [what-transfers.md](what-transfers.md) for which tier each claim lives in.
+The distinction that matters when reading this table: these are refutations **for this workload shape** on one machine class. NUMA imbalance is real on multi-socket boards; THP helps anonymous-page workloads; ZenDNN helps Q8_0-on-CPU paths. None of that contradicts the table — the table says they did nothing *here*, measured, and the burden of proof for your system is one benchmark away. See [general-principles.md](general-principles.md) for which tier each claim lives in.
