@@ -1,6 +1,6 @@
 # General principles
 
-Every result in this repo comes from one machine (Galactus; see [../README.md](../README.md) and [../hardware/galactus/README.md](../hardware/galactus/README.md)). This page sorts the results by how far they carry. It tells you which parts to copy, which to measure again, and which to ignore as ours.
+Every result in this repo so far comes from Galactus ([../hardware/galactus/README.md](../hardware/galactus/README.md)); further machines are documented under [../hardware/](../hardware/) and will add their own numbers. This page sorts the results by how far they carry. It tells you which parts to copy, which to measure again, and which to ignore as ours.
 
 The whole project has one workload shape: **a large MoE model with the routed experts in system RAM (`-ot exps=CPU` or `--cpu-moe`) and the dense path — attention, shared experts, and the KV cache — on GPUs.** If this is your setup, most of the method below applies. Your CPU, RAM, and cards do not have to match ours.
 
@@ -49,6 +49,6 @@ These are properties of llama.cpp, not of Galactus. Each one cost us time:
 
 ## The honest limits of this data
 
-- This is one machine, and mostly one prompt (a technical-prose ZFS explainer for the decode and speculation tests), with greedy decoding. We did not capture the acceptance rates for the Session 10 DSpark runs. An instrumentation failure caused this, and we recorded it as a finding.
+- These numbers are, so far, from one machine and mostly one prompt (a technical-prose ZFS explainer for the decode and speculation tests), with greedy decoding. We did not capture the acceptance rates for the Session 10 DSpark runs. An instrumentation failure caused this, and we recorded it as a finding.
 - The numbers come from different llama.cpp builds across three weeks. The text names the build where the build matters.
 - Where a figure is an estimate from a model rather than a measurement, the source documents say so. Trust the labels over any summary.

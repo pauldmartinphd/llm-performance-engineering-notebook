@@ -1,6 +1,6 @@
 # Results
 
-Per-model performance notes for Galactus. Each note distills the raw benchmarks into headline numbers, the best configuration found, and the takeaways. The machine itself: [../hardware/galactus/README.md](../hardware/galactus/README.md). The method behind the numbers: [methodology.md](methodology.md). What carries to other systems: [../takeaways/](../takeaways/).
+Per-model performance notes; every note states the machine it was measured on (all results to date: Galactus). Each note distills the raw benchmarks into headline numbers, the best configuration found, and the takeaways. The machine itself: [../hardware/galactus/README.md](../hardware/galactus/README.md). The method behind the numbers: [methodology.md](methodology.md). What carries to other systems: [../takeaways/](../takeaways/).
 
 Sorted by best measured decode:
 

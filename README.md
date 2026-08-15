@@ -1,9 +1,8 @@
 # LLM Performance Engineering Notebook
 
-Notes on tuning large Mixture-of-Experts (MoE) models on **Galactus**, one lab server:
-**AMD EPYC 7713** (64 cores / 128 threads, Zen 3), **2 TB DDR4-2933 3DS RDIMM** (8-channel mode), **4 × AMD Radeon Pro V620** (gfx1030, about 120 GiB VRAM total). It runs llama.cpp and ROCm in an LXC container on Proxmox.
+A lab notebook of LLM performance engineering: experiments and results in finding and raising the inference speed limits of large Mixture-of-Experts (MoE) models. The measurements come from the lab's own servers — the deeply characterized machine to date is **Galactus** (AMD EPYC 7713, 2 TB DDR4-2933 8-channel, 4 × AMD Radeon Pro V620, llama.cpp + ROCm in an LXC container on Proxmox); **Borg** (Threadripper Pro 3995WX, Radeon AI PRO R9700 + Radeon Pro W6800) is documented and queued. Full specs and raw captures per machine: [hardware/](hardware/).
 
-This is one machine, tested in detail. The exact speeds belong to this machine. The method, the llama.cpp patch, and the list of changes that did not help apply to any server that runs MoE models with the routed experts in system RAM and the dense layers on GPUs. If you run large MoE models this way, this repo shows how to find the speed limit and how to raise it.
+Every exact speed belongs to the machine it was measured on, and each result states its machine; the measurements published so far are from Galactus. The method, the llama.cpp patch, and the list of changes that did not help apply to any server that runs MoE models with the routed experts in system RAM and the dense layers on GPUs. If you run large MoE models this way, this repo shows how to find the speed limit and how to raise it.
 
 **Read [takeaways/general-principles.md](takeaways/general-principles.md) first.** It sorts every result into three groups: method you can copy, models where you supply your own numbers, and numbers that apply only to Galactus.
 
@@ -54,4 +53,4 @@ This repo uses two licenses. The code (`patches/`, `experiments/`) is **MIT** �
 
 ---
 
-*Not affiliated with AMD, the llama.cpp project, or any model vendor. "Galactus" is the author's name for one machine. All numbers come from that machine unless the text states otherwise.*
+*Not affiliated with AMD, the llama.cpp project, or any model vendor. "Galactus" and "Borg" are the author's names for the machines. Every number states which machine it came from.*
