@@ -5,7 +5,7 @@ This repo uses two licenses. Each covers a different part.
 | Part | Paths | License |
 |---|---|---|
 | Code | `patch/`, `scripts/` | MIT — see [LICENSE](LICENSE) |
-| Text and data | `docs/`, `data/`, `hardware/`, `raw-logs/`, and the Markdown files at the root | CC BY 4.0 — see [LICENSE-CC-BY-4.0.txt](LICENSE-CC-BY-4.0.txt) |
+| Text and data | `results/`, `takeaways/`, `hardware/`, and the Markdown files at the root | CC BY 4.0 — see [LICENSE-CC-BY-4.0.txt](LICENSE-CC-BY-4.0.txt) |
 
 Copyright © 2026 Paul D. Martin, Ph.D.
 

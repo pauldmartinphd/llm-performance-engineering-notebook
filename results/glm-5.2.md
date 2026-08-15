@@ -1,7 +1,7 @@
 # GLM-5.2 — Galactus results
 
 **Model:** GLM-5.2, Unsloth UD-Q4_K_XL — `glm-dsa` arch, 753.86 B params, 435.19 GiB, 75 MoE layers, 256 experts / 8 active, MLA attention.
-**System:** Galactus (EPYC 7713, 1 TB DDR4-2933 8-channel at the time, 4 × Radeon Pro V620). See [platform-and-method](../platform-and-method.md) for platform, method, and the prefill patch.
+**System:** Galactus (EPYC 7713, 1 TB DDR4-2933 8-channel at the time, 4 × Radeon Pro V620). Platform: [../hardware/galactus/README.md](../hardware/galactus/README.md); method: [methodology.md](methodology.md); the prefill patch: [../patch/README.md](../patch/README.md).
 **Investigation:** July 13–21, 2026, plus an August MTP addendum.
 
 ## Executive summary
@@ -32,7 +32,7 @@ The ubatch ladder (op_offload on, exps=CPU, -b 8192):
 | 4096 | 84.62 |
 | 8192 | 104.97 |
 
-With the scheduler patch (see [platform-and-method](../platform-and-method.md) §4):
+With the scheduler patch (see [../patch/README.md](../patch/README.md)):
 
 | Build | pp8192 | pp16384 | pp32768 |
 |---|---|---|---|

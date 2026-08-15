@@ -1,9 +1,9 @@
 # MiniMax M2.7 — Galactus results
 
 **Model:** MiniMax M2.7, Unsloth UD-Q5_K_M — `minimax-m2` arch, 228.69 B params (≈10 B active), 157.23 GiB.
-**System:** Galactus (EPYC 7713, DDR4-2933 8-channel, 4 × Radeon Pro V620). See [platform-and-method](../platform-and-method.md).
+**System:** Galactus (EPYC 7713, DDR4-2933 8-channel, 4 × Radeon Pro V620). Platform: [../hardware/galactus/README.md](../hardware/galactus/README.md); method: [methodology.md](methodology.md).
 **Build:** `0893f50f2 (8746)`. **Date:** 2026-04-17.
-**Raw log:** `../../raw-logs/model-benchmark-logs/minimax-m2.7-raw.md`.
+**Raw log:** `raw-logs/model-benchmark-logs/minimax-m2.7-raw.md`.
 
 ## Result in one line
 

@@ -1,9 +1,9 @@
 # Qwen 3.5 397B.A17B — Galactus results
 
 **Model:** Qwen 3.5 397B.A17B, Q6_K_L — `qwen35moe` arch, 396.35 B params (≈17 B active), 319.21 GiB.
-**System:** Galactus (EPYC 7713, DDR4-2933 8-channel, 4 × Radeon Pro V620). See [platform-and-method](../platform-and-method.md).
+**System:** Galactus (EPYC 7713, DDR4-2933 8-channel, 4 × Radeon Pro V620). Platform: [../hardware/galactus/README.md](../hardware/galactus/README.md); method: [methodology.md](methodology.md).
 **Builds:** `58190cc84 (8671)` and `0893f50f2 (8746)`. **Dates:** 2026-04-07 and 2026-04-10.
-**Raw log:** `../../raw-logs/model-benchmark-logs/qwen-3.5-397b-raw.md`.
+**Raw log:** `raw-logs/model-benchmark-logs/qwen-3.5-397b-raw.md`.
 
 ## Result in one line
 

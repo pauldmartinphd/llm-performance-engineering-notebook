@@ -1,6 +1,6 @@
-# Results and takeaways
+# Results
 
-Per-model performance notes for Galactus. Each note distills the raw benchmarks into headline numbers, the best configuration found, and the takeaways. For everything model-independent — the machine, the measurement method, the benchmark pitfalls, the refuted hypotheses, and the reusable llama.cpp patch — see [platform-and-method](../platform-and-method.md).
+Per-model performance notes for Galactus. Each note distills the raw benchmarks into headline numbers, the best configuration found, and the takeaways. The machine itself: [../hardware/galactus/README.md](../hardware/galactus/README.md). The method behind the numbers: [methodology.md](methodology.md). What carries to other systems: [../takeaways/](../takeaways/).
 
 Sorted by best measured decode:
 
@@ -13,3 +13,12 @@ Sorted by best measured decode:
 | [Kimi K2.5](kimi-k2.5.md) | 1.03 T / Q4_K_XL | 6.76 t/s | 44 t/s | largest model; bandwidth-bound |
 
 How to read these: decode is bounded by DRAM bandwidth, so a smaller active-expert footprint decodes faster; prefill responds to thread count and to resident-expert offload; the largest decode gains came from speculative decoding (MTP, DSpark) on the models that support it.
+
+## The full record
+
+| Path | Content |
+|---|---|
+| [methodology.md](methodology.md) | The measurement method these results were produced with. |
+| [lab-notebook/](lab-notebook/) | The chronological record: Sessions 1–10, every command and result in order. |
+| [raw-logs/](raw-logs/) | Primary captures: the diagnostic run, the MTP A/B, per-model benchmark logs, failure logs. |
+| [data/](data/) | CSV extracts — every benchmark row, machine-readable. |

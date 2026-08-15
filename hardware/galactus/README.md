@@ -15,7 +15,7 @@ Galactus is a lab server. One Proxmox host. All inference runs in one LXC contai
 
 ## Cost (July 2026)
 
-The original 1 TB build cost $9,050 in total (RAM $5,600 at $5.47/GB). RAM is now 2 TB (8 × 256 GB DDR4-2933 3DS RDIMM) at $7,800 (≈ $3.81/GB), upgraded August 2026. The four V620s cost $1,600 in total. At July 2026 street prices, DDR4 was about $5.15/GB and DDR5 about $30.94/GB. A DDR5 or Genoa machine would cost $16–21k for an estimated +46% decode. This project evaluated that option and declined it. See the full reasoning in [../docs/platform-and-method.md §6](../docs/platform-and-method.md).
+The original 1 TB build cost $9,050 in total (RAM $5,600 at $5.47/GB). RAM is now 2 TB (8 × 256 GB DDR4-2933 3DS RDIMM) at $7,800 (≈ $3.81/GB), upgraded August 2026. The four V620s cost $1,600 in total. At July 2026 street prices, DDR4 was about $5.15/GB and DDR5 about $30.94/GB. A DDR5 or Genoa machine would cost $16–21k for an estimated +46% decode. This project evaluated that option and declined it. The DDR5 evaluation is in the lab notebook: [Session 6](../../results/lab-notebook/06-session-6-ubatch-ladder-and-economics.md).
 
 ## Models tested
 
@@ -23,4 +23,4 @@ The original 1 TB build cost $9,050 in total (RAM $5,600 at $5.47/GB). RAM is no
 |---|---|---|---|
 | GLM-5.2 | Unsloth UD-Q4_K_XL | 753.86 B / 435 GiB | arch `glm-dsa`, 75 MoE layers, 256 experts / 8 active, MLA attention |
 | DeepSeek-V4-Flash-0731 | Unsloth UD-Q8_K_XL | 162 GB | MXFP4 routed experts; DSpark drafter |
-| Kimi K2.5, MiniMax M2.7, Qwen 3.5 397B | various | — | see the vault; they fit in 2 TB |
+| Kimi K2.5, MiniMax M2.7, Qwen 3.5 397B | various | — | see [../../results/](../../results/); they fit in 2 TB |

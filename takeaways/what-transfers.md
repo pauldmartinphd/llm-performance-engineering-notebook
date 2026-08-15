@@ -18,7 +18,7 @@ The method is architectural, not specific to Galactus. The size of the gain depe
 ### Benchmark faults
 These are properties of llama.cpp, not of Galactus. Each one cost us time:
 - **`-p N` limits `n_ubatch` to N.** This was the largest error in the project. Every `op_offload` test before we found it had run at ub 512, not the ub 8192 we intended. Always set `-ub` directly. Do not trust a prefill number until you confirm the effective ubatch.
-- **`llama-bench` separates `-ot` rules with semicolons. Commas create separate benchmark configurations** (the opposite of `llama-server`). A comma-separated rule set drops the `exps=CPU` catch-all from all but the first configuration. The GPU then tries to allocate the full expert tensor and runs out of memory. The failure is in [../raw-logs/newtest-ot-oom.txt](../raw-logs/newtest-ot-oom.txt).
+- **`llama-bench` separates `-ot` rules with semicolons. Commas create separate benchmark configurations** (the opposite of `llama-server`). A comma-separated rule set drops the `exps=CPU` catch-all from all but the first configuration. The GPU then tries to allocate the full expert tensor and runs out of memory. The failure is in [../results/raw-logs/llama-bench-ot-oom-failure.txt](../results/raw-logs/llama-bench-ot-oom-failure.txt).
 - **`llama-bench` installs a null log callback.** `GGML_SCHED_DEBUG` output appears only with `-v`.
 - **`llama-fit-params` turns off** if you pass any of `-ngl`, `-ts`, `-ot`, or `-ncmoe`.
 - **`llama-cli` on a 1M-context model** takes the context length from the model unless you pass `-c`. It fills VRAM with the KV cache and runs out of memory. `llama-bench` hides this because it sizes the context per test.
@@ -41,7 +41,7 @@ These are properties of llama.cpp, not of Galactus. Each one cost us time:
 - **Decode two-term model:** `time_per_token ≈ C + (bytes_read_per_token ÷ your_bandwidth)`. `C` is a GPU-side constant (about 90 ms on Galactus). `bytes_read_per_token` is your active-expert size at your quant. On Galactus the model predicted 5.5 / 6.2 / 3.9 t/s against measured 5.53 / 6.01 / 3.87. Measure your bandwidth (STREAM) and your bytes per token. The form holds; the constants are yours.
 - **Prefill ubatch ladder:** `t_ubatch ≈ (fixed streaming term) + (linear GEMM term × ub)`. On Galactus both terms came from the single card that the unpatched scheduler used. Your ladder will differ, but it should still fit two terms.
 - **Prompt-length scaling:** a quadratic attention term plus the linear expert terms. Attention was 72% of a 32k prefill pass here. Your split depends on your attention implementation and your context depth.
-- **Cost:** the $/GB and $/decode-token method in [platform economics](platform-and-method.md) is a template. Your prices and your parts will differ.
+- **Cost:** the $/GB and $/decode-token method in [the hardware note's cost section](../hardware/galactus/README.md) is a template. Your prices and your parts will differ.
 
 ---
 

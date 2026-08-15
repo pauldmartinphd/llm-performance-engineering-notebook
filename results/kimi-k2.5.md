@@ -1,9 +1,9 @@
 # Kimi K2.5 — Galactus results
 
 **Model:** Kimi K2.5, Unsloth UD-Q4_K_XL — `deepseek2` arch (Kimi K2 is built on the DeepSeek-V3 MLA backbone), 1026.41 B params (≈1.03 T), 579.28 GiB.
-**System:** Galactus (EPYC 7713, DDR4-2933 8-channel, 4 × Radeon Pro V620). See [platform-and-method](../platform-and-method.md).
+**System:** Galactus (EPYC 7713, DDR4-2933 8-channel, 4 × Radeon Pro V620). Platform: [../hardware/galactus/README.md](../hardware/galactus/README.md); method: [methodology.md](methodology.md).
 **Build:** `58190cc84 (8671)`. **Date:** 2026-04-07.
-**Raw log:** `../../raw-logs/model-benchmark-logs/kimi-k2.5-raw.md`.
+**Raw log:** `raw-logs/model-benchmark-logs/kimi-k2.5-raw.md`.
 
 ## Result in one line
 

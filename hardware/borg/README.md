@@ -1,6 +1,6 @@
 # Borg — platform
 
-Second machine in the fleet, alongside [Galactus](../galactus/README.md). Dual-role: LLM inference for agentic coding, and multi-era Windows support (native 3D audio/video from Win98 through 11) via period-correct GPU and sound hardware. The [methodology](../../docs/methodology.md) transfers as written; figures marked unmeasured have no benchmark on record yet.
+Second machine in the fleet, alongside [Galactus](../galactus/README.md). Dual-role: LLM inference for agentic coding, and multi-era Windows support (native 3D audio/video from Win98 through 11) via period-correct GPU and sound hardware. The [methodology](../../results/methodology.md) transfers as written; figures marked unmeasured have no benchmark on record yet.
 
 ## Compute
 
@@ -29,10 +29,10 @@ Sound Blaster X-Fi Titanium (PCIe); Sound Blaster Audigy 2 NX (USB). Selected fo
 ## LLM duty (throughput unmeasured)
 
 - **Qwen3.8 27B** — agentic coding.
-- **DeepSeek-V4-Flash-0731** — agentic coding. Shared with Galactus — see the [Galactus results](../../docs/results-and-takeaways/deepseek-v4-flash.md), which do **not** transfer: Borg has ~20% less memory bandwidth (estimated), 64 GB VRAM across two mixed-arch cards vs 120 GB across four.
+- **DeepSeek-V4-Flash-0731** — agentic coding. Shared with Galactus — see the [Galactus results](../../results/deepseek-v4-flash.md), which do **not** transfer: Borg has ~20% less memory bandwidth (estimated), 64 GB VRAM across two mixed-arch cards vs 120 GB across four.
 
 ## Open items
 
 - STREAM baseline (prerequisite for everything).
-- V4-Flash baseline, then whether DSpark (see [speculative decoding](../../docs/speculative-decoding.md)) reproduces the Galactus gain — the drafter (10.9 GB) fits the R9700; needs llama.cpp ≥ PR #25784.
+- V4-Flash baseline, then whether DSpark (see [speculative decoding](../../takeaways/speculative-decoding.md)) reproduces the Galactus gain — the drafter (10.9 GB) fits the R9700; needs llama.cpp ≥ PR #25784.
 - Record quants in use and placement flags.

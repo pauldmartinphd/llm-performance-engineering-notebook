@@ -1,6 +1,6 @@
 # Speculative decoding on hybrid CPU-MoE rigs
 
-Cross-model mechanics — the companion to [methodology](methodology.md) for the speculation-specific loop. Per-model numbers live in [glm-5.2](results-and-takeaways/glm-5.2.md) and [deepseek-v4-flash](results-and-takeaways/deepseek-v4-flash.md).
+Cross-model mechanics — the companion to [methodology](../results/methodology.md) for the speculation-specific loop. Per-model numbers live in [glm-5.2](../results/glm-5.2.md) and [deepseek-v4-flash](../results/deepseek-v4-flash.md).
 
 ## Why it works on a memory-bound rig
 

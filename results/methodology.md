@@ -1,6 +1,6 @@
 # A performance-testing methodology for LLM inference
 
-A repeatable procedure for finding a system's real inference limits and moving them, without fooling yourself. It is written for hybrid Mixture-of-Experts (MoE) inference — routed experts in system RAM, dense path on GPUs — but the loop generalizes. Every step is demonstrated with real numbers from **Galactus** (EPYC 7713, DDR4-2933, 4 × Radeon Pro V620); see the [per-model results](results-and-takeaways/) and the [platform note](platform-and-method.md).
+A repeatable procedure for finding a system's real inference limits and moving them, without fooling yourself. It is written for hybrid Mixture-of-Experts (MoE) inference — routed experts in system RAM, dense path on GPUs — but the loop generalizes. Every step is demonstrated with real numbers from **Galactus** (EPYC 7713, DDR4-2933, 4 × Radeon Pro V620); see the [per-model results](README.md) and the [hardware note](../hardware/galactus/README.md).
 
 The one-sentence version: **establish the physical ceiling, predict what the software should reach, then change one variable at a time and explain every number — keeping the refuted hypotheses.**
 
