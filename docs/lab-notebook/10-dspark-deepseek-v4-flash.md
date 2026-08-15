@@ -103,6 +103,8 @@ Baseline (no speculation) measured twice across the session: **10.3** and **9.8 
 
 **Data conflict, unresolved:** an earlier report in the session gave n=3 / p-min 0.3 as 13.4; a later run of the nominally identical configuration gave 14.7. These are irreconcilable at observed run variance (±0.2); one report is presumed mislabeled (one prior mislabeling was caught and corrected during the session). The later dose–response set (0.3 → 14.7, 0.5-at-n=2 → 13.9, 0.8 → 12.6), being internally consistent and monotone, is taken as authoritative.
 
+**Rerun:** `scripts/session-10-rerun.sh` regenerates this table under identical conditions — fixed order, two reps per configuration, baseline at start and end as a drift check, `--fit` at default throughout, TTY captured with `script(1)`. The table above is provisional until it runs; it also settles the conflict row.
+
 ### Entry 6 — Analysis
 
 - **Optimum: fixed draft depth 2–3, plateau at ~14.5–14.8 t/s.** Locked production setting `--spec-draft-n-max 3`, p-min off: **14.7 ± 0.2 t/s, ≈ +45% over baseline.** The fastest decode Galactus has produced on any model.

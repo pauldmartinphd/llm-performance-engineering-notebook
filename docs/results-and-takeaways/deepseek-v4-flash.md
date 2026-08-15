@@ -15,13 +15,15 @@ The fastest decode Galactus has produced on any model: **14.7 ± 0.2 t/s** with 
 
 ## DSpark draft-depth sweep
 
-Config: `-ngl 99 --cpu-moe -fa on -t 64 -c 8192 -b 8192 -ub 8192 --spec-type draft-dspark -md <drafter> -ngld 99 --spec-draft-n-max <N>`. Single technical-prose prompt, greedy. Acceptance rates were **not captured** (instrumentation failure — see the notebook).
+Config: `-ngl 99 --cpu-moe -fa on -t 64 -c 8192 -b 8192 -ub 8192 --spec-type draft-dspark -md <drafter> -ngld 99 --spec-draft-n-max <N>`. Single technical-prose prompt, greedy. Acceptance rates were **not captured** (instrumentation failure — see the notebook). The `--fit` state was not held constant across runs; the sweep is provisional pending the identical-conditions rerun (`scripts/session-10-rerun.sh`).
 
 | Configuration | tg (t/s) |
 |---|---|
 | baseline (no speculation) | 9.8 / 10.3 |
 | n=1 | 12.8 |
 | n=2 | 14.3 (--fit off) / 14.5 |
+| n=2, p-min 0.3 | 14.4 |
+| n=2, p-min 0.5 | 13.9 |
 | **n=3** | **14.6 / 14.8** |
 | n=3, p-min 0.3 | 14.7 |
 | n=3, p-min 0.8 | 12.6 |
