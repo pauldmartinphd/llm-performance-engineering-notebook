@@ -65,3 +65,4 @@ Entries are ordered by wall-clock time and grouped into nine work sessions. `###
 8. [08-session-8-h2d-verdict-and-patch-interrupted](08-session-8-h2d-verdict-and-patch-interrupted.md) — The H2D verdict and the patch, interrupted
 9. [09-session-9-building-and-benchmarking-the-patch](09-session-9-building-and-benchmarking-the-patch.md) — Building and benchmarking the patch
 10. [10-dspark-deepseek-v4-flash](10-dspark-deepseek-v4-flash.md) — DSpark on DeepSeek-V4-Flash (Session 10) + interval notes
+11. [11-stream-rebaseline-2tb](11-stream-rebaseline-2tb.md) — STREAM re-baseline on the 2 TB population (Aug 15)

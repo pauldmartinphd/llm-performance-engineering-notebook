@@ -24,7 +24,7 @@ The GLM-5.2 investigation is the deepest: prefill went from 37.63 to **119.36 t/
 
 This project measured both limits; it did not guess them. Memory bandwidth limits decode: STREAM measured 152 GB/s after the RFO correction. A two-term model predicted three separate configurations to within a few percent. Two faults in the llama.cpp scheduler limited prefill. This project fixed both.
 
-Note: the July GLM-5.2 results ran on the earlier 1 TB memory (8 × 128 GB). Galactus now has 2 TB (8 × 256 GB DDR4-2933 3DS RDIMM), installed August 2026. The STREAM re-baseline on the 2 TB DIMMs is still an open item, so the 152 GB/s figure comes from the 1 TB population. See [hardware/galactus/README.md](hardware/galactus/README.md).
+Note: the July GLM-5.2 results ran on the earlier 1 TB memory (8 × 128 GB). Galactus now has 2 TB (8 × 256 GB DDR4-2933 3DS RDIMM), installed August 2026. Re-baselined on the 2 TB DIMMs 2026-08-15, after one failing DIMM in the new population was found and replaced: 148–151 GB/s RFO-corrected, within ~2% of the 1 TB figure — the July numbers stand as measured. See [hardware/galactus/README.md](hardware/galactus/README.md).
 
 ## The three changes most likely to help your system
 
@@ -45,7 +45,7 @@ Note: the July GLM-5.2 results ran on the earlier 1 TB memory (8 × 128 GB). Gal
 
 ## Status
 
-Active, and now spanning five models. The production decode configurations are settled: GLM-5.2 at 7.1 t/s with MTP n=2, and DeepSeek-V4-Flash at 14.7 t/s with DSpark n=3. Open items: a STREAM re-baseline on the new 2 TB DIMMs, an upstream PR for the prefill patch, and a Kimi K3 test. See the open-items sections in the per-model notes under [results/](results/).
+Active, and now spanning five models. The production decode configurations are settled: GLM-5.2 at 7.1 t/s with MTP n=2, and DeepSeek-V4-Flash at 14.7 t/s with DSpark n=3. Open items: an upstream PR for the prefill patch, and a Kimi K3 test. See the open-items sections in the per-model notes under [results/](results/).
 
 ## License
 

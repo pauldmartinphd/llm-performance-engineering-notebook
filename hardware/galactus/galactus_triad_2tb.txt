@@ -1,0 +1,69 @@
+root@galactus:~/STREAM# for t in 16 24 32 40 48 56 64 80 96 112 128; do   echo "===== THREADS=$t =====";   OMP_NUM_THREADS=$t OMP_PROC_BIND=spread OMP_PLACES=cores ./stream_c |     awk -v t="$t" '/Copy:|Scale:|Add:|Triad:/{print "Threads=" t, $0}';   echo; done | tee stream_sweep_2tb.log
+# 2 TB population (8 x 256 GB DDR4-2933 3DS RDIMM, rated speed), bare-metal host, 2026-08-15.
+# Capture taken after the failing-DIMM replacement (same day); supersedes the pre-replacement capture.
+===== THREADS=16 =====
+Threads=16 Copy:          145877.4     0.109923     0.109681     0.110482
+Threads=16 Scale:         100849.6     0.159365     0.158652     0.160367
+Threads=16 Add:           110595.6     0.217394     0.217007     0.218633
+Threads=16 Triad:         111151.7     0.216487     0.215921     0.216794
+
+===== THREADS=24 =====
+Threads=24 Copy:          139678.3     0.114638     0.114549     0.114763
+Threads=24 Scale:          94647.6     0.169537     0.169048     0.170551
+Threads=24 Add:           103608.6     0.232038     0.231641     0.233071
+Threads=24 Triad:         103743.9     0.231709     0.231339     0.232420
+
+===== THREADS=32 =====
+Threads=32 Copy:          145673.2     0.110187     0.109835     0.110681
+Threads=32 Scale:          96990.9     0.165145     0.164964     0.165635
+Threads=32 Add:           107962.8     0.222593     0.222299     0.222991
+Threads=32 Triad:         108157.4     0.222208     0.221899     0.223479
+
+===== THREADS=40 =====
+Threads=40 Copy:          128879.5     0.124273     0.124147     0.124590
+Threads=40 Scale:          87469.0     0.183098     0.182922     0.183262
+Threads=40 Add:            95284.6     0.252019     0.251877     0.252839
+Threads=40 Triad:          95447.9     0.251635     0.251446     0.252073
+
+===== THREADS=48 =====
+Threads=48 Copy:          138977.1     0.115295     0.115127     0.115860
+Threads=48 Scale:          93426.3     0.171567     0.171258     0.171988
+Threads=48 Add:           103648.9     0.231758     0.231551     0.232828
+Threads=48 Triad:         103834.5     0.231379     0.231137     0.232425
+
+===== THREADS=56 =====
+Threads=56 Copy:          138668.4     0.115570     0.115383     0.115861
+Threads=56 Scale:          94837.8     0.168918     0.168709     0.169966
+Threads=56 Add:           105490.8     0.227737     0.227508     0.228349
+Threads=56 Triad:         105706.4     0.227275     0.227044     0.228543
+
+===== THREADS=64 =====
+Threads=64 Copy:          139111.1     0.115203     0.115016     0.115458
+Threads=64 Scale:          94889.1     0.168780     0.168618     0.169152
+Threads=64 Add:           105929.4     0.226792     0.226566     0.227862
+Threads=64 Triad:         106107.8     0.226423     0.226185     0.227566
+
+===== THREADS=80 =====
+Threads=80 Copy:          125370.3     0.127799     0.127622     0.128021
+Threads=80 Scale:          84956.7     0.188528     0.188331     0.188950
+Threads=80 Add:            93827.0     0.256341     0.255790     0.259033
+Threads=80 Triad:          93990.4     0.255729     0.255345     0.256397
+
+===== THREADS=96 =====
+Threads=96 Copy:          135554.3     0.118287     0.118034     0.119982
+Threads=96 Scale:          91603.3     0.174943     0.174666     0.175638
+Threads=96 Add:           102055.1     0.235484     0.235167     0.236130
+Threads=96 Triad:         102233.0     0.235357     0.234758     0.239492
+
+===== THREADS=112 =====
+Threads=112 Copy:          134809.5     0.119069     0.118686     0.120747
+Threads=112 Scale:          92809.6     0.172621     0.172396     0.173463
+Threads=112 Add:           103552.7     0.232029     0.231766     0.232800
+Threads=112 Triad:         103773.5     0.231540     0.231273     0.233932
+
+===== THREADS=128 =====
+Threads=128 Copy:          135331.8     0.119370     0.118228     0.122666
+Threads=128 Scale:          92855.3     0.173250     0.172311     0.176612
+Threads=128 Add:           103892.5     0.232086     0.231008     0.237081
+Threads=128 Triad:         104140.0     0.231846     0.230459     0.234998
+
