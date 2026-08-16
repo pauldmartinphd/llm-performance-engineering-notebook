@@ -1,0 +1,19 @@
+model,file,size_gib,params_b,threads,test,tps_mean,tps_stddev,build,notes
+GLM-5.2,Unsloth UD-Q4_K_XL,435.19,753.86,32,pp8192,95.99,3.36,3653e6d6d (10326),stock scheduler; PP patch not applied
+GLM-5.2,Unsloth UD-Q4_K_XL,435.19,753.86,32,tg128,5.30,0.00,3653e6d6d (10326),stock scheduler; PP patch not applied
+DeepSeek-V4-Flash-0731,Unsloth UD-Q8_K_XL (MXFP4 experts),150.75,284.33,64,pp8192,143.54,1.64,3653e6d6d (10326),build stamp reconstructed (tee overwrite); same binary as adjacent runs
+DeepSeek-V4-Flash-0731,Unsloth UD-Q8_K_XL (MXFP4 experts),150.75,284.33,64,tg128,10.34,0.10,3653e6d6d (10326),build stamp reconstructed (tee overwrite); same binary as adjacent runs
+Kimi-K2.6,Unsloth UD-Q8_K_XL (native-INT4 MoE),553.71,1026.41,64,pp8192,94.23,4.45,3653e6d6d (10326),first Kimi row on K2.6; April rows were K2.5
+Kimi-K2.6,Unsloth UD-Q8_K_XL (native-INT4 MoE),553.71,1026.41,64,tg128,5.79,0.01,3653e6d6d (10326),first Kimi row on K2.6; April rows were K2.5
+Qwen3.5-397B-A17B,Unsloth UD-Q6_K_XL,337.43,396.35,64,pp8192,249.61,19.78,3653e6d6d (10326),file changed from April (bartowski Q6_K_L 319.21 GiB)
+Qwen3.5-397B-A17B,Unsloth UD-Q6_K_XL,337.43,396.35,64,tg128,9.37,0.16,3653e6d6d (10326),file changed from April (bartowski Q6_K_L 319.21 GiB)
+MiniMax-M2.7,Unsloth UD-Q5_K_M,157.23,228.69,64,pp8192,418.83,24.11,3653e6d6d (10326),terminal measurement; model retired and deleted after
+MiniMax-M2.7,Unsloth UD-Q5_K_M,157.23,228.69,64,tg128,15.18,0.18,3653e6d6d (10326),terminal measurement; model retired and deleted after
+GLM-5.2,Unsloth UD-Q4_K_XL,435.19,753.86,32,spec-mtp-n1,5.9,,3653e6d6d (10326),llama-cli single rep; spec rep noise ~9%
+GLM-5.2,Unsloth UD-Q4_K_XL,435.19,753.86,32,spec-mtp-n2,6.6,0.3,3653e6d6d (10326),llama-cli 2 reps (6.3/6.9); production config
+GLM-5.2,Unsloth UD-Q4_K_XL,435.19,753.86,32,spec-mtp-n3,6.3,,3653e6d6d (10326),llama-cli single rep
+DeepSeek-V4-Flash-0731,Unsloth UD-Q8_K_XL (MXFP4 experts),150.75,284.33,64,spec-dspark-n2,14.3,,3653e6d6d (10326),llama-cli single rep
+DeepSeek-V4-Flash-0731,Unsloth UD-Q8_K_XL (MXFP4 experts),150.75,284.33,64,spec-dspark-n3,14.1,0.7,3653e6d6d (10326),llama-cli 2 reps (14.7/13.4); production config; p-min off
+DeepSeek-V4-Flash-0731,Unsloth UD-Q8_K_XL (MXFP4 experts),150.75,284.33,64,spec-dspark-n4,13.6,,3653e6d6d (10326),llama-cli single rep
+DeepSeek-V4-Flash-0731,Unsloth UD-Q8_K_XL (MXFP4 experts),150.75,284.33,64,spec-dspark-n8-clamped-5,12.5,,3653e6d6d (10326),llama-cli single rep; n-max clamps to drafter block size 5
+DeepSeek-V4-Flash-0731,Unsloth UD-Q8_K_XL (MXFP4 experts),150.75,284.33,64,spec-dspark-n1,12.9,,3653e6d6d (10326),llama-cli single rep

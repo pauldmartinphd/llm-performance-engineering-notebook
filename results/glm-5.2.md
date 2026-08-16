@@ -56,3 +56,7 @@ At the July compilation the loader flagged blk.78 TENSOR_SKIP, so `--spec-type d
 - Resident experts on ROCm1/2 via `-ot`: 17% worse than all-CPU op_offload (resident-weight path ≠ op_offload path).
 - DFlash speculation: parked — no GLM-5.2 draft model exists; projected ~11–12.5 t/s if one appears.
 - `llama-bench -d` KV-restore crash at 16,384 cells (`hipMemcpyAsync` illegal access) — unreported upstream.
+
+## 2 TB common baseline and MTP re-stamp (2026-08-15/16, build 3653e6d6d, stock scheduler)
+
+Entry 12 (`lab-notebook/12-common-baseline-2tb.md`) normalized all five models on one build. GLM-5.2 stock: **pp8192 95.99 ± 3.36, tg128 5.30 ± 0.00** (t=32; no prefill patch — 119.36 remains the July patched-build figure). MTP re-stamp on the same build (llama-cli, ZFS prompt, greedy): n=1 5.9, **n=2 6.3/6.9 → 6.6 ± 0.3 (production)**, n=3 6.3 — +25% ± 6 over baseline, against July's +31%; n=2 confirmed optimal, with more separation from n=1 than July showed. Speculative reps carry ~9% timing noise at identical token streams (Entry 12). Current-build production decode: **6.6 ± 0.3 t/s, MTP n=2**.

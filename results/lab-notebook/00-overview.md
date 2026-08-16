@@ -66,3 +66,4 @@ Entries are ordered by wall-clock time and grouped into nine work sessions. `###
 9. [09-session-9-building-and-benchmarking-the-patch](09-session-9-building-and-benchmarking-the-patch.md) — Building and benchmarking the patch
 10. [10-dspark-deepseek-v4-flash](10-dspark-deepseek-v4-flash.md) — DSpark on DeepSeek-V4-Flash (Session 10) + interval notes
 11. [11-stream-rebaseline-2tb](11-stream-rebaseline-2tb.md) — STREAM re-baseline on the 2 TB population (Aug 15)
+12. [12-common-baseline-2tb](12-common-baseline-2tb.md) — The 2 TB common baseline: five models, one build, stock (Aug 15–16)

@@ -1,4 +1,4 @@
-# Kimi K2.5 — Galactus results
+# Kimi K2.5/K2.6 — Galactus results
 
 **Model:** Kimi K2.5, Unsloth UD-Q4_K_XL — `deepseek2` arch (Kimi K2 is built on the DeepSeek-V3 MLA backbone), 1026.41 B params (≈1.03 T), 579.28 GiB.
 **System:** Galactus (EPYC 7713, DDR4-2933 8-channel, 4 × Radeon Pro V620). Platform: [../hardware/galactus/README.md](../hardware/galactus/README.md); method: [methodology.md](methodology.md).
@@ -39,3 +39,7 @@ ROCm is ~18% faster on decode and slightly faster on prefill. Use ROCm for this 
 - Prefill scales with threads to t=96; decode does not.
 - Vulkan is a working fallback but slower; SMT (t=128) collapses decode.
 - Not yet tested: resident-expert offload (little VRAM headroom at 579 GiB) and speculative decode.
+
+## K2.6 — 2 TB common baseline (2026-08-15/16, build 3653e6d6d, stock scheduler)
+
+First fully-conditioned Kimi row, measured on **K2.6** (Unsloth UD-Q8_K_XL, 553.71 GiB, native-INT4 MoE weights + BF16 rest; llama-bench's `deepseek2 671B BF16` label is cosmetic): **pp8192 94.23 ± 4.45, tg128 5.79 ± 0.01** (t=64). The April tables above are K2.5 under April conditions and are not class-comparable; treating K2.6 ≈ K2.5 is a recorded assumption. Decode decomposes as S ≈ 101 ms (≈15 GB/token of INT4 routed experts at 148 GB/s) + C ≈ 72 ms — K2.6 out-decodes GLM-5.2 despite the larger total size, on the smaller GPU-side constant. Entry: `lab-notebook/12-common-baseline-2tb.md`. Open: the K2.6 vs K2.7-Code disposition.

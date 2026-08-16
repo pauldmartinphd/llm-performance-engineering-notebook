@@ -1,5 +1,7 @@
 # MiniMax M2.7 — Galactus results
 
+**Status: retired 2026-08-16.** Final normalized measurement below; the model was removed from the machine afterward. Everything else in this note is April history.
+
 **Model:** MiniMax M2.7, Unsloth UD-Q5_K_M — `minimax-m2` arch, 228.69 B params (≈10 B active), 157.23 GiB.
 **System:** Galactus (EPYC 7713, DDR4-2933 8-channel, 4 × Radeon Pro V620). Platform: [../hardware/galactus/README.md](../hardware/galactus/README.md); method: [methodology.md](methodology.md).
 **Build:** `0893f50f2 (8746)`. **Date:** 2026-04-17.
@@ -40,3 +42,7 @@ Resident-expert offload is worth +53 t/s prefill and +2.6 t/s decode here — th
 - Best all-CPU config: **t=32**, 14.76 t/s decode / 71.82 t/s prefill.
 - Best overall config: **resident-expert offload, ngl 42** — 17.37 t/s decode / 154.93 t/s prefill.
 - Never schedule into SMT siblings (t=128 halves decode).
+
+## Final measurement — 2 TB common baseline (2026-08-15/16, build 3653e6d6d, stock scheduler)
+
+Terminal row, identical file to April (UD-Q5_K_M, 157.23 GiB): **pp8192 418.83 ± 24.11** — the machine record, 4.1× the April baseline-class 101.71 — and **tg128 15.18 ± 0.18** (t=64), +2.8% over the April baseline-class 14.76: the only model to beat its April number, a clean isolation of build gains on an identical file. The April offload-class 17.37 was not re-run; the offload class retires with the model. Entry: `lab-notebook/12-common-baseline-2tb.md`.

@@ -23,4 +23,4 @@ The original 1 TB build cost $9,050 in total (RAM $5,600 at $5.47/GB). RAM is no
 |---|---|---|---|
 | GLM-5.2 | Unsloth UD-Q4_K_XL | 753.86 B / 435 GiB | arch `glm-dsa`, 75 MoE layers, 256 experts / 8 active, MLA attention |
 | DeepSeek-V4-Flash-0731 | Unsloth UD-Q8_K_XL | 162 GB | MXFP4 routed experts; DSpark drafter |
-| Kimi K2.5, MiniMax M2.7, Qwen 3.5 397B | various | — | see [../../results/](../../results/); they fit in 2 TB |
+| Kimi K2.5/K2.6, MiniMax M2.7, Qwen 3.5 397B | various | — | see [../../results/](../../results/); they fit in 2 TB |

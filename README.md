@@ -8,19 +8,23 @@ Every exact speed belongs to the machine it was measured on, and each result sta
 
 ---
 
-## Headline results
+## Headline results — the normalized baseline (2026-08-15/16)
 
-Best measured decode / prefill per model on Galactus (details in [results/](results/)):
+All five models, one build (`3653e6d6d`), one uniform command (`-ngl 99 -ot "exps=CPU" -fa on -b 8192 -ub 8192 -p 8192 -n 128 -r 2`), stock scheduler — the prefill patch is not applied anywhere in this table. One optimization class per number. Full conditions, history, and the speculative sweeps: [Entry 12](results/lab-notebook/12-common-baseline-2tb.md).
 
-| Model | Params / quant | Best decode | Best prefill |
+| Model | pp8192 (t/s) | tg128 (t/s) | Speculative decode, same build |
 |---|---|---|---|
-| MiniMax M2.7 | 229 B / Q5_K | 17.37 t/s (resident offload) | 154.93 t/s |
-| DeepSeek-V4-Flash-0731 | Q8_K_XL, MXFP4 | 14.7 t/s (DSpark n=3) | — |
-| Qwen 3.5 397B | 396 B / Q6_K | ~11.7 t/s (resident offload) | ~110 t/s |
-| GLM-5.2 | 753 B / Q4_K_XL | 7.1 t/s (MTP n=2) | 119.36 t/s (patched) |
-| Kimi K2.5 | 1.03 T / Q4_K_XL | 6.76 t/s | 44 t/s |
+| MiniMax M2.7 † | 418.83 ± 24.11 | 15.18 ± 0.18 | — |
+| Qwen 3.5 397B | 249.61 ± 19.78 | 9.37 ± 0.16 | — (MTP does not arm on this export) |
+| DeepSeek-V4-Flash-0731 | 143.54 ± 1.64 | 10.34 ± 0.10 | **14.1 ± 0.7** (DSpark n=3) |
+| GLM-5.2 (t=32) | 95.99 ± 3.36 | 5.30 ± 0.00 | **6.6 ± 0.3** (MTP n=2) |
+| Kimi K2.6 | 94.23 ± 4.45 | 5.79 ± 0.01 | — |
 
-The GLM-5.2 investigation is the deepest: prefill went from 37.63 to **119.36 t/s** (unclamping `n_ubatch`, 2.6×, plus the 3-edit scheduler patch, +13.7%) and decode from 5.15 to **7.1 t/s** (MTP n=2). DeepSeek-V4-Flash decode roughly doubled to **14.7 t/s** (DSpark n=3), all from software.
+† Terminal measurement: MiniMax M2.7 was retired and removed from the machine after this row.
+
+Historical bests under other classes and builds — the July patched prefill (GLM 119.36), the April resident-offload rows (MiniMax 17.37, Qwen ~11.7) — live in the per-model notes under [results/](results/) as history, labeled with their class and build. They are no longer mixed into this table.
+
+The GLM-5.2 investigation is the deepest: prefill went from 37.63 to **119.36 t/s** on the July build (unclamping `n_ubatch`, 2.6×, plus the 3-edit scheduler patch, +13.7%), and decode from 5.15 to 7.1 (July) — **6.6 ± 0.3 on the current build** (MTP n=2). DeepSeek-V4-Flash decode roughly doubled since July, 7.16 → **14.1 ± 0.7** (DSpark n=3), with the stock part of that gain (+44%) coming from upstream llama.cpp churn alone — the argument, in one number, for re-baselining on one build.
 
 This project measured both limits; it did not guess them. Memory bandwidth limits decode: STREAM measured 152 GB/s after the RFO correction. A two-term model predicted three separate configurations to within a few percent. Two faults in the llama.cpp scheduler limited prefill. This project fixed both.
 
@@ -37,15 +41,15 @@ Note: the July GLM-5.2 results ran on the earlier 1 TB memory (8 × 128 GB). Gal
 | Path | Content |
 |---|---|
 | [takeaways/](takeaways/) | **What carries to your system.** [general-principles.md](takeaways/general-principles.md) (read this first), the [refuted-hypotheses table](takeaways/refuted-hypotheses.md), and [speculative decoding](takeaways/speculative-decoding.md). |
-| [results/](results/) | The empirical record: one note per model, the [methodology](results/methodology.md), the [lab notebook](results/lab-notebook/) (Sessions 1–10), [raw logs](results/raw-logs/), and [CSV data](results/data/). |
+| [results/](results/) | The empirical record: one note per model, the [methodology](results/methodology.md), the [lab notebook](results/lab-notebook/) (Sessions 1–10 and Entries 11–12), [raw logs](results/raw-logs/), and [CSV data](results/data/). |
 | [hardware/](hardware/) | Per-machine hardware notes and raw captures: [galactus/](hardware/galactus/), [borg/](hardware/borg/). |
 | [patches/](patches/) | The llama.cpp scheduler patch (Edits 1–3), and how to apply and check it. Being submitted upstream. |
-| [experiments/](experiments/) | Measurement harnesses: the 16-phase diagnostic run and the Session-10 rerun protocol. |
+| [experiments/](experiments/) | Measurement harnesses: the 16-phase diagnostic run and the Session-10 rerun protocol (superseded by Entry 12). |
 | [REPRODUCE.md](REPRODUCE.md) | How to run the same measurements on your own hardware. |
 
 ## Status
 
-Active, and now spanning five models. The production decode configurations are settled: GLM-5.2 at 7.1 t/s with MTP n=2, and DeepSeek-V4-Flash at 14.7 t/s with DSpark n=3. Open items: an upstream PR for the prefill patch, and a Kimi K3 test. See the open-items sections in the per-model notes under [results/](results/).
+Active. All five models were re-baselined 2026-08-15/16 on one build with the stock scheduler ([Entry 12](results/lab-notebook/12-common-baseline-2tb.md)); MiniMax M2.7 was retired after its final row. Production decode configurations on the current build: GLM-5.2 **6.6 ± 0.3 t/s** (MTP n=2) and DeepSeek-V4-Flash **14.1 ± 0.7 t/s** (DSpark n=3). Open items: the prefill-patch A/B across the four kept models, the upstream PR for the patch, the Kimi K2.6 vs K2.7-Code disposition, the speculative-run timing variance, and a Kimi K3 test.
 
 ## License
 

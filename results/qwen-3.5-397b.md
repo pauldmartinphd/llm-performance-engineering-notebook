@@ -51,3 +51,7 @@ Each extra resident layer buys ~1 t/s. Transparent hugepages made no difference 
 - Best all-CPU config: **t=32–64**, ~9.7 t/s decode / 63–85 t/s prefill.
 - Best overall config: **5-layer resident offload at DDR4-2933** — ~11.5–11.7 t/s decode (t=32) / ~110 t/s prefill (t=96).
 - THP: no effect. SMT (t=128): decode collapses.
+
+## 2 TB common baseline (2026-08-15/16, build 3653e6d6d, stock scheduler)
+
+File changed from April: Unsloth UD-Q6_K_XL (337.43 GiB) replaces bartowski Q6_K_L (319.21 GiB). Stock results: **pp8192 249.61 ± 19.78** — second-fastest prefill on the machine, behind MiniMax's terminal row — and **tg128 9.37 ± 0.16** (t=64), −2.0% vs the April baseline-class 9.56, the moving parts cancelling. The April resident-offload configuration was not re-run: under the standing ub-8192 config the 5-layer placement failed at weight load and the 4-layer placement at context creation — large-ubatch prefill and resident offload compete for VRAM (Entry 12) — and offload was dropped as not solving a problem of interest. Qwen MTP does not arm on this export (`failed to create MTP context`; cause not isolated). Entry: `lab-notebook/12-common-baseline-2tb.md`. Qwen remains in the kept set.

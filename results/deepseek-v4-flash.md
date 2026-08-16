@@ -15,7 +15,7 @@ The fastest decode Galactus has produced on any model: **14.7 ± 0.2 t/s** with 
 
 ## DSpark draft-depth sweep
 
-Config: `-ngl 99 --cpu-moe -fa on -t 64 -c 8192 -b 8192 -ub 8192 --spec-type draft-dspark -md <drafter> -ngld 99 --spec-draft-n-max <N>`. Single technical-prose prompt, greedy. Acceptance rates were **not captured** (instrumentation failure — see the notebook). The `--fit` state was not held constant across runs; the sweep is provisional pending the identical-conditions rerun (`experiments/session-10-rerun.sh`).
+Config: `-ngl 99 --cpu-moe -fa on -t 64 -c 8192 -b 8192 -ub 8192 --spec-type draft-dspark -md <drafter> -ngld 99 --spec-draft-n-max <N>`. Single technical-prose prompt, greedy. Acceptance rates were **not captured** (instrumentation failure — see the notebook). The `--fit` state was not held constant across runs; the sweep was provisional; the identical-conditions re-stamp on one build is in the section below (2026-08-16), which supersedes `experiments/session-10-rerun.sh`.
 
 | Configuration | tg (t/s) |
 |---|---|
@@ -43,3 +43,7 @@ Baseline progression: **7.16** (July, build 9942) → **~10.1** (upstream DSv4 f
 ## Contrast with GLM-5.2
 
 V4-Flash speculates better (+45% at n=3) than GLM-5.2 MTP (+31% at n=2) because its streaming share of the token budget is smaller (~29 of ~100 ms vs GLM's ~91 of ~180 ms), leaving more amortizable cost for speculation to attack.
+
+## 2 TB common baseline and DSpark re-stamp (2026-08-15/16, build 3653e6d6d, stock scheduler)
+
+Entry 12 (`lab-notebook/12-common-baseline-2tb.md`) normalized all five models on one build. V4-Flash stock: **pp8192 143.54 ± 1.64** (the first recorded V4-Flash prefill at the standing config) and **tg128 10.34 ± 0.10** — vs July's 7.16, +44% from upstream churn alone. DSpark re-stamp, same build, p-min off: n=1 12.9, n=2 14.3, **n=3 14.7/13.4 → 14.1 ± 0.7 (production)**, n=4 13.6, n=8→clamped-to-5 12.5. The July depth curve reproduces end to end (July: 12.8 / 14.3–14.5 / 14.6–14.8 / — / 11.4 at n=5). Speculative reps carry ~9% timing noise. This supersedes `experiments/session-10-rerun.sh`; that open item is closed. Current-build production decode: **14.1 ± 0.7 t/s, DSpark n=3**.
