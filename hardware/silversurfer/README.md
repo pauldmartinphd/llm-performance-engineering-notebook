@@ -1,6 +1,6 @@
 # SilverSurfer — platform
 
-Integrated-GPU workstation laptop in the fleet, alongside [Galactus](../galactus/README.md), [Borg](../borg/README.md), and [Magneto](../magneto/README.md). Like Magneto it is a unified-memory machine — one LPDDR5X pool for the CPU and a large integrated GPU — but on the x86 / ROCm side, which makes it the closest laptop analogue to the Galactus software stack. The [methodology](../../results/methodology.md) transfers as written; the memory-bandwidth ceiling (§1) is the first thing to measure. Figures marked unmeasured have no benchmark on record yet.
+Integrated-GPU workstation laptop in the fleet, alongside [Galactus](../galactus/README.md), [Borg](../borg/README.md), [Magneto](../magneto/README.md), and [Vision](../vision/README.md). Like Magneto it is a unified-memory machine — one LPDDR5X pool for the CPU and a large integrated GPU — but on the x86 / ROCm side, which makes it the closest laptop analogue to the Galactus software stack. The [methodology](../../results/methodology.md) transfers as written; the memory-bandwidth ceiling (§1) is the first thing to measure. Figures marked unmeasured have no benchmark on record yet.
 
 ## Compute
 

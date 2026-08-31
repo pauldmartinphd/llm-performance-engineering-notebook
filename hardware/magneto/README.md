@@ -1,6 +1,6 @@
 # Magneto — platform
 
-Apple Silicon laptop in the fleet, alongside [Galactus](../galactus/README.md) and [Borg](../borg/README.md). A unified-memory machine: CPU, GPU, and model weights share one LPDDR5 pool, so the discrete-GPU offload split Galactus uses (routed experts in system RAM, dense path on GPU) does not exist here. The [methodology](../../results/methodology.md) transfers as written; the memory-bandwidth ceiling (§1) and the decode two-term model are the parts to re-measure first. Figures marked unmeasured have no benchmark on record yet.
+Apple Silicon laptop in the fleet, alongside [Galactus](../galactus/README.md), [Borg](../borg/README.md), and [Vision](../vision/README.md). A unified-memory machine: CPU, GPU, and model weights share one LPDDR5 pool, so the discrete-GPU offload split Galactus uses (routed experts in system RAM, dense path on GPU) does not exist here. The [methodology](../../results/methodology.md) transfers as written; the memory-bandwidth ceiling (§1) and the decode two-term model are the parts to re-measure first. Figures marked unmeasured have no benchmark on record yet.
 
 This is the machine this notebook is currently edited from (`magneto-local`).
 

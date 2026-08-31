@@ -1,6 +1,6 @@
 # LLM Performance Engineering Notebook
 
-A lab notebook of LLM performance engineering: experiments and results in finding and raising the inference speed limits of large Mixture-of-Experts (MoE) models. The measurements come from the lab's own servers — the machine characterized in detail to date is **Galactus** (AMD EPYC 7713, 2 TB DDR4-2933 8-channel, 4 × AMD Radeon Pro V620, llama.cpp + ROCm in an LXC container on Proxmox); **Borg** (Threadripper Pro 3995WX, Radeon AI PRO R9700 + Radeon Pro W6800) is documented and queued. Full specs and raw captures per machine: [hardware/](hardware/).
+A lab notebook of LLM performance engineering: experiments and results in finding and raising the inference speed limits of large Mixture-of-Experts (MoE) models. The measurements come from the lab's own machines. **Galactus** (AMD EPYC 7713, 2 TB DDR4-2933 8-channel, 4 × AMD Radeon Pro V620, llama.cpp + ROCm in an LXC container on Proxmox) is the one characterized in detail to date. Four more are documented and queued, spanning very different memory systems: **Borg** (Threadripper Pro 3995WX, Radeon AI PRO R9700 + Radeon Pro W6800, 8-channel DDR4), **Vision** (a Lenovo ThinkStation P620 — Threadripper Pro, 8-channel DDR4 — bought broken and under repair), **SilverSurfer** (HP ZBook Ultra G1a: Ryzen AI Max+ PRO 395, 128 GB unified LPDDR5X), and **Magneto** (Apple M2 Max, 64 GB unified LPDDR5). Full specs and raw captures per machine: [hardware/](hardware/).
 
 Every exact speed belongs to the machine it was measured on, and each result states its machine; the measurements published so far are from Galactus. The method, the llama.cpp patch, and the list of changes that did not help apply to any server that runs MoE models with the routed experts in system RAM and the dense layers on GPUs. If you run large MoE models this way, this repo shows how to find the speed limit and how to raise it.
 
@@ -42,7 +42,7 @@ Note: the July GLM-5.2 results ran on the earlier 1 TB memory (8 × 128 GB). Gal
 |---|---|
 | [takeaways/](takeaways/) | **What carries to your system.** [general-principles.md](takeaways/general-principles.md) (read this first), the [refuted-hypotheses table](takeaways/refuted-hypotheses.md), and [speculative decoding](takeaways/speculative-decoding.md). |
 | [results/](results/) | The empirical record: one note per model, the [methodology](results/methodology.md), the [lab notebook](results/lab-notebook/) (Sessions 1–10 and Entries 11–12), [raw logs](results/raw-logs/), and [CSV data](results/data/). |
-| [hardware/](hardware/) | Per-machine hardware notes and raw captures: [galactus/](hardware/galactus/), [borg/](hardware/borg/). |
+| [hardware/](hardware/) | Per-machine hardware notes and raw captures: [galactus/](hardware/galactus/), [borg/](hardware/borg/), [vision/](hardware/vision/), [silversurfer/](hardware/silversurfer/), [magneto/](hardware/magneto/). |
 | [patches/](patches/) | The llama.cpp scheduler patch (Edits 1–3), and how to apply and check it. Being submitted upstream. |
 | [experiments/](experiments/) | Measurement harnesses: the 16-phase diagnostic run and the Session-10 rerun protocol (superseded by Entry 12). |
 | [REPRODUCE.md](REPRODUCE.md) | How to run the same measurements on your own hardware. |
@@ -57,4 +57,4 @@ This repo uses two licenses. The code (`patches/`, `experiments/`) is **MIT** �
 
 ---
 
-*Not affiliated with AMD, the llama.cpp project, or any model vendor. "Galactus" and "Borg" are the author's names for the machines. Every number states which machine it came from.*
+*Not affiliated with AMD, the llama.cpp project, or any model vendor. "Galactus", "Borg", "Vision", "SilverSurfer", and "Magneto" are the author's names for the machines. Every number states which machine it came from.*
