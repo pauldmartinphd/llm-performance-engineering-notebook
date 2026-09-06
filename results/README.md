@@ -1,10 +1,10 @@
 # Results
 
-Per-model performance notes; every note states the machine it was measured on (all results to date: Galactus). Each note distills the raw benchmarks into headline numbers, the best configuration found, and the takeaways. The machine itself: [../hardware/galactus/README.md](../hardware/galactus/README.md). The method behind the numbers: [methodology.md](methodology.md). What carries to other systems: [../takeaways/](../takeaways/).
+These are the per-model performance notes. Every note states the machine it was measured on; all results to date come from Galactus. Each note distills the raw benchmarks into the main numbers, the best configuration found, and the conclusions. For the machine itself, see [../hardware/galactus/README.md](../hardware/galactus/README.md). For the method behind the numbers, see [methodology.md](methodology.md). For what transfers to other systems, see [../takeaways/](../takeaways/).
 
 ## The normalized baseline (2026-08-15/16, build 3653e6d6d, stock scheduler)
 
-One uniform command, one build, one day; one optimization class per number ([Entry 12](lab-notebook/12-common-baseline-2tb.md) has the full conditions ledger). Sorted by baseline decode:
+This table uses one command, one build, and one day, with one class of optimization per number. [Entry 12](lab-notebook/12-common-baseline-2tb.md) has the full conditions ledger. The rows are sorted by baseline decode.
 
 | Model | pp8192 (t/s) | tg128 (t/s) | Speculative decode, same build |
 |---|---|---|---|
@@ -14,11 +14,11 @@ One uniform command, one build, one day; one optimization class per number ([Ent
 | [Kimi K2.5/K2.6](kimi-k2.5.md) | 94.23 ± 4.45 | 5.79 ± 0.01 | — |
 | [GLM-5.2](glm-5.2.md) (t=32) | 95.99 ± 3.36 | 5.30 ± 0.00 | **6.6 ± 0.3** (MTP n=2) |
 
-† Terminal measurement: retired and removed from the machine after this row.
+† This is the final measurement. We removed MiniMax M2.7 from the machine after this row.
 
-Historical bests under other classes and builds — the July patched prefill (GLM 119.36), the April resident-offload rows (MiniMax 17.37, Qwen ~11.7), the April K2.5 numbers — live in the per-model notes as history, labeled with their class and build.
+The best results under other classes and builds live in the per-model notes as history, each labeled with its class and build. They include the July patched prefill (GLM-5.2 at 119.36), the April resident-offload rows (MiniMax at 17.37, Qwen at about 11.7), and the April K2.5 numbers.
 
-How to read these: decode is bounded by DRAM bandwidth, so a smaller active-expert footprint decodes faster (prefill orders by active size: A10B > A17B > V4-Flash > A40B ≈ A32B); the largest decode gains come from speculative decoding (MTP, DSpark) on the models that support it, and the gain scales with the amortizable GPU-side share of the token budget.
+Two patterns explain the table. First, DRAM bandwidth bounds decode, so a model with a smaller active-expert footprint decodes faster; prefill orders by active size (A10B > A17B > V4-Flash > A40B ≈ A32B). Second, the largest decode gains come from speculative decoding (MTP and DSpark) on the models that support it, and the gain scales with the amortizable GPU-side share of the token budget.
 
 ## The full record
 
@@ -26,5 +26,5 @@ How to read these: decode is bounded by DRAM bandwidth, so a smaller active-expe
 |---|---|
 | [methodology.md](methodology.md) | The measurement method these results were produced with. |
 | [lab-notebook/](lab-notebook/) | The chronological record: Sessions 1–10 and Entries 11–12, every command and result in order. |
-| [raw-logs/](raw-logs/) | Primary captures: the diagnostic run, the MTP A/B, per-model benchmark logs, failure logs. |
-| [data/](data/) | CSV extracts — every benchmark row, machine-readable. |
+| [raw-logs/](raw-logs/) | The primary captures: the diagnostic run, the MTP A/B test, the per-model benchmark logs, and the failure logs. |
+| [data/](data/) | CSV extracts, with every benchmark row in machine-readable form. |

@@ -3,11 +3,11 @@
 **Period covered:** Sunday, July 13, 2026 – Tuesday, July 21, 2026
 **Investigator:** Paul Martin
 **Subject:** Characterizing and improving the inference throughput of GLM-5.2 (753.86 B-parameter mixture-of-experts model) running under llama.cpp/ROCm on the server "Galactus"
-**Compiled:** July 24, 2026, from the original conversation exports, benchmark logs, and the automated diagnostic run log. All timestamps are US Eastern Time. Nothing in this notebook is reconstructed from memory; every command and number is taken from the primary records listed in the source table below.
+**Compiled:** July 24, 2026, from the original conversation exports, benchmark logs, and the automated diagnostic run log. All timestamps are US Eastern Time. Nothing in this notebook is reconstructed from memory; every command and number comes from the primary records listed in the source table below.
 
 ---
 
-## Headline results
+## Summary of results
 
 | Metric | Start (7/14, 07:00) | End (7/21) | Change |
 |---|---|---|---|
@@ -35,7 +35,7 @@ GLM-5.2 (Zai Org), Unsloth UD-Q4_K_XL quantization: 11 GGUF shards, 435.19 GiB o
 
 ## Conventions used in this notebook
 
-Entries are ordered by wall-clock time and grouped into nine work sessions. `### HH:MM — title` marks an entry; commands appear verbatim in fenced blocks; benchmark rows are reproduced as llama-bench printed them. Inline labels mark the epistemic status of statements at the time they were made: **Hypothesis**, **Prediction**, **Confirmed**, **Refuted**, **Dead end**, **Decision**, **Correction**. "STREAM, RFO-corrected" means Scale ×1.5 and Add/Triad ×4/3 to account for read-for-ownership traffic that STREAM does not count (Copy is compiled to non-temporal stores and needs no correction). The v3 diagnostic run (Session 4) executed unattended from 11:08 to 14:25 on 7/14 while the dialogue of Sessions 3 and 5 continued; its phases are presented as a block in wall-clock position, with per-phase times reconstructed from the log's elapsed stamps.
+Entries are ordered by wall-clock time and grouped into nine work sessions. `### HH:MM — title` marks an entry; commands appear verbatim in fenced blocks; benchmark rows are reproduced as llama-bench printed them. Inline labels mark the epistemic status of statements at the time they were made: **Hypothesis**, **Prediction**, **Confirmed**, **Refuted**, **Dead end**, **Decision**, **Correction**. "STREAM, RFO-corrected" means Scale ×1.5 and Add/Triad ×4/3 to account for read-for-ownership traffic that STREAM does not count (Copy is compiled to non-temporal stores and needs no correction). The v3 diagnostic run (Session 4) ran unattended from 11:08 to 14:25 on 7/14, while the dialogue of Sessions 3 and 5 continued. This notebook presents its phases as a block in wall-clock position, with per-phase times reconstructed from the log's elapsed stamps.
 
 ## Primary sources
 

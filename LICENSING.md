@@ -1,6 +1,6 @@
 # Licensing
 
-This repo uses two licenses. Each covers a different part.
+This repository uses two licenses. Each one covers a different part.
 
 | Part | Paths | License |
 |---|---|---|

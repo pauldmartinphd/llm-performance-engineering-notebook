@@ -1,6 +1,6 @@
-# Refuted hypotheses and dead ends
+# Refuted hypotheses
 
-Every entry below was measured on Galactus and came back null or worse for the hybrid CPU-MoE workload (routed experts in system RAM, dense path on GPUs). Each "no" is a road you do not have to drive down. Platform context: [../hardware/galactus/README.md](../hardware/galactus/README.md); how each was tested: [../results/methodology.md](../results/methodology.md) and the [lab notebook](../results/lab-notebook/).
+We measured every entry below on Galactus, and each one produced no improvement, or a regression, for the hybrid CPU-MoE workload (routed experts in system RAM, dense path on GPUs). Each negative result is a path you need not take. For platform context, see [../hardware/galactus/README.md](../hardware/galactus/README.md); for how we tested each item, see [../results/methodology.md](../results/methodology.md) and the [lab notebook](../results/lab-notebook/).
 
 | Hypothesis / attempt | Verdict | Evidence |
 |---|---|---|
@@ -16,4 +16,4 @@ Every entry below was measured on Galactus and came back null or worse for the h
 | HIP managed memory | Disaster | 7.2 t/s prefill |
 | SMT oversubscription (t=128) | Refuted (harmful) | Decode collapses on every model tested |
 
-The distinction that matters when reading this table: these are refutations **for this workload shape** on one machine class. NUMA imbalance is real on multi-socket boards; THP helps anonymous-page workloads; ZenDNN helps Q8_0-on-CPU paths. None of that contradicts the table — the table says they did nothing *here*, measured, and the burden of proof for your system is one benchmark away. See [general-principles.md](general-principles.md) for which tier each claim lives in.
+One distinction matters when reading this table: these are refutations for this workload on one class of machine. NUMA imbalance is real on multi-socket boards, transparent huge pages help anonymous-page workloads, and ZenDNN helps Q8_0-on-CPU paths. None of that contradicts the table. The table states that these changes did nothing here, by measurement, and that the burden of proof for your system is one benchmark. See [general-principles.md](general-principles.md) for the tier of each claim.

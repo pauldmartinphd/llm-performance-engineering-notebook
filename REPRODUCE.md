@@ -3,9 +3,9 @@
 You do not need Galactus's exact parts. You need the same workload shape: a large MoE model with the routed experts in system RAM and the dense path on one or more GPUs. Follow the steps in this order to find the speed limit and raise it.
 
 ## 0. Prerequisites
-- llama.cpp, built for your GPU backend (ROCm here; CUDA, Metal, and Vulkan use the same scheduler logic).
-- A large MoE GGUF that does not fit in VRAM, so the experts must live in RAM.
-- STREAM (`stream.c`), compiled for your core count.
+- Build llama.cpp for your GPU backend (ROCm here; CUDA, Metal, and Vulkan share the same scheduler logic).
+- Obtain a large MoE GGUF that does not fit in VRAM, so the experts must live in RAM.
+- Compile STREAM (`stream.c`) for your core count.
 
 ## 1. Find your memory-bandwidth limit (this limits decode)
 Run STREAM across a thread sweep. Apply the RFO correction (Scale ×1.5, Add/Triad ×4/3; Copy usually needs no correction — confirm it does not exceed your theoretical limit). This gives your decode limit. See [experiments/galactus-diag.sh](experiments/galactus-diag.sh) for the exact command, and [hardware/galactus/galactus_triad.txt](hardware/galactus/galactus_triad.txt) for a sample of the output.
@@ -37,4 +37,4 @@ Follow [patches/prefill/README.md](patches/prefill/README.md). Run step 3 again 
 - Measure through the `llama-server` JSON timings, or with `script -q`. Do not pipe `llama-cli` to a file; it drops the timing lines.
 
 ## What to record
-Use the CSV schema in [results/data/](results/data/): date, experiment, configuration (with the exact flags and build), metric, value, source. The configuration column is what makes a number reproducible. A t/s figure without its configuration has no value. Record the dead ends too. The [refuted-hypotheses table](takeaways/refuted-hypotheses.md) saved more time than any single gain.
+Use the CSV schema in [results/data/](results/data/): date, experiment, configuration (with the exact flags and build), metric, value, source. The configuration column is what makes a number reproducible. A t/s figure without its configuration has no value. Record the failures too. The [refuted-hypotheses table](takeaways/refuted-hypotheses.md) saved more time than any single gain.

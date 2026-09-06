@@ -1,32 +1,32 @@
 # Magneto — platform
 
-Apple Silicon laptop in the fleet, alongside [Galactus](../galactus/README.md), [Borg](../borg/README.md), and [Vision](../vision/README.md). A unified-memory machine: CPU, GPU, and model weights share one LPDDR5 pool, so the discrete-GPU offload split Galactus uses (routed experts in system RAM, dense path on GPU) does not exist here. The [methodology](../../results/methodology.md) transfers as written; the memory-bandwidth ceiling (§1) and the decode two-term model are the parts to re-measure first. Figures marked unmeasured have no benchmark on record yet.
+Magneto is the Apple Silicon laptop in the fleet, alongside [Galactus](../galactus/README.md) and [Borg](../borg/README.md). It is a unified-memory machine: the CPU, the GPU, and the model weights share one LPDDR5 pool, so the discrete-GPU offload split that Galactus uses (routed experts in system RAM, dense path on the GPU) does not exist here. The [methodology](../../results/methodology.md) transfers as written; the first things to re-measure are the memory-bandwidth limit (§1) and the decode two-term model. Figures marked unmeasured have no benchmark on record yet.
 
 This is the machine this notebook is currently edited from (`magneto-local`).
 
 ## Compute
 
-Apple M2 Max (2023), 14" MacBook Pro. 12-core CPU: 8 performance + 4 efficiency cores. AVX/NEON note: Arm64, not x86 — the llama.cpp CPU path and its build flags differ from the EPYC/Threadripper machines.
+The processor is an Apple M2 Max (2023) in a 14-inch MacBook Pro, with a 12-core CPU (8 performance and 4 efficiency cores). It is Arm64, not x86, so the llama.cpp CPU path and its build flags differ from the EPYC and Threadripper machines.
 
 ## Memory
 
-**64 GB unified LPDDR5**, shared by CPU and GPU.
+The memory is 64 GB of unified LPDDR5, shared by the CPU and the GPU.
 
-Theoretical bandwidth: **~400 GB/s** — Apple's published figure; a 512-bit LPDDR5-6400 bus computes to 409.6 GB/s (64 bytes × 6400 MT/s). This is a spec-sheet number, **not** a STREAM result. Real achievable bandwidth and its efficiency ratio are **unmeasured** here, and that ratio does **not** transfer from Galactus's 81% — Apple's memory subsystem is different and must be measured on its own. For scale only: ~400 GB/s on paper is roughly 2.6× Galactus's ~150 GB/s *real* DRAM bandwidth, which is the headline reason to test MoE decode on this class of part.
+The theoretical bandwidth is about 400 GB/s. This is Apple's published figure, and a 512-bit LPDDR5-6400 bus computes to 409.6 GB/s (64 bytes × 6400 MT/s). It is a spec-sheet number, not a STREAM result. The real achievable bandwidth and its efficiency ratio are unmeasured here, and that ratio does not transfer from Galactus's 81%, because Apple's memory subsystem is different and must be measured on its own. For scale only: about 400 GB/s on paper is roughly 2.6× Galactus's about 150 GB/s real DRAM bandwidth, which is the main reason to test MoE decode on this class of part.
 
 ## GPU
 
-Integrated Apple GPU, **38 cores** (the M2 Max's larger GPU configuration). llama.cpp uses the Metal backend, not ROCm — so the ROCm split-histogram check and the prefill scheduler patch from the Galactus work do not apply as written; the Metal path has its own scheduler and its own knobs.
+The integrated Apple GPU has 38 cores, the M2 Max's larger configuration. llama.cpp uses the Metal backend, not ROCm, so the ROCm split-histogram check and the prefill scheduler patch from the Galactus work do not apply as written; the Metal path has its own scheduler and its own controls.
 
 ## Storage
 
-Internal Apple NVMe SSD, **1 TB.**
+The internal Apple NVMe SSD is 1 TB.
 
-## Status / LLM duty (throughput unmeasured)
+## Status and LLM duty (throughput unmeasured)
 
-- No STREAM, no theoretical-peak-vs-measured ratio, no model benchmarks on record.
-- Best fleet fit: small-to-mid MoE and dense models that fit inside 64 GB unified, and a cross-architecture check of the decode two-term model (`C + bytes ÷ bandwidth`) on a high-bandwidth unified-memory part with a non-ROCm backend.
+There is no STREAM measurement, no theoretical-peak-versus-measured ratio, and no model benchmark on record. The best fleet fit is small-to-mid MoE and dense models that fit inside 64 GB of unified memory, and a cross-architecture check of the decode two-term model (`C + bytes ÷ bandwidth`) on a high-bandwidth unified-memory part with a non-ROCm backend.
 
 ## Open items
 
-- STREAM baseline with the RFO correction, per methodology §1 — the prerequisite for every decode budget here. Build a CPU STREAM for Arm64; note whether it emits non-temporal stores (the Copy-correction check).- Pick a model that fits 64 GB, record quant + placement, and measure `C` and bytes/token so the two-term model has Apple-Silicon constants.
+- Run the STREAM baseline with the RFO correction, per methodology §1; it is the prerequisite for every decode budget here. Build a CPU STREAM for Arm64, and note whether it emits non-temporal stores (the Copy-correction check).
+- Pick a model that fits 64 GB, record its quant and placement, and measure `C` and the bytes per token so the two-term model has Apple Silicon constants.

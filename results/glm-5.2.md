@@ -4,9 +4,9 @@
 **System:** Galactus (EPYC 7713, 1 TB DDR4-2933 8-channel at the time, 4 × Radeon Pro V620). Platform: [../hardware/galactus/README.md](../hardware/galactus/README.md); method: [methodology.md](methodology.md); the prefill patch: [../patches/prefill/README.md](../patches/prefill/README.md).
 **Investigation:** July 13–21, 2026, plus an August MTP addendum.
 
-## Executive summary
+## Summary
 
-Prefill went from 37.63 to **119.36 t/s** (≈ 3.2×): unclamping `n_ubatch` (2.6×) plus the three-edit scheduler patch (+13.7%). Decode went from 5.15 to **7.1 t/s** (+38%), the gain coming from MTP speculative decode; the non-speculative decode ceiling is the DDR4 bandwidth wall. Both ceilings are explained by measurement, not conjecture.
+Prefill rose from 37.63 to **119.36 t/s**, a factor of about 3.2: unclamping `n_ubatch` gave a factor of 2.6, and the three-edit scheduler patch added 13.7%. Decode rose from 5.15 to **7.1 t/s** (+38%), and that gain came from MTP speculative decode. The non-speculative decode limit is the DDR4 bandwidth wall. Measurement explains both limits, not conjecture.
 
 ## Decode
 
@@ -18,7 +18,7 @@ Prefill went from 37.63 to **119.36 t/s** (≈ 3.2×): unclamping `n_ubatch` (2.
 | CPU-only denominator | 3.87 t/s tg64 | -ngl 0 |
 | **MTP speculative decode (n=2)** | **7.1 t/s** | `--spec-type draft-mtp --spec-draft-n-max 2`, ~Aug 1 |
 
-Decode is bounded by DRAM bandwidth: decode reads ≈ 13.77 GB/token, and the two-term model (~90 ms constant + bytes ÷ 152 GB/s) predicted 5.5 / 6.2 / 3.9 t/s vs measured 5.53 / 6.01 / 3.87. The thread sweep peaks at t=24–32 and collapses into SMT (t=96: 2.76; t=128: 1.29). The GPUs are worth +43–55% on decode over CPU-only.
+DRAM bandwidth bounds decode. Decode reads about 13.77 GB per token, and the two-term model (about 90 ms constant plus bytes ÷ 152 GB/s) predicted 5.5 / 6.2 / 3.9 t/s against measured 5.53 / 6.01 / 3.87. The thread sweep peaks at t=24–32 and collapses into SMT (t=96: 2.76; t=128: 1.29). The GPUs are worth +43% to +55% on decode over CPU-only.
 
 ## Prefill
 
@@ -40,23 +40,23 @@ With the scheduler patch (see [../patches/prefill/README.md](../patches/prefill/
 | Edit 2 only (distribution) | 105.71 (null) | — | — |
 | **Edit 2+3** | **119.36** | 86.11 | 55.76 |
 
-The remaining prefill ceiling is arithmetic, not scheduling: attention is quadratic (≈ 26.3 s of a pp32768 pass, 72%), so the gains decay with depth.
+The remaining prefill limit is arithmetic, not scheduling. Attention is quadratic (about 26.3 s of a pp32768 pass, or 72%), so the gains decay with depth.
 
-## MTP (blk.78) — corrected
+## MTP (blk.78), corrected
 
-At the July compilation the loader flagged blk.78 TENSOR_SKIP, so `--spec-type draft-mtp` could not work for glm-dsa. **Upstream later added glm-dsa MTP support**; the blk.78 NextN head loads from the existing Unsloth quant (no re-download). Measured ~Aug 1: **7.1 t/s at n=2 (+31%)** — the first decode gain of the project, and above the 7–10 t/s reading-speed threshold. n=1 → 6.8, n=2 → 7.1, n=3 → 6.9. See the DSpark addendum in the lab notebook.
+At the July compilation, the loader flagged blk.78 as TENSOR_SKIP, so `--spec-type draft-mtp` could not work for glm-dsa. Upstream later added glm-dsa MTP support, and the blk.78 NextN head now loads from the existing Unsloth quant with no re-download. Measured around August 1, it reached **7.1 t/s at n=2 (+31%)**, the first decode gain of the project and above the 7–10 t/s reading-speed threshold. The depth curve was n=1 → 6.8, n=2 → 7.1, n=3 → 6.9. See the DSpark addendum in the lab notebook.
 
 ## Production configurations
 
-- **Decode-first (chat):** the fitter (no manual placement) at 6.01 t/s, or MTP n=2 at 7.1 t/s.
-- **Prefill-first (long context, RAG, agents):** patched build, `-ngl 99 -ot exps=CPU -b 8192 -ub 8192 -fa 1 -t 32` — 119.36 t/s pp8192.
+- For decode-first use (chat), use the fitter (no manual placement) at 6.01 t/s, or MTP n=2 at 7.1 t/s.
+- For prefill-first use (long context, RAG, agents), use the patched build with `-ngl 99 -ot exps=CPU -b 8192 -ub 8192 -fa 1 -t 32`, which gives 119.36 t/s at pp8192.
 
-## GLM-specific dead ends
+## GLM-specific negative results
 
-- Resident experts on ROCm1/2 via `-ot`: 17% worse than all-CPU op_offload (resident-weight path ≠ op_offload path).
-- DFlash speculation: parked — no GLM-5.2 draft model exists; projected ~11–12.5 t/s if one appears.
-- `llama-bench -d` KV-restore crash at 16,384 cells (`hipMemcpyAsync` illegal access) — unreported upstream.
+- Placing resident experts on ROCm1/2 with `-ot` ran 17% worse than all-CPU op_offload, because the resident-weight path is not the op_offload path.
+- DFlash speculation is parked, because no GLM-5.2 draft model exists; a projection gives about 11 to 12.5 t/s if one appears.
+- `llama-bench -d` crashes on KV restore at 16,384 cells (a `hipMemcpyAsync` illegal access); this is unreported upstream.
 
 ## 2 TB common baseline and MTP re-stamp (2026-08-15/16, build 3653e6d6d, stock scheduler)
 
-Entry 12 (`lab-notebook/12-common-baseline-2tb.md`) normalized all five models on one build. GLM-5.2 stock: **pp8192 95.99 ± 3.36, tg128 5.30 ± 0.00** (t=32; no prefill patch — 119.36 remains the July patched-build figure). MTP re-stamp on the same build (llama-cli, ZFS prompt, greedy): n=1 5.9, **n=2 6.3/6.9 → 6.6 ± 0.3 (production)**, n=3 6.3 — +25% ± 6 over baseline, against July's +31%; n=2 confirmed optimal, with more separation from n=1 than July showed. Speculative reps carry ~9% timing noise at identical token streams (Entry 12). Current-build production decode: **6.6 ± 0.3 t/s, MTP n=2**.
+Entry 12 (`lab-notebook/12-common-baseline-2tb.md`) normalized all five models on one build. GLM-5.2 stock measured pp8192 95.99 ± 3.36 and tg128 5.30 ± 0.00 (t=32, no prefill patch; 119.36 remains the July patched-build figure). The MTP re-stamp on the same build (llama-cli, ZFS prompt, greedy) measured n=1 5.9, n=2 6.3/6.9 (6.6 ± 0.3, production), and n=3 6.3, which is +25% ± 6 over baseline against July's +31%. n=2 is confirmed optimal, with more separation from n=1 than July showed. The speculative reps carry about 9% timing noise at identical token streams (Entry 12). The current-build production decode is **6.6 ± 0.3 t/s** with MTP n=2.

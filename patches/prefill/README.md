@@ -1,17 +1,21 @@
 # llama.cpp scheduler patch — multi-GPU MoE offload for prefill
 
-Three edits to `ggml/src/ggml-backend.cpp`. On Galactus they raised GLM-5.2 prefill from **104.97 to 119.36 t/s** (pp8192, +13.7%), on top of the free 2.6× from unclamping `n_ubatch`. Decode does not change. The edits act only at prefill batch sizes.
+This patch makes three edits to `ggml/src/ggml-backend.cpp`. On Galactus, they raised GLM-5.2 prefill from **104.97 to 119.36 t/s** (pp8192, +13.7%), on top of the free 2.6× from unclamping `n_ubatch`. Decode does not change, because the edits act only at prefill batch sizes.
 
-**The problem.** With a large MoE in system RAM and `-ot exps=CPU`, the llama.cpp scheduler offloads every large expert matmul to backend 0. On Galactus, 731 of 1,186 GPU splits went to ROCm0, and three cards stayed idle. The expert-weight copies are already asynchronous (`ggml_backend_tensor_set_async`). Two things still serialized them. First, they all queued onto one card's stream. Second, a per-split `ggml_backend_synchronize(ids_backend)` blocked the host to read the routing ids, which chained each layer's copy behind the previous layer's GEMM.
+## The problem
 
-**The fix.** Edit 2 spreads the offload target across all eligible GPUs, keyed on the layer index, so each layer's gate/up/down stay on one card. Edit 1 adds a fallback cursor for Edit 2. Edit 3 skips the ids read at prefill batch sizes, where every expert is used, so the read saves no bandwidth and only adds the blocking synchronize. The async copies can then issue at once and overlap compute across the cards.
+With a large MoE in system RAM and `-ot exps=CPU`, the llama.cpp scheduler offloads every large expert matmul to backend 0. On Galactus, 731 of 1,186 GPU splits went to ROCm0, and three cards stayed idle. The expert-weight copies are already asynchronous (`ggml_backend_tensor_set_async`). Two things still serialized them. First, they all queued onto one card's stream. Second, a per-split `ggml_backend_synchronize(ids_backend)` blocked the host to read the routing ids, which chained each layer's copy behind the previous layer's GEMM.
 
-> **Source and cautions.** The line numbers are from llama.cpp master, about July 21, 2026. Confirm your tree before you patch:
+## The fix
+
+Edit 2 spreads the offload target across all eligible GPUs, keyed on the layer index, so each layer's gate, up, and down stay on one card. Edit 1 adds a fallback cursor for Edit 2. Edit 3 skips the ids read at prefill batch sizes, where every expert is used, so the read saves no bandwidth and only adds the blocking synchronize. The async copies can then issue at once and overlap compute across the cards.
+
+> A note on source and cautions. The line numbers are from llama.cpp master, about July 21, 2026. Confirm your tree before you patch:
 > ```bash
 > grep -n "prev_ids_tensor\|used_ids" ggml/src/ggml-backend.cpp   # Edit 3 anchor, one hit in compute_splits
 > grep -n "bool op_offload;"          ggml/src/ggml-backend.cpp   # Edit 1 anchor
 > ```
-> **Edit 2 alone changes nothing.** We predicted this before the run, and the run confirmed it: 105.71 vs 104.97 baseline. The copies were already async; the ids read (Edit 3) was the true serializer. Edits 2 and 3 together produce the gain. Edit 2 alone gives an equal split histogram with unchanged throughput. Check the histogram to confirm the mechanism, and the throughput to confirm the gain.
+> Edit 2 alone changes nothing. We predicted this before the run, and the run confirmed it: 105.71 versus 104.97 baseline. The copies were already async; the ids read (Edit 3) was the true serializer. Edits 2 and 3 together produce the gain. Edit 2 alone gives an equal split histogram with unchanged throughput. Check the histogram to confirm the mechanism, and the throughput to confirm the gain.
 
 ---
 
@@ -119,7 +123,7 @@ cd /path/to/llama.cpp
 cmake --build build -j$(nproc) && cmake --install build
 ```
 
-**Check 1 — did the concentration break up? Do this check first.**
+### Check 1 — did the concentration break up? Do this first.
 ```bash
 GGML_SCHED_DEBUG=2 llama-bench \
   -m /models/GLM-5.2/UD-Q4_K_XL/GLM-5.2-UD-Q4_K_XL-00001-of-00011.gguf \
@@ -131,7 +135,7 @@ grep -c '## SPLIT' sched_patched.txt   # split count should stay near the pre-pa
 ```
 Before: ROCm0 731, ROCm1 133, ROCm2 175, ROCm3 147. After: about equal, near 290 each. If ROCm0 is still about 731, the patch did not take effect. Confirm that `ldd $(which llama-bench) | grep ggml` points at your rebuilt library. Do not measure throughput yet.
 
-**Check 2 — the number. Do this check only if Check 1 gave an equal histogram.**
+### Check 2 — the number. Do this only if Check 1 gave an equal histogram.
 ```bash
 llama-bench \
   -m /models/GLM-5.2/UD-Q4_K_XL/GLM-5.2-UD-Q4_K_XL-00001-of-00011.gguf \
@@ -140,7 +144,7 @@ llama-bench \
 ```
 `-mmp 0` pins the host buffer. Async H2D from pinned pages reaches the multi-stream bandwidth limit; pageable memory uses a bounce buffer and stays lower. Confirm the load log shows the expert tensors in a `ROCm_Host` buffer. If `-mmp 0` runs out of memory on the pinned allocation, use `-mmp 1` for a working number first.
 
-**Regression check (one run):** decode `-n 64 -p 0` should not change. Round-robin acts only at batch 32 or more, and Edit 3's condition is false at batch 1.
+Regression check (one run): decode with `-n 64 -p 0` should not change. Round-robin acts only at batch 32 or more, and Edit 3's condition is false at batch 1.
 
 ## Galactus results
 
@@ -154,4 +158,4 @@ Split histogram after the patch: ROCm0 731 → 285; distribution 285/300/294/292
 
 ## Upstream
 
-This relates to [issue #20757](https://github.com/ggml-org/llama.cpp/issues/20757) (a two-tier GPU+RAM expert cache for MoE offload). It touches the same code (`compute_splits`, the selective expert copy). An upstream PR for this patch is an open item; the text above is its basis. If you take this to a PR, the two contributions are the layer-keyed distribution and the batch-size-gated ids bypass. State the no-change result for Edit 2 alone, so reviewers see why Edit 3 is required.
+This relates to [issue #20757](https://github.com/ggml-org/llama.cpp/issues/20757) (a two-tier GPU+RAM expert cache for MoE offload). It touches the same code (`compute_splits`, the selective expert copy). An upstream PR for this patch is an open item, and the text above is its basis. If you take this to a PR, the two contributions are the layer-keyed distribution and the batch-size-gated ids bypass. State the no-change result for Edit 2 alone, so reviewers see why Edit 3 is required.
