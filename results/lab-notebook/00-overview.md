@@ -1,13 +1,15 @@
-# Galactus Lab Notebook — GLM-5.2 Throughput Investigation
+# Galactus lab notebook
 
-**Period covered:** Sunday, July 13, 2026 – Tuesday, July 21, 2026
+**Period covered:** July 13–August 16, 2026. Sessions 1–9 cover the July GLM-5.2 investigation; Session 10 and Entries 11–12 extend the record through August.
 **Investigator:** Paul Martin
 **Subject:** Characterizing and improving the inference throughput of GLM-5.2 (753.86 B-parameter mixture-of-experts model) running under llama.cpp/ROCm on the server "Galactus"
-**Compiled:** July 24, 2026, from the original conversation exports, benchmark logs, and the automated diagnostic run log. All timestamps are US Eastern Time. Nothing in this notebook is reconstructed from memory; every command and number comes from the primary records listed in the source table below.
+**Original July notebook compiled:** July 24, 2026, from the original conversation exports, benchmark logs, and the automated diagnostic run log. All timestamps are US Eastern Time. The original July notebook was compiled from those records rather than memory. Later entries identify their own sources and capture limitations, including the hand-collected Session 10 timings.
 
 ---
 
-## Summary of results
+The entries preserve the sequence of hypotheses, measurements, mistakes, and corrections. Commands and quoted dialogue describe what happened at the time; they are not instructions to execute now. Later findings can supersede earlier conclusions. For the latest measurements in this record, see [Entry 12](12-common-baseline-2tb.md); for the condensed interpretation, see the [model summaries](../README.md).
+
+## July GLM-5.2 results
 
 | Metric | Start (7/14, 07:00) | End (7/21) | Change |
 |---|---|---|---|
@@ -17,7 +19,7 @@
 | Root cause of prefill ceiling | unknown | op_offload scheduler pins all MoE offload work to ROCm0 (731 of 1,186 GPU splits) + per-split expert-ids synchronization | proven, patched |
 | Decode ceiling | unknown | DDR4 bandwidth wall: ~13.8 GB/token ÷ 152 GB/s ≈ 91 ms of the ~180 ms token budget | settled |
 
-## System under test
+## System during Sessions 1–9
 
 | Component | Detail |
 |---|---|
@@ -29,13 +31,13 @@
 | GTT pool | 497.8 GiB (half of RAM, amdgpu default) — relevant to pinned-allocation failures |
 | llama.cpp | Baseline: build f84a51940 (9942), backend ROCm+ZenDNN. From 7/14 mid-day: build 657e01125 (10001), rebuilt with -DGGML_ZENDNN=OFF. From 7/21: build 10001 plus the two-edit scheduler patch developed in Session 9 |
 
-## Model under test
+## Model during Sessions 1–9
 
 GLM-5.2 (Zai Org), Unsloth UD-Q4_K_XL quantization: 11 GGUF shards, 435.19 GiB on disk, 753.86 B parameters, ~4.96 bits per weight. llama.cpp architecture `glm-dsa`. 79 blocks: blk.0–2 dense, blk.3–77 MoE (75 layers), blk.78 MTP/NextN (TENSOR_SKIP — never allocated, so `--spec-type draft-mtp` cannot work). 256 routed experts, 8 active per token, 1 shared expert. MLA attention (kv_lora_rank 512, q_lora_rank 2048), DSA lightning indexer, 1 M context. Expert tensors per MoE layer: ffn_gate_exps 1728 MiB Q4_K, ffn_up_exps 1728 MiB Q4_K, ffn_down_exps 2112 MiB Q5_K (exceptions: blk.8 Q5_K/Q6_K; blk.75–77 Q6_K down). Decode reads ≈ 13.77 GB per token in the hybrid config; ≈ 27 GB per token CPU-only.
 
 ## Conventions used in this notebook
 
-Entries are ordered by wall-clock time and grouped into nine work sessions. `### HH:MM — title` marks an entry; commands appear verbatim in fenced blocks; benchmark rows are reproduced as llama-bench printed them. Inline labels mark the epistemic status of statements at the time they were made: **Hypothesis**, **Prediction**, **Confirmed**, **Refuted**, **Dead end**, **Decision**, **Correction**. "STREAM, RFO-corrected" means Scale ×1.5 and Add/Triad ×4/3 to account for read-for-ownership traffic that STREAM does not count (Copy is compiled to non-temporal stores and needs no correction). The v3 diagnostic run (Session 4) ran unattended from 11:08 to 14:25 on 7/14, while the dialogue of Sessions 3 and 5 continued. This notebook presents its phases as a block in wall-clock position, with per-phase times reconstructed from the log's elapsed stamps.
+The original July investigation is ordered by wall-clock time and grouped into nine work sessions. The later session and entries follow in sequence. `### HH:MM — title` marks an entry; commands appear verbatim in fenced blocks; benchmark rows are reproduced as llama-bench printed them. Inline labels mark the epistemic status of statements at the time they were made: **Hypothesis**, **Prediction**, **Confirmed**, **Refuted**, **Dead end**, **Decision**, **Correction**. "STREAM, RFO-corrected" means Scale ×1.5 and Add/Triad ×4/3 to account for read-for-ownership traffic that STREAM does not count (Copy is compiled to non-temporal stores and needs no correction). The v3 diagnostic run (Session 4) ran unattended from 11:08 to 14:25 on 7/14, while the dialogue of Sessions 3 and 5 continued. This notebook presents its phases as a block in wall-clock position, with per-phase times reconstructed from the log's elapsed stamps.
 
 ## Primary sources
 

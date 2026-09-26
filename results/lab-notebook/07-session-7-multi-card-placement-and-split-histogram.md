@@ -1,4 +1,6 @@
-## Session 7 — Monday, July 14, 2026 (evening) — Multi-card placement experiments and the split histogram
+# Session 7 — July 14, 2026 (evening) — Multi-card placement experiments and the split histogram
+
+[Notebook index](00-overview.md) · [Model summaries](../README.md)
 
 ### 18:13 — newtest.txt named; first read of an incomplete log
 
@@ -825,4 +827,3 @@ hipcc /tmp/h2d4.hip -o /tmp/h2d4 && /tmp/h2d4
 - The h2d4 four-stream pinned host→device probe is queued as the decider (~80+ / ~40 / ~22 GB/s thresholds). Standing numbers: prefill 104.97 t/s, decode 6.01 t/s.
 
 ---
-

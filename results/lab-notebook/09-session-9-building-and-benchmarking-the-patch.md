@@ -1,4 +1,6 @@
-## Session 9 — Tuesday, July 21, 2026 — Building and benchmarking the patch
+# Session 9 — July 21, 2026 — Building and benchmarking the patch
+
+[Notebook index](00-overview.md) · [Model summaries](../README.md)
 
 This session is the separate thread in which the scheduler patch was actually built and benchmarked end to end. The transcript (`llamacpp_patch.md`, exported 07:37 ET) carries no timestamps; entries below follow sequence order. A second analysis stream, whose output Paul pasted in, appears throughout. Context artifact: "Claude State Export.zip" (saved 7/21 06:53 ET) contains the openwebui system prompt and knowledge files Paul prepared for local-model use — the workload the patched machine was being tuned to serve.
 

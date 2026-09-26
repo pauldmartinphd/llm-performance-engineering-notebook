@@ -1,5 +1,9 @@
 # Lab Notebook Addendum — Session 10 and Interval Notes
 
+[Notebook index](00-overview.md) · [Model summaries](../README.md)
+
+*Editorial note: Later results: [Entry 11](11-stream-rebaseline-2tb.md) completed the memory rebaseline, and [Entry 12](12-common-baseline-2tb.md) repeated speculative decode on a common build. The provisional table and its unresolved p-min conflict below remain as recorded. The description of 14.7 t/s as the fastest result on any model overlooks the April MiniMax resident-offload result of 17.37 t/s.*
+
 *Continuation of the Galactus Lab Notebook (Sessions 1–9, July 13–21, 2026). Compiled August 8, 2026 from the working dialogue; benchmark figures in Session 10 were hand-collected from the terminal by Paul — the log-capture instrumentation failed (recorded below as its own finding). Times of day were not recorded; entries are in sequence order, following the Session 9 convention.*
 
 ---
@@ -23,7 +27,7 @@
 
 ---
 
-## Session 10 — Friday, August 8, 2026 — DSpark speculative decoding on DeepSeek-V4-Flash-0731
+## Session 10 — August 8, 2026 — DSpark speculative decoding on DeepSeek-V4-Flash-0731
 
 **Object:** test DSpark (DeepSeek's official block-diffusion drafter, llama.cpp `--spec-type draft-dspark`) on DeepSeek-V4-Flash-0731, Unsloth UD-Q8_K_XL (162 GB, 5 shards, MXFP4 routed experts), with routed experts in system RAM and everything else — attention, shared experts, drafter — in VRAM.
 

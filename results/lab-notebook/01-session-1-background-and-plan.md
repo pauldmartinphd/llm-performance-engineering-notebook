@@ -1,4 +1,6 @@
-## Session 1 — Sunday, July 13, 2026 (evening) — Background and plan
+# Session 1 — July 13, 2026 (evening) — Background and plan
+
+[Notebook index](00-overview.md) · [Model summaries](../README.md)
 
 *Conversation "Applying concepts to Galactus with GLM5.2", opened 7/13/2026 22:43. This session is background, architecture research, sizing, and planning; no commands were executed on Galactus. All figures in this session are either quoted from the pasted source material or are estimates, flagged as such.*
 
@@ -248,4 +250,3 @@ Also: re-sweep threads — the 64-thread optimum was established on Qwen3.5-397B
 - Predicted uplift from filling VRAM: ~1.2–1.3× on tg over the `--cpu-moe` baseline — not the post's 200%.
 - Theoretical CPU-side numbers on the table (later revised): pp ~57 t/s at batch 2048; tg ceiling ~14.7 t/s at an assumed ~160 GB/s.
 - No commands executed on Galactus yet; prior reference point is DeepSeek-V4-Flash at 7.16 t/s with `--cpu-moe`.
-

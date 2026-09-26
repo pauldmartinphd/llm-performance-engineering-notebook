@@ -1,4 +1,6 @@
-## Session 4 — Monday, July 14, 2026, 11:08–14:25 — The v3 diagnostic run (machine log)
+# Session 4 — July 14, 2026, 11:08–14:25 — The v3 diagnostic run (machine log)
+
+[Notebook index](00-overview.md) · [Model summaries](../README.md)
 
 This session is the machine's log, not the dialogue: the 16-phase battery `galactus-diag.sh` ran unattended on Galactus from 11:08:13 to 14:25:10 ET (total runtime 3h16m) while the conversation of Sessions 3 and 5 continued in parallel. Run directory `/root/diag-20260714-110813`; MAIN.log (delivered to the dialogue as results.txt, 175,463 lines) is the source for everything below. Build under test: `657e01125 (10001)`. Hang guard: 10800 s per invocation; deadline: none. Wall-clock times below are mapped from the log's elapsed markers against the 11:08 start.
 
@@ -157,7 +159,7 @@ Same buffers and splits as A1 (graph splits = 155).
 
 - **Confirmed:** `-C`/`--cpu-strict` is not the crasher; the script sets `CPU_MASK_OK=1` and Phase C proceeds.
 
-### ~11:41 (elapsed 0h33m) — Phase B: *** THE MAIN EVENT *** thread × poll sweep
+### ~11:41 (elapsed 0h33m) — Phase B: thread × poll sweep
 
 Purpose (from the script): "M1. THE experiment. Decode only (-p 0)... STREAM saturates at 16 threads and DECAYS beyond. llama.cpp is being run with 64... --poll 100 keeps the threadpool SPINNING instead of futex-sleeping between the ~76 CPU splits per token. 63 ms unaccounted / 155 splits = 0.4 ms per split, which is exactly what waking a sleeping 64-thread pool costs. *** IF --poll 100 PRODUCES A STEP CHANGE, THE 63 ms IS FOUND AND THE FIX IS ONE FLAG. *** 16 combos, ONE model load."
 
@@ -444,7 +446,7 @@ ROCm error: an illegal memory access was encountered
 - **Confirmed:** depth degradation is mild while it works — 5.41 → 5.29 at d4096, −2.2%.
 - **Dead end (new bug):** restoring a 16384-cell saved KV state into GPU KV buffers dies in hipMemcpyAsync H2D — llama-bench's `-d` state save/restore path, unrelated to ZenDNN. The d16384 and d65536 rows were never produced.
 
-### ~13:32 (elapsed 2h24m) — Phase L: *** THE PRODUCTION CANDIDATE *** M2 = -mmp 0 --no-host 1
+### ~13:32 (elapsed 2h24m) — Phase L: M2 = -mmp 0 --no-host 1
 
 The log's banner precedes this block: "## SLOW PHASES — these use -mmp 0 and each load costs 5-15 minutes." Purpose (from the script, abridged): "THIS IS THE CONFIG THAT SHOULD WIN. --no-host 1 removes the pinned host buffer... 1. NO 411 GiB hipHostMalloc. 2. The experts land in ANONYMOUS memory => THP-ELIGIBLE for the first time. 3. CPU_REPACK (AVX2 q4_K_8x8_q8_K) claims the Q4_K gate+up tensors = 62% of expert bytes... GREP THE load_tensors LINES: 'CPU_REPACK model buffer size' should be ~253 GiB; 'CPU model buffer size' ~158 GiB; 'ROCm_Host model buffer size' MUST NOT APPEAR... NOTE: CPU_REPACK's buffer reports is_host = nullptr, so op_offload CANNOT fire for repacked weights. This config is therefore CPU-prefill only."
 
@@ -611,4 +613,3 @@ Clean teardown: VRAM back to ~16.4 MiB used per GPU; 436 GiB of model still resi
 - Artifacts: `/root/diag-20260714-110813/MAIN.log` (= results.txt, saved 14:33:44 ET) and `monitors/`; script `galactus-diag.sh` saved 11:05:36 ET.
 
 ---
-

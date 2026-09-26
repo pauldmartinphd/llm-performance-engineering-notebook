@@ -1,4 +1,6 @@
-## Session 6 — Monday, July 14, 2026 (late afternoon) — The ubatch ladder and the economics of the build
+# Session 6 — July 14, 2026 (late afternoon) — The ubatch ladder and the economics of the build
+
+[Notebook index](00-overview.md) · [Model summaries](../README.md)
 
 ### 15:29 — The purchase thesis, scored against four justifications
 
@@ -40,7 +42,7 @@ Supporting analysis recorded alongside the table:
 
 - **Decision:** "Good build, and the GPUs were the best-value line item." The next dollar should not go to hardware — the `return b` heuristic in `ggml-backend.cpp` is twenty lines.
 
-### 15:34 — 2026 RAM price research: DDR4 emphatically the right call
+### 15:34 — 2026 RAM price research: DDR4 cost comparison
 
 At 15:32 Paul directed: "Go check out 2026 RAM prices and then answer for me." A search ("DDR4 server RAM price 2026 shortage DRAM price surge") returned live figures.
 
@@ -590,4 +592,3 @@ tail -20 /root/ot-placement-test.txt
 - The `-ot` placement test has been issued (tee to `/root/ot-placement-test.txt`); its output has not yet been seen — the file upload failed twice.
 
 ---
-

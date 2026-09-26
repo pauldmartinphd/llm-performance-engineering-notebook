@@ -1,4 +1,6 @@
-## Session 2 — Monday, July 14, 2026 (morning) — Baselines, memory bandwidth, and the first diagnostic script
+# Session 2 — July 14, 2026 (morning) — Baselines, memory bandwidth, and the first diagnostic script
+
+[Notebook index](00-overview.md) · [Model summaries](../README.md)
 
 *Executed 07:00–08:46. Work begins at the `root@openwebui` container prompt (where llama.cpp and the model live) and moves to the bare-metal host `root@galactus` at 08:04. llama.cpp build f84a51940 (9942), backends ROCm,ZenDNN; model at `/models/GLM-5.2/UD-Q4_K_XL/GLM-5.2-UD-Q4_K_XL-00001-of-00011.gguf` (11 shards).*
 
@@ -1157,4 +1159,3 @@ Either MAIN.log stands alone (self-contained briefing), but both are wanted: the
 - Ruled out this session: NUMA misplacement, container throttling, HIP-graphs-off, ZenDNN as a factor (inert for 256-expert Q4_K), `GGML_CUDA_REGISTER_HOST` (dead code), `-sm tensor` (unsupported for glm-dsa), and MTP self-speculation (blk.78 TENSOR_SKIP).
 - Leading open hypotheses, mapped to experiments: hybrid-split overhead (75 fork/joins, ~150 device boundaries, ~375 barriers, ~2,000 kernel launches per token) → the `-ngl 0` versus hybrid comparison, predicted ~5.5 t/s pure-CPU; CCD/fabric placement → the 16-spread versus 16-packed `-C` mask pair; clock throttling → turbostat on the host; op_offload OOM → the ascending ubatch ladder plus unified-memory escape hatch.
 - Host kernel state: THP `always` + `defer+madvise`, C-states below C0 disabled (08:11–08:13); galactus-diag.sh v2 (Phase 0 inventory + fourteen benchmark phases B0–B12, one 17-minute model load each, no deadline, 6-hour per-phase hang guard, MODE=all|host|bench) launched in the container at ~08:46, with the host companion run prescribed.
-

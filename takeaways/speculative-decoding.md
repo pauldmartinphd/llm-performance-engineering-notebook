@@ -8,14 +8,14 @@ The decode cost per token is C + S. C is the amortizable part: the GPU dense pat
 
 - The gain scales with C ÷ (C + S), so models with a light active-expert footprint speculate better.
 - The optimum draft depth is shallow: 2 to 3 on Galactus, on both models tested.
-- The hard ceiling is 1 ÷ S, regardless of drafter quality.
+- Within this approximation, the ceiling is 1 ÷ S; it assumes expert streaming remains the per-token cost that speculation cannot amortize.
 
 | Model (Galactus) | C (ms) | S (ms) | S share | Measured gain | Ceiling (1/S) |
 |---|---|---|---|---|---|
 | GLM-5.2 (Q4_K experts, 40 B active) | ~90 | ~91 | 50% | +31% (MTP n=2 → 7.1 t/s) | ~11 t/s |
 | DS-V4-Flash (MXFP4 experts, 13 B active) | ~70 | ~29 | 30% | +45% (DSpark n=3 → 14.7 t/s) | ~35 t/s |
 
-C and S are fitted estimates. We did not capture acceptance rates in Session 10 (an instrumentation gap).
+C and S are fitted estimates, and the gains in this table are the earlier measurements. The August common-build repeats were GLM-5.2 **6.6 ± 0.3 t/s** (+25% ± 6) and DeepSeek-V4-Flash **14.1 ± 0.7 t/s** (+36% ± 7). See [Entry 12](../results/lab-notebook/12-common-baseline-2tb.md). We did not capture acceptance rates in Session 10, so acceptance-based explanations remain hypotheses.
 
 ## Methods in llama.cpp (as of August 2026)
 
@@ -25,8 +25,8 @@ C and S are fitted estimates. We did not capture acceptance rates in Session 10 
 
 ## Flags and findings
 
-The flag set is `--spec-type <type> [-md <drafter> -ngld 99] --spec-draft-n-max N`. Sweep N from 1, and expect the peak at 2 to 3 on this hardware class; the "hybrids only gain at n=1" pattern reported in llama.cpp PR #25784 did not hold on Galactus. `--spec-draft-p-min` (confidence truncation) measured as a monotone tax on technical prose with the V4-Flash drafter: once the head takes over, the truncated configurations converge to the same throughput regardless of n-max, because the head is miscalibrated and too pessimistic. One untested hypothesis is that p-min helps on genuinely low-acceptance domains, such as creative text. Benchmark at `--temp 0`. Acceptance is strongly domain-dependent; the PR #25784 data ranges from about 0.22 for creative text to about 0.77 for math.
+The flag set is `--spec-type <type> [-md <drafter> -ngld 99] --spec-draft-n-max N`. Sweep N from 1. The peak was at 2 to 3 on Galactus; the "hybrids only gain at n=1" pattern reported in llama.cpp PR #25784 did not hold on Galactus. `--spec-draft-p-min` (confidence truncation) did not establish an improvement on the technical-prose prompt. Several truncated configurations converged around 13.3–13.4 t/s, but the results were not uniformly monotonic and one setting had conflicting reports. An overly pessimistic confidence head was the proposed explanation, not a measured diagnosis. One untested hypothesis is that p-min helps on genuinely low-acceptance domains, such as creative text. Benchmark at `--temp 0`. Acceptance is strongly domain-dependent; the PR #25784 data ranges from about 0.22 for creative text to about 0.77 for math.
 
 ## Measurement rules
 
-`llama-cli` is not a measurement tool: `tee` breaks its terminal display, and `--log-file` drops the info-level acceptance and timing lines. Capture with `script -q <file> -c "<command>"`, or benchmark through `llama-server` (the `/completion` JSON `timings`; the logs print `draft acceptance`). `llama-bench` does not support speculation. Record the full flag set with every number. Session 10's table needed a conditions ledger added after the fact; the identical-conditions template is [scripts/session-10-rerun.sh](../experiments/session-10-rerun.sh).
+In the tested builds, llama-cli required terminal-aware capture: `tee` breaks its terminal display, and `--log-file` drops the info-level acceptance and timing lines. Capture with `script -q <file> -c "<command>"`, or benchmark through `llama-server` (the `/completion` JSON `timings`; the logs print `draft acceptance`). `llama-bench` does not support speculation. Record the full flag set with every number. Session 10’s table needed a conditions ledger added after the fact. The proposed [rerun protocol](../experiments/session-10-rerun.sh) is retained as history; Entry 12 superseded it with the common-build measurements. The original p-min conflict remains part of Session 10’s record.

@@ -1,5 +1,7 @@
 # Entry 11 — STREAM re-baseline on the 2 TB population
 
+[Notebook index](00-overview.md) · [Model summaries](../README.md)
+
 **Date:** Friday, August 15, 2026. **Machine:** Galactus, bare-metal host, `~/STREAM`.
 **Object:** Close the open item standing since the August RAM upgrade. Re-measure the platform DRAM bandwidth on the new population (8 × 256 GB DDR4-2933 3DS RDIMM at rated speed) with the identical July sweep, so that every decode budget in this notebook has a current denominator.
 

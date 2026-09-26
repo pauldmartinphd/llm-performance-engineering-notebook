@@ -1,5 +1,9 @@
 # Entry 12 — the 2 TB common baseline (stock build)
 
+[Notebook index](00-overview.md) · [Model summaries](../README.md)
+
+*Editorial note: Comparison note: the common baseline below covers August 15–16, not a single day. Historical comparisons also change memory population, benchmark settings, and in some cases the model file; they do not isolate upstream code changes alone. References below to the earlier “July” DSpark sweep correspond to Session 10, compiled August 8. The quoted speculative ± values summarize two repetitions and are not confidence intervals.*
+
 **Date:** August 15–16, 2026. **Machine:** Galactus, LXC `openwebui`.
 **Object:** Re-measure all five models with one command set, one build, on one day. The April and July headline rows came from non-identical conditions (different builds, flags, ubatch sizes, KV types, and RAM populations), so they cannot be compared against each other. This entry replaces them with a normalized set. It is also the closing snapshot for the retired models, and the stock reference against which the prefill-patch A/B will be measured.
 

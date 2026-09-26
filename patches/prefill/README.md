@@ -1,16 +1,16 @@
 # llama.cpp scheduler patch — multi-GPU MoE offload for prefill
 
-This patch makes three edits to `ggml/src/ggml-backend.cpp`. On Galactus, they raised GLM-5.2 prefill from **104.97 to 119.36 t/s** (pp8192, +13.7%), on top of the free 2.6× from unclamping `n_ubatch`. Decode does not change, because the edits act only at prefill batch sizes.
+This patch makes three edits to `ggml/src/ggml-backend.cpp`. On Galactus, they raised GLM-5.2 prefill from **104.97 to 119.36 t/s** (pp8192, +13.7%), following an earlier 2.6× improvement attributed to unclamping `n_ubatch`. The measured decode result was unchanged. These are July results on build `657e01125 (10001)` with 1 TB of RAM; the August four-model patch comparison remains open.
 
 ## The problem
 
-With a large MoE in system RAM and `-ot exps=CPU`, the llama.cpp scheduler offloads every large expert matmul to backend 0. On Galactus, 731 of 1,186 GPU splits went to ROCm0, and three cards stayed idle. The expert-weight copies are already asynchronous (`ggml_backend_tensor_set_async`). Two things still serialized them. First, they all queued onto one card's stream. Second, a per-split `ggml_backend_synchronize(ids_backend)` blocked the host to read the routing ids, which chained each layer's copy behind the previous layer's GEMM.
+With a large MoE in system RAM and `-ot exps=CPU`, the llama.cpp scheduler offloads every large expert matmul to backend 0. On Galactus, 731 of 1,186 GPU splits went to ROCm0. The other cards still had splits, but the offloaded expert work was concentrated on the first card. The expert-weight copies are already asynchronous (`ggml_backend_tensor_set_async`). Two things still serialized them. First, they all queued onto one card's stream. Second, a per-split `ggml_backend_synchronize(ids_backend)` blocked the host to read the routing ids, which chained each layer's copy behind the previous layer's GEMM.
 
 ## The fix
 
-Edit 2 spreads the offload target across all eligible GPUs, keyed on the layer index, so each layer's gate, up, and down stay on one card. Edit 1 adds a fallback cursor for Edit 2. Edit 3 skips the ids read at prefill batch sizes, where every expert is used, so the read saves no bandwidth and only adds the blocking synchronize. The async copies can then issue at once and overlap compute across the cards.
+Edit 2 spreads the offload target across all eligible GPUs, keyed on the layer index, so each layer's gate, up, and down stay on one card. Edit 1 adds a fallback cursor for Edit 2. Edit 3 skips the ids read when the number of routing selections reaches its threshold, marking all experts as used. At large batches the investigation expected nearly all experts to be selected, making the selective readback of little benefit. The patch may copy unused experts when routing is uneven; the threshold is a heuristic, not a guarantee that every expert was selected. The async copies can then issue at once and overlap compute across the cards.
 
-> A note on source and cautions. The line numbers are from llama.cpp master, about July 21, 2026. Confirm your tree before you patch:
+> The source anchors and line numbers refer to the July 21, 2026 tree. Inspect the corresponding code in your checkout before applying these edits:
 > ```bash
 > grep -n "prev_ids_tensor\|used_ids" ggml/src/ggml-backend.cpp   # Edit 3 anchor, one hit in compute_splits
 > grep -n "bool op_offload;"          ggml/src/ggml-backend.cpp   # Edit 1 anchor
@@ -123,7 +123,7 @@ cd /path/to/llama.cpp
 cmake --build build -j$(nproc) && cmake --install build
 ```
 
-### Check 1 — did the concentration break up? Do this first.
+### Check scheduler placement
 ```bash
 GGML_SCHED_DEBUG=2 llama-bench \
   -m /models/GLM-5.2/UD-Q4_K_XL/GLM-5.2-UD-Q4_K_XL-00001-of-00011.gguf \
@@ -135,7 +135,7 @@ grep -c '## SPLIT' sched_patched.txt   # split count should stay near the pre-pa
 ```
 Before: ROCm0 731, ROCm1 133, ROCm2 175, ROCm3 147. After: about equal, near 290 each. If ROCm0 is still about 731, the patch did not take effect. Confirm that `ldd $(which llama-bench) | grep ggml` points at your rebuilt library. Do not measure throughput yet.
 
-### Check 2 — the number. Do this only if Check 1 gave an equal histogram.
+### Compare throughput after confirming placement
 ```bash
 llama-bench \
   -m /models/GLM-5.2/UD-Q4_K_XL/GLM-5.2-UD-Q4_K_XL-00001-of-00011.gguf \
@@ -144,7 +144,7 @@ llama-bench \
 ```
 `-mmp 0` pins the host buffer. Async H2D from pinned pages reaches the multi-stream bandwidth limit; pageable memory uses a bounce buffer and stays lower. Confirm the load log shows the expert tensors in a `ROCm_Host` buffer. If `-mmp 0` runs out of memory on the pinned allocation, use `-mmp 1` for a working number first.
 
-Regression check (one run): decode with `-n 64 -p 0` should not change. Round-robin acts only at batch 32 or more, and Edit 3's condition is false at batch 1.
+Regression check (one run): decode with `-n 64 -p 0` should not change. In the tested backend, offload eligibility limited distribution to batch 32 or more, and Edit 3’s condition was false at batch 1. Recheck those assumptions on other builds and backends.
 
 ## Galactus results
 
@@ -156,6 +156,6 @@ Regression check (one run): decode with `-n 64 -p 0` should not change. Round-ro
 
 Split histogram after the patch: ROCm0 731 → 285; distribution 285/300/294/292 plus CPU 308.
 
-## Upstream
+## Submission status
 
-This relates to [issue #20757](https://github.com/ggml-org/llama.cpp/issues/20757) (a two-tier GPU+RAM expert cache for MoE offload). It touches the same code (`compute_splits`, the selective expert copy). An upstream PR for this patch is an open item, and the text above is its basis. If you take this to a PR, the two contributions are the layer-keyed distribution and the batch-size-gated ids bypass. State the no-change result for Edit 2 alone, so reviewers see why Edit 3 is required.
+This relates to [issue #20757](https://github.com/ggml-org/llama.cpp/issues/20757) (a two-tier GPU+RAM expert cache for MoE offload). It touches the same code (`compute_splits`, the selective expert copy). An upstream PR for this patch is an open item, and the text above is its basis. The proposed contributions are layer-keyed distribution and the batch-size-gated ids bypass. The distribution-only null result is part of the evidence for the combined change.

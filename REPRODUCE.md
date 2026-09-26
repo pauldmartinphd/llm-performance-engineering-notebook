@@ -1,40 +1,66 @@
-# Reproducing this on your own hardware
+# Reproducing the measurements
 
-You do not need Galactus's exact parts. You need the same workload shape: a large MoE model with the routed experts in system RAM and the dense path on one or more GPUs. Follow the steps in this order to find the speed limit and raise it.
+These experiments use a large MoE model with routed experts in system RAM and the dense path on one or more GPUs. You do not need Galactus's exact parts, but you do need to measure your own bandwidth, placement, and effective batch sizes. The commands below describe the recorded llama.cpp workflow; flags and backend behavior can differ by build.
 
-## 0. Prerequisites
-- Build llama.cpp for your GPU backend (ROCm here; CUDA, Metal, and Vulkan share the same scheduler logic).
-- Obtain a large MoE GGUF that does not fit in VRAM, so the experts must live in RAM.
-- Compile STREAM (`stream.c`) for your core count.
+## Prepare and record the configuration
 
-## 1. Find your memory-bandwidth limit (this limits decode)
-Run STREAM across a thread sweep. Apply the RFO correction (Scale ×1.5, Add/Triad ×4/3; Copy usually needs no correction — confirm it does not exceed your theoretical limit). This gives your decode limit. See [experiments/galactus-diag.sh](experiments/galactus-diag.sh) for the exact command, and [hardware/galactus/galactus_triad.txt](hardware/galactus/galactus_triad.txt) for a sample of the output.
+Build llama.cpp for your GPU backend and record the commit, build options, and loaded backend libraries. The measurements here used ROCm. CUDA, Metal, and Vulkan share scheduler code, but this repository does not establish the patch's performance on those backends.
 
-Predict decode before you measure it: `t/token ≈ C + bytes_per_token ÷ bandwidth`. `bytes_per_token` is the active-expert size at your quant. `C` is your GPU-side constant, about 90 ms on Galactus; measure it once and reuse it. If your measured decode is far below this prediction, a setting is wrong. Fix it before you tune further.
+Choose an MoE GGUF whose routed experts must live in RAM, and record the exact export, quantization, shard names, and sizes. Compile STREAM (`stream.c`) for the machine. Record the memory population, channel count, configured transfer rate, CPU topology, GPU placement, and available VRAM. These details distinguish a repeat measurement from a comparison between different configurations.
 
-## 2. Baseline both phases correctly
+## Measure memory bandwidth
+
+Run STREAM across a thread-count sweep. For ordinary stores that incur read-for-ownership traffic, the corrections used here are Scale ×1.5 and Add/Triad ×4/3. Copy needs no correction when compiled to non-temporal stores. Check the generated store behavior before applying these factors on another system; an adjusted rate above the theoretical DRAM peak is a reason to investigate the assumption. The [diagnostic script](experiments/galactus-diag.sh) and [Galactus STREAM capture](hardware/galactus/galactus_triad.txt) provide the recorded procedure and output.
+
+Use the result to estimate decode time:
+
+```
+time_per_token ≈ C + bytes_read_per_token / bandwidth
+```
+
+The bytes term is the active-expert footprint at the chosen quantization. `C` represents the remaining cost for the configuration; the GLM-5.2 investigation estimated about 90 ms on Galactus. Fit and check that term for your model and placement. A large gap between prediction and measurement warrants investigation of both the setup and the model's assumptions.
+
+## Establish prefill and decode baselines
+
+Substitute the model path and one thread count per run:
+
 ```bash
 llama-bench -m <model> -ngl 99 -ot "exps=CPU" -fa 1 \
-  -t <physical-cores/2..physical-cores> -b 8192 -ub 8192 -p 8192 -n 128 -r 2 -o md
+  -t <threads> -b 8192 -ub 8192 -p 8192 -n 128 -r 2 -o md
 ```
-Set `-ub` directly. `-p` limits `n_ubatch`, so a low `-p` limits prefill without warning. Sweep the thread count. Expect a maximum near half your physical cores, and a large drop when you use SMT siblings.
 
-## 3. See where the offload goes
+Sweep thread counts rather than assuming that all logical CPUs will help. Galactus's GLM-5.2 decode peaked around 24–32 threads and slowed sharply when the sweep reached SMT siblings. Other models and prefill had different optima.
+
+Set `-ub` explicitly and keep `-p` large enough for the intended micro-batch: in the recorded builds, `-p` clamps the effective `n_ubatch`. Asking for `-ub 8192` with `-p 512` still tests the smaller regime. Record the effective values from the run. The [August baseline](results/lab-notebook/12-common-baseline-2tb.md) used f16 KV; the April runs used q8_0 and smaller prompts.
+
+## Inspect scheduler placement
+
 ```bash
 GGML_SCHED_DEBUG=2 llama-bench -m <model> -ngl 99 -ot "exps=CPU" -fa 1 -v \
   -t 32 -b 512 -ub 512 -p 512 -n 0 -r 1 > sched.txt 2>&1
 grep '## SPLIT' sched.txt | sed -E 's/.*: (GPU?[0-9]|CPU|ROCm[0-9]|CUDA[0-9]).*/\1/' | sort | uniq -c
 ```
-If one GPU holds most of the splits, the [prefill patch](patches/prefill/README.md) applies to you. If the offload is already balanced, the patch will not help. This is why you check first.
 
-## 4. Apply the patch (if step 3 justified it)
-Follow [patches/prefill/README.md](patches/prefill/README.md). Run step 3 again first, and confirm the histogram is now equal. Then run step 2 again for the throughput. The histogram confirms the mechanism. The throughput confirms the gain.
+Adapt the backend names and thread count for your machine. This small-batch run checks placement; it is not the large-batch throughput benchmark. `-v` is required because llama-bench otherwise suppresses the scheduler log.
 
-## 5. Add speculative decode for the last decode gains
-- GLM family: `--spec-type draft-mtp --spec-draft-n-max 2`.
-- DeepSeek-V4-Flash: `--spec-type draft-dspark --spec-draft-n-max 3`, with the block-5 drafter in VRAM.
-- Sweep `n-max` from 1 to 5. Expect a maximum at 2 or 3, and a drop by 5 from the verify cost on a top-k-of-many MoE. Leave `p-min` off on technical prose.
-- Measure through the `llama-server` JSON timings, or with `script -q`. Do not pipe `llama-cli` to a file; it drops the timing lines.
+Concentration on one GPU is a reason to inspect the [prefill patch](patches/prefill/README.md). On Galactus, balancing the split counts alone did not improve throughput: the routing-index synchronization also had to change. An equal histogram establishes placement, not a speedup.
 
-## What to record
-Use the CSV schema in [results/data/](results/data/): date, experiment, configuration (with the exact flags and build), metric, value, source. The configuration column is what makes a number reproducible. A t/s figure without its configuration has no value. Record the failures too. The [refuted-hypotheses table](takeaways/refuted-hypotheses.md) saved more time than any single gain.
+## Compare the patched and stock builds
+
+Follow the patch note's source anchors, build instructions, and two checks. Hold the model, flags, loading mode, and hardware state constant across stock and patched runs. Confirm the changed split distribution, measure large-batch prefill, and check decode for regressions. The recorded gain was 13.7% on GLM-5.2; the four-model comparison on the August build remains open.
+
+The July commands use `-mmp 0` for pinned host loading. The [Session 10 interval notes](results/lab-notebook/10-dspark-deepseek-v4-flash.md) record its later replacement by `--load-mode none`; `-dio 1` maps to `--load-mode dio`. Use the flags supported by the build under test and record the buffer type actually allocated.
+
+## Measure speculative decode separately
+
+For the tested exports, GLM-5.2 used `--spec-type draft-mtp --spec-draft-n-max 2`. DeepSeek-V4-Flash used `--spec-type draft-dspark --spec-draft-n-max 3`, with the block-5 drafter in VRAM. The [model notes](results/README.md) give the files and conditions. These are starting points for a sweep, not established optima for other models or prompts.
+
+Sweep `n-max` from 1 to 5 with the prompt, context, sampling settings, placement, and fitter state held constant. Use an explicit context size (`-c`): the tested 1M-context model otherwise attempted a KV allocation that exhausted VRAM. Record the baseline and repetitions, generated token count, acceptance rates, and timings. The Galactus tests used greedy decoding and mostly one technical-prose prompt; p-min truncation did not establish an improvement for that workload.
+
+Use llama-server's JSON timings or capture llama-cli through a pseudo-terminal. On the Linux test host, `script -q <file> -c "<command>"` preserves terminal output; piping llama-cli or relying on its log file lost timing lines in the recorded builds. llama-bench did not support speculation in these experiments. Keep the tool difference explicit when comparing its baseline with a llama-cli result.
+
+## Save the evidence
+
+Keep raw output alongside the [CSV extracts](results/data/). Record date, experiment, configuration (including exact flags and build), metric, value, and source. Preserve individual repetitions and explain what a reported ± value represents. The speculative repeats in Entry 12 show about 9% timing variation, so a single run cannot reliably distinguish nearby settings.
+
+Record failed runs, unsupported configurations, and null results as well as improvements. The [negative-results table](takeaways/refuted-hypotheses.md) is specific to the tested workload and machine; it helps prioritize new experiments without ruling out different behavior elsewhere.

@@ -1,4 +1,6 @@
-## Session 5 — Monday, July 14, 2026 (afternoon) — Interpreting v3; the untested ubatch regime
+# Session 5 — July 14, 2026 (afternoon) — Interpreting v3; the untested ubatch regime
+
+[Notebook index](00-overview.md) · [Model summaries](../README.md)
 
 The v3 battery was still running (11:08–14:25) through the first half of this session; the dialogue proceeded in parallel, returning to the battery's output when the complete results arrived at 14:34.
 
@@ -60,7 +62,7 @@ What would truly unlock it — experts in VRAM, so that verify(B) ≈ verify(1):
 
 "12.5 tps is about 25% the speed of Claude/ChatGPT? That's *really* good."
 
-### 12:20 — Reality check: 21% of Opus 4.8; the honest near-term ceiling is ~13%; prefill is what is felt
+### 12:20 — Reality check: 21% of Opus 4.8; the estimated near-term ceiling is ~13%; prefill is what is felt
 
 Artificial Analysis figures were checked rather than eyeballed:
 
@@ -550,7 +552,7 @@ watch -n2 'rocm-smi --showuse --showmemuse | grep -E "GPU\[|use"'
 
 "So say I paid $350 per GPU. Would ~$1600 including tax and shipping for these four GPUs have been a good deal?"
 
-### 15:27 — Verdict: yes, with the receipt; the next money goes to DDR5 — but the free patch first
+### 15:27 — GPU purchase assessment and priorities for further work
 
 "Yes. And unusually, you now have the receipt." What the $1,600 measurably bought:
 
@@ -599,4 +601,3 @@ CPU experts       13.77 GB ÷ 152 GB/s   =  91 ms   (unchanged)
 - The GPUs are measured at +55% (3.87 → 6.01) while running at 11% of installed bandwidth (219 of 2,048 GB/s); a `return b` patch (~20 lines) plus async pinned copies would take prefill toward ~800–1,200 t/s on existing hardware.
 - The $1,600 GPU purchase is judged good ($12.50/GiB of PCIe-attached VRAM; four 3090s would yield only 6.3 versus 6.01 t/s decode with less VRAM); DFlash speculation would reach ~12.5 t/s but no GLM-5.2 draft model exists; hosted-model gap: ~9% of Opus 4.8 decode today, ~13% honest near-term ceiling, 5–8× slower end-to-end.
 - Open at session close: the v4 ubatch ladder (rows above 512 still pending at 15:27).
-

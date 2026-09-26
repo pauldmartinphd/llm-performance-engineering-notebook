@@ -1,4 +1,6 @@
-## Session 3 — Monday, July 14, 2026 (mid-day) — v2 crash forensics and the v3 relaunch
+# Session 3 — July 14, 2026 (mid-day) — v2 crash forensics and the v3 relaunch
+
+[Notebook index](00-overview.md) · [Model summaries](../README.md)
 
 ### 10:22 — v2 battery output arrives: B0 alone survived
 
@@ -449,4 +451,3 @@ Honest bottom line:
 - The v3 battery (16 phases) is running as `diag-20260714-110813`; phases D, F, H, J, L are the ones that matter.
 
 ---
-

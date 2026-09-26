@@ -1,4 +1,6 @@
-## Session 8 — Monday evening, July 14 – Wednesday, July 16, 2026 — The H2D verdict and the patch, interrupted
+# Session 8 — evening, July 14 – July 16, 2026 — The H2D verdict and the patch, interrupted
+
+[Notebook index](00-overview.md) · [Model summaries](../README.md)
 
 ### 19:25 — Four-stream H2D: 65.7 GB/s; the copy-mechanism diagnosis reverses itself
 
@@ -573,4 +575,3 @@ Paul issued `/export`; the transcript closed with the exporter footer ("Powered 
 - Frontier framing: ~10x slower than hosted decode today (~10.5x end-to-end on an 8K prompt: ~54 s vs ~9.5 min); the realistic software path is ~7x, with 5x requiring DFlash (an ecosystem bet — no GLM-5.2 draft exists) and the scheduler copy rewrite; the usability threshold that matters is reading speed, ~7–10 t/s.
 
 ---
-
