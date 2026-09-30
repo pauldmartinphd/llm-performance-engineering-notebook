@@ -37,9 +37,14 @@ The [findings](takeaways/general-principles.md) collect what the experiments est
 | Changes that did not help on Galactus | [Negative results](takeaways/refuted-hypotheses.md) |
 | MTP and DSpark measurements | [Speculative decoding](takeaways/speculative-decoding.md) |
 | Experiments in chronological order | [Lab notebook](results/lab-notebook/00-overview.md) |
+| Early build record, dated model surveys, and deployment proposals | [Source notes](results/reference-notes/README.md) |
 | Original captures and extracted measurements | [Raw logs](results/raw-logs/) and [CSV data](results/data/) |
 | Machine specifications and memory measurements | [Hardware](hardware/README.md) |
 | Diagnostic scripts and historical rerun protocol | [Experiments](experiments/README.md) |
+
+## Earlier build and deployment notes
+
+The [March build entry](results/lab-notebook/00-march-build-record.md) preserves the initial ROCm/container setup, DIMM replacement results, and expert-placement command, under conditions that differ from the July and August investigations. The [dated source notes](results/reference-notes/README.md) also retain a July model shortlist, September architecture comparisons, and an unmeasured two-node residency proposal. These records explain the build and candidate selection; they do not add a new common benchmark or establish the proposed routing roles.
 
 ## Work remaining
 

@@ -1,6 +1,6 @@
 # Performance engineering lab notebook
 
-**Period covered:** July 13–September 30, 2026. Sessions 1–9 cover the July GLM-5.2 investigation; Session 10 and Entries 11–12 extend the Galactus record through August. Entry 13 adds oMLX/Qwen3.8-27B on Magneto.
+**Period covered:** March 23–September 30, 2026. The earlier March build record was added from a dated authored note on September 30. Sessions 1–9 cover the July GLM-5.2 investigation; Session 10 and Entries 11–12 extend the Galactus record through August. Entry 13 adds oMLX/Qwen3.8-27B on Magneto.
 **Investigator:** Paul Martin
 **Original subject:** Measuring and improving inference throughput for GLM-5.2 (753.86 B-parameter mixture-of-experts model) running under llama.cpp/ROCm on the server "Galactus". Later entries extend the record to other models and to oMLX on Magneto.
 **Original July notebook compiled:** July 24, 2026, from the original conversation exports, benchmark logs, and the automated diagnostic run log. All timestamps are US Eastern Time. The July entries were compiled from the saved records. Later entries list their sources and recording limitations, including the hand-collected Session 10 timings.
@@ -54,6 +54,12 @@ The original July investigation is ordered by wall-clock time and grouped into n
 | llamacpp_patch.md | exported 7/21 07:37 | Patch-development session transcript (Session 9) |
 
 ---
+
+## Earlier build record and reference material
+
+The [March 23 build record](00-march-build-record.md) precedes the numbered sessions. Its compiler/device setup, mixed-to-matched DIMM results, and manual placement recipe describe the initial installation. The source is a September 30 edited copy of a dated note; its rates are retained separately because the raw captures and repetition details are missing.
+
+The [source-note index](../reference-notes/README.md) preserves that full note alongside the July model survey, September model/architecture notes, and the undated two-node deployment proposal. Candidate roles, external rankings, and proposed residency are identified separately from measured local results.
 
 ## Sessions
 

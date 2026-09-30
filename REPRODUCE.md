@@ -2,6 +2,8 @@
 
 These experiments use a large MoE model with routed experts in system RAM and the dense path on one or more GPUs. Repeating the method on another machine starts with its measured bandwidth, placement, and effective batch sizes. The commands below describe the recorded llama.cpp workflow; flags and backend behavior can differ by build.
 
+For the initial March installation, the [earlier build record](results/lab-notebook/00-march-build-record.md) links the retained compiler, device-access, and server commands. It is a historical configuration on a different build and storage setup, rather than the recipe for the August common baseline. The [source-note index](results/reference-notes/README.md) records the evidence status of the later model-selection and residency plans.
+
 ## Prepare and record the configuration
 
 Build llama.cpp for your GPU backend and record the commit, build options, and loaded backend libraries. The measurements here used ROCm. CUDA, Metal, and Vulkan share scheduler code, but this repository does not establish the patch's performance on those backends.

@@ -34,3 +34,5 @@ Memory bandwidth and the active-expert footprint explain part of decode time; th
 | [lab-notebook/00-overview.md](lab-notebook/00-overview.md) | The chronological record: Sessions 1–10 and Entries 11–13, every command and result in order. |
 | [raw-logs/](raw-logs/) | The primary captures: the diagnostic run, the MTP A/B test, the per-model benchmark logs, and the failure logs. |
 | [data/](data/) | CSV extracts, with every benchmark row in machine-readable form. |
+| [lab-notebook/00-march-build-record.md](lab-notebook/00-march-build-record.md) | Earlier build, device setup, DIMM replacement, and placement trials, recorded separately from the normalized baseline. |
+| [reference-notes/](reference-notes/README.md) | Retained authored notes: dated surveys, architecture comparisons, and an unmeasured residency proposal, with a source manifest. |

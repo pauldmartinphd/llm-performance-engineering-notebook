@@ -1,0 +1,42 @@
+[
+  {
+    "original_name": "Galactus LLM Inference Server Build — Lab Notebook.md",
+    "retained_path": "results/reference-notes/2026-03-23-galactus-build.md",
+    "sha256": "5b168549265916063282ebdbdbed78d28d857cb6eaa8e57d5825afe8738f0742",
+    "bytes": 14565,
+    "imported_on": "2026-09-30",
+    "source_type": "authored note; not raw machine output"
+  },
+  {
+    "original_name": "open-weights-model-survey-2026-07.md",
+    "retained_path": "results/reference-notes/2026-07-31-open-weights-survey.md",
+    "sha256": "1b4e68f9d8aa12aef50959c1ad89401d0ef9b6b983c4e7f9d3e4d6cd1bf85305",
+    "bytes": 5769,
+    "imported_on": "2026-09-30",
+    "source_type": "authored note; not raw machine output"
+  },
+  {
+    "original_name": "Open-Weight Frontier Models, Benchmark Reality, and a Practical Local Frontier Stack.md",
+    "retained_path": "results/reference-notes/2026-09-13-local-frontier-stack.md",
+    "sha256": "7b543c60b3702bbf9af000683bd9b1c768da0eac1e3d2187eec7527f86802b24",
+    "bytes": 11877,
+    "imported_on": "2026-09-30",
+    "source_type": "authored note; not raw machine output"
+  },
+  {
+    "original_name": "Frontier Language Models in September 2026_ Capability, Architecture, and the Return of Inference Efficiency.md",
+    "retained_path": "results/reference-notes/2026-09-13-frontier-model-roundup.md",
+    "sha256": "b56db240c43fb4e4d704661de68313d39e2d92ef81ebde17708b95d90e6a6721",
+    "bytes": 11887,
+    "imported_on": "2026-09-30",
+    "source_type": "authored note; not raw machine output"
+  },
+  {
+    "original_name": "Local AI Infrastructure Architecture Report.md",
+    "retained_path": "results/reference-notes/undated-local-ai-infrastructure-proposal.md",
+    "sha256": "babdfdea95b02adb209172150bdf6d89c5969dc95550410206c0cdda7d2afccb",
+    "bytes": 6345,
+    "imported_on": "2026-09-30",
+    "source_type": "authored note; not raw machine output"
+  }
+]
