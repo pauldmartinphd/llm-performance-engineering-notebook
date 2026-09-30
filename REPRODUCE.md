@@ -64,3 +64,11 @@ Use llama-server's JSON timings or capture llama-cli through a pseudo-terminal. 
 Keep raw output alongside the [CSV extracts](results/data/). Record date, experiment, configuration (including exact flags and build), metric, value, and source. Preserve individual repetitions and explain what a reported ± value represents. The speculative repeats in Entry 12 show about 9% timing variation, so a single run cannot reliably distinguish nearby settings.
 
 Record failed runs, unsupported configurations, and null results as well as improvements. The [negative-results table](takeaways/refuted-hypotheses.md) is specific to the tested workload and machine; it helps prioritize new experiments without ruling out different behavior elsewhere.
+
+## oMLX measurements on Apple Silicon
+
+The workflow above describes Galactus/llama.cpp. For [Magneto's oMLX record](results/qwen-3.8-27b.md), save the exact Mac model identifier and chassis, chip/GPU-core count, RAM, macOS and oMLX/MLX versions, model repository/revision, and exported recipe. The leaderboard's chip/RAM label does not identify chassis.
+
+Record the benchmark corpus, context and generation lengths, full/quick warm-up, ANE-aligned prompt setting, cache state, and every acceleration toggle. Keep single-request PP/TG separate from continuous-batching throughput. Start with a single 4K condition; repeat the same baseline between changes, and test sustained thermal behavior separately from a cool start. Record power mode, adapter, cooling conditions, and timestamped powermetrics alongside prefill/decode boundaries. Do not assign a thermal snapshot to an entire sweep.
+
+The initial recorded configuration used Lightning MTP on and ANE Prefill, SpecPrefill, DFlash, VLM MTP, and TurboQuant KV off. It is a reference configuration, not an MTP-off control. Change one feature at a time before testing interactions, retain per-run output and quality checks, and report uncertainty from actual repeats. The missing model/MLX revisions, macOS build, full recipes and original logs in [Entry 13](results/lab-notebook/13-magneto-omlx-qwen38.md) currently prevent exact reproduction.

@@ -1,6 +1,6 @@
 # Magneto — platform
 
-Magneto is the Apple Silicon laptop in the fleet, alongside [Galactus](../galactus/README.md) and [Borg](../borg/README.md). It is a unified-memory machine: the CPU, the GPU, and the model weights share one LPDDR5 pool, so the discrete-GPU offload split that Galactus uses (routed experts in system RAM, dense path on the GPU) does not exist here. The [methodology](../../results/methodology.md) transfers as written; the first things to re-measure are the memory-bandwidth limit (§1) and the decode two-term model. Figures marked unmeasured have no benchmark on record yet.
+Magneto is the Apple Silicon laptop in the fleet, alongside [Galactus](../galactus/README.md) and [Borg](../borg/README.md). It is a unified-memory machine: the CPU, the GPU, and the model weights share one LPDDR5 pool, so the discrete-GPU offload split that Galactus uses (routed experts in system RAM, dense path on the GPU) does not exist here. The measurement principles in the [methodology](../../results/methodology.md) transfer, but the backend-specific procedure must be adapted; the memory-bandwidth limit (§1) and decode two-term model still need local measurements. Figures marked unmeasured have no benchmark on record yet.
 
 This is the machine this notebook is currently edited from (`magneto-local`).
 
@@ -22,11 +22,16 @@ The integrated Apple GPU has 38 cores, the M2 Max's larger configuration. llama.
 
 The internal Apple NVMe SSD is 1 TB.
 
-## Status and LLM duty (throughput unmeasured)
+## Status and LLM duty
 
-There is no STREAM measurement, no theoretical-peak-versus-measured ratio, and no model benchmark on record. The best fleet fit is small-to-mid MoE and dense models that fit inside 64 GB of unified memory, and a cross-architecture check of the decode two-term model (`C + bytes ÷ bandwidth`) on a high-bandwidth unified-memory part with a non-ROCm backend.
+The [September 30 oMLX record](../../results/qwen-3.8-27b.md) contains Qwen3.8-27B throughput measurements. There is still no STREAM measurement or theoretical-peak-versus-measured ratio on record. The best fleet fit is small-to-mid MoE and dense models that fit inside 64 GB of unified memory, and a cross-architecture check of the decode two-term model (`C + bytes ÷ bandwidth`) on a high-bandwidth unified-memory part with a non-ROCm backend.
+
+## Thermal observations
+
+The September investigation captured Heavy thermal pressure with about 21.6 W GPU power, 942 MHz active frequency, and 84.4% active residency. Earlier Nominal samples around 27–29 W are reported in the conversation but lack recovered captures. These observations do not establish a fixed chassis power limit. The oMLX leaderboard hardware label omits chassis; a 38-core/64-GB M2 Max label alone cannot identify a 14-inch MacBook Pro, 16-inch MacBook Pro, or Mac Studio. [Entry 13](../../results/lab-notebook/13-magneto-omlx-qwen38.md) separates the observations from the larger-chassis hypothesis.
 
 ## Open items
 
 - Run the STREAM baseline with the RFO correction, per methodology §1; it is the prerequisite for every decode budget here. Build a CPU STREAM for Arm64, and note whether it emits non-temporal stores (the Copy-correction check).
-- Pick a model that fits 64 GB, record its quant and placement, and measure `C` and the bytes per token so the two-term model has Apple Silicon constants.
+- Complete the Qwen3.8-27B recipe/version ledger and repeat the acceleration comparisons with time-aligned thermal telemetry.
+- Measure `C` and bytes per token for a recorded model configuration so the two-term model has Apple Silicon constants.

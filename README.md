@@ -1,10 +1,10 @@
 # LLM Performance Engineering Notebook
 
-This notebook investigates the performance limits of large mixture-of-experts models whose weights exceed GPU memory. The routed experts live in system RAM, while the dense computation runs on GPUs. The experiments measure where time goes in prompt processing and token generation, then test changes to the configuration and to llama.cpp itself.
+This notebook investigates local LLM inference performance. Its original focus is large mixture-of-experts models whose weights exceed GPU memory. The routed experts live in system RAM, while the dense computation runs on GPUs. The experiments measure where time goes in prompt processing and token generation, then test changes to the configuration and to llama.cpp itself.
 
 The most detailed investigation is GLM-5.2 on Galactus, an EPYC 7713 server with eight-channel DDR4 and four Radeon Pro V620 GPUs. Memory bandwidth explains much of its decode time. Prefill exposed a different problem: llama.cpp concentrated offloaded expert computation on one GPU, and a routing-index readback serialized the work. A scheduler patch raised prefill from **104.97 to 119.36 tokens/s (+13.7%)** in the July comparison. Distributing the work alone produced no meaningful gain; removing the synchronization was also necessary.
 
-The repository includes the measurements, unsuccessful experiments, patch source instructions, and chronological notes behind those conclusions. All published benchmarks so far come from Galactus. They provide a method to test on another machine, rather than a promise of the same performance.
+The repository includes the measurements, unsuccessful experiments, patch source instructions, and chronological notes behind those conclusions. The Galactus investigation now sits alongside the first oMLX measurements on Magneto, a 14-inch M2 Max MacBook Pro. Each record states its platform and conditions; results from the two engines are not a common benchmark.
 
 ## Results
 
@@ -21,6 +21,10 @@ The latest common baseline in this notebook was measured on **August 15–16, 20
 The speculative runs used a ZFS explanation prompt, greedy decoding, and llama-cli rather than llama-bench. Their repeated timings varied by about 9%; the reported spreads are not confidence intervals. MiniMax was retired after this measurement. [Entry 12](results/lab-notebook/12-common-baseline-2tb.md) records the exact model files, conditions, repetitions, and remaining questions.
 
 The July patch result and April resident-expert results used different builds and configurations. They remain in the [model notes](results/README.md), with their original conditions, and are not included in the stock baseline above.
+
+## Apple Silicon measurements (September 30, 2026)
+
+[Qwen3.8-27B on Magneto](results/qwen-3.8-27b.md) records an initial Lightning MTP baseline of **156.1 PP / 16.4 TG tokens/s at 4K**, with tuned ANE + MTP at **170.1 / 13.9** and a later screenshot at **171.0 / 16.9**. The baseline survives as a conversation transcription; the later results have a retained screenshot. Heavy thermal pressure was observed during the investigation. The oMLX leaderboard label omits chassis, so the higher external M2 Max result cannot establish an equivalent-machine comparison. A larger chassis is a hypothesis, not an identified cause. [Entry 13](results/lab-notebook/13-magneto-omlx-qwen38.md) records the ANE tuner/benchmark distinction, DFlash regression, incomplete SpecPrefill experiment, and evidence limitations.
 
 ## Reading the notebook
 

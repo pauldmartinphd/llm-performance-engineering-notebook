@@ -1,13 +1,13 @@
-# Galactus lab notebook
+# Performance engineering lab notebook
 
-**Period covered:** July 13–August 16, 2026. Sessions 1–9 cover the July GLM-5.2 investigation; Session 10 and Entries 11–12 extend the record through August.
+**Period covered:** July 13–September 30, 2026. Sessions 1–9 cover the July GLM-5.2 investigation; Session 10 and Entries 11–12 extend the Galactus record through August. Entry 13 adds oMLX/Qwen3.8-27B on Magneto.
 **Investigator:** Paul Martin
-**Subject:** Characterizing and improving the inference throughput of GLM-5.2 (753.86 B-parameter mixture-of-experts model) running under llama.cpp/ROCm on the server "Galactus"
+**Original subject:** Characterizing and improving the inference throughput of GLM-5.2 (753.86 B-parameter mixture-of-experts model) running under llama.cpp/ROCm on the server "Galactus". Later entries extend the record to other models and to oMLX on Magneto.
 **Original July notebook compiled:** July 24, 2026, from the original conversation exports, benchmark logs, and the automated diagnostic run log. All timestamps are US Eastern Time. The original July notebook was compiled from those records rather than memory. Later entries identify their own sources and capture limitations, including the hand-collected Session 10 timings.
 
 ---
 
-The entries preserve the sequence of hypotheses, measurements, mistakes, and corrections. Commands and quoted dialogue describe what happened at the time; they are not instructions to execute now. Later findings can supersede earlier conclusions. For the latest measurements in this record, see [Entry 12](12-common-baseline-2tb.md); for the condensed interpretation, see the [model summaries](../README.md).
+The entries preserve the sequence of hypotheses, measurements, mistakes, and corrections. Commands and quoted dialogue describe what happened at the time; they are not instructions to execute now. Later findings can supersede earlier conclusions. For the latest measurements in this record, see [Entry 13](13-magneto-omlx-qwen38.md); the Galactus common baseline is in [Entry 12](12-common-baseline-2tb.md); for the condensed interpretation, see the [model summaries](../README.md).
 
 ## July GLM-5.2 results
 
@@ -69,3 +69,4 @@ The original July investigation is ordered by wall-clock time and grouped into n
 10. [10-dspark-deepseek-v4-flash](10-dspark-deepseek-v4-flash.md) — DSpark on DeepSeek-V4-Flash (Session 10) + interval notes
 11. [11-stream-rebaseline-2tb](11-stream-rebaseline-2tb.md) — STREAM re-baseline on the 2 TB population (Aug 15)
 12. [12-common-baseline-2tb](12-common-baseline-2tb.md) — The 2 TB common baseline: five models, one build, stock (Aug 15–16)
+13. [13-magneto-omlx-qwen38](13-magneto-omlx-qwen38.md) — oMLX/Qwen3.8-27B on the 14-inch M2 Max; thermal observations and chassis uncertainty (Sep 30)

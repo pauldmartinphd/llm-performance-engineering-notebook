@@ -1,0 +1,15 @@
+run_id,machine,context_tokens,pp_tps,tg_tps,ttft_ms,tpot_ms,peak_memory_gb,evidence
+initial_baseline,Magneto,1024,143.8,15.7,7120,64.3,19.2,conversation_pdf_pp63-65_114-115
+initial_baseline,Magneto,4096,156.1,16.4,26230,61.6,23.3,conversation_pdf_pp63-65_114-115
+initial_baseline,Magneto,8192,153.2,16.7,53480,60.4,24.1,conversation_pdf_pp63-65_114-115
+initial_baseline,Magneto,16384,152.9,19.1,107180,52.6,25.5,conversation_pdf_pp63-65_114-115
+initial_baseline,Magneto,32768,138.8,17.3,236010,58.1,26.5,conversation_pdf_pp63-65_114-115
+initial_baseline,Magneto,65536,117.3,13.9,558500,72.7,28.8,conversation_pdf_pp63-65_114-115
+ane_mtp,Magneto,4096,170.1,13.9,24080,,,conversation_pdf_p88
+ane_mtp,Magneto,16384,165.6,15.7,98950,,,conversation_pdf_p88
+dflash_ane_requested_inactive,Magneto,4096,153.7,15.5,26660,,,conversation_pdf_p81
+dflash_ane_requested_inactive,Magneto,16384,,11.2,,,,conversation_pdf_p84
+later_recipe_incomplete,Magneto,4096,165.5,15.9,,,,conversation_pdf_p106
+later_recipe_incomplete,Magneto,16384,171.1,18.2,,,,conversation_pdf_p106
+latest_recipe_incomplete,Magneto,4096,171.0,16.9,23957.5,59.6,25.9,screenshot_2026-09-30_094454
+latest_recipe_incomplete,Magneto,16384,173.0,19.4,94700.2,52.0,28.1,screenshot_2026-09-30_094454

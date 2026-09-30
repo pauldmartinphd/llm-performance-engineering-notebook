@@ -1,6 +1,6 @@
 # Results
 
-These are the per-model performance notes. Every note states the machine it was measured on; all results to date come from Galactus. Each note distills the raw benchmarks into the main numbers, the best configuration found, and the conclusions. For the machine itself, see [../hardware/galactus/README.md](../hardware/galactus/README.md). For the method behind the numbers, see [methodology.md](methodology.md). For what transfers to other systems, see [../takeaways/](../takeaways/).
+These are the per-model performance notes. Every note states the machine it was measured on; the llama.cpp results come from Galactus, and the oMLX results come from Magneto. Each note distills the raw benchmarks into the main numbers, the best configuration found, and the conclusions. For machine specifications, see [Hardware](../hardware/README.md). For the method behind the numbers, see [methodology.md](methodology.md). For what transfers to other systems, see [../takeaways/](../takeaways/).
 
 ## The normalized baseline (2026-08-15/16, build 3653e6d6d, stock scheduler)
 
@@ -22,11 +22,15 @@ The model notes retain earlier results with their builds and configurations. The
 
 Memory bandwidth and the active-expert footprint explain part of decode time; the GPU-side cost also differs by model. Prefill is fastest for MiniMax (A10B), followed by Qwen (A17B), V4-Flash, GLM (A40B), and Kimi (A32B). This is not a simple ordering by active parameter count: quantization and architecture also differ. MTP and DSpark improve decode on the two models tested successfully, but their timings vary more than the ordinary decode benchmarks.
 
+## Apple Silicon: oMLX on Magneto
+
+[Qwen3.8-27B](qwen-3.8-27b.md) records a six-context Lightning MTP baseline and later 4K/16K measurements on the 14-inch M2 Max (38 GPU cores, 64 GB). Tuned ANE improved measured prefill about 8–9% in the recorded comparison. DFlash was slower with ANE inactive at runtime; SpecPrefill setup never established a successful local run. These are configuration-specific observations, not general feature rankings. The thermal investigation and the leaderboard's missing chassis field are recorded separately from throughput measurements in [Entry 13](lab-notebook/13-magneto-omlx-qwen38.md). These results do not join the Galactus normalized baseline.
+
 ## The full record
 
 | Path | Content |
 |---|---|
 | [methodology.md](methodology.md) | The measurement method these results were produced with. |
-| [lab-notebook/00-overview.md](lab-notebook/00-overview.md) | The chronological record: Sessions 1–10 and Entries 11–12, every command and result in order. |
+| [lab-notebook/00-overview.md](lab-notebook/00-overview.md) | The chronological record: Sessions 1–10 and Entries 11–13, every command and result in order. |
 | [raw-logs/](raw-logs/) | The primary captures: the diagnostic run, the MTP A/B test, the per-model benchmark logs, and the failure logs. |
 | [data/](data/) | CSV extracts, with every benchmark row in machine-readable form. |

@@ -1,0 +1,490 @@
+SYSTEM / MODEL STATUS
+
+oMLX version:
+0.6.4 build 2529
+
+Model:
+Qwen3.8-27B-oQ4e-fp16-mtp
+
+Model size:
+17.50 GB
+
+GPU wired:
+18.3 / 55.7 GB
+
+RAM:
+42.3 / 68.7 GB
+
+Cache:
+1.8 GB
+
+Thermal:
+Nominal
+
+
+============================================================
+ANE PREFILL TUNER
+============================================================
+
+GPU-only:
+155.7 prompt tok/s
+
+Predicted optimum:
+182.5 prompt tok/s
++17.2%
+
+Profile-refined optimum:
+196.3 prompt tok/s
++26.1%
+
+
+============================================================
+ORIGINAL BASELINE
+Lightning MTP ON
+ANE Prefill OFF
+SpecPrefill OFF
+DFlash OFF
+VLM MTP OFF
+============================================================
+
+1K:
+PP TPS:       143.8
+TG TPS:        15.7
+TTFT:           7.12 s
+Peak memory:   19.2 GB
+
+4K:
+PP TPS:       156.1
+TG TPS:        16.4
+TTFT:          26.23 s
+Peak memory:   23.3 GB
+
+8K:
+PP TPS:       153.2
+TG TPS:        16.7
+TTFT:          53.48 s
+Peak memory:   24.1 GB
+
+16K:
+PP TPS:       152.9
+TG TPS:        19.1
+TTFT:         107.18 s
+Peak memory:   25.5 GB
+
+32K:
+PP TPS:       138.8
+TG TPS:        17.3
+TTFT:         236.01 s
+Peak memory:   26.5 GB
+
+64K:
+PP TPS:       117.3
+TG TPS:        13.9
+TTFT:         558.50 s
+Peak memory:   28.8 GB
+
+
+Batch-generation aggregate throughput:
+
+Batch 1:
+15.7 tok/s
+
+Batch 2:
+22.3 tok/s
+
+Batch 4:
+38.3 tok/s
+
+
+============================================================
+DFlash TEST
+DFlash ON
+ANE configured ON but INACTIVE at runtime
+============================================================
+
+4K:
+PP TPS:       153.7
+TG TPS:        15.5
+TTFT:          26.66 s
+
+DFlash internal:
+Acceptance:    69.5%
+Draft time:     1.55 s
+Verify time:  679 ms
+Generation:     3.7 tok/s
+
+ANE operations:
+MLP expected:   64
+MLP observed:    0
+
+GDN expected:   48
+GDN observed:    0
+
+
+16K:
+TG TPS:        11.2
+
+DFlash internal:
+Acceptance:    79.7%
+Draft time:   833 ms
+Verify time:   10.27 s
+Generation:     1.0 tok/s
+
+ANE operations:
+MLP expected:  448
+MLP observed:    0
+
+GDN expected:  336
+GDN observed:    0
+
+
+============================================================
+ANE PREFILL + LIGHTNING MTP
+============================================================
+
+4K:
+PP TPS:       170.1
+TG TPS:        13.9
+TTFT:          24.08 s
+E2E:           33.3 s
+
+16K:
+PP TPS:       165.6
+TG TPS:        15.7
+TTFT:          98.95 s
+E2E:          107.1 s
+
+
+16K Lightning MTP diagnostics:
+
+Generated tokens:       128
+Backbone cycles:         43
+Tokens/backbone cycle:    2.98
+MTP acceptance:          91.5%
+Backbone time:         7605.5 ms
+
+Approx. backbone time/cycle:
+176.9 ms
+
+
+ANE operations at 16K:
+
+MLP observed:   441
+MLP expected:   448
+
+GDN observed:   336
+GDN expected:   336
+
+
+4K Lightning MTP diagnostics:
+
+Initial MTP acceptance:
+66.7%
+
+Tokens/backbone cycle:
+1.61
+
+MTP subsequently parked
+
+
+============================================================
+LATER BENCHMARK RUN
+============================================================
+
+4K:
+PP TPS:       165.5
+TG TPS:        15.9
+
+16K:
+PP TPS:       171.1
+TG TPS:        18.2
+
+
+============================================================
+STILL-LATER BENCHMARK VALUES VISIBLE IN SCREENSHOT
+============================================================
+
+4K:
+PP TPS:       171.0
+TG TPS:        16.9
+
+16K:
+PP TPS:       173.0
+TG TPS:        19.4
+
+
+============================================================
+POWERMETRICS — NOMINAL / ACTIVE WORKLOAD
+============================================================
+
+Thermal pressure:
+Nominal
+
+GPU active residency:
+approximately 88–100%
+
+GPU power:
+approximately 23–29 W
+
+GPU active frequency:
+approximately 922–1008 MHz
+
+Examples preserved from individual samples:
+
+GPU active residency:
+7.35%
+
+GPU idle residency:
+92.65%
+
+GPU frequency:
+444 MHz
+
+GPU power:
+38 mW
+
+Thermal pressure:
+Nominal
+
+
+Another sample:
+
+GPU active residency:
+6.67%
+
+GPU idle residency:
+93.33%
+
+Thermal pressure:
+Nominal
+
+
+Complete captured powermetrics run:
+
+Samples:
+61
+
+Nominal thermal-pressure samples:
+61 / 61
+
+
+============================================================
+POWERMETRICS — HEAT-SOAKED STATE
+============================================================
+
+Thermal pressure:
+Heavy
+
+GPU HW active frequency:
+444 MHz
+
+GPU HW active residency:
+12.56%
+
+GPU idle residency:
+87.44%
+
+GPU SW requested state:
+P1: 100%
+
+GPU power:
+178 mW
+
+CPU + GPU combined power:
+approximately 6.2 W
+
+
+Another heat-affected screenshot:
+
+GPU power:
+approximately 21.6 W
+
+GPU active:
+approximately 84%
+
+GPU frequency:
+approximately 942 MHz
+
+Thermal pressure:
+Heavy
+
+
+============================================================
+PUBLIC OMLX COMPARISON RESULT
+f4f6h86x
+============================================================
+
+Hardware reported:
+M2 Max
+
+GPU cores:
+38
+
+Memory:
+64 GB
+
+Model:
+Qwen3.8-27B-oQ4e-fp16-mtp
+
+Quantization:
+4-bit
+
+Context:
+4096
+
+PP TPS:
+201.8
+
+TG TPS:
+25.7
+
+TTFT:
+20.302 s
+
+Peak memory:
+20.5 GB
+
+MLX active peak:
+20.54 GB
+
+MLX cache peak:
+2.92 GB
+
+Peak footprint:
+21.33 GB
+
+GPU average:
+98.0%
+
+GPU maximum:
+100%
+
+Thermal:
+Nominal
+
+oMLX:
+0.6.3rc2
+
+macOS:
+26.5.2
+
+Lightning MTP:
+ON
+
+ANE Prefill:
+OFF
+
+SpecPrefill:
+OFF
+
+DFlash:
+OFF
+
+VLM MTP:
+OFF
+
+TurboQuant KV:
+OFF
+
+Benchmark context:
+Code (Python)
+
+
+============================================================
+OTHER PUBLIC M2 MAX COMPARISONS DISCUSSED
+============================================================
+
+M2 Max 38 GPU / 96 GB:
+4K:
+PP TPS: 156.2
+TG TPS: 18.5
+
+Another M2 Max 38 GPU / 96 GB:
+1K:
+PP TPS: 154.0
+TG TPS: 20.5
+
+4K:
+PP TPS: 171.9
+TG TPS: 14.2
+
+
+M2 Max 38 GPU:
+8K:
+PP TPS: 202.0
+TG TPS: 28.5
+
+
+M2 Max 38 GPU / 64 GB:
+ordinary Qwen3.8-27B-4bit
+
+4K:
+PP TPS: 124.3
+TG TPS: 20.2
+
+
+Another M2 Max 38 GPU / 64 GB:
+
+4K:
+TG TPS: 19.9
+
+
+M2 Max 38 GPU / 64 GB:
+Qwen3.8-27B-Uncensored-oQ4e-fp16-mtp
+
+4K:
+PP TPS: 201.6
+TG TPS: 20.1
+
+16K:
+PP TPS: 192.2
+TG TPS: 18.7
+
+
+M2 Max 38 GPU:
+Qwen3.8-27B-8bit
+
+4K:
+PP TPS: 116.1
+TG TPS: 12.0
+
+
+Another 8-bit run:
+
+4K:
+PP TPS: 93.9
+TG TPS: 9.2
+
+
+8-bit 16K:
+
+PP TPS: 107.9
+TG TPS: 11.4
+
+
+M2 Max 30 GPU:
+ordinary Qwen3.8-27B-4bit
+
+4K:
+PP TPS: 98.5
+TG TPS: 18.2
+
+
+M2 Max 30 GPU:
+SpecPrefill + Lightning MTP
+
+4K:
+PP TPS: 188
+TG TPS: 24.9
+
+8K:
+PP TPS: 204
+TG TPS: 19.4
+
+16K:
+PP TPS: 709
+TG TPS: 20.6
+
+32K:
+PP TPS: 713
+TG TPS: 24.8
