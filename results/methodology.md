@@ -1,8 +1,8 @@
 # A performance-testing methodology for LLM inference
 
-This is a repeatable procedure for finding a system's real inference limits and improving them. It is written for hybrid Mixture-of-Experts (MoE) inference, in which the routed experts sit in system RAM and the dense path runs on the GPUs, but the loop generalizes to other systems. Every step below uses real numbers from **Galactus** (EPYC 7713, DDR4-2933, 4 × Radeon Pro V620); see the [per-model results](README.md) and the [hardware note](../hardware/galactus/README.md).
+This is the procedure I used to find the system's inference limits and test changes. It was developed for hybrid Mixture-of-Experts (MoE) inference, in which the routed experts sit in system RAM and the dense path runs on the GPUs, but the test loop also applies to other systems. Every step below uses numbers from **Galactus** (EPYC 7713, DDR4-2933, 4 × Radeon Pro V620); see the [per-model results](README.md) and the [hardware note](../hardware/galactus/README.md).
 
-The investigation starts with memory bandwidth and an estimate of time per token. Controlled sweeps then test the estimate and identify which settings or code paths deserve closer inspection. This page uses the July GLM-5.2 investigation as its worked example; the [August common baseline](lab-notebook/12-common-baseline-2tb.md) records the later build and memory population.
+The investigation starts with memory bandwidth and an estimate of time per token. Controlled sweeps test that estimate and identify the settings or code paths to inspect. This page uses the July GLM-5.2 investigation as its worked example; the [August common baseline](lab-notebook/12-common-baseline-2tb.md) records the later build and memory population.
 
 > A companion article on the Technicomp Labs blog presents this method as a narrative, with the full patch investigation: [A Scientific Method for Measuring the Limits of Local LLM Inference Speed](https://technicomplabs.io/posts/2026/08/measuring-local-llm-inference-limits/).
 
@@ -64,13 +64,13 @@ Record these dependencies with the configuration, especially when a requested va
 
 ## 5. Measurement hygiene
 
-The tools have several traps, each of which cost us time:
+I encountered several tool behaviors that complicated the measurements:
 
 - The `-p N` option clamps `n_ubatch` to N. Set `-ub` explicitly, use a sufficiently large `-p`, and verify the effective micro-batch size.
 - In the tested builds, llama-cli required terminal-aware capture: piping it through `tee` breaks its terminal display, and `--log-file` drops the timing lines. Capture with `script -q`, or read the JSON timings from `llama-server`.
 - `GGML_SCHED_DEBUG` output appears only with `-v`, because `llama-bench` otherwise installs a null log callback.
 - `llama-fit-params` turns off if you pass any of `-ngl`, `-ts`, `-ot`, or `-ncmoe`.
-- Confirm the mechanism before you trust the number. An equalized split histogram and a faster prefill are separate facts; prove that the histogram moved (`GGML_SCHED_DEBUG=2 … -v | grep '## SPLIT' | sort | uniq -c`) before you believe the throughput.
+- Check placement and throughput separately. An equalized split histogram and faster prefill are separate facts; `GGML_SCHED_DEBUG=2 … -v | grep '## SPLIT' | sort | uniq -c` confirms whether the histogram moved.
 
 ## 6. Record results and the refuted hypotheses
 
@@ -86,6 +86,6 @@ Record the failures as well. The [negative-results table](../takeaways/refuted-h
 
 ## Worked example: the scheduler patch
 
-The baseline was GLM-5.2 prefill at 104.97 t/s (ub 8192). We found the bottleneck by mechanism: the split histogram showed 731 of 1,186 GPU splits on one card (ROCm0), concentrating the expert offload there. The hypothesis was to distribute the offload across all four GPUs. Before the run, we predicted a null result: distribution alone would not help, because the expert copies were already asynchronous, and only a per-split synchronize, needed to read the routing ids, serialized them. We predicted this before the run and confirmed it: 105.71 versus 104.97 t/s, no change. The combined patch also skipped the ids read at prefill-sized batches. It treated all experts as used and copied their weights without waiting for the routing ids, removing that synchronization. The result was 119.36 t/s, a gain of 13.7%, and the histogram equalized to 285/300/294/292. See [the patch note](../patches/prefill/README.md).
+The baseline was GLM-5.2 prefill at 104.97 t/s (ub 8192). The split histogram exposed the placement problem: it showed 731 of 1,186 GPU splits on one card (ROCm0), concentrating the expert offload there. I tested distributing the offload across all four GPUs. Before the run, the prediction was a null result: distribution alone would not help, because the expert copies were already asynchronous, and only a per-split synchronize, needed to read the routing ids, serialized them. The run confirmed that prediction: 105.71 versus 104.97 t/s, no change. The combined patch also skipped the ids read at prefill-sized batches. It treated all experts as used and copied their weights without waiting for the routing ids, removing that synchronization. The result was 119.36 t/s, a gain of 13.7%, and the histogram equalized to 285/300/294/292. See [the patch note](../patches/prefill/README.md).
 
 The distribution-only result mattered because it separated a placement change from a throughput change. The combined patch provided the measured improvement; its behavior on the later common build and other models remains to be tested.

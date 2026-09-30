@@ -4,13 +4,13 @@
 
 The file changed from April: Unsloth UD-Q6_K_XL (337.43 GiB) replaces bartowski Q6_K_L (319.21 GiB). The stock results are pp8192 249.61 ± 19.78, the second-fastest prefill on the machine, behind MiniMax's final measurement, and tg128 9.37 ± 0.16 (t=64), which is −2.0% relative to the April baseline of 9.56 t/s. The model export, bandwidth, and build changed, so the similar result does not isolate any one effect.
 
-Attempts to repeat the April resident-offload configuration at ub 8192 failed: the 5-layer placement failed at weight load and the 4-layer placement failed at context creation, because large-batch prefill and resident experts compete for VRAM. Further offload testing was set aside for this workload.
+Attempts to repeat the April resident-offload configuration at ub 8192 failed: the 5-layer placement failed at weight load and the 4-layer placement failed at context creation, because large-batch prefill and resident experts compete for VRAM. I set further offload testing aside for this workload.
 
-Qwen MTP does not arm on this export (`failed to create MTP context`; the cause is not isolated). See [Entry 12](lab-notebook/12-common-baseline-2tb.md) for the complete conditions. Qwen was retained for further testing.
+Qwen MTP does not arm on this export (`failed to create MTP context`; the cause is not isolated). See [Entry 12](lab-notebook/12-common-baseline-2tb.md) for the complete conditions. I kept Qwen for further testing.
 
 ## Earlier measurements
 
-The specifications and configurations below describe the earlier runs. They do not replace the August conditions above.
+The sections below record earlier runs under their original conditions.
 
 **Model:** Qwen 3.5 397B.A17B, Q6_K_L — `qwen35moe` arch, 396.35 B params (≈17 B active), 319.21 GiB.
 **System:** Galactus (EPYC 7713, DDR4-2933 8-channel, 4 × Radeon Pro V620). Platform: [../hardware/galactus/README.md](../hardware/galactus/README.md); method: [methodology.md](methodology.md).
@@ -34,7 +34,7 @@ Config: `-ngl 99 -nopo 1 -mmp 0 -ctk q8_0 -ctv q8_0 -fa 1 -b 4096 -ub 4096 -ot "
 | 96 | **87.54** | 9.42 |
 | 128 | 85.61 | 4.57 (SMT collapse) |
 
-The recorded conclusion at the time was that t=64 is the best prefill/decode balance.
+I selected t=64 as the best prefill/decode balance at the time.
 
 ### Resident-expert offload (build 8671)
 

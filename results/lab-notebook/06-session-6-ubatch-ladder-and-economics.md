@@ -2,12 +2,12 @@
 
 [Notebook index](00-overview.md) · [Model summaries](../README.md)
 
-### 15:29 — The purchase thesis, scored against four justifications
+### 15:29 — Why these GPUs were bought
 
-While the v4 ladder ran, Paul stated his original purchase thesis: the GPUs were bought "entirely for the prefill, KV cache and attention layers/shared experts and to run small models in VRAM (e.g. like tiny vision model, maybe 27B fast coding model etc)" — at 2026 prices he knew he would never fit a large MoE in VRAM. The message cut off mid-thought at "And"; scored against the four stated purposes, the buy came out vindicated on all four.
+While the v4 ladder ran, Paul restated his reasons for buying the GPUs: "entirely for the prefill, KV cache and attention layers/shared experts and to run small models in VRAM (e.g. like tiny vision model, maybe 27B fast coding model etc)" — at 2026 prices he knew he would never fit a large MoE in VRAM. The message cut off mid-thought at "And"; the analysis supported all four reasons for buying them.
 
-1. **Prefill.** GPU prefill at 40 t/s vs the CPU's 20. The first ladder row proved the mechanism: 19.8 s per ubatch, 441 GB of experts moved, 22.3 GB/s — essentially line rate for PCIe 4.0 x16. A plumbing limitation, not a card limitation.
-2. **Attention + KV cache.** The `-ngl 0` run was the receipt: the CPU needs ~167 ms for the dense path (MLA projections, shared experts, output head); the GPUs do it in ~48 ms of actual reading. MLA compresses the KV cache to ~90 KB/token — 44 MiB at 512 context, well under 12 GiB at 128K — sitting in VRAM at 512 GB/s instead of DDR4 at 152 GB/s.
+1. **Prefill.** GPU prefill at 40 t/s vs the CPU's 20. The first ladder row proved the mechanism: 19.8 s per ubatch, 441 GB of experts moved, 22.3 GB/s — essentially line rate for PCIe 4.0 x16. The limit was in how work reached the card.
+2. **Attention + KV cache.** The `-ngl 0` run showed the difference: the CPU needs ~167 ms for the dense path (MLA projections, shared experts, output head); the GPUs do it in ~48 ms of actual reading. MLA compresses the KV cache to ~90 KB/token — 44 MiB at 512 context, well under 12 GiB at 128K — sitting in VRAM at 512 GB/s instead of DDR4 at 152 GB/s.
 3. **Shared experts.** `ffn_*_shexp` fires on every token across all 75 layers; `-ot "exps=CPU"` correctly does not match it (`shexp` does not contain the substring `exps`). Q8_0, ~12 MiB per layer, permanently GPU-resident.
 4. **Small models in VRAM.** 122 GiB of VRAM; a 27B coder at Q8 is ~29 GiB — four could be held simultaneously. A 27B dense model tensor-parallelizes (unlike GLM-5.2): 27B at Q8 across four cards = 60–100+ t/s.
 
@@ -15,9 +15,9 @@ While the v4 ladder ran, Paul stated his original purchase thesis: the GPUs were
 
 - **Prediction (later corrected):** `-ub 8192` should land near 300 t/s; fixing `return b` puts prefill near 800–1,200 t/s.
 - **Correction (self):** "I kept evaluating these cards as GLM-5.2 accelerators... I've been benchmarking the wrong hypothesis for two messages." With 411 GiB of experts and no consumer or prosumer configuration reaching that, spending on VRAM bandwidth would have been irrational; the experts always live in DDR4, and DDR4 was always the wall.
-- Swapping in 3090s would buy 5% and cost 26 GiB of capacity; MI100s at 1,229 GB/s HBM2 would be pure waste.
+- Swapping in 3090s would buy 5% and cost 26 GiB of capacity; MI100s at 1,229 GB/s HBM2 would not help this bottleneck.
 
-### 15:30 — Component costs disclosed; the $9,050 build, itemized
+### 15:30 — The $9,050 build, itemized
 
 Paul supplied the remaining line items: "$600 for CPU, $600 for motherboard, $250 for case, $400 for PSU and $5600 for RAM." With the GPUs at $1,600 after tax and shipping, the build totals $9,050.
 
@@ -30,13 +30,13 @@ Paul supplied the remaining line items: "$600 for CPU, $600 for motherboard, $25
 | PSU | $400 | 4% |
 | Case | $250 | 3% |
 
-Supporting analysis recorded alongside the table:
+Analysis recorded with the costs:
 
 - Parameter accounting: routed experts ~22.65B, shared experts ~2.83B, attention ~10B, dense layers 0.68B, embeddings/output 1.9B → ~38.1B active (matching the claimed 40B). Memory layout per token: 13.77 GB of experts read from DDR4, 19.7 GB of dense weights in VRAM; GPU buffers total 18.36 GiB; total footprint ~33.5 GB/token.
-- 62% of the build went to the bottleneck component: "91 of every 181 ms is the CPU reading experts out of that DDR4 at 152 GB/s." Correct spending — without 1 TB the model does not load.
-- The CPU is the sleeper: $600 for 64 cores when the decode sweep says only 24 are needed (decode peaks at t=24–32 and decays past it); what was actually bought is 8 memory channels and 128 PCIe lanes, both load-bearing. The motherboard delivers 8 channels plus four x16 slots — 89 GB/s aggregate host-to-device bandwidth.
+- 62% of the build went to the bottleneck component: "91 of every 181 ms is the CPU reading experts out of that DDR4 at 152 GB/s." That spending was necessary: without 1 TB the model does not load.
+- The CPU matters for more than its core count: $600 for 64 cores when the decode sweep says only 24 are needed (decode peaks at t=24–32 and decays past it); its value here is 8 memory channels and 128 PCIe lanes, both needed for this workload. The motherboard delivers 8 channels plus four x16 slots — 89 GB/s aggregate host-to-device bandwidth.
 - Genoa/SP5 counterfactual: 12 channels of DDR5 ≈ 400 GB/s vs 152. Model: `90 ms (GPU, unchanged) + 13.77 GB ÷ 400 GB/s = 124 ms = 8.1 t/s` — +35% decode. Dual-socket DDR4 EPYC 7003 would be 16 channels ≈ 410 GB/s theoretical, but MoE decode cannot be NUMA-partitioned (the router picks experts dynamically); cross-socket Infinity Fabric ~64 GB/s/direction on Milan caps scaling at ~1.4×, not 2×.
-- Mac Studio M3 Ultra comparison: 512 GB unified at 819 GB/s, ~$10,000; ~33 t/s theoretical, 20–25 t/s realistic under llama.cpp Metal, ~15–18 t/s quoted as the practical verdict — 2.5–3× decode but wrong for this owner (near-zero context room in 512 GB, no PCIe, no GPUs, no upgrades, no small-model hosting, a sealed appliance).
+- Mac Studio M3 Ultra comparison: 512 GB unified at 819 GB/s, ~$10,000; ~33 t/s theoretical, 20–25 t/s realistic under llama.cpp Metal, ~15–18 t/s quoted as the practical estimate — 2.5–3× decode but a poor fit for this use (near-zero context room in 512 GB, no PCIe, no GPUs, no upgrades, no small-model hosting, a sealed appliance).
 
 **Observations**
 
@@ -61,7 +61,7 @@ At 15:32 Paul directed: "Go check out 2026 RAM prices and then answer for me." A
 
 - Appreciating asset: DDR4 ECC RDIMM rose ~60–80% from early 2025 to Q1 2026; Taiwanese makers are raising 8Gb DDR4 contract prices up to 50% in Q3 2026 vs Q2. Samsung, Micron, and SK Hynix have largely exited DDR4; only Nanya and Winbond produce it, below demand. SK Hynix calls 2027 the "worst year," with the crunch lasting to 2030. "You could not rebuild this machine today for $9,050."
 
-GPU re-scoring on the decode-governing metric, cost per unit memory bandwidth:
+GPU costs compared by memory bandwidth, the metric limiting decode:
 
 | | cost | bandwidth | $/GB-per-sec |
 |---|---|---|---|
@@ -69,7 +69,7 @@ GPU re-scoring on the decode-governing metric, cost per unit memory bandwidth:
 | 4× V620 (as used, one card live) | $1,600 | 512 GB/s | $3.13 |
 | 4× V620 (aggregate installed) | $1,600 | 2,048 GB/s | $0.78 |
 
-The GPUs are 12× better value than the RAM on the metric that governs decode, 47× on bandwidth physically owned. Two software bottlenecks keep the rest idle: `llm_arch_supports_sm_tensor()` returns false for `GLM_DSA` (MLA blocks tensor parallelism, leaving 1,536 GB/s of installed VRAM bandwidth idle), and `return b` in `ggml-backend.cpp` (every offloaded op goes to card 0, three of four PCIe 4.0 x16 links idle during prefill).
+The GPUs are 12× better value than the RAM on the metric that governs decode, 47× on installed bandwidth. Two software bottlenecks keep the rest idle: `llm_arch_supports_sm_tensor()` returns false for `GLM_DSA` (MLA blocks tensor parallelism, leaving 1,536 GB/s of installed VRAM bandwidth idle), and `return b` in `ggml-backend.cpp` (every offloaded op goes to card 0, three of four PCIe 4.0 x16 links idle during prefill).
 
 **Observations**
 
@@ -77,9 +77,9 @@ The GPUs are 12× better value than the RAM on the metric that governs decode, 4
 - **Decision:** "So: buy nothing" — not DDR5, not Genoa, not better GPUs. The next gain is twenty lines in `ggml-backend.cpp`.
 - Sources cited (10): Unibetter RAM Shortage 2026 Guide; PCSP Refurbished DDR4; datacenterdisk memory-chip-shortage-2026; Tom's Hardware RAM price index 2026; Club386 DDR4 +50%; Gizmochina DDR4 +50% Q3 2026; wccftech memory shortages DDR4 +50%; bacloud When Will RAM Prices Drop; VersaLogic Supply Chain Brief; ramexchange Why Are RAM Prices Increasing.
 
-### 15:34 — A result announced but not received; reference predictions staged
+### 15:34 — A result announced but not received; predictions recorded
 
-Paul wrote "I have a new result. Is this starting to match your model?" but no output came through. Retrieval commands were staged and the linear model pre-registered against the single standing row (ub 512 → 25.90: 19.8 s per ubatch, 22.3 GB/s on ROCm0's single link — per-ubatch cost ~100% transfer, ~0% compute).
+Paul wrote "I have a new result. Is this starting to match your model?" but no output came through. Commands to retrieve it were provided, and a prediction was recorded before the result arrived. The linear model used the single available row (ub 512 → 25.90: 19.8 s per ubatch, 22.3 GB/s on ROCm0's single link — per-ubatch cost ~100% transfer, ~0% compute).
 
 ```bash
 D=$(ls -dt /root/diag-v4-*/ | head -1)
@@ -97,18 +97,18 @@ grep -E '^\| glm-dsa' "$D/MAIN.log"
 **Observations**
 
 - The `-nopo 1` control rows should sit flat near 35 regardless of ubatch.
-- Three failure signatures pre-registered: flat ~26 across all ubatches → not PCIe throttling; rows beating linear → copies overlapping compute; OOM at 4096/8192 → ROCm0 carrying everything, with `-ts 0,1,1,1` as the fix.
+- Three failure patterns were recorded in advance: flat ~26 across all ubatches → not PCIe throttling; rows beating linear → copies overlapping compute; OOM at 4096/8192 → ROCm0 carrying everything, with `-ts 0,1,1,1` as the fix.
 
-### 15:36 — Rows one and two land: 25.90 and 41.68; the two-term model appears
+### 15:36 — First two rows: 25.90 and 41.68; fitting a two-term model
 
-At 15:34:56 Paul pasted the log (`cat diag-v4-20260714-150115/MAIN.log | grep pp`). The dump also carried standing context: `=> tg128 = 6.01 t/s  pp512 = 40.11 t/s`; `tg 5.52 vs 5.53. pp 34.64 vs 34.65. The AVX2`; `-sm row` impossible ("device ROCm0 does not support split buffers"); `-sm tensor` not supported for glm-dsa; the annotated `return b; // <-- FIRST supporting backend. Always 0.` at ggml-backend.cpp:919-925; and the CPU_Mapped buffer sizes (46166.88 MiB, then 8× 46303.78 MiB, then 22067.47 MiB).
+At 15:34:56 Paul pasted the log (`cat diag-v4-20260714-150115/MAIN.log | grep pp`). The dump also included earlier context: `=> tg128 = 6.01 t/s  pp512 = 40.11 t/s`; `tg 5.52 vs 5.53. pp 34.64 vs 34.65. The AVX2`; `-sm row` impossible ("device ROCm0 does not support split buffers"); `-sm tensor` not supported for glm-dsa; the annotated `return b; // <-- FIRST supporting backend. Always 0.` at ggml-backend.cpp:919-925; and the CPU_Mapped buffer sizes (46166.88 MiB, then 8× 46303.78 MiB, then 22067.47 MiB).
 
 ```
 | glm-dsa ?B Q4_K - Medium       | 435.19 GiB |   753.86 B | ROCm       |  99 |    8192 |      512 |   1 | exps=CPU              |    0 |          pp8192 |         25.90 ± 0.36 |
 | glm-dsa ?B Q4_K - Medium       | 435.19 GiB |   753.86 B | ROCm       |  99 |    8192 |     1024 |   1 | exps=CPU              |    0 |          pp8192 |         41.68 ± 0.12 |
 ```
 
-The linear model predicted ~52 at ub 1024; the measurement was 41.68. Back-solving per-ubatch cost:
+The linear model predicted ~52 at ub 1024; the measurement was 41.68. Calculating the cost per ubatch:
 
 ```
 ub  512:  25.90 t/s  ->  8192/25.90 = 316.3 s  ÷ 16 ubatches = 19.77 s/ubatch
@@ -141,7 +141,7 @@ Revised curve with asymptote:
 
 - **Correction:** "I told you ~300 at ub 8192. The real number is ~89" — roughly 2.2× on prefill, not 7×. The cost per ubatch is not constant; it rose 24% when the ubatch doubled.
 - Both terms are single-card artifacts (one x16 link, one GPU), both traceable to `return b`. Fixed, both divide by four: `t_ubatch = 3.75 s + 2.34 ms·ub` → ub 4096 → 307 t/s, ub 8192 → 357 t/s, asymptote → 427 t/s. "From ~89 to ~350. A 4×."
-- **Prediction (watch item):** ub 2048 near 60 confirms the linear fit and a ~107 ceiling; meaningfully above 60 means GEMM efficiency is improving and the curve keeps climbing.
+- **Prediction (watch item):** ub 2048 near 60 confirms the linear fit and a ~107 ceiling; well above 60 means GEMM efficiency is improving and the curve keeps climbing.
 
 ### 15:38 — Row three: 62.64; marginal cost per token is falling
 
@@ -195,11 +195,11 @@ pp @ ub 8192           ~105                    ~400
 
 - Projected gain over the 40 t/s baseline: ~2.6×; an 8K prompt drops from 3.4 minutes to 78 seconds — from a flag.
 - Ceiling estimate: infinite ubatch on one V620 caps at ~150–250 t/s; four cards → 600–1,000.
-- **Prediction (watch item):** ub 4096 near 85 means the efficiency curve is behaving; clearing 95 means the GEMM is fattening faster and the ceiling is higher.
+- **Prediction (watch item):** ub 4096 near 85 means the efficiency curve is behaving; clearing 95 means GEMM efficiency is improving faster and the ceiling is higher.
 
 ### 15:42 — "So how can I get all four cards to do this together" — the offending code and three options
 
-Paul asked the direct question at 15:41:51. The responsible code was produced and the options laid out.
+Paul asked the direct question at 15:41:51. The relevant code and three options followed.
 
 ```c
 // ggml/src/ggml-backend.cpp:916-929
@@ -257,7 +257,7 @@ Verification plan: `GGML_SCHED_DEBUG=1` — splits should cycle `ROCm0 … ROCm1
 
 - **Decision (order of operations):** (1) `-ts 0,1,1,1` tonight, expecting ~110–125; (2) patch and re-run the ladder → ~335–400; (3) submit a PR.
 
-### 15:44 — Rows four and five: 84.62 and 104.97; the model closes
+### 15:44 — Rows four and five: 84.62 and 104.97; the fitted model holds
 
 Paul pasted the final two rows at 15:44:33.
 
@@ -287,7 +287,7 @@ t_ubatch = 14.9 s  +  7.72 ms × ub
       line rate
 ```
 
-**40.11 → 104.97 t/s — a 2.6× on prefill, for a flag.** An 8K prompt drops from 3m24s to 78 seconds. The underlying bug: `-p 512` had silently clamped `n_ubatch` for four days. Both remaining terms belong to one card, both to `return b`:
+**40.11 → 104.97 t/s — a 2.6× prefill gain from changing a flag.** An 8K prompt drops from 3m24s to 78 seconds. The underlying bug: `-p 512` had silently clamped `n_ubatch` for four days. Both remaining terms belong to one card, both to `return b`:
 
 | | today | patched |
 |---|---|---|
@@ -310,7 +310,7 @@ llama-server -m /models/GLM-5.2/UD-Q4_K_XL/GLM-5.2-UD-Q4_K_XL-00001-of-00011.ggu
 - Two caveats: the fitter fills VRAM to within `-fitt` of full and does not model op_offload staging, so it may starve ROCm0 of ~5.4 GiB (hence `-fitt 8192`, not 2048); `--no-mmap` gives pinned host memory and pushes 29.4 GB/s toward line rate.
 - **Decision:** two things found in the codebase — the scheduler pathology (costing every multi-GPU MoE offloader four cards' worth of prefill) and the `llm_arch_supports_sm_tensor` MLA exclusion. "Write it up. This one's worth sending."
 
-### 15:52 — Decode re-confirmed: 6.01 t/s, declared done
+### 15:52 — Decode checked again: 6.01 t/s; no further tuning planned
 
 Paul asked "And what is my token gen again?" The answer: 6.01 t/s, from Phase J, the fitter, at `-t 64`.
 
@@ -494,21 +494,21 @@ watch -n1 'rocm-smi --showuse --showmemuse | grep -E "GPU\[|use"'
 - **Prediction:** both terms of `t_ubatch = 14.9 s + 7.72 ms × ub` divide by ~four if the patch works; not a clean 4× (PCIe P2P activation hops plus scheduler bookkeeping) — 3–3.5× realistic.
 - If `-mmp 0` OOMs on load (pinning ~411 GiB), drop to `-mmp 1` for the functional test.
 
-### 18:11 — "Before I do this, are you absolutely certain" — the walk-back
+### 18:11 — "Before I do this, are you absolutely certain" — the uncertainty
 
-Paul asked for certainty before touching the server. It could not be given: the diagnosis was confident, but the patch was not certain to be correct — right to stop.
+Paul asked for certainty before touching the server. The analysis could not justify that certainty. The diagnosis was supported, but the patch had not been verified.
 
 - **Proven (measured, five points, tight fit):** prefill cost `14.9 s + 7.72 ms × ub`; streaming at 93% of one x16 line rate; something serializes onto one card.
 - **Read from source, high confidence:** the `return b` loop picks backend 0; `MUL_MAT_ID` has `src[0]` = weight, `src[1]` = activations.
 - **Inference, not verified:** that walking `src[]` for a GPU-resident activation and returning that backend spreads the load without breaking routing or correctness.
 
-Three genuine unknowns:
+Three things still needed checking:
 
 1. **Hypothesis (unverified, load-bearing):** where `src[1]` actually lives at scheduling time. The function runs during graph split assignment, before placement is finalized; `src[1]` may not have a `buffer` yet, in which case the check dereferences null or the branch skips and the patch is an expensive no-op. "I did not trace the assignment order. This is the load-bearing assumption and I never verified it."
 2. Forcing the op onto a different device than its weight may create a copy the scheduler places badly (GEMM to ROCm2, stream the weight to ROCm2 and bounce the activation ROCm1→ROCm2 — net worse).
 3. Whether upstream already fixed or reworked this.
 
-Three routes to certainty, cheapest first:
+Three ways to check, cheapest first:
 
 ```bash
 git -C /root/llama.cpp log --oneline -20 -- ggml/src/ggml-backend.cpp
@@ -557,9 +557,9 @@ watch -n1 'rocm-smi --showmemuse | grep -E "GPU\[|Memory"'
 
 - **Correction:** the cleaner mechanism test remains `-ts 0,1,1,1` (ROCm0 as pure scratch, directly attacking the concentration); if only one is run, run that. Read the `-ot` test as "resident experts on multiple cards," not "spread offload."
 
-### 18:13 — File upload fails again; session ends mid-handoff
+### 18:13 — File upload fails again; session ends before the result arrives
 
-Paul attempted a file upload ("> File:") that arrived empty. Nothing had landed in the uploads directory — the only file present was `results.txt`, the 10 MB v4 log from earlier, timestamped 18:34 — the same failure mode as before. Retrieval commands were left standing:
+Paul attempted a file upload ("> File:") that arrived empty. Nothing had arrived in the uploads directory — the only file present was `results.txt`, the 10 MB v4 log from earlier, timestamped 18:34 — the same failure mode as before. The commands to retrieve the result remained:
 
 ```bash
 # 1. did placement take? ROCm1/ROCm2 should be ~44 GiB larger than ROCm0/ROCm3
@@ -584,11 +584,11 @@ tail -20 /root/ot-placement-test.txt
 
 - Build cost fixed at $9,050; RAM $5,600 (62%, $5.47/GB against a 2026 DDR4 spot of $5.15/GB and DDR5 at $30.94/GB). Genoa/DDR5 counterfactual ≈ $16,050–$21,000 for +35% decode. Verdict: DDR4 was right; buy nothing.
 - The ubatch ladder is complete: pp8192 = 25.90 / 41.68 / 62.64 / 84.62 / 104.97 t/s at ub 512/1024/2048/4096/8192. Prefill improved 40.11 → 104.97 (2.6×) purely by unclamping `n_ubatch`; the four-day-old cause was `-p 512` silently clamping it.
-- Two-term prefill model closed: `t_ubatch = 14.9 s + 7.72 ms × ub` — 437.8 GB streamed at 29.4 GB/s (93% of one PCIe 4.0 x16 line) plus one V620 doing all expert GEMM at ~6.2 TFLOP/s. Both terms are single-card artifacts of `return b` at ggml-backend.cpp:919-925.
+- Two-term prefill model fitted: `t_ubatch = 14.9 s + 7.72 ms × ub` — 437.8 GB streamed at 29.4 GB/s (93% of one PCIe 4.0 x16 line) plus one V620 doing all expert GEMM at ~6.2 TFLOP/s. Both terms are single-card artifacts of `return b` at ggml-backend.cpp:919-925.
 - Decode confirmed at 6.01 t/s (fitter, 106 GiB VRAM filled); declared done against the 152 GB/s DDR4 wall; every software lever exhausted; only Q3_K_XL (~7 t/s, rejected) or new memory moves it.
 - DFlash projects ~11 t/s (83%) with optimal block 6–8 and a hard cliff at verify batch B=32 (`GGML_OP_OFFLOAD_MIN_BATCH`); blocked — no GLM-5.2 draft model exists.
 - A first patch (route offloaded ops to the activation's device, tag `1.off.act`) is drafted against master, projected 360–415 t/s at ub 8192, but its load-bearing assumption — that `src[1]` has a resolved buffer at scheduling time — is explicitly unverified.
-- Certainty was walked back on request; the agreed order is zero-code mechanism tests (`-ot` pinning, `-ts 0,1,1,1`) before any compilation.
+- The patch was explicitly treated as unverified after Paul challenged the certainty; the agreed order is zero-code mechanism tests (`-ot` pinning, `-ts 0,1,1,1`) before any compilation.
 - The `-ot` placement test has been issued (tee to `/root/ot-placement-test.txt`); its output has not yet been seen — the file upload failed twice.
 
 ---

@@ -2,7 +2,7 @@
 
 [Notebook index](00-overview.md) · [Model summaries](../README.md)
 
-This session is the machine's log, not the dialogue: the 16-phase battery `galactus-diag.sh` ran unattended on Galactus from 11:08:13 to 14:25:10 ET (total runtime 3h16m) while the conversation of Sessions 3 and 5 continued in parallel. Run directory `/root/diag-20260714-110813`; MAIN.log (delivered to the dialogue as results.txt, 175,463 lines) is the source for everything below. Build under test: `657e01125 (10001)`. Hang guard: 10800 s per invocation; deadline: none. Wall-clock times below are mapped from the log's elapsed markers against the 11:08 start.
+This entry follows the machine log from the 16-phase `galactus-diag.sh` run. It ran unattended on Galactus from 11:08:13 to 14:25:10 ET (total runtime 3h16m), while the conversation in Sessions 3 and 5 continued in parallel. Run directory `/root/diag-20260714-110813`; MAIN.log (uploaded as results.txt, 175,463 lines) is the source for everything below. Build under test: `657e01125 (10001)`. Hang guard: 10800 s per invocation; deadline: none. Wall-clock times below are mapped from the log's elapsed markers against the 11:08 start.
 
 **Artifacts:** the script `galactus-diag.sh` (756 lines) was saved at 11:05:36 ET; `results.txt` (the copy of MAIN.log) was saved at 14:33:44 ET.
 
@@ -46,7 +46,7 @@ HANG GUARD  : 10800s per invocation (0 = off).
 
 ### ~11:08 — Phase 0: system inventory (pre-flight)
 
-Purpose: verify the just-rebooted, just-rebuilt system before spending any benchmark time. Every command and its result:
+Purpose: verify the system after the reboot and rebuild, before running benchmarks. Commands and results:
 
 - Kernel/OS/container: `uname -a` → `Linux openwebui 7.0.14-4-pve #1 SMP PREEMPT_DYNAMIC PMX 7.0.14-4 (2026-07-07T07:27Z) x86_64`; `/etc/os-release` → Debian GNU/Linux 13 (trixie) userland; `cat /proc/cmdline` → `initrd=\EFI\proxmox\7.0.14-4-pve\initrd.img-7.0.14-4-pve root=UUID=f23a25fb-9be5-4b2e-9a3e-e5a5787c9754 amd_iommu=on iommu=pt` — the just-added IOMMU flags are present; `uptime` → up 5 min (load 0.12/0.16/0.09, fresh boot); `systemd-detect-virt` → lxc; cgroups: `cpu.max` = `max 100000`, `cpuset.cpus.effective` = `0-127`, `memory.max` = `max`, `nr_throttled 0` / `throttled_usec 0`; `ulimit -l` → 8192 (irrelevant to hipHostMalloc, which pins via GTT).
 - CPU topology: lscpu → AMD EPYC 7713 64-Core, 2 threads/core, 1 socket, scaling 83%, max 3720.7029 MHz, min 1500.0000 MHz, L3 256 MiB (8 instances), 1 NUMA node (CPUs 0–127); `/proc/cpuinfo` flags include `fma avx bmi1 avx2 bmi2 sha_ni`, no avx512f; `thread_siblings_list` for cpu0 → `0,64`; the index3 shared_cpu_list walk confirms the eight-CCD map (0-7,64-71 / 8-15,72-79 / 16-23,80-87 / 24-31,88-95 / 32-39,96-103 / 40-47,104-111 / 48-55,112-119 / 56-63,120-127) — the `-C` masks are correct.
@@ -102,7 +102,7 @@ Memsnap before: MemFree 1,042,595,372 kB, Cached 377,772 kB, AnonHugePages 0 kB.
 
 **Observations**
 
-- **Refuted (in effect):** the prewarm did not populate the page cache — the ZFS ARC absorbed the read. Consequence realized in Phase A1: the first mmap load paid the full 435 GiB read (~25 min); after that, Cached sat at ~456.75 GB (456,752,756 kB) for the rest of the run and every later `-mmp 1` load took ~45–90 s.
+- **Refuted (in effect):** the prewarm did not populate the page cache — the ZFS ARC absorbed the read. As a result, the first mmap load in Phase A1 paid the full 435 GiB read (~25 min); after that, Cached sat at ~456.75 GB (456,752,756 kB) for the rest of the run and every later `-mmp 1` load took ~45–90 s.
 
 ### ~11:14 (elapsed 0h06m) — Phase A1: SMOKE TEST (plain)
 
@@ -124,7 +124,7 @@ load_tensors:        ROCm2 model buffer size =  4431.34 MiB
 load_tensors:        ROCm3 model buffer size =  4952.45 MiB
 ```
 
-CPU_Mapped as demanded — no ROCm_Host, no pin; GPU dense = 18.36 GiB, matching the briefing. pp512 context: KV buffers ROCm0–2 11.25 MiB each, ROCm3 10.69 MiB; compute buffers ROCm0–2 205.05 MiB, ROCm3 435.05 MiB, ROCm_Host 217.01 MiB. `sched_reserve: graph splits = 155`; `reserve took 247.42 ms, sched copies = 1`.
+CPU_Mapped appeared as expected — no ROCm_Host, no pin; GPU dense = 18.36 GiB, matching the briefing. pp512 context: KV buffers ROCm0–2 11.25 MiB each, ROCm3 10.69 MiB; compute buffers ROCm0–2 205.05 MiB, ROCm3 435.05 MiB, ROCm_Host 217.01 MiB. `sched_reserve: graph splits = 155`; `reserve took 247.42 ms, sched copies = 1`.
 
 | test | t/s |
 |---|---|
@@ -157,7 +157,7 @@ Same buffers and splits as A1 (graph splits = 155).
 
 **Observations**
 
-- **Confirmed:** `-C`/`--cpu-strict` is not the crasher; the script sets `CPU_MASK_OK=1` and Phase C proceeds.
+- **Confirmed:** `-C`/`--cpu-strict` did not cause the crash; the script sets `CPU_MASK_OK=1` and Phase C proceeds.
 
 ### ~11:41 (elapsed 0h33m) — Phase B: thread × poll sweep
 
@@ -184,7 +184,7 @@ First load: `load time = 44187.45 ms`. Every combo reported `sched_reserve: grap
 
 **Observations**
 
-- The answer to the main question: decode peaks at t=24–32 (5.53–5.54 t/s), is flat from 16 to 64, then collapses at 96 (2.76) and 128 (1.29) once SMT siblings are engaged.
+- Decode peaks at t=24–32 (5.53–5.54 t/s), is flat from 16 to 64, then collapses at 96 (2.76) and 128 (1.29) once SMT siblings are engaged.
 - **Refuted:** `--poll 100` produces no step change anywhere (identical within noise; at t=64 it is actually noisier and worse, 4.84 ± 1.01). The 63 ms is not threadpool sleep/wake.
 - Best hybrid decode ≈ 5.54 t/s = 181 ms/token — still ~43 ms above the 138 ms ideal.
 
@@ -313,7 +313,7 @@ timeout --kill-after=180 10800 llama-bench -m '...' -fa 1 --progress -o md -v -n
 **Observations**
 
 - **Refuted (as measured here):** the predicted 3–10× did not happen. op_offload over pageable mmap plateaus at ~25.9 t/s with very large run-to-run variance (± 5.6) — slower than plain CPU prefill (30.7 at t=64 in B2).
-- ub > 512 cannot help a 512-token prompt, so the plateau above ub=512 is expected in this test; the salient point is the absolute level — ~26, not ~125. (Session 5, 14:37, identifies the deeper problem: `-p 512` silently clamped n_ubatch to 512 in every row, so the large-ubatch regime was never actually exercised.)
+- ub > 512 cannot help a 512-token prompt, so the plateau above ub=512 is expected in this test. The absolute rate was still ~26, far below the predicted ~125. (Session 5, 14:37, identifies the deeper problem: `-p 512` silently clamped n_ubatch to 512 in every row, so the large-ubatch regime was never actually exercised.)
 
 ### ~13:02 (elapsed 1h54m) — Phase G: op_offload + HIP managed memory
 
@@ -357,7 +357,7 @@ llama_bench: error: failed to load model '/models/GLM-5.2/UD-Q4_K_XL/GLM-5.2-UD-
 
 **Observations**
 
-- **Dead end (and the clean failure is itself the result):** ROCm on these V620s reports `VMM: no`, and llama.cpp's row-split buffer type requires it — `-sm row` is impossible on this hardware/stack. The ~47 ms serial-GPU dense cost under `-sm layer` cannot be attacked this way.
+- **Dead end:** ROCm on these V620s reports `VMM: no`, and llama.cpp's row-split buffer type requires it — `-sm row` is impossible on this hardware/stack. The ~47 ms serial-GPU dense cost under `-sm layer` cannot be attacked this way.
 
 ### ~13:11 (elapsed 2h03m) — Phase I: GGML_CUDA_GRAPH_OPT=1
 
@@ -408,7 +408,7 @@ load_tensors:        ROCm3 model buffer size = 27696.32 MiB
 
 **Observations**
 
-- **Confirmed (and best of run):** pp512 40.11 t/s, tg128 6.01 t/s — the best numbers in the entire battery; prefill 40.11 beats every other configuration including the op_offload phases.
+- **Confirmed:** pp512 40.11 t/s, tg128 6.01 t/s — the best numbers in the run. Prefill 40.11 exceeded every other configuration, including the op_offload phases.
 - Decode gain over the 5.40–5.54 hybrid is 1.09–1.11× — less than the predicted ~1.3× bandwidth gain (removing ~16/75 layers of CPU reads should cut 13.77 → ~10.8 GB/token). Splits only dropped 155 → 137. Consistent with Phases B and D: the non-bandwidth overhead does not shrink proportionally.
 
 ### ~13:18 (elapsed 2h10m) — Phase K: decode at context depth — CRASHED
@@ -491,7 +491,7 @@ $ grep AnonHugePages /proc/meminfo
 **Observations**
 
 - **Refuted:** the production candidate did not win on decode — tg peaks at 5.52 @ t=32, identical to M1 mmap (5.53) and M3 pinned (5.52–5.54). Repack plus anonymous memory bought zero decode.
-- Prefill: 34.64 @ t=64 versus M1's 30.73 (+13%) but identical to M3's 34.60 — the pp gain comes from leaving mmap, not from repack. The 62% repack coverage moved nothing measurable at the token level.
+- Prefill: 34.64 @ t=64 versus M1's 30.73 (+13%) but identical to M3's 34.60 — the pp gain comes from leaving mmap, not from repack. The 62% repack coverage produced no measurable gain at the token level.
 - The AnonHugePages readings in MAIN.log (post-phase and memsnap) are both taken after the process exited and freed its memory; the per-run trajectory lives in `monitors/meminfo.txt`, which is not part of MAIN.log — MAIN.log alone does not settle the THP question.
 
 ### ~13:53 (elapsed 2h45m) — Phase M: M3 = -mmp 0 default (411 GiB pinned) + op_offload
@@ -542,7 +542,7 @@ Load: `ROCm_Host model buffer size = 420964.22 MiB` again (the 411 GiB pin); `lo
 **Observations**
 
 - The re-measured baseline on build 10001: 34.60 pp / 5.40 tg at the old settings (t=64), versus the briefing's 37.6 / 5.15 on build 9942.
-- **Confirmed:** cross-config decode at matched threads is a three-way tie — M1 5.53, M2 5.52, M3 5.54 at t=32. Pinning, mmap-versus-anonymous, and repack all wash out; decode is configuration-insensitive. Only thread count (and the fitter's VRAM fill) move it.
+- **Confirmed:** cross-config decode at matched threads is a three-way tie — M1 5.53, M2 5.52, M3 5.54 at t=32. Pinning, mmap-versus-anonymous, and repack produced equivalent decode rates. Only thread count (and the fitter's VRAM fill) move it.
 
 ### ~14:25 (elapsed 3h16m) — SUMMARY and TEARDOWN
 
@@ -597,18 +597,18 @@ ARTIFACTS        : /root/diag-20260714-110813/MAIN.log
 === END OF RUN 2026-07-14T14:25:10-04:00 ===
 ```
 
-Clean teardown: VRAM back to ~16.4 MiB used per GPU; 436 GiB of model still resident in buff/cache. MAIN.log was delivered into the dialogue as results.txt at 14:34 (artifact saved 14:33:44 ET).
+After teardown: VRAM back to ~16.4 MiB used per GPU; 436 GiB of model still resident in buff/cache. I uploaded MAIN.log as results.txt at 14:34 (artifact saved 14:33:44 ET).
 
 ### State of knowledge at end of session
 
-- All 16 phases attempted; 14 succeeded; H failed by design-relevant error (`device ROCm0 does not support split buffers`, exit=1); K crashed in llama-bench's `-d` KV-state restore (hipMemcpyAsync illegal access at 16384 cells, exit=134) — a new, non-ZenDNN bug.
+- All 16 phases attempted; 14 succeeded; H failed with an error that ruled out the proposed configuration (`device ROCm0 does not support split buffers`, exit=1); K crashed in llama-bench's `-d` KV-state restore (hipMemcpyAsync illegal access at 16384 cells, exit=134) — a new, non-ZenDNN bug.
 - ZenDNN is confirmed gone at runtime (`--list-devices`, `ldd`, and `-ngl 0` splits = 1 versus v2's 1088), the stale `GGML_ZENDNN:BOOL=ON` CMakeCache line notwithstanding; IOMMU passthrough took (96 identity groups).
-- Decode peaks at 5.53–5.54 t/s at t=24–32 and is configuration-insensitive (M1 mmap 5.53 / M2 repack 5.52 / M3 pinned 5.54 at t=32); SMT thread counts are catastrophic (t=96 → 2.76, t=128 → 1.29); `--poll`, `-C`/`--cpu-strict` (−40% at t=16), and `GGML_CUDA_GRAPH_OPT` (5.40) all null or harmful.
+- Decode peaks at 5.53–5.54 t/s at t=24–32 and is configuration-insensitive (M1 mmap 5.53 / M2 repack 5.52 / M3 pinned 5.54 at t=32); SMT thread counts sharply reduce throughput (t=96 → 2.76, t=128 → 1.29); `--poll`, `-C`/`--cpu-strict` (−40% at t=16), and `GGML_CUDA_GRAPH_OPT` (5.40) all ineffective or harmful.
 - `-ngl 0` peaks at 3.87 t/s (t=32) with graph splits = 1 — the GPUs are net +43%, and ~80 ms of non-bandwidth overhead exists even with zero splits.
 - Prefill is compute-bound (scales to t=96: 32.92 t/s); `-mmp 0` (pinned or repacked) adds ~13% prefill over mmap at t=64 (34.6 versus 30.7).
 - op_offload prefill lost everywhere as run: 25.9 t/s pageable (F), 29.7 pinned (M), 7.2 managed (G), against 34.6 CPU-only — the pin worth only ~15% on H2D.
-- The fitter (Phase J) is the only real win: 106.1 GiB of VRAM filled (~15–16 expert layers resident), splits 155 → 137, pp512 40.11 / tg128 6.01 — decode 1.09–1.11×, below the predicted ~1.3×.
-- CPU_REPACK engaged exactly as designed (255,744 MiB repacked + 165,220 MiB plain) and bought nothing measurable; the THP question remains unsettled by MAIN.log (all AnonHugePages readings post-exit 0 kB).
+- The fitter (Phase J) is the only configuration that improved throughput: 106.1 GiB of VRAM filled (~15–16 expert layers resident), splits 155 → 137, pp512 40.11 / tg128 6.01 — decode 1.09–1.11×, below the predicted ~1.3×.
+- CPU_REPACK engaged exactly as designed (255,744 MiB repacked + 165,220 MiB plain) and produced no measurable gain; the THP question remains unsettled by MAIN.log (all AnonHugePages readings post-exit 0 kB).
 - Context-depth cost is mild while measurable: 5.41 → 5.29 t/s at d4096 (−2.2%).
 - Artifacts: `/root/diag-20260714-110813/MAIN.log` (= results.txt, saved 14:33:44 ET) and `monitors/`; script `galactus-diag.sh` saved 11:05:36 ET.
 

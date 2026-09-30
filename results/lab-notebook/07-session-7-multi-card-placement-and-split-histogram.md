@@ -4,7 +4,7 @@
 
 ### 18:13 — newtest.txt named; first read of an incomplete log
 
-Paul pointed at the log by name ("Okay, its newtest.txt") before the file itself arrived. What was reachable showed the run had not finished — the log stopped mid-load at `blk.78` skip messages, with no result row, no `load_tensors:` buffer summary, no error, no exit marker. Two findings from the partial capture:
+Paul pointed at the log by name ("Okay, its newtest.txt") before the file itself arrived. The available capture showed the run had not finished — the log stopped mid-load at `blk.78` skip messages, with no result row, no `load_tensors:` buffer summary, no error, no exit marker. Two findings from the partial capture:
 
 1. The `-ot` rules were accepted verbatim:
 
@@ -14,7 +14,7 @@ tensor blk.3.ffn_down_exps.weight (2112 MiB q5_K) buffer type overridden to ROCm
 ... blk.4, 5, 6 → ROCm1
 ```
 
-Placement mechanism confirmed: `-ot` puts expert tensors exactly where pointed. "That was the precondition for the patch to mean anything, and it holds." Missing, however: the blk.7–10 → ROCm2 lines never appear.
+Placement was confirmed: `-ot` puts expert tensors exactly where requested. "That was the precondition for the patch to mean anything, and it holds." Still missing: the blk.7–10 → ROCm2 lines never appear.
 
 2. The load was slow and unintentionally pinned:
 
@@ -48,14 +48,14 @@ grep -E '^\| glm-dsa' /root/ot2.txt                        # the number
 
 ### 18:14 — newtest.txt attached: the OOM and the broken regex
 
-The file arrived. **Artifact — `newtest.txt` (saved 18:13:59 ET):** the failed `-ot` llama-bench log. Its header reads `llama-bench: benchmark 1/3: starting` — the comma-separated `-ot` rules had been parsed as three separate benchmark configurations, so configuration 1 carried only the ROCm1 rule and lost its `exps=CPU` catch-all; the load then attempted to allocate 157272.74 MiB on ROCm1 and died out of memory. (The full anatomy of that parse emerged over the next several entries.)
+The file arrived. **Artifact — `newtest.txt` (saved 18:13:59 ET):** the failed `-ot` llama-bench log. Its header reads `llama-bench: benchmark 1/3: starting` — the comma-separated `-ot` rules had been parsed as three separate benchmark configurations, so configuration 1 carried only the ROCm1 rule and lost its `exps=CPU` catch-all; the load then attempted to allocate 157272.74 MiB on ROCm1 and died out of memory. (The parsing failure became clear over the next several entries.)
 
 ```
 allocating 157272.74 MiB on device 1: cudaMalloc failed: out of memory
 failed to allocate ROCm1 buffer of size 164912416512
 ```
 
-157 GiB onto ROCm1's 30 GiB card. The first diagnosis targeted the regex: `blk\.(3|4|5|6)` is unanchored — `blk.3` is a substring of `blk.34`, and `regex_search` matches anywhere — so the rule swept roughly 40 layers (blk.3/4/5/6 plus blk.30–39, blk.40–49, blk.53, blk.63, and so on) onto ROCm1, attempted 157 GiB, and died before reaching the ROCm2 rule (hence zero ROCm2 matches, and why the earlier capture showed only blk.3–6). Fixed with a literal-dot anchor:
+157 GiB onto ROCm1's 30 GiB card. The first diagnosis was the regex: `blk\.(3|4|5|6)` is unanchored — `blk.3` is a substring of `blk.34`, and `regex_search` matches anywhere — so the rule swept roughly 40 layers (blk.3/4/5/6 plus blk.30–39, blk.40–49, blk.53, blk.63, and so on) onto ROCm1, attempted 157 GiB, and died before reaching the ROCm2 rule (hence zero ROCm2 matches, and why the earlier capture showed only blk.3–6). Fixed with a literal-dot anchor:
 
 ```bash
 llama-bench \
@@ -98,7 +98,7 @@ grep -E 'out of memory|failed to allocate|overridden to ROCm|error loading' /roo
 grep -E 'cudaMalloc|out of memory|failed to allocate ROCm|buffer of size|overridden to' /root/ot3.txt
 ```
 
-and staged a two-layer-per-card fallback that "cannot OOM":
+and a two-layer-per-card fallback was provided that "cannot OOM":
 
 ```bash
 llama-bench \
@@ -123,7 +123,7 @@ grep -E '^\| glm-dsa' /root/ot4.txt
 
 ### 18:17 — The six-line log reinterpreted: parse failure, not allocation
 
-`cat /root/ot3.txt` showed the entire log was the init block, the error line, and the empty table header — no placement lines, no allocation messages. Course corrected: this was not the 157 GiB over-match — the run died earlier, at argument parsing; the `-ot` string never took effect. Isolation test with a single rule:
+`cat /root/ot3.txt` showed the entire log was the init block, the error line, and the empty table header — no placement lines, no allocation messages. The diagnosis changed: this was not the 157 GiB over-match — the run died earlier, at argument parsing; the `-ot` string never took effect. Isolation test with a single rule:
 
 ```bash
 llama-bench \
@@ -147,9 +147,9 @@ llama-bench --list-devices
 **Observations**
 
 - **Correction:** the failure stage moved from allocation to parsing; the four-clause `-ot` string was suspected of hitting a parse limit or malformed-rule rejection.
-- Open question flagged: does `-ot ...=ROCm1` even parse on this build (newtest.txt had shown "overridden to ROCm1," so it parsed before); stray characters from retyping also flagged.
+- Still unclear: does `-ot ...=ROCm1` even parse on this build (newtest.txt had shown "overridden to ROCm1," so it parsed before); stray characters introduced while retyping were also possible.
 
-### 18:18 — Paul forces the lookup; the comma/semicolon inversion found in the parser
+### 18:18 — Paul asks for a source check; the comma/semicolon inversion found in the parser
 
 Paul: "Well can you go look this up?  I think you're supposed to use | | | or , , ,". The llama-bench parser, read directly, gave the root cause — `-ot` uses two delimiter levels:
 
@@ -187,7 +187,7 @@ Paul ran ot6 verbatim; the same four-device init block, then:
 llama_bench: error: failed to create context with model '/models/GLM-5.2/UD-Q4_K_XL/GLM-5.2-UD-Q4_K_XL-00001-of-00011.gguf'
 ```
 
-The changed error read as progress — "failed to create context" happens after the model loads; the semicolons fixed parsing, placement worked, and the run died building the compute context. Requested detail:
+The different error showed progress — "failed to create context" happens after the model loads; the semicolons fixed parsing, placement worked, and the run died building the compute context. Requested detail:
 
 ```bash
 grep -E 'overridden to ROCm|error|failed|out of memory|cudaMalloc|buffer' /root/ot6.txt | head -40
@@ -213,11 +213,11 @@ Baseline at ub 2048: 62.64. Fix step 2 if 2048 still fails — halve the residen
 
 **Observations**
 
-- Insight flagged as central: resident experts and op_offload scratch compete for the same VRAM — the same ceiling would apply to the patched multi-card path. The `-ts 0,1,1,1` idea (ROCm0 kept empty as scratch) reiterated.
+- The relevant limit: resident experts and op_offload scratch compete for the same VRAM — the same ceiling would apply to the patched multi-card path. The `-ts 0,1,1,1` idea (ROCm0 kept empty as scratch) reiterated.
 
 ### 18:20 — The grep returns only the error line; two structural hypotheses
 
-Paul's grep of ot6.txt returned exactly one line — the error itself; no "overridden to ROCm" lines at all, though in ot3.txt placement lines had appeared during load. The unfiltered view was requested:
+Paul's grep of ot6.txt returned exactly one line — the error itself; no "overridden to ROCm" lines at all, though in ot3.txt placement lines had appeared during load. The full log was requested:
 
 ```bash
 wc -l /root/ot6.txt
@@ -251,11 +251,11 @@ pp2048 = 51.74 with 8 expert layers resident on ROCm1/ROCm2, against the all-CPU
 
 - **Hypothesis (later retracted):** the 8 resident layers force activations to hop ROCm0→ROCm1, compute, and hop back, per layer per token, through the host bridge (`Hops: 2`, no XGMI) — "that is exactly what my patch would trigger, at scale."
 - **Decision (later reversed):** "Do not build the patch."
-- Standing best reaffirmed: ub 8192, all experts CPU, op_offload on → 104.97 t/s; "the single-card concentration that I thought was a bug to fix is, on this hardware, close to optimal... The 105 t/s you already have is, most likely, the ceiling." `-ts 0,1,1,1` still noted as a different mechanism worth one run.
+- The best result remained: ub 8192, all experts CPU, op_offload on → 104.97 t/s; "the single-card concentration that I thought was a bug to fix is, on this hardware, close to optimal... The 105 t/s you already have is, most likely, the ceiling." `-ts 0,1,1,1` still noted as a different mechanism worth one run.
 
 ### 18:25 — Paul pushes back; the P2P retraction
 
-Paul: "Can you look into anything I can do here.  I have four cards.  Prefill should be faster and parallelizable.  I also think we should look into that p2p routing maybe?" The source, read again, forced a retraction of the earlier explanation: op_offload doesn't do GPU-to-GPU copies at all. In op_offload the weight is on the host, so the transfer is host→device; `GGML_CUDA_P2P` gates GPU↔GPU only (lines 334-348) and is irrelevant to the offload path. What the `-ot` experiment actually did: op_offload fires only for CPU-resident weights (`ggml_backend_buffer_is_host(src->buffer)`, line 919); the resident experts on ROCm1 are not host, so those 8 layers ran as ordinary resident-GPU matmuls while their attention stayed on ROCm0 — the hidden state crossed ROCm0→ROCm1 and back via `cudaMemcpyDeviceToDevice` (lines 754-756), which does need peer access, not enabled. The experiment created GPU↔GPU traffic through the resident-weight path, not the offload path. It tested the wrong mechanism.
+Paul: "Can you look into anything I can do here.  I have four cards.  Prefill should be faster and parallelizable.  I also think we should look into that p2p routing maybe?" The source, read again, forced a retraction of the earlier explanation: op_offload doesn't do GPU-to-GPU copies at all. In op_offload the weight is on the host, so the transfer is host→device; `GGML_CUDA_P2P` gates GPU↔GPU only (lines 334-348) and is irrelevant to the offload path. What the `-ot` experiment actually did: op_offload fires only for CPU-resident weights (`ggml_backend_buffer_is_host(src->buffer)`, line 919); the resident experts on ROCm1 are not host, so those 8 layers ran as ordinary resident-GPU matmuls while their attention stayed on ROCm0 — the hidden state crossed ROCm0→ROCm1 and back via `cudaMemcpyDeviceToDevice` (lines 754-756), which does need peer access, not enabled. The experiment created GPU↔GPU traffic through the resident-weight path, not the offload path. It tested a different mechanism from the proposed patch.
 
 Proposed tests, in order — first a 30-second P2P capability probe:
 
@@ -300,7 +300,7 @@ GGML_CUDA_P2P=1 llama-bench \
 
 - **Correction:** "the `-ot` result does not actually condemn the patch... the experiment was not a valid test of the patch, and I called it decisive when it wasn't." The patch is untested, not disproven.
 - Re-verified on build 657e01125: the offload path is host→device only; the copy falls through to the blocking path (lines 514-517) because `cpy_tensor_async` returns false for a CPU source. The bottleneck is serialization, not peer bandwidth.
-- Self-assessment on the record: three wrong or oversold mechanism claims this session. The measured truth: prefill is host→device-bound, serialized, one card — 22 GB/s against ~89 GB/s of installed lane bandwidth.
+- The analysis acknowledged three wrong or overstated mechanism claims during this session. The measured result: prefill is host→device-bound, serialized, one card — 22 GB/s against ~89 GB/s of installed lane bandwidth.
 
 ### 18:26 — hipcc fails on a .c file; workarounds
 
@@ -333,7 +333,7 @@ rocm-smi --showtopo
 rocm-bandwidth-test -t   # topology + peer access matrix
 ```
 
-Recalled hardware fact: the earlier `--showtopo` showed `Link Type: PCIE, Hops: 2` for the pairs; the single needed bit is whether any GPU pair reports peer access possible.
+The earlier `--showtopo` output showed `Link Type: PCIE, Hops: 2` for the pairs; what still needed checking was whether any GPU pair reports peer access possible.
 
 **Observations**
 
@@ -360,7 +360,7 @@ GPU3->GPU2: YES
 
 **Observations**
 
-- **Refuted:** every pair: YES. That kills the "cards can't talk to each other" claim outright. The patch is not dead — untested. It was also now unknown why the `-ot` experiment lost, the P2P explanation being disproven.
+- **Refuted:** every pair: YES. That rules out the "cards can't talk to each other" claim outright. The patch is not dead — untested. It was also now unknown why the `-ot` experiment lost, the P2P explanation being disproven.
 - Capability is not bandwidth: four cards on separate root complexes through the EPYC IOD fabric could peer anywhere from 3 GB/s to 25 GB/s. Bandwidth probes queued:
 
 ```bash
@@ -395,7 +395,7 @@ hipcc /tmp/pbw.hip -o /tmp/pbw && /tmp/pbw
 
 ### 18:29 — Single-pair peer bandwidth: 16.2 GB/s; ts.txt missing
 
-Paul: "GPU0->GPU1 peer: 16.2 GB/s" — above the ≥15 threshold, "not the 3-8 GB/s host-relay penalty I feared." Four-card expert compute back on the table on measured evidence. Two unknowns remained: aggregate peer bandwidth with all four cards peering simultaneously through the shared IOD (could scale to ~64 GB/s or contend down to ~20), and how much peer traffic each scheme generates. Patch math sketch: spread 438 GB of expert streaming across four host→device links; peer cost = activation hops — at 16 GB/s, a 100 MB activation per layer ≈ ~6 ms, across 75 layers ≈ ~450 ms of peer traffic per token if every layer hops. The queued results were requested:
+Paul: "GPU0->GPU1 peer: 16.2 GB/s" — above the ≥15 threshold, "not the 3-8 GB/s host-relay penalty I feared." That measurement supported considering four-card expert compute again. Two unknowns remained: aggregate peer bandwidth with all four cards peering simultaneously through the shared IOD (could scale to ~64 GB/s or contend down to ~20), and how much peer traffic each scheme generates. Patch estimate: spread 438 GB of expert streaming across four host→device links; peer cost = activation hops — at 16 GB/s, a 100 MB activation per layer ≈ ~6 ms, across 75 layers ≈ ~450 ms of peer traffic per token if every layer hops. The queued results were requested:
 
 ```bash
 grep -E '^\| glm-dsa' /root/ts.txt
@@ -480,7 +480,7 @@ The detail was requested:
 grep -iE 'out of memory|cudaMalloc|failed to allocate|buffer of size|compute buffer|reserve' /root/ts.txt
 ```
 
-and identified the design flaw in its own experiment: `-ts 0,1,1,1` puts zero model layers on ROCm0, packing all 78 attention layers onto ROCm1/2/3 (26 each) — but op_offload still sends every streamed expert to ROCm0 (the `return b` = backend 0 behaviour). ROCm1–3 cannot fit 26 attention layers each plus the ub 8192 compute buffer, so context creation fails. "`-ts 0,1,1,1` is self-defeating: it frees the wrong card." A fallback was staged to at least get a number:
+The analysis also identified a design flaw in the experiment: `-ts 0,1,1,1` puts zero model layers on ROCm0, packing all 78 attention layers onto ROCm1/2/3 (26 each) — but op_offload still sends every streamed expert to ROCm0 (the `return b` = backend 0 behaviour). ROCm1–3 cannot fit 26 attention layers each plus the ub 8192 compute buffer, so context creation fails. "`-ts 0,1,1,1` is self-defeating: it frees the wrong card." A fallback was provided to get a measurement:
 
 ```bash
 llama-bench \
@@ -502,11 +502,11 @@ llama-bench \
 4 concurrent pairs: 49.4 GB/s aggregate
 ```
 
-49.4 GB/s aggregate against 16.2 single-pair: the fabric scales at ~76% efficiency across concurrent transfers and does not collapse to ~20. Measured-facts scoreboard at this point: peer access YES in all 12 directions; single-pair peer 16.2 GB/s; four-pair aggregate 49.4 GB/s; current prefill = one card, one link, 22 GB/s host→device, serialized.
+49.4 GB/s aggregate against 16.2 single-pair: the fabric scales at ~76% efficiency across concurrent transfers and does not collapse to ~20. Measurements available at this point: peer access YES in all 12 directions; single-pair peer 16.2 GB/s; four-pair aggregate 49.4 GB/s; current prefill = one card, one link, 22 GB/s host→device, serialized.
 
 Before writing the patch, the mechanism was verified — does `src[1]` (the activation) have a resolved buffer at graph-assignment time? The source answered no: lines 1047-1050 walk the nodes calling `backend_id_from_cur` without pre-assigning sources — the src-assignment block at lines 1052-1066 is `#if 0` dead code. `src[1]` therefore has `tensor_backend_id == -1` when the heuristic runs; the original activation-routing patch would read `asrc->buffer` as null and fall through to `return b` = ROCm0. A silent no-op. The scheduler's own design comment (line 1074): "ops unsupported by the backend being expanded will be left unassigned so that they can be assigned later when the locations of its inputs are known" — pass 2 (line 1078+) expands GPU assignments to adjacent nodes, but the offload heuristic at line 919 fires in pass 1 and hardcodes backend 0 before pass 2 runs.
 
-A no-code diagnostic was ordered first:
+A diagnostic requiring no code changes came first:
 
 ```bash
 GGML_SCHED_DEBUG=2 llama-bench \
@@ -585,7 +585,7 @@ grep '1.off' /root/sched_full.txt | grep -oE '\[ROCm[0-9]|\[CPU' | sort | uniq -
 1494
 ```
 
-The dump landed; the third command (the `1.off` grep) printed nothing — the pattern was wrong, not offload absent (the bracket format in source is `[%5.5s %8.8s]`, so the cause tag may render padded or truncated). Follow-up queries:
+The dump arrived; the third command (the `1.off` grep) printed nothing — the pattern was wrong, not offload absent (the bracket format in source is `[%5.5s %8.8s]`, so the cause tag may render padded or truncated). Follow-up queries:
 
 ```bash
 # what do the node lines actually look like? show a MoE expert node
@@ -602,7 +602,7 @@ grep '## SPLIT' /root/sched_full.txt | grep -oE 'ROCm[0-9]|CPU' | sort | uniq -c
 
 - **Correction:** the empty `1.off` grep reflects a wrong pattern (the bracket format in source is `[%5.5s %8.8s]`, so the cause tag may render padded or truncated), not an absence of offload. The third command is the runtime answer: if ~1,400 of the 1,494 splits are ROCm0, the diagnosis holds; if evenly spread, the theory is wrong and the 105 ceiling has a different cause.
 
-### 19:09 — Partial grep results: name fragments, and the ROCm_Host insight
+### 19:09 — Partial grep results: name fragments, and the ROCm_Host finding
 
 After a stray keystroke ("v"), Paul pasted partial results. The first grep showed tensor lines:
 
@@ -624,7 +624,7 @@ The cause-tag grep (run twice, same output):
      40 1.indexer
 ```
 
-Reinterpreted: the `1.xxx` tokens are tensor name fragments (`blk.1.attn…`, `blk.1.ffn…`), not scheduler cause tags. Key observation: `buffer type overridden to ROCm_Host` — pinned, page-locked host RAM; with `-ot exps=CPU` the experts live in the pinned host buffer, on no GPU. Direct queries issued for the actual question:
+On review: the `1.xxx` tokens are tensor name fragments (`blk.1.attn…`, `blk.1.ffn…`), not scheduler cause tags. The relevant observation: `buffer type overridden to ROCm_Host` — pinned, page-locked host RAM; with `-ot exps=CPU` the experts live in the pinned host buffer, on no GPU. Commands to answer the actual question:
 
 ```bash
 # the actual question: of 1494 splits, which backend runs each?
@@ -636,7 +636,7 @@ grep -oE '\[(ROCm[0-9]|CPU) ' /root/sched_full.txt | sort | uniq -c
 
 **Observations**
 
-- Clean measured facts restated while leveling with Paul: prefill 104.97 t/s at ub 8192 (2.6× over start); the offload copy blocking and serialized (source, lines 514-517); peer bandwidth healthy (16 GB/s single, 49 GB/s aggregate); every VRAM-layout flag trick hits the same wall. "Squeezing past 105 requires a code change to the scheduler."
+- The analysis restated the available evidence: prefill 104.97 t/s at ub 8192 (2.6× over start); the offload copy blocking and serialized (source, lines 514-517); peer bandwidth healthy (16 GB/s single, 49 GB/s aggregate); every attempted VRAM placement setting hits the same wall. "Squeezing past 105 requires a code change to the scheduler."
 - **Prediction (branches):** splits ~1,400 on ROCm0 → write the patch knowing it is real; distributed → the bottleneck is the blocking copy itself, and the fix is the harder `cpy_tensor_async` change.
 
 ### 19:10 — The split distribution: ROCm0 owns 731 of 1,494
@@ -655,7 +655,7 @@ root@openwebui:~# grep -oE '\[(ROCm[0-9]|CPU) ' /root/sched_full.txt | sort | un
   15874 [ROCm3
 ```
 
-"The diagnosis holds, and now it's measured." ROCm0 owns 731 splits — 49% of all 1,494, 62% of the 1,186 GPU splits — versus ~133/175/147 for the other three cards. The node-level counts (18811/14188/18922/15874) are a red herring: they count resident attention nodes, distributed normally by the layer split. The splits expose op_offload: 731 splits on ROCm0 = 731 host→device transfers serialized onto one card's link = the measured 22 GB/s single-link bottleneck. Everything-agrees checklist: splits ROCm0 62% ✓; copy path blocking/serialized (source) ✓; streaming 22 GB/s = one link ✓; peer fabric 49 GB/s aggregate, healthy ✓; flag tricks cannot move it, the pin is in code ✓.
+"The diagnosis holds, and now it's measured." ROCm0 owns 731 splits — 49% of all 1,494, 62% of the 1,186 GPU splits — versus ~133/175/147 for the other three cards. The node-level counts (18811/14188/18922/15874) do not answer this question: they count resident attention nodes, distributed normally by the layer split. The splits expose op_offload: 731 splits on ROCm0 = 731 host→device transfers serialized onto one card's link = the measured 22 GB/s single-link bottleneck. The evidence agreed: splits ROCm0 62% ✓; copy path blocking/serialized (source) ✓; streaming 22 GB/s = one link ✓; peer fabric 49 GB/s aggregate, healthy ✓; placement flags cannot move it; the assignment is in code ✓.
 
 **Decision:** the patch is justified by measurement. The original activation-routing diff being a no-op, the correct narrow change is round-robin. Patch v1 — file `ggml/src/ggml-backend.cpp`, find around line 919:
 
@@ -723,7 +723,7 @@ GGML_SCHED_DEBUG=2 llama-bench \
 grep '## SPLIT' /root/sched_patched.txt | sed -E 's/.*: (ROCm[0-9]|CPU).*/\1/' | sort | uniq -c
 ```
 
-Then the number:
+Then the throughput test:
 
 ```bash
 llama-bench \
@@ -753,11 +753,11 @@ Paul pasted a detailed technical review from a separate analysis session (referr
 - **Hypothesis (pasted review):** the realistic bound for round-robin is ~130 t/s, not 250–350 — the single blocking host thread prevents parallel transfer; the patch's entire gain is overlap of copy l+1 with GEMM l.
 - **Decision seed (pasted review):** key the assignment on the layer index rather than a per-op cursor.
 
-### 19:23 — Verification, adoption of layer-keying, and the h2d4 gate
+### 19:23 — Verification, adoption of layer-keying, and the h2d4 check
 
 The counter-analysis was verified against the current tree: lines 516-518 — `ggml_backend_tensor_copy_async` hits the blocking fallback for host→device (the async path at lines 508-509 needs both ends GPU); the split loop (~line 1583) does `ggml_backend_synchronize(split_backend)` before the copy when there is no event — each expert copy waits for that card to finish its previous GEMM; copy and compute fully serialize on ROCm0.
 
-A new source finding altered the magnitude: a comment at line ~1587 — "when offloading MoE weights, we can reduce the amount of data copied by copying only the experts that are used" — llama.cpp already sparse-copies offloaded experts (only the ~8-per-token actually routed, gated by the `used_ids` bitset). The "438 GB per ubatch" was the dense figure; the real transfer is far smaller, and the measured 22 GB/s is moving only active experts. This does not change the ~130 bound (derived from the measured 78 s wall clock, which already reflects sparse copying), but the streaming term is smaller than 15 s, so the overlap win is more modest — "possibly closer to ~120 than 130." The layer-keyed revision was adopted:
+Another source finding changed the estimate: a comment at line ~1587 — "when offloading MoE weights, we can reduce the amount of data copied by copying only the experts that are used" — llama.cpp already sparse-copies offloaded experts (only the ~8-per-token actually routed, gated by the `used_ids` bitset). The "438 GB per ubatch" was the dense figure; the real transfer is far smaller, and the measured 22 GB/s is moving only active experts. This does not change the ~130 bound (derived from the measured 78 s wall clock, which already reflects sparse copying), but the streaming term is smaller than 15 s, so the overlap win is more modest — "possibly closer to ~120 than 130." The layer-keyed revision was adopted:
 
 ```c
             if (sched->op_offload && src_backend_id == sched->n_backends - 1 && ggml_backend_buffer_is_host(src->buffer)) {
@@ -783,7 +783,7 @@ A new source finding altered the magnitude: a comment at line ~1587 — "when of
             }
 ```
 
-(`unsigned off_rr` per the overflow note; the `blk.%d.` sscanf is on `src[0]`, the weight, whose name carries the layer.) Everything was gated on the aggregate host→device probe — the pbw4 probe measured GPU↔GPU, not four concurrent host→device streams:
+(`unsigned off_rr` per the overflow note; the `blk.%d.` sscanf is on `src[0]`, the weight, whose name carries the layer.) The next step depended on the aggregate host→device probe — the pbw4 probe measured GPU↔GPU, not four concurrent host→device streams:
 
 ```bash
 cat > /tmp/h2d4.hip <<'EOF'
@@ -817,13 +817,13 @@ hipcc /tmp/h2d4.hip -o /tmp/h2d4 && /tmp/h2d4
 
 ### State of knowledge at end of Session 7
 
-- The zero-code mechanism tests all failed to move the needle or to run: three `-ot` command failures (unanchored regex; comma-vs-semicolon delimiter inversion, documented in the `newtest.txt` artifact's 157272.74 MiB ROCm1 OOM; compute-buffer OOM at ub 4096), then the one that ran — resident experts on ROCm1/ROCm2 at ub 2048 — measured pp2048 = 51.74 vs the 62.64 baseline, 17% worse.
+- The zero-code mechanism tests all failed to improve throughput or to run: three `-ot` command failures (unanchored regex; comma-vs-semicolon delimiter inversion, documented in the `newtest.txt` artifact's 157272.74 MiB ROCm1 OOM; compute-buffer OOM at ub 4096), then the one that ran — resident experts on ROCm1/ROCm2 at ub 2048 — measured pp2048 = 51.74 vs the 62.64 baseline, 17% worse.
 - The 51.74 negative result was initially read as condemning the patch, then retracted: the experiment exercised the resident-weight peer-copy path, not op_offload's host→device path. The patch is untested, not disproven.
 - Peer fabric measured: capability YES in all 12 directions; single-pair 16.2 GB/s; four-pair aggregate 49.4 GB/s (~76% scaling). Current offload streaming: ~22 GB/s, one link, blocking, against ~89 GB/s of installed lane bandwidth.
 - `-ts 0,1,1,1` is self-defeating (op_offload hardcodes ROCm0 as target; freeing ROCm0 overloads ROCm1–3 with 26 attention layers each and the context fails to build). Flag-level experiments are exhausted; only code can spread the streaming load.
 - The runtime split histogram (31,795-line GGML_SCHED_DEBUG dump, obtainable only with `-v` because llama-bench installs a null log callback): CPU 308 / ROCm0 731 / ROCm1 133 / ROCm2 175 / ROCm3 147 — ROCm0 owns 62% of the 1,186 GPU splits. The `return b` pin is confirmed at runtime, no longer inferred.
 - The original activation-routing patch is a proven no-op (`src[1]` unassigned at heuristic time; the src-assignment block is `#if 0` dead code). Round-robin patch v1 was drafted, then revised to layer-keyed v2 (`sscanf(src->name, "blk.%d.")`) after the pasted counter-analysis.
 - Expected gain corrected downward: not 250–350 t/s but ~130 (possibly ~120), because the single blocking host thread prevents parallel transfer; llama.cpp already sparse-copies only used experts.
-- The h2d4 four-stream pinned host→device probe is queued as the decider (~80+ / ~40 / ~22 GB/s thresholds). Standing numbers: prefill 104.97 t/s, decode 6.01 t/s.
+- The h2d4 four-stream pinned host→device probe is queued to decide the next step (~80+ / ~40 / ~22 GB/s thresholds). Current numbers: prefill 104.97 t/s, decode 6.01 t/s.
 
 ---

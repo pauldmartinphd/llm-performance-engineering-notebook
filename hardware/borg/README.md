@@ -1,6 +1,6 @@
 # Borg — platform
 
-Borg is the second machine in the fleet, alongside [Galactus](../galactus/README.md). It has two roles: LLM inference for agentic coding, and multi-era Windows support, with native 3D audio and video from Windows 98 through 11 through period-correct GPU and sound hardware. The [methodology](../../results/methodology.md) transfers as written. Figures marked unmeasured have no benchmark on record yet.
+Borg is the second machine in the fleet, alongside [Galactus](../galactus/README.md). It has two roles: LLM inference for agentic coding, and multi-era Windows support, with native 3D audio and video from Windows 98 through 11 through period-correct GPU and sound hardware. The [methodology](../../results/methodology.md) applies here too. Figures marked unmeasured have no benchmark on record yet.
 
 ## Compute
 
@@ -10,7 +10,7 @@ The CPU is an AMD Threadripper Pro 3995WX (Zen 2, 64C/128T, WRX80, 8-channel).
 
 The memory is 512 GB of DDR4 ECC RDIMM (8 channels, 2400 MT/s, Samsung).
 
-The bandwidth is unmeasured. The theoretical 8-channel DDR4-2400 peak is 153.6 GB/s; at Galactus-like efficiency (81% of theoretical), expect roughly 120 to 125 GB/s in practice, about 20% below Galactus's 152 GB/s. That sets proportionally lower CPU-MoE decode expectations for the shared models. The STREAM sweep (spread binding, RFO-corrected, per methodology §1) is the prerequisite before any decode budget here can be trusted.
+I have not measured the bandwidth. The theoretical 8-channel DDR4-2400 peak is 153.6 GB/s. At Galactus-like efficiency (81% of theoretical), that would give roughly 120 to 125 GB/s, about 20% below Galactus's 152 GB/s, with proportionally lower CPU-MoE decode expectations for the shared models. That estimate depends on a STREAM sweep (spread binding, RFO-corrected, per methodology §1) confirming the bandwidth.
 
 ## GPUs
 
@@ -33,6 +33,6 @@ The storage is 6 × 8 TB HDD, 6 × 3.84 TB Micron 5100 (SATA SSD), and 2 × 3.84
 
 ## Open items
 
-- Run the STREAM baseline; it is the prerequisite for everything.
+- Measure the STREAM baseline before estimating decode.
 - Run the V4-Flash baseline, then test whether DSpark (see [speculative decoding](../../takeaways/speculative-decoding.md)) reproduces the Galactus gain; the drafter (10.9 GB) fits the R9700, and it needs llama.cpp ≥ PR #25784.
 - Record the quants in use and the placement flags.

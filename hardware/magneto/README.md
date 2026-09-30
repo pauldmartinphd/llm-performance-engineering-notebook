@@ -1,8 +1,8 @@
 # Magneto — platform
 
-Magneto is the Apple Silicon laptop in the fleet, alongside [Galactus](../galactus/README.md) and [Borg](../borg/README.md). It is a unified-memory machine: the CPU, the GPU, and the model weights share one LPDDR5 pool, so the discrete-GPU offload split that Galactus uses (routed experts in system RAM, dense path on the GPU) does not exist here. The measurement principles in the [methodology](../../results/methodology.md) transfer, but the backend-specific procedure must be adapted; the memory-bandwidth limit (§1) and decode two-term model still need local measurements. Figures marked unmeasured have no benchmark on record yet.
+Magneto is my Apple Silicon laptop, alongside [Galactus](../galactus/README.md) and [Borg](../borg/README.md). It is a unified-memory machine: the CPU, the GPU, and the model weights share one LPDDR5 pool, so the discrete-GPU offload split that Galactus uses (routed experts in system RAM, dense path on the GPU) does not exist here. The measurement principles in the [methodology](../../results/methodology.md) transfer, but the backend-specific procedure must be adapted; the memory-bandwidth limit (§1) and decode two-term model remain unmeasured here. Figures marked unmeasured have no benchmark on record yet.
 
-This is the machine this notebook is currently edited from (`magneto-local`).
+I edit this notebook on Magneto (`magneto-local`).
 
 ## Compute
 
@@ -12,7 +12,7 @@ The processor is an Apple M2 Max (2023) in a 14-inch MacBook Pro, with a 12-core
 
 The memory is 64 GB of unified LPDDR5, shared by the CPU and the GPU.
 
-The theoretical bandwidth is about 400 GB/s. This is Apple's published figure, and a 512-bit LPDDR5-6400 bus computes to 409.6 GB/s (64 bytes × 6400 MT/s). It is a spec-sheet number, not a STREAM result. The real achievable bandwidth and its efficiency ratio are unmeasured here, and that ratio does not transfer from Galactus's 81%, because Apple's memory subsystem is different and must be measured on its own. For scale only: about 400 GB/s on paper is roughly 2.6× Galactus's about 150 GB/s real DRAM bandwidth, which is the main reason to test MoE decode on this class of part.
+The theoretical bandwidth is about 400 GB/s. This is Apple's published figure, and a 512-bit LPDDR5-6400 bus computes to 409.6 GB/s (64 bytes × 6400 MT/s). It is a spec-sheet number, not a STREAM result. I have no local bandwidth measurement or efficiency ratio. Galactus's 81% does not transfer to Apple's different memory subsystem. For scale only: about 400 GB/s on paper is roughly 2.6× Galactus's about 150 GB/s real DRAM bandwidth, which is the main reason to test MoE decode on this class of part.
 
 ## GPU
 
@@ -30,8 +30,6 @@ The [September 30 oMLX record](../../results/qwen-3.8-27b.md) contains Qwen3.8-2
 
 The September investigation captured Heavy thermal pressure with about 21.6 W GPU power, 942 MHz active frequency, and 84.4% active residency. Earlier Nominal samples around 27–29 W are reported in the conversation but lack recovered captures. These observations do not establish a fixed chassis power limit. The oMLX leaderboard hardware label omits chassis; a 38-core/64-GB M2 Max label alone cannot identify a 14-inch MacBook Pro, 16-inch MacBook Pro, or Mac Studio. [Entry 13](../../results/lab-notebook/13-magneto-omlx-qwen38.md) separates the observations from the larger-chassis hypothesis.
 
-## Open items
+## Current configuration
 
-- Run the STREAM baseline with the RFO correction, per methodology §1; it is the prerequisite for every decode budget here. Build a CPU STREAM for Arm64, and note whether it emits non-temporal stores (the Copy-correction check).
-- Complete the Qwen3.8-27B recipe/version ledger and repeat the acceleration comparisons with time-aligned thermal telemetry.
-- Measure `C` and bytes per token for a recorded model configuration so the two-term model has Apple Silicon constants.
+I’m running `Qwen3.8-27B-oQ4e-fp16-mtp` under oMLX 0.6.4 build 2529. Lightning MTP and ANE Prefill are on; DFlash, VLM MTP, TurboQuant KV, and CPU prefill sharing are off. SpecPrefill is saved as on without a draft model recorded, so its execution and benefit remain unverified. The [model note](../../results/qwen-3.8-27b.md#final-settings-for-now-september-30-2026) has the full settings. I’m stopping further measurements for now.

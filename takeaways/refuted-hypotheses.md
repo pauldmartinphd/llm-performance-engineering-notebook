@@ -1,6 +1,6 @@
 # Negative results on Galactus
 
-We measured every entry below on Galactus, and each one produced no improvement, or a regression, for the hybrid CPU-MoE workload (routed experts in system RAM, dense path on GPUs). Some attempts produced a measured null result or regression; others failed to run or did not apply to the supported code path. Those are different kinds of evidence. For platform context, see [../hardware/galactus/README.md](../hardware/galactus/README.md); for how we tested each item, see [../results/methodology.md](../results/methodology.md) and the [lab notebook](../results/lab-notebook/).
+I tested these approaches on Galactus for the hybrid CPU-MoE workload (routed experts in system RAM, dense path on GPUs). Some produced no improvement or regressed; others failed to run or did not apply to the supported code path. I've kept those outcomes distinct. For platform context, see [../hardware/galactus/README.md](../hardware/galactus/README.md); for how we tested each item, see [../results/methodology.md](../results/methodology.md) and the [lab notebook](../results/lab-notebook/).
 
 | Hypothesis / attempt | Verdict | Evidence |
 |---|---|---|
@@ -16,4 +16,4 @@ We measured every entry below on Galactus, and each one produced no improvement,
 | HIP managed memory | Regression | 7.2 t/s prefill |
 | SMT oversubscription (t=128) | Refuted (harmful) | Decode collapses on every model tested |
 
-One distinction matters when reading this table: these are refutations for this workload on one class of machine. NUMA imbalance is real on multi-socket boards, transparent huge pages help anonymous-page workloads, and ZenDNN helps Q8_0-on-CPU paths. None of that contradicts the table. The table states that these changes did nothing here, by measurement, and provides a basis for choosing tests on another system. See [findings and limits](general-principles.md) for the scope of the evidence.
+These results apply to this workload on one class of machine. NUMA imbalance is real on multi-socket boards, transparent huge pages help anonymous-page workloads, and ZenDNN helps Q8_0-on-CPU paths. None of that contradicts the table. The table records what happened here and gives me a basis for choosing tests on another system. See [findings and limits](general-principles.md) for the scope of the evidence.

@@ -1,10 +1,10 @@
 # LLM Performance Engineering Notebook
 
-This notebook investigates local LLM inference performance. Its original focus is large mixture-of-experts models whose weights exceed GPU memory. The routed experts live in system RAM, while the dense computation runs on GPUs. The experiments measure where time goes in prompt processing and token generation, then test changes to the configuration and to llama.cpp itself.
+This notebook records my measurements of local LLM inference performance. I started with large mixture-of-experts models whose weights exceed GPU memory, placing the routed experts in system RAM while the dense computation runs on GPUs. By measuring where time goes in prompt processing and token generation, I can test changes to the configuration and to llama.cpp itself.
 
-The most detailed investigation is GLM-5.2 on Galactus, an EPYC 7713 server with eight-channel DDR4 and four Radeon Pro V620 GPUs. Memory bandwidth explains much of its decode time. Prefill exposed a different problem: llama.cpp concentrated offloaded expert computation on one GPU, and a routing-index readback serialized the work. A scheduler patch raised prefill from **104.97 to 119.36 tokens/s (+13.7%)** in the July comparison. Distributing the work alone produced no meaningful gain; removing the synchronization was also necessary.
+The most detailed investigation so far is GLM-5.2 on Galactus, an EPYC 7713 server with eight-channel DDR4 and four Radeon Pro V620 GPUs. Memory bandwidth explains much of its decode time. Prefill exposed a different problem: llama.cpp concentrated offloaded expert computation on one GPU, and a routing-index readback serialized the work. A scheduler patch raised prefill from **104.97 to 119.36 tokens/s (+13.7%)** in the July comparison. Distributing the work alone produced no meaningful gain; removing the synchronization was also necessary.
 
-The repository includes the measurements, unsuccessful experiments, patch source instructions, and chronological notes behind those conclusions. The Galactus investigation now sits alongside the first oMLX measurements on Magneto, a 14-inch M2 Max MacBook Pro. Each record states its platform and conditions; results from the two engines are not a common benchmark.
+The repository includes the measurements, unsuccessful experiments, patch instructions, and chronological notes behind these conclusions. The Galactus investigation now sits alongside the first oMLX measurements on Magneto, a 14-inch M2 Max MacBook Pro. Since the two engines were measured separately, each record gives its platform and conditions rather than treating the results as a common benchmark.
 
 ## Results
 
@@ -28,7 +28,7 @@ The July patch result and April resident-expert results used different builds an
 
 ## Reading the notebook
 
-Start with the [findings](takeaways/general-principles.md) for what the experiments established and where the evidence stops. The [methodology](results/methodology.md) explains the measurements; the [reproduction guide](REPRODUCE.md) gives the commands and checks needed to repeat them.
+The [findings](takeaways/general-principles.md) collect what the experiments established and what remains uncertain. The [methodology](results/methodology.md) explains how I measured performance; the [reproduction guide](REPRODUCE.md) gives the commands and checks.
 
 | Material | Where to find it |
 |---|---|
@@ -49,4 +49,4 @@ As of the August 16 entry, the next comparison is the prefill patch against the 
 
 Code in `patches/` and `experiments/` is covered by the [MIT license](LICENSE). Text and data are covered by [CC BY 4.0](LICENSE-CC-BY-4.0.txt); [LICENSING.md](LICENSING.md) gives the scope and attribution details.
 
-This project is not affiliated with AMD, llama.cpp, or any model vendor. Galactus and the other machine names are the author's names for the lab hardware.
+This project is not affiliated with AMD, llama.cpp, or any model vendor. Galactus and the other machine names are the names I use for the lab hardware.

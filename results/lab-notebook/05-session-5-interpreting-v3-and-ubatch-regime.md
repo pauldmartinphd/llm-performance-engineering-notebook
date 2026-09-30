@@ -2,7 +2,7 @@
 
 [Notebook index](00-overview.md) · [Model summaries](../README.md)
 
-The v3 battery was still running (11:08–14:25) through the first half of this session; the dialogue proceeded in parallel, returning to the battery's output when the complete results arrived at 14:34.
+The v3 battery was still running (11:08–14:25) during the first half of this session. The conversation continued in parallel, then returned to the benchmark output when I uploaded the complete results at 14:34.
 
 ### 12:13 — Paul asks about DFlash speculation
 
@@ -10,9 +10,9 @@ The v3 battery was still running (11:08–14:25) through the first half of this 
 
 ### 12:15 — DFlash: merged upstream, but the verify-side tax rules; ~12.5 t/s best case
 
-dflash postdated the model's training, so this was researched rather than guessed. **Correction** (of the question's premise): `draft-dflash` is already on master — `docs/speculative.md` documents it in the `--spec-type` list; "The blocker isn't merge status." DFlash produces an entire block of draft tokens in a single forward pass (block diffusion) and injects the target model's hidden states into the draft model's attention; the draft is a small block-diffusion model trained for a specific target (e.g. `z-lab/Qwen3-4B-DFlash` for `Qwen/Qwen3-4B`), ~1–2 GB. Two wins over EAGLE3/MTP: a block of 15 costs one pass instead of fifteen, and hidden-state injection pushes acceptance to p ≈ 0.9 (back-solved from the claimed 8× on Qwen3).
+The DFlash discussion began with a check of the implementation and documentation. **Correction** (of the question's premise): `draft-dflash` is already on master — `docs/speculative.md` documents it in the `--spec-type` list; "The blocker isn't merge status." DFlash produces an entire block of draft tokens in a single forward pass (block diffusion) and injects the target model's hidden states into the draft model's attention; the draft is a small block-diffusion model trained for a specific target (e.g. `z-lab/Qwen3-4B-DFlash` for `Qwen/Qwen3-4B`), ~1–2 GB. Two wins over EAGLE3/MTP: a block of 15 costs one pass instead of fifteen, and hidden-state injection pushes acceptance to p ≈ 0.9 (back-solved from the claimed 8× on Qwen3).
 
-Key analysis: "Both of those are draft-side wins. Your bottleneck is the verify side. DFlash does not touch it." The batching premise is only half true on this machine — the GPU half (90 ms: 18.7 GB dense weights + 155 syncs) is batch-independent and amortizes; the CPU half (90 ms: 13.77 GB of routed experts from DDR4) scales near-linearly with the verify batch:
+The relevant distinction was: "Both of those are draft-side wins. Your bottleneck is the verify side. DFlash does not touch it." The batching premise is only half true on this machine — the GPU half (90 ms: 18.7 GB dense weights + 155 syncs) is batch-independent and amortizes; the CPU half (90 ms: 13.77 GB of routed experts from DDR4) scales near-linearly with the verify batch:
 
 ```
 E(B) = 256 × (1 − 0.96875^B)
@@ -39,7 +39,7 @@ Stacked projection (VRAM fill = CPU bytes × 0.77, and `-sm row` taking G from 9
 | + `-t 24`, VRAM fill, `-sm row` | ~7.5 |
 | + **DFlash, block 8** | **~12.5** |
 
-What would truly unlock it — experts in VRAM, so that verify(B) ≈ verify(1):
+With experts in VRAM, verify(B) ≈ verify(1), changing the projection:
 
 | | expert size | fits in 120 GiB? |
 |---|---|---|
@@ -64,7 +64,7 @@ What would truly unlock it — experts in VRAM, so that verify(B) ≈ verify(1):
 
 ### 12:20 — Reality check: 21% of Opus 4.8; the estimated near-term ceiling is ~13%; prefill is what is felt
 
-Artificial Analysis figures were checked rather than eyeballed:
+The comparison used these Artificial Analysis figures:
 
 | model | output t/s |
 |---|---|
@@ -94,7 +94,7 @@ Artificial Analysis figures were checked rather than eyeballed:
 
 **Observations**
 
-- What remains remarkable: GLM-5.2 sits in Artificial Analysis's frontier tables alongside Opus 4.8 and GPT-5.6, running "in your basement on used server parts, at roughly human reading speed (~250 wpm ≈ 5–6 tok/s)."
+- GLM-5.2 sits in Artificial Analysis's frontier tables alongside Opus 4.8 and GPT-5.6, running "in your basement on used server parts, at roughly human reading speed (~250 wpm ≈ 5–6 tok/s)."
 - **Decision (emphasis):** "Phase F is the phase that matters. Decode is a 1.3× fight against physics. Prefill is a 10× fight against a flag that's currently crashing." (Phase F was running at this moment.)
 - Sources: artificialanalysis.ai (GPT-5.6 landing page; GPT-5.6 Sol high/medium/max; GPT-5.6 Terra max; Claude Opus 4.8; Claude Opus 4.7; Opus 4.6 versus GPT-5 comparison), callsphere.ai, tokencalculator.com.
 
@@ -104,7 +104,7 @@ Artificial Analysis figures were checked rather than eyeballed:
 
 ### 12:49 — Scheduler source read: every offloaded op goes to ROCm0; the copies are blocking
 
-Rather than speculate, the scheduler was read. Two structural findings, both previously held wrong; neither proven to be the crash, but together they explain it, and they change the payoff.
+Reading the scheduler corrected two earlier assumptions. These findings were proposed to explain the crash, although neither was confirmed as its cause. They also changed the expected performance gain.
 
 **Finding 1 — every offloaded matmul goes to ROCm0.** `ggml-backend.cpp:919-925`, verbatim:
 
@@ -195,20 +195,20 @@ llama-bench -m /models/GLM-5.2/UD-Q4_K_XL/GLM-5.2-UD-Q4_K_XL-00001-of-00011.gguf
 
 **Observations**
 
-- Phase J upgraded because op_offload dumps everything on card 0: the fitter distributes expert layers across all four cards, and every layer the fitter parks in VRAM is a layer op_offload does not stream down card 0's link.
+- Phase J became more useful because op_offload sends all streamed weights to card 0: the fitter distributes expert layers across all four cards, and every layer the fitter parks in VRAM is a layer op_offload does not stream down card 0's link.
 - `-ts 0,1,1,1` rationale: ROCm0 zero layers, 30.7 GiB free as offload scratch; "If F crashes at ub 2048/4096 and this survives, that's the answer." "Check back after F."
 - (Retrospective note: the queued command as written pairs `-p 512` with `-ub 1024,2048,4096` — the very pairing proven at 14:37/14:49 to clamp n_ubatch to 512.)
 - Working details: Phase B was nearly done at this moment (one data point at t=128 remaining); the fitter and `-ot` are mutually exclusive, and `-ts` is disabled by the fitter; fitter plus op_offload compose — e.g. 17 expert layers in VRAM cut streaming from 408 GiB to 315 GiB.
 
 ### 14:34 — Complete v3 results delivered
 
-Paul attached the finished results.txt: "Here are the complete results." (The battery had ended at ~14:25; the results.txt artifact was saved at 14:33:44 ET.)
+I attached the finished results.txt: "Here are the complete results." (The battery had ended at ~14:25; the results.txt artifact was saved at 14:33:44 ET.)
 
 ### 14:37 — Full v3 interpretation: the fitter wins; the model validates; four hypotheses dead; op_offload never actually tested
 
-A complete run, and it changes several conclusions — including two earlier ones.
+The complete run changed several of the earlier conclusions.
 
-**Winner — Phase J (fitter): tg128 = 6.01, pp512 = 40.11**, the best numbers in the entire battery. VRAM fill, verbatim from the log:
+**Phase J (fitter): tg128 = 6.01, pp512 = 40.11**, the best numbers in the run. VRAM fill, verbatim from the log:
 
 ```
 ROCm0 27636.72 MiB    ROCm2 26645.77 MiB
@@ -218,7 +218,7 @@ tensor blk.11.ffn_gate_exps.weight (1728 MiB q4_K) buffer type overridden to ROC
 
 +8.5% decode and +16% prefill over the best hybrid. "Use it." (Working notes: the fitter run used `-t 64`; `-t 32` measured ~2.5% better elsewhere, so combining might give ~6.15 t/s. The fitter also tried to spill some expert tensors to the ROCm_Host pinned buffer, which reported zero size — that fallback did not work as intended. ~16 MoE layers placed on GPU ≈ 88 GiB of expert weights.)
 
-**The performance model is now fully validated:** `t_token = 90 ms (GPU + 155 splits) + CPU_expert_bytes ÷ 152 GB/s`
+**The complete results validate the performance model:** `t_token = 90 ms (GPU + 155 splits) + CPU_expert_bytes ÷ 152 GB/s`
 
 | config | CPU bytes | predicted | **measured** |
 |---|---|---|---|
@@ -226,9 +226,9 @@ tensor blk.11.ffn_gate_exps.weight (1728 MiB q4_K) buffer type overridden to ROC
 | fitter (~16 layers on GPU) | 10.8 GB | 161 ms → 6.2 | **6.01** |
 | `-ngl 0` | 27 GB + CPU attention | 258 ms → 3.9 | **3.87** |
 
-**Four hypotheses, all dead:**
+**Four hypotheses that no longer justify tuning:**
 
-- **Dead end:** `CPU_REPACK` engaged — and gave exactly nothing. Verbatim:
+- **Dead end:** `CPU_REPACK` engaged and produced no gain. Verbatim:
 
 ```
 load_tensors: CPU_REPACK model buffer size = 255744.00 MiB     (60.7% — I predicted 62%)
@@ -240,7 +240,7 @@ load_tensors:        CPU model buffer size = 165220.22 MiB     (the Q5_K down te
 - **Dead end:** `--poll` — zero effect at every thread count, every config. `--cpu-strict`/`-C` — no gain and harmful: t=16 strict gives 3.09 versus 5.27 unpinned. "The OS already places threads well. Drop both." `GGML_CUDA_GRAPH_OPT`: 5.40 versus 5.40.
 - **Dead end:** THP never applied — `AnonHugePages: 0 kB` even in Phase L with anonymous memory. "Untested and probably untestable."
 
-**op_offload never actually ran — a script bug**, self-attributed. Verbatim from the logs:
+**The intended op_offload regime was never tested because of a script bug.** The script's author identified the mistake. Verbatim from the logs:
 
 ```
 llama_context: n_batch  = 512
@@ -282,7 +282,7 @@ llama-server -m ... -fitt 2048 -c 65536 -fa 1 -t 32 --no-mmap
 
 **Observations**
 
-- **Correction** (of an earlier hypothesis): `-ngl 0` at 3.87 settles it — the GPUs are worth +43%, not net-negative. That earlier hypothesis was wrong. The CPU is bad at MLA — it needs ~167 ms for the dense path that the GPUs do in 90. (Implied CPU-only bandwidth ~105 GB/s at `-ngl 0`, not 152.)
+- **Correction** (of an earlier hypothesis): `-ngl 0` at 3.87 settles it — the GPUs are worth +43%, not net-negative. That earlier hypothesis was wrong. The CPU needs ~167 ms for the MLA dense path that the GPUs complete in 90. (Implied CPU-only bandwidth ~105 GB/s at `-ngl 0`, not 152.)
 - **Prediction:** the queued experiment should stream ~344 GB per ubatch onto ROCm0's single x16 link ≈ 14 s + ~5 s GEMM → ~200 t/s versus 40 today. "A 5×. That is the last real prize."
 - **Decision:** "decode is done." The ceiling is `90 + bytes/152`; even with every expert in VRAM (impossible) that is 11 t/s. The only remaining decode lever is fewer bytes — Q3_K_XL → CPU reads ~7.7 GB → ~7 t/s (working figure 141 ms → ~7.1 t/s). "Prefill is where the 5× is."
 - Additional numbers recovered in this analysis: Phase F did not crash (the v2 crash "was ZenDNN," not op_offload); Phase M pinned op_offload ~29.7 t/s, still below the 34.65 baseline; Phase L (`--no-host 1`) nearly identical to M1, tg ~5.4–5.5; the `GGML_CUDA_GRAPH_OPT` control 5.40 t/s, no gain; Phase B2 prefill scaling 12.81 @ t=16 → peak 32.92 @ t=96 → 32.48 @ t=128, with B2's t=64 30.73 versus A1's 34.65 at the same `--poll 100` attributed to variance; Phase D tg peaks 3.87 @ t=32 and collapses to 1.44 @ t=64 (1.4–1.5 across t=48–64), with the hybrid showing the analogous pathology at t=128 (1.29–1.31); Phase C strict-t16 cluster 3.09–3.14 (~41% penalty versus non-strict 5.27, regardless of mask), the wrapped-mask case effectively zero (**dead end**), t=32 strict 8-CCD 5.53 versus 4-CCD 5.07 (9%) and no gain over OS scheduling; Phase H exited with the load error; Phase K exit code 134 = SIGABRT in state save/restore (`state_seq_set_data`) — a llama.cpp bug with CUDA graphs/ROCm, not actionable (**dead end** for `-d`); CPU_REPACK allocation ~250 GiB versus the standard CPU buffer ~161 GiB.
@@ -293,7 +293,7 @@ llama-server -m ... -fitt 2048 -c 65536 -fa 1 -t 32 --no-mmap
 
 ### 14:49 — v4 written: galactus-prefill.sh — op_offload at real ubatch, dead hypotheses removed
 
-The `-p` clamp proven from source, verbatim:
+The source confirms the `-p` clamp, verbatim:
 
 ```c
 llama-bench.cpp:1247   cparams.n_ctx = n_prompt + n_gen + n_depth;
@@ -330,11 +330,11 @@ nohup ./galactus-prefill.sh > /root/console-v4.txt 2>&1 &
 | `-ot exps=CPU` (GPUs hold the dense path) | 5.53 |
 | fitter (GPUs hold dense + 16 expert layers) | **6.01** |
 
-"Pull the cards and you lose a third of your throughput." The number showing something is wrong: "The GPUs read 19.7 GB per token and take 90 ms to do it. That's an effective 219 GB/s — against 2,048 GB/s of installed bandwidth. You are using 11% of what you paid for."
+"Pull the cards and you lose a third of your throughput." The bandwidth comparison was: "The GPUs read 19.7 GB per token and take 90 ms to do it. That's an effective 219 GB/s — against 2,048 GB/s of installed bandwidth. You are using 11% of what you paid for."
 
 Reason 1 — under `-sm layer`, layers 0–19 sit on ROCm0, 20–39 on ROCm1, and so on; the graph is processed sequentially, so each card works a quarter of the token and idles three quarters: "Four cards, one card's worth of bandwidth."
 
-Reason 2 — both parallelism modes are closed, and not because of AMD. `-sm row` is gone from llama.cpp entirely — `ggml_backend_cuda_reg_get_proc_address()` no longer exports the split-buffer entry point, verbatim:
+Reason 2 — both parallelism modes are unavailable for this model in llama.cpp. `-sm row` is gone from llama.cpp entirely — `ggml_backend_cuda_reg_get_proc_address()` no longer exports the split-buffer entry point, verbatim:
 
 ```c
 static void * ggml_backend_cuda_reg_get_proc_address(ggml_backend_reg_t reg, const char * name) {
@@ -346,7 +346,7 @@ static void * ggml_backend_cuda_reg_get_proc_address(ggml_backend_reg_t reg, con
 }
 ```
 
-"That's why you got `device ROCm0 does not support split buffers` — llama.cpp deleted row-split for CUDA and HIP alike and replaced it with real tensor parallelism" (`comm_allreduce_tensor`). But tensor parallelism refuses this model, verbatim:
+"That's why you got `device ROCm0 does not support split buffers` — llama.cpp deleted row-split for CUDA and HIP alike and replaced it with real tensor parallelism" (`comm_allreduce_tensor`). Tensor parallelism is also disabled for this model, verbatim:
 
 ```c
 bool llm_arch_supports_sm_tensor(const llm_arch & arch) {
@@ -360,9 +360,9 @@ bool llm_arch_supports_sm_tensor(const llm_arch & arch) {
 
 Every model on that list uses MLA — the compressed KV latent does not shard across devices. "So the thing keeping your four cards from working in parallel is GLM-5.2's attention design — not ROCm, not RDNA2, not AMD."
 
-Reason 3 — at batch 1 the cards do GEMVs, 0% compute utilization (each V620: 72 CUs, ~40 TFLOP/s fp16). "You are using four graphics cards as expensive, slow DRAM." Prefill/op_offload is the one regime where their compute means anything — which is what v4 is measuring.
+Reason 3 — at batch 1 the cards do GEMVs, 0% compute utilization (each V620: 72 CUs, ~40 TFLOP/s fp16). "You are using four graphics cards as expensive, slow DRAM." Prefill/op_offload is where the cards' compute capacity should matter, which is what v4 is measuring.
 
-Would better GPUs help? Barely. Four 3090s (936 GB/s each, ~1.8× the bandwidth):
+The estimated benefit from four 3090s was small (936 GB/s each, ~1.8× the bandwidth):
 
 ```
 GPU weight read   19.7 GB / ~750 GB/s   =  26 ms   (was 48)
@@ -384,8 +384,8 @@ The cards hold "27% of a model that is 3.6× too big for them." Given a model th
 
 **Observations**
 
-- Established fact: Paul already runs DeepSeek-V4-Flash on this machine — at 7.16 t/s, with `--cpu-moe` pushing every expert into RAM by choice. At Q4 it fits entirely in VRAM: 13B active at ~4.9 bpw ≈ ~8 GB/token; at a single card's 512 GB/s that is 16 ms. "You are leaving something like a 5–8× on the table on a model you already have on disk."
-- Honest summary: the V620s are mediocre AI cards (RDNA2, no matrix cores, second-tier ROCm support, 512 GB/s unremarkable in 2026), but none of that is what is hurting; they are earning +55% doing the only job available.
+- I already run DeepSeek-V4-Flash on this machine — at 7.16 t/s, with `--cpu-moe` pushing every expert into RAM by choice. At Q4 it fits entirely in VRAM: 13B active at ~4.9 bpw ≈ ~8 GB/token; at a single card's 512 GB/s that is 16 ms. "You are leaving something like a 5–8× on the table on a model you already have on disk."
+- The V620s have limited AI capabilities (RDNA2, no matrix cores, second-tier ROCm support, 512 GB/s unremarkable in 2026), but those limits do not explain the measured bottleneck. They still contribute +55% in the available configuration.
 
 ### 15:09 — Paul: the GPUs were bought for prompt processing
 
@@ -395,13 +395,13 @@ The cards hold "27% of a model that is 3.6× too big for them." Given a model th
 
 "Your instinct is right, and it's the one thing this entire investigation still hasn't measured." Prefill is compute-bound: the CPU runs it at 1.7 TFLOP/s (64 Zen3 cores, AVX2, no VNNI). Each V620 delivers ≈ 35 TOPS int8 via `V_DOT4_I32_I8`; four ≈ ~140 TOPS — about 80× the CPU. (Working figures: V620 peak int8 ~73.7 TOPS at 2.0 GHz boost, 30–40 effective; CPU cross-check 512 tokens / 13.7 s × 45.3 GFLOP/token ≈ 1.69 TFLOP/s; the fitter's 40 t/s ≈ 1.8 TFLOP/s.)
 
-Why they have not: "`-p 512` clamped `n_ubatch` to 512, and at ubatch 512 op_offload loses to the CPU by design. That's the whole point of v4." Compute was never going to be the ceiling anyway — prefill sees every expert:
+The missing prefill gain was explained this way: "`-p 512` clamped `n_ubatch` to 512, and at ubatch 512 op_offload loses to the CPU by design. That's the whole point of v4." The analysis expected transfers to set the ceiling because prefill sees every expert:
 
 ```
 E(B) = 256 × (1 − 0.96875^B)     B=512 → 255.99996
 ```
 
-`ggml_backend_tensor_copy()` moves the whole tensor regardless, so every ubatch drags 438 GB of expert weights across PCIe (344 GB with the fitter holding 16 layers resident). The two scheduler findings set the ceiling — all offloaded ops go to ROCm0 (one x16 link, 25 GB/s, not 100), and the copies are blocking (PCIe and compute strictly additive). Arithmetic, verbatim:
+`ggml_backend_tensor_copy()` moves the whole tensor regardless, so every ubatch transfers 438 GB of expert weights across PCIe (344 GB with the fitter holding 16 layers resident). The two scheduler findings set the ceiling — all offloaded ops go to ROCm0 (one x16 link, 25 GB/s, not 100), and the copies are blocking (PCIe and compute strictly additive). Arithmetic, verbatim:
 
 ```
 per ubatch, with the fitter:
@@ -432,7 +432,7 @@ per ubatch, with the fitter:
 
 "Roughly a 6× beyond what llama.cpp will give you today, and a 30× over your CPU. Your four PCIe 4.0 x16 links are 100 GB/s of aggregate bandwidth and llama.cpp uses one of them."
 
-The patch is small — two places:
+The proposed patch changes two places:
 
 ```c
 for (int b = 0; b < src_backend_id; b++) {
@@ -453,13 +453,13 @@ for (int b = 0; b < src_backend_id; b++) {
 
 ### 15:21 — First v4 row arrives: pp8192 = 25.90 at ub 512
 
-Paul ran, on the server, verbatim:
+I ran this on the server, verbatim:
 
 ```
 root@openwebui:~# cat diag-v4-20260714-150115/MAIN.log  | grep pp
 ```
 
-and pasted the output (key lines verbatim, with interleaved v4-briefing lines included):
+The output follows (key lines verbatim, including interleaved v4-briefing lines):
 
 ```
       => tg128 = 6.01 t/s     pp512 = 40.11 t/s
@@ -554,7 +554,7 @@ watch -n2 'rocm-smi --showuse --showmemuse | grep -E "GPU\[|use"'
 
 ### 15:27 — GPU purchase assessment and priorities for further work
 
-"Yes. And unusually, you now have the receipt." What the $1,600 measurably bought:
+"Yes. And unusually, you now have the receipt." The measured contribution of the $1,600 purchase was:
 
 | | no GPUs (`-ngl 0`) | the V620s (fitter) | + op_offload (projected) |
 |---|---|---|---|
@@ -563,7 +563,7 @@ watch -n2 'rocm-smi --showuse --showmemuse | grep -E "GPU\[|use"'
 
 "+55% decode, and 2× prefill today rising to ~15× once op_offload runs at a real ubatch. For a model that is 435 GiB against 122 GiB of VRAM. That's $12.50/GiB of PCIe 4.0 x16-attached VRAM." (Working figure ≈ $13/GiB, ~$400 per 32 GB card with tax.)
 
-The obvious "better" purchase would have been worse — four 3090s (1.8× bandwidth, CUDA, ~75% more money, ~$2,800):
+The comparison with a "better" purchase, four 3090s (1.8× bandwidth, CUDA, ~75% more money, ~$2,800), projected less value:
 
 ```
 GPU weight read   19.7 GB ÷ ~750 GB/s   =  26 ms   (was 48)
@@ -577,9 +577,9 @@ CPU experts       13.77 GB ÷ 152 GB/s   =  91 ms   (unchanged)
 
 **Observations**
 
-- Three findings make VRAM-capacity-per-dollar the correct metric, none knowable in advance: decode is DDR4-bound, not VRAM-bandwidth-bound (HBM would have been wasted money); tensor parallelism is blocked by MLA, not by AMD (`llm_arch_supports_sm_tensor()` returns false for GLM_DSA and DEEPSEEK2/32/4 — every MLA model, every vendor); prefill is PCIe-bound, so lane count and PCIe generation matter, "which you have four of."
-- The ROCm tax "turned out to be near zero here": ZenDNN was Paul's own build flag; split buffers were deleted for CUDA too; `return b` is vendor-agnostic. "You didn't actually hit an AMD-specific wall."
-- Where the cards genuinely cost: RDNA2 has no matrix cores (would matter only if op_offload became compute-bound — it will not; it is PCIe-stuck); poor resale (odd cloud-gaming parts); "a day of your life debugging, though most of that was llama.cpp, not the cards."
+- Three findings make VRAM capacity per dollar the useful comparison here. They were not known before the tests: decode is DDR4-bound, not VRAM-bandwidth-bound (HBM would have been wasted money); tensor parallelism is blocked by MLA, not by AMD (`llm_arch_supports_sm_tensor()` returns false for GLM_DSA and DEEPSEEK2/32/4 — every MLA model, every vendor); prefill is PCIe-bound, so lane count and PCIe generation matter, "which you have four of."
+- The ROCm tax "turned out to be near zero here": ZenDNN was my own build flag; split buffers were deleted for CUDA too; `return b` is vendor-agnostic. "You didn't actually hit an AMD-specific wall."
+- The remaining disadvantages of these cards: RDNA2 has no matrix cores (would matter only if op_offload became compute-bound — it will not; it is PCIe-stuck); poor resale (odd cloud-gaming parts); "a day of your life debugging, though most of that was llama.cpp, not the cards."
 - **Decision:** the next $1,600 should not go to GPUs. "The DDR4 is the wall" — 91 of every 181 ms is the CPU reading experts at 152 GB/s. Twelve channels of DDR5 on Genoa/Turin ≈ 450 GB/s → the expert read drops 91 → 24 ms:
 
 ```
@@ -587,17 +587,17 @@ CPU experts       13.77 GB ÷ 152 GB/s   =  91 ms   (unchanged)
 ```
 
   (Working figure: a used Genoa system — EPYC 9004 32/64-core, board, 12× 64 GB DDR5 — estimated $4–6k in 2026.) But before spending anything: "`return b` is free." Twenty lines in `ggml-backend.cpp` take prefill from ~300 to ~800–1,200 t/s using the hardware already in the chassis — a bigger return than any purchase on the list.
-- Caveat recorded: the used-market prices are recollection, not research; the relative argument rests on Paul's own measurements.
+- The used-market prices came from recollection rather than research; the relative comparison rests on my measurements.
 
 ### State of knowledge at end of session
 
 - The performance model is validated across three configurations: `t_token = 90 ms (GPU + 155 splits) + CPU_expert_bytes ÷ 152 GB/s` — predicted 5.5 / 6.2 / 3.9 against measured 5.53 (hybrid) / 6.01 (fitter) / 3.87 (`-ngl 0`).
-- Decode is declared done at 6.01 t/s (fitter, 106 GiB VRAM filled); the hard ceiling on this quant is ~11 t/s; the only remaining decode lever is fewer bytes (Q3_K_XL → ~7 t/s) or a DDR5 platform (~8.8 t/s, +46%).
+- The conclusion at this point was to stop decode tuning at 6.01 t/s (fitter, 106 GiB VRAM filled); the hard ceiling on this quant is ~11 t/s; the only remaining decode lever is fewer bytes (Q3_K_XL → ~7 t/s) or a DDR5 platform (~8.8 t/s, +46%).
 - Production configuration: `llama-server -m ... -fitt 2048 -c 65536 -fa 1 -t 32 --no-mmap` — no `--poll`, `-C`, `--cpu-strict`, `--no-host`, `-ncmoe`, `-ot`, or `-sm row`.
-- Four hypotheses are formally dead: CPU_REPACK (engaged, zero gain), `-sm row` (removed from llama.cpp; MLA also blocks `-sm tensor`), `--poll`/`--cpu-strict` (nothing/harmful), THP (never applied, probably untestable).
+- Four hypotheses were ruled out for further tuning: CPU_REPACK (engaged, zero gain), `-sm row` (removed from llama.cpp; MLA also blocks `-sm tensor`), `--poll`/`--cpu-strict` (nothing/harmful), THP (never applied, probably untestable).
 - v3 never actually tested op_offload above ubatch 512: `-p 512` clamps n_ctx → n_batch → n_ubatch (`llama-bench.cpp:1247`, `llama-context.cpp:239/241`) — a script bug flagged and then reintroduced by its author.
 - Two structural scheduler facts set the op_offload ceiling: all offloaded ops go to the first supporting backend (`return b` → ROCm0, one x16 link at ~25 GB/s instead of 100 GB/s aggregate), and CPU→GPU copies are blocking (no overlap with compute).
 - v4 (`galactus-prefill.sh`, run directory `diag-v4-20260714-150115`) launched at 15:01:15 to measure the untested regime; its first row — pp8192 = 25.90 ± 0.36 at n_ubatch 512, n_batch 8192 — back-calculates to 19.8 s per ubatch = 22.3 GB/s, essentially PCIe 4.0 x16 line rate from a pageable mmap; predicted ladder ~52 / ~103 / ~185 / ~300 t/s at ub 1024/2048/4096/8192.
 - The GPUs are measured at +55% (3.87 → 6.01) while running at 11% of installed bandwidth (219 of 2,048 GB/s); a `return b` patch (~20 lines) plus async pinned copies would take prefill toward ~800–1,200 t/s on existing hardware.
-- The $1,600 GPU purchase is judged good ($12.50/GiB of PCIe-attached VRAM; four 3090s would yield only 6.3 versus 6.01 t/s decode with less VRAM); DFlash speculation would reach ~12.5 t/s but no GLM-5.2 draft model exists; hosted-model gap: ~9% of Opus 4.8 decode today, ~13% honest near-term ceiling, 5–8× slower end-to-end.
+- The $1,600 GPU purchase was judged good value ($12.50/GiB of PCIe-attached VRAM; four 3090s would yield only 6.3 versus 6.01 t/s decode with less VRAM); DFlash speculation would reach ~12.5 t/s but no GLM-5.2 draft model exists; hosted-model gap: ~9% of Opus 4.8 decode today, ~13% estimated near-term ceiling, 5–8× slower end-to-end.
 - Open at session close: the v4 ubatch ladder (rows above 512 still pending at 15:27).

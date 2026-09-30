@@ -2,12 +2,12 @@
 
 **Period covered:** July 13–September 30, 2026. Sessions 1–9 cover the July GLM-5.2 investigation; Session 10 and Entries 11–12 extend the Galactus record through August. Entry 13 adds oMLX/Qwen3.8-27B on Magneto.
 **Investigator:** Paul Martin
-**Original subject:** Characterizing and improving the inference throughput of GLM-5.2 (753.86 B-parameter mixture-of-experts model) running under llama.cpp/ROCm on the server "Galactus". Later entries extend the record to other models and to oMLX on Magneto.
-**Original July notebook compiled:** July 24, 2026, from the original conversation exports, benchmark logs, and the automated diagnostic run log. All timestamps are US Eastern Time. The original July notebook was compiled from those records rather than memory. Later entries identify their own sources and capture limitations, including the hand-collected Session 10 timings.
+**Original subject:** Measuring and improving inference throughput for GLM-5.2 (753.86 B-parameter mixture-of-experts model) running under llama.cpp/ROCm on the server "Galactus". Later entries extend the record to other models and to oMLX on Magneto.
+**Original July notebook compiled:** July 24, 2026, from the original conversation exports, benchmark logs, and the automated diagnostic run log. All timestamps are US Eastern Time. The July entries were compiled from the saved records. Later entries list their sources and recording limitations, including the hand-collected Session 10 timings.
 
 ---
 
-The entries preserve the sequence of hypotheses, measurements, mistakes, and corrections. Commands and quoted dialogue describe what happened at the time; they are not instructions to execute now. Later findings can supersede earlier conclusions. For the latest measurements in this record, see [Entry 13](13-magneto-omlx-qwen38.md); the Galactus common baseline is in [Entry 12](12-common-baseline-2tb.md); for the condensed interpretation, see the [model summaries](../README.md).
+The entries follow the hypotheses, measurements, mistakes, and corrections in order. Commands and quoted dialogue describe what happened at the time; they are not instructions to execute now. Later findings can supersede earlier conclusions. For the latest measurements in this record, see [Entry 13](13-magneto-omlx-qwen38.md); the Galactus common baseline is in [Entry 12](12-common-baseline-2tb.md); for the shorter account, see the [model summaries](../README.md).
 
 ## July GLM-5.2 results
 
@@ -35,9 +35,9 @@ The entries preserve the sequence of hypotheses, measurements, mistakes, and cor
 
 GLM-5.2 (Zai Org), Unsloth UD-Q4_K_XL quantization: 11 GGUF shards, 435.19 GiB on disk, 753.86 B parameters, ~4.96 bits per weight. llama.cpp architecture `glm-dsa`. 79 blocks: blk.0–2 dense, blk.3–77 MoE (75 layers), blk.78 MTP/NextN (TENSOR_SKIP — never allocated, so `--spec-type draft-mtp` cannot work). 256 routed experts, 8 active per token, 1 shared expert. MLA attention (kv_lora_rank 512, q_lora_rank 2048), DSA lightning indexer, 1 M context. Expert tensors per MoE layer: ffn_gate_exps 1728 MiB Q4_K, ffn_up_exps 1728 MiB Q4_K, ffn_down_exps 2112 MiB Q5_K (exceptions: blk.8 Q5_K/Q6_K; blk.75–77 Q6_K down). Decode reads ≈ 13.77 GB per token in the hybrid config; ≈ 27 GB per token CPU-only.
 
-## Conventions used in this notebook
+## How to read this notebook
 
-The original July investigation is ordered by wall-clock time and grouped into nine work sessions. The later session and entries follow in sequence. `### HH:MM — title` marks an entry; commands appear verbatim in fenced blocks; benchmark rows are reproduced as llama-bench printed them. Inline labels mark the epistemic status of statements at the time they were made: **Hypothesis**, **Prediction**, **Confirmed**, **Refuted**, **Dead end**, **Decision**, **Correction**. "STREAM, RFO-corrected" means Scale ×1.5 and Add/Triad ×4/3 to account for read-for-ownership traffic that STREAM does not count (Copy is compiled to non-temporal stores and needs no correction). The v3 diagnostic run (Session 4) ran unattended from 11:08 to 14:25 on 7/14, while the dialogue of Sessions 3 and 5 continued. This notebook presents its phases as a block in wall-clock position, with per-phase times reconstructed from the log's elapsed stamps.
+The original July investigation is ordered by wall-clock time and grouped into nine work sessions. The later session and entries follow in sequence. `### HH:MM — title` marks an entry; commands appear verbatim in fenced blocks; benchmark rows are reproduced as llama-bench printed them. Inline labels show what was known when each statement was made: **Hypothesis**, **Prediction**, **Confirmed**, **Refuted**, **Dead end**, **Decision**, **Correction**. "STREAM, RFO-corrected" means Scale ×1.5 and Add/Triad ×4/3 to account for read-for-ownership traffic that STREAM does not count (Copy is compiled to non-temporal stores and needs no correction). The v3 diagnostic run (Session 4) ran unattended from 11:08 to 14:25 on 7/14, while the dialogue of Sessions 3 and 5 continued. Its phases appear together at that point in the timeline; the phase times were reconstructed from elapsed timestamps in the log.
 
 ## Primary sources
 

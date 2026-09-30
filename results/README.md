@@ -1,6 +1,6 @@
 # Results
 
-These are the per-model performance notes. Every note states the machine it was measured on; the llama.cpp results come from Galactus, and the oMLX results come from Magneto. Each note distills the raw benchmarks into the main numbers, the best configuration found, and the conclusions. For machine specifications, see [Hardware](../hardware/README.md). For the method behind the numbers, see [methodology.md](methodology.md). For what transfers to other systems, see [../takeaways/](../takeaways/).
+These notes collect the measurements, the best configuration I found for each model, and what I could conclude. Each note names the machine: Galactus for llama.cpp, Magneto for oMLX. For machine specifications, see [Hardware](../hardware/README.md). For the method behind the numbers, see [methodology.md](methodology.md). For what transfers to other systems, see [../takeaways/](../takeaways/).
 
 ## The normalized baseline (2026-08-15/16, build 3653e6d6d, stock scheduler)
 
@@ -24,7 +24,7 @@ Memory bandwidth and the active-expert footprint explain part of decode time; th
 
 ## Apple Silicon: oMLX on Magneto
 
-[Qwen3.8-27B](qwen-3.8-27b.md) records a six-context Lightning MTP baseline and later 4K/16K measurements on the 14-inch M2 Max (38 GPU cores, 64 GB). Tuned ANE improved measured prefill about 8–9% in the recorded comparison. DFlash was slower with ANE inactive at runtime; SpecPrefill setup never established a successful local run. These are configuration-specific observations, not general feature rankings. The thermal investigation and the leaderboard's missing chassis field are recorded separately from throughput measurements in [Entry 13](lab-notebook/13-magneto-omlx-qwen38.md). These results do not join the Galactus normalized baseline.
+[Qwen3.8-27B](qwen-3.8-27b.md) records a six-context Lightning MTP baseline and later 4K/16K measurements on the 14-inch M2 Max (38 GPU cores, 64 GB). Tuned ANE improved measured prefill about 8–9% in the recorded comparison. DFlash was slower with ANE inactive at runtime; SpecPrefill setup never established a successful local run. These observations apply to the configurations I tested. The thermal investigation and the leaderboard's missing chassis field are recorded separately from throughput measurements in [Entry 13](lab-notebook/13-magneto-omlx-qwen38.md). I measured these separately from the Galactus normalized baseline.
 
 ## The full record
 

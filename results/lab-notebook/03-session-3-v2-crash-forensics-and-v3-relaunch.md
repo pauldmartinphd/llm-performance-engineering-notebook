@@ -4,9 +4,9 @@
 
 ### 10:22 — v2 battery output arrives: B0 alone survived
 
-Paul pasted the output of the v2 diagnostic battery ("Here's the current status:"). Phase B0 succeeded; B1–B4 all crashed; B5 was still running with its log cut off at `done_getting_tensors:`.
+I pasted the output of the v2 diagnostic battery ("Here's the current status:"). Phase B0 succeeded; B1–B4 all crashed; B5 was still running with its log cut off at `done_getting_tensors:`.
 
-Contents of the upload, as read from the logs:
+The logs showed:
 
 - B0 succeeded: `sched_reserve: graph splits = 155`, 6063 graph nodes; the 420 GB pinned ROCm host buffer allocated; first-token throughput 1.59 t/s (cold start, not meaningful); `load time = 858989 ms` (~14.3 min).
 - B1 died with "Illegal instruction" (SIGILL) at warmup; B2, B3, B4 died with segmentation faults (SIGSEGV). Every failed run contained:
@@ -34,7 +34,7 @@ load_tensors:          CPU model buffer size = 420964.22 MiB
 
 ### 10:28 — Diagnosis: the 411 GiB pinned buffer plus ZenDNN; 155 splits confirmed; pivot to -mmp 1
 
-Headline reading: B0 worked. B1–B4 all crashed. B5 is running now and will almost certainly join them. The number the battery was launched to obtain was in B0's log, verbatim:
+B0 worked, B1–B4 crashed, and B5 was still running. At this point, it was also expected to crash. B0 nevertheless captured the graph-split count that the script was designed to measure, verbatim:
 
 ```
 sched_reserve: graph nodes  = 6063
@@ -54,7 +54,7 @@ ffn_down_exps   2112 MiB   Q5_K   <- NOT repackable
 ```
 
   Q6_K down tensors on blk.8/75/76/77. `CPU_REPACK` handles only Q4_0/Q4_K/Q2_K/IQ4_NL → covers 3456 of 5568 MiB per layer = 62% of expert bytes.
-- Decode read per token nailed: 8 experts × (54 + 54 + 66) MiB × 75 layers = 12.75 GiB = 13.7 GB/token; at 152 GB/s → 90 ms. (Earlier working estimate before verification: 56.6 MB gate + 56.6 up + 69.2 down = 182.4 MB/layer → 13.68 GB/token → ~68 GB/s needed at ~5 t/s; per expert 6.75 + 6.75 + 8.25 = 21.75 MiB.)
+- Decode read per token calculated from the tensor sizes: 8 experts × (54 + 54 + 66) MiB × 75 layers = 12.75 GiB = 13.7 GB/token; at 152 GB/s → 90 ms. (Earlier working estimate before verification: 56.6 MB gate + 56.6 up + 69.2 down = 182.4 MB/layer → 13.68 GB/token → ~68 GB/s needed at ~5 t/s; per expert 6.75 + 6.75 + 8.25 = 21.75 MiB.)
 - PCIe (settled): PCIe 4.0 x16 on all four (~25 GB/s per card, ~100 GB/s aggregate). Streaming 411 GiB of experts at that bandwidth ≈ 4.4 s per graph eval → an op_offload prefill ceiling near ~116 t/s.
 - Storage (settled): local ZFS at 1.5 GB/s direct, 2.1 GB/s buffered — not a bottleneck.
 - GPU-side weights (measured): 4987 + 4431 + 4431 + 4952 = 18.4 GiB; serialized under `-sm layer` at ~400 GB/s ≈ 49 ms. Budget: 90 + 49 = 139 ms ideal versus 201 ms actual → ~60 ms unaccounted.
@@ -67,7 +67,7 @@ ffn_down_exps   2112 MiB   Q5_K   <- NOT repackable
 - **Hypothesis:** after B0 took and released 411 GiB, B3 failed at the identical size — "The pages aren't coming back" (driver leak / TTM accounting / GTT fragmentation).
 - With `-nopo 1` the pinned buffer buys nothing; its sole purpose is fast H2D for op_offload.
 - **Correction:** "ZenDNN is not inert at `-ngl 0`." It rejects the routed experts (256 experts, Q4_K) but accepts Q8_0 `MUL_MAT`, and all 872 Q8_0 attention tensors sit on the CPU at `-ngl 0` — hence `graph splits = 1088` (bs=512) versus 1 (bs=1). ZenDNN is a separate ACCEL backend, so every op it claims is a split boundary. **Hypothesis:** that shredded graph threw the SIGILL (LIBXSMM JITs; its banner printed on every abort). At `-ngl 99` attention is on GPU, ZenDNN sees nothing, and the graph is a clean 155.
-- **Correction:** Paul rebuilt llama.cpp that very morning — `libggml-*.so.0.16.0` dated Jul 14 08:28 (files 08:28–08:32); `build: 657e01125 (10001)` versus the prior working `f84a51940 (9942)`, 59 commits back; the new build adds fused Gated Delta Net and Lightning Indexer paths for glm-dsa. Three variables moved at once (new build, THP=always, C-states off), and the script itself introduced `-C`/`--cpu-strict`.
+- **Correction:** I had rebuilt llama.cpp that morning — `libggml-*.so.0.16.0` dated Jul 14 08:28 (files 08:28–08:32); `build: 657e01125 (10001)` versus the prior working `f84a51940 (9942)`, 59 commits back; the new build adds fused Gated Delta Net and Lightning Indexer paths for glm-dsa. Three variables moved at once (new build, THP=always, C-states off), and the script itself introduced `-C`/`--cpu-strict`.
 - Supporting notes: the `-C` mask parse is safe (128 hex digits → 512 boolmask entries = GGML_MAX_N_THREADS; a 32-hex mask starts at index 127); earlier stable runs measured `--no-host 1` at 37.29/4.97 and default at 37.63/5.15; a plain 439 GB malloc/free test left MemFree unchanged; the crash signals are SIGILL/SIGSEGV, not SIGKILL (so not the OOM killer); the 1088-split `-ngl 0` graph "seems worth reporting upstream."
 - **Decision:** kill the battery and pivot to mmap:
 
@@ -113,7 +113,7 @@ load_tensors:       CPU model buffer size = …   <- Q5_K down + the rest
 
 ### 10:32 — P2P triage: irrelevant under -sm layer; probe written; parked
 
-Answer: for the current bottleneck, P2P is nearly irrelevant — and it may not be available on gfx1030 at all. From B0's scheduler dump, under `-sm layer` the only cross-GPU traffic is three tensors:
+P2P contributes very little to the current bottleneck, and it may not be available on gfx1030 at all. From B0's scheduler dump, under `-sm layer` the only cross-GPU traffic is three tensors:
 
 ```
 SPLIT #36:  ROCm1  inputs: [l_out-19 (24K)]
@@ -185,22 +185,22 @@ Want `[size=32G]`, not `[size=256M]`; if small, enable Above 4G Decoding and Res
 
 ### 10:57 — Directives: full rerun; IOMMU flags added; ZenDNN-free rebuild
 
-Paul chose a clean slate rather than the incremental bisect: "Just put it all into the script. I'm going to delete the output and rerun from scratch. Ignore the p2p stuff for now then. I also just rebooted the container before running. I'll rerun all tests including the diagnostics." He also reported two system changes: "I added amd_iommu=on iommu=pt." and "I rebuilt with -DGGML_ZENDNN=OFF."
+I decided to rerun the full script: "Just put it all into the script. I'm going to delete the output and rerun from scratch. Ignore the p2p stuff for now then. I also just rebooted the container before running. I'll rerun all tests including the diagnostics." I had also made two system changes: "I added amd_iommu=on iommu=pt." and "I rebuilt with -DGGML_ZENDNN=OFF."
 
 ### 11:03 — v3 script written: galactus-diag.sh (16 phases, three model configurations)
 
-The battery was rewritten from scratch: `-mmp 1` makes loads take seconds instead of 14 minutes, so the battery is now many cheap invocations instead of few expensive ones. The script was delivered as `/mnt/user-data/outputs/galactus-diag.sh` (artifact saved 11:05:36 ET), with the launch:
+The script was rewritten to use `-mmp 1`. Since loads were expected to take seconds instead of 14 minutes, it could use more separate invocations without the previous loading cost. The script was delivered as `/mnt/user-data/outputs/galactus-diag.sh` (artifact saved 11:05:36 ET), with the launch:
 
 ```bash
 cd /root/STREAM
 nohup ./galactus-diag.sh > /root/console.txt 2>&1 &
 ```
 
-Pre-write crash re-analysis (a correction of the earlier `-C` suspicion): B2 and B3 died during `graph_reserve` at `n_tokens=512` — before any threadpool or mask exists — so `-C` could not be responsible there. B0 only reserved graphs for n_tokens = 1 and 16 (`-p 0`); B1–B5 had `-p 512`, which clamps n_ubatch to 512 and forces the 512-token graph where the crashes occurred. B1 hit SIGILL at warmup (16 threads); B4 cleared sched_reserve (155 splits) and then hit SIGSEGV at warmup. Common denominator: ZenDNN/LIBXSMM.
+Rechecking the crashes corrected the earlier suspicion about `-C`: B2 and B3 died during `graph_reserve` at `n_tokens=512` — before any threadpool or mask exists — so `-C` could not be responsible there. B0 only reserved graphs for n_tokens = 1 and 16 (`-p 0`); B1–B5 had `-p 512`, which clamps n_ubatch to 512 and forces the 512-token graph where the crashes occurred. B1 hit SIGILL at warmup (16 threads); B4 cleared sched_reserve (155 splits) and then hit SIGSEGV at warmup. Common denominator: ZenDNN/LIBXSMM.
 
 Model-size accounting from the tensor dump and load logs: blk.8 (higher precision) = 6744 MiB; blk.75–77 (Q6_K down) = 5976 MiB each; the remaining 71 standard layers = 5568 MiB each; total ≈ 420 GiB, matching the measured 420,964 MiB. Per-token expert read ≈ 13.1 GiB ≈ 13.77 GB. Budget: CPU 13.77 GB @ 152 GB/s = 90.6 ms; GPU 18.7 GB @ ~400 GB/s ≈ 47 ms; ideal 138 ms (7.25 t/s) versus actual 201 ms (4.97 t/s) → ~63 ms unaccounted ≈ 0.4 ms per split.
 
-The three model configurations, made explicit (a "reload" happens only when these change):
+The three model configurations (a "reload" happens only when these change):
 
 | | flags | expert buffer | pinned | THP | repack |
 |---|---|---|---|---|---|
@@ -214,13 +214,13 @@ The three model configurations, made explicit (a "reload" happens only when thes
 - Design: `-mmp 1` for eleven of the sixteen phases; the five `-mmp 0` phases are quarantined at the end behind `SKIP_SLOW=1`. Crash handling: Phase 0.9 checks `--list-devices` and `ldd` for ZenDNN; Phases A1/A2 bisect (A1 plain, A2 with `-C`/`--cpu-strict`); Phase C auto-skips if A2 fails.
 - M2 (Phase L) is the production candidate — never once run to date. It is the only configuration with anonymous memory (THP finally testable; `AnonHugePages` has read `0 kB` in every memsnap so far) plus AVX2 repack on the Q4_K gate/up tensors. **Prediction:** Phase L should print `CPU_REPACK model buffer size` ≈ 253 GiB alongside `CPU model buffer size` ≈ 158 GiB.
 - Phase B is "where the money is": 16 combos, one load, decode only. STREAM saturates at 16 threads and decays past it; production has been running 64. 63 ms ÷ 155 splits = 0.4 ms per split — what waking a sleeping 64-thread pool costs. **Hypothesis (H1 test):** "If `--poll 100` produces a step change, the whole thing was a flag."
-- Phase D is the denominator and a ZenDNN receipt. **Prediction:** it printed `graph splits = 1088` last time; it should now print `1`.
+- Phase D provides the CPU-only baseline and checks that ZenDNN is gone. **Prediction:** it printed `graph splits = 1088` last time; it should now print `1`.
 - Practical notes: a prewarm reads 435 GiB at 2.1 GB/s ≈ 3.5 min; there is a double-caching risk (page cache + ZFS ARC = up to 870 GiB); under mmap, `--no-host` is redundant (mmap demotes the host buffer to plain CPU, so `CPU_REPACK` is never selected under mmap — to be checked empirically in `load_tensors` output); lxcfs virtualizes `/proc/meminfo` inside a Proxmox LXC; the CPU masks were computed from the CCD topology.
 - The battery started at 11:08:13 (OUTDIR `/root/diag-20260714-110813`). Its complete machine log is transcribed as Session 4 below; the dialogue continued in parallel.
 
 ### 11:56 — Two upload attempts arrive empty; triage and digest commands
 
-Paul attached the in-progress results file twice ("How does this look now?", "This is where it is"); both uploads arrived with no content and an empty `/mnt/user-data/uploads/`. **Dead end:** "The upload came through empty... Twice now, so it's not a fluke." Two candidate causes: the file too large for the attachment path, or genuinely zero bytes. Triage commands supplied:
+I attached the in-progress results file twice ("How does this look now?", "This is where it is"); both uploads arrived with no content and an empty `/mnt/user-data/uploads/`. **Dead end:** "The upload came through empty... Twice now, so it's not a fluke." Two candidate causes: the file too large for the attachment path, or genuinely zero bytes. Triage commands supplied:
 
 ```bash
 D=$(ls -dt /root/diag-*/ | head -1); echo "$D"
@@ -259,11 +259,11 @@ grep -B2 -A30 '^## B '          "$D/MAIN.log"              # the -t x --poll tab
 
 ### 11:57 — results.txt arrives (244k lines, mid-Phase B)
 
-On the third attempt the file landed: results.txt, 244k lines, 6.8 MB — the run still in progress, the log ending mid-Phase B. Paul: "HEre you go."
+On the third attempt the file landed: results.txt, 244k lines, 6.8 MB — the run still in progress, the log ending mid-Phase B. My message was: "HEre you go."
 
 ### 12:00 — Partial v3 read: both crash causes dead; H1 dead; the CPU is at the memory wall; C = 90 ms
 
-Assessment: a very good run; let it finish — but the answer to the main question is already visible.
+The partial run already answered the main question, although the remaining phases still needed to finish.
 
 Phase B table as of the partial log (tg t/s):
 
@@ -290,16 +290,16 @@ Implied CPU bandwidth versus STREAM, from the model `t_total = C + t_cpu(n)` wit
 
 **Observations**
 
-- **Confirmed:** both crash causes are dead — `A1 exit=0`, `A2 exit=0`. `ldd` shows no `libggml-zendnn`; `--list-devices` shows only ROCm0–3; the benchmark backend column reads plain `ROCm` (previously `ROCm,ZenDNN`). "ZenDNN was the crash." `-C`/`--cpu-strict` was never the problem — A2 ran clean with the full 128-bit mask. (Phase 0.9's `GGML_ZENDNN:BOOL=ON` in CMakeCache.txt is stale text from an old build directory; `ldd` is authoritative.)
+- **Confirmed:** both crash causes have been eliminated — `A1 exit=0`, `A2 exit=0`. `ldd` shows no `libggml-zendnn`; `--list-devices` shows only ROCm0–3; the benchmark backend column reads plain `ROCm` (previously `ROCm,ZenDNN`). "ZenDNN was the crash." `-C`/`--cpu-strict` was never the problem — A2 ran clean with the full 128-bit mask. (Phase 0.9's `GGML_ZENDNN:BOOL=ON` in CMakeCache.txt is stale text from an old build directory; `ldd` is authoritative.)
 - **Confirmed:** `-mmp 1` worked as designed — `CPU_Mapped model buffer size`, no `ROCm_Host`, no 411 GiB pin. A1 took 25 min (cold; wall ~24.7 min, page-faulting 435 GiB from ZFS); A2 took 1 minute (cached). IOMMU passthrough took: 96 `identity` groups.
 - Load-path detail: the prewarm read ran at 1.4 GB/s over 435 GiB, yet the Linux page cache did not grow (377 MB before and after) — the ZFS ARC holds the data instead (visible as `SReclaimable`/`Slab`, not `Cached`), which is why A2 loaded in a minute. The cumulative load-time prints (44 s, 65 s, 81 s … up to 579 s) are misleading; `llama_perf_context_print` values are all zeros (llama-bench does not populate them). 16,380 distinct CUDA graph IDs (HIP graphs active and reused). VRAM barely touched: ~5.2 GiB of 30 GiB per card; compute buffers tiny (205 MiB max). pp512 = 34.65 t/s at t=64. Build 657e01125 confirmed.
 - **Refuted (H1, dead end):** `--poll` does nothing — "Identical at every thread count. The gap is not threadpool sleep/wake across the 155 splits. Scratch that hypothesis entirely."
-- The CPU side is perfect. Plateau across t=24…48 means t_cpu is saturated: `t_cpu(24) = 13.77 GB ÷ 152 GB/s = 90.6 ms` → **C = 180.5 − 90.6 = 90 ms**. From 24 threads up, llama.cpp's Q4_K/Q5_K expert path runs at full platform memory bandwidth — even reproducing STREAM's own decay at 48/64. Below 24 threads it is compute-limited (AVX2 unpack). "There is nothing left to win on the CPU. It is at the memory wall."
+- The plateau across t=24…48 indicates that the CPU expert path has saturated memory bandwidth: `t_cpu(24) = 13.77 GB ÷ 152 GB/s = 90.6 ms` → **C = 180.5 − 90.6 = 90 ms**. From 24 threads up, llama.cpp's Q4_K/Q5_K expert path runs at full platform memory bandwidth — even reproducing STREAM's own decay at 48/64. Below 24 threads it is compute-limited (AVX2 unpack). "There is nothing left to win on the CPU. It is at the memory wall."
 - Therefore 90 of the 180 ms is the GPU side; the GPUs only remove ~87 ms of CPU work (the 13.5 GB dense path they hold) — "roughly a wash."
 - **Prediction (Phase D):** `-ngl 0` reads ~27 GB/token at 152 GB/s = 178 ms = 5.6 t/s with zero splits. If it lands there, it beats the hybrid's 5.54 and the GPUs are net-negative in their current role.
 - **Correction:** filling VRAM is upgraded to a double win (from the 1.25× quoted the previous day): only 18.4 GiB of 120 GiB is in use, compute buffers peak at 205 MiB; moving ~17 MoE layers' experts to the cards cuts CPU bytes 13.77 → 10.6 GB/token (90 → 70 ms) and removes those layers' CPU splits (155 → ~121). Phase J will measure it. (Working figures: overhead 43 → 33.6 ms, GPU +7.75 ms, total ~158 ms → 6.3 t/s, +14%.) `-sm row` likewise matters more than previously said (the dense path is currently serialized one card at a time; 47 → 12 ms would give ~145 ms → 6.9 t/s, +25%).
 - **Decision:** settings effective immediately — `-t 24`; drop `--poll` (noise); never `-t 96` (2.76 t/s, a 2× collapse from SMT sibling pairs stalling the barrier).
-- Housekeeping: the log carries 232,110 lines of `CUDA Graph id … reused` spam (from `-v` plus HIP-graph debug). On completion:
+- The log carries 232,110 lines of `CUDA Graph id … reused` spam (from `-v` plus HIP-graph debug). On completion:
 
 ```bash
 D=$(ls -dt /root/diag-*/ | head -1)
@@ -311,7 +311,7 @@ wc -c /root/diag-clean.log
 
 ### 12:02 — Log-spam stripping agreed; the run stays alive
 
-Paul offered to parse out the `CUDA Graph id … reused` lines before sending. Agreed: strip them at source — they're 232k lines of pure noise and they'll only get worse.
+I offered to remove the `CUDA Graph id … reused` lines before sending the log. The better fix was to filter them at source, since the 232k lines contain no useful result and would continue to accumulate.
 
 ```bash
 D=$(ls -dt /root/diag-*/ | head -1)
@@ -336,7 +336,7 @@ wc -lc /root/diag-digest.log
 
 ### 12:06 — Ceiling estimate: decode 7–8 t/s realistic (hard ceiling ~11); prefill 200–800 t/s
 
-Assessment: enough for decode; not enough for prefill — that hinges entirely on whether op_offload survives, which is still unmeasured. The wall: `t_total = C + t_cpu(n)`; the plateau at t=24–48 fixes `t_cpu(24) = 13.77 GB ÷ 152 GB/s = 90.6 ms`, hence C = 90 ms, and the constant reproduces the entire curve including STREAM's decay at 48/64. "A token is 90 ms of GPU + 90 ms of CPU, and the two never overlap" — the graph is strictly sequential (GPU attention → CPU experts → GPU down, ×75). The CPU half already runs at 152 GB/s; the only fix is to read fewer bytes.
+There was enough evidence to estimate the decode ceiling, but the prefill estimate depended on whether op_offload would run successfully. That remained unmeasured. The limiting model was `t_total = C + t_cpu(n)`; the plateau at t=24–48 fixes `t_cpu(24) = 13.77 GB ÷ 152 GB/s = 90.6 ms`, hence C = 90 ms, and the constant reproduces the entire curve including STREAM's decay at 48/64. "A token is 90 ms of GPU + 90 ms of CPU, and the two never overlap" — the graph is strictly sequential (GPU attention → CPU experts → GPU down, ×75). The CPU half already runs at 152 GB/s; the only fix is to read fewer bytes.
 
 Decode lever table:
 
@@ -347,7 +347,7 @@ Decode lever table:
 | **`-sm row`** | dense path stops being serialized one card at a time | −25 ms, **if it works at all** |
 | `GGML_CUDA_GRAPH_OPT` | launch gaps across ~4,500 nodes | −0 to 5 ms |
 
-Bits-per-weight, the lever with real headroom (decode t/s scales inversely with expert bpw):
+Bits-per-weight still offered room for improvement (decode t/s scales inversely with expert bpw):
 
 | quant | expert bpw | GB/token | t_cpu | est. tg (VRAM filled) |
 |---|---|---|---|---|
@@ -377,7 +377,7 @@ Prefill, if op_offload works (expert GEMMs move to the V620s; prefill becomes a 
 
 ### 12:11 — Speculative decoding: structurally weak on sparse MoE; MTP is the right draft but llama.cpp will not load it
 
-Assessment: enough to answer, and the answer is counterintuitive — it runs against the usual advice. On a dense model, verifying B tokens costs the same as one (weights read once). Not true for top-8-of-256 MoE with the experts on CPU — with independent routing, distinct experts touched across B tokens:
+The analysis suggested that speculation would help less than it usually does on a dense model. On a dense model, verifying B tokens costs the same as one (weights read once). Not true for top-8-of-256 MoE with the experts on CPU — with independent routing, distinct experts touched across B tokens:
 
 ```
 E(B) = 256 × (1 − (1 − 8/256)^B)
@@ -385,7 +385,7 @@ E(B) = 256 × (1 − (1 − 8/256)^B)
 E(1)=8   E(2)=15.8   E(3)=23.3   E(4)=30.5   E(5)=37.5
 ```
 
-Near-linear, so the CPU expert read (half the token time) scales almost linearly with speculation depth. What is free: the 90 ms GPU path reads its 18.7 GB of dense weights once regardless of batch size, and the 155 stream syncs are batch-independent — "That constant is the entire prize." Verified in source: llama.cpp builds the verify batch as `[last_accepted, draft_0 … draft_{N-1}]` — N drafts = batch of N+1 (`common_speculative.cpp:294,353`); expected tokens per cycle `α = (1 − p^(N+1))/(1 − p)`.
+Near-linear, so the CPU expert read (half the token time) scales almost linearly with speculation depth. The part that can be amortized is the 90 ms GPU path: it reads its 18.7 GB of dense weights once regardless of batch size, and the 155 stream syncs are batch-independent — "That constant is the entire prize." Verified in source: llama.cpp builds the verify batch as `[last_accepted, draft_0 … draft_{N-1}]` — N drafts = batch of N+1 (`common_speculative.cpp:294,353`); expected tokens per cycle `α = (1 − p^(N+1))/(1 − p)`.
 
 With a 10 ms/token GPU-resident draft, p = 0.75, independent routing (pessimistic bound):
 
@@ -422,7 +422,7 @@ for (int i = 0; i < n_layer_all; ++i) {
 | **2** | **9.7** |
 | 3 | ~9.5 |
 
-Honest bottom line:
+Estimate at this point:
 
 | config | est. tg |
 |---|---|
@@ -435,13 +435,13 @@ Honest bottom line:
 
 - **Dead end (for now):** MTP drafting on GLM-5.2 — a known gap with an upstream TODO marker; plausible that it lands. "Speculation is worth roughly the same as everything else combined — but only shallow, only with a nearly-free draft, and only once someone deletes eight lines in `glm-dsa.cpp`."
 - A separate draft model must be small, dense, fully GPU-resident, and share GLM-5.2's 154,880-token vocabulary; a MoE draft needing CPU offload goes backwards. Whether a suitable GLM-5.2 sibling exists (e.g. a "Flash" variant) is unknown.
-- Repeated caveat: the 90 ms decomposition (~47 ms serialized dense reads + ~43 ms sync overhead) is inferred, not measured; if mostly sync, `-sm row` will not help and speculation amortizes less. Phase H settles it.
+- The 90 ms decomposition (~47 ms serialized dense reads + ~43 ms sync overhead) is inferred, not measured; if mostly sync, `-sm row` will not help and speculation amortizes less. Phase H settles it.
 - Supporting figures: MTP blk.78 = 256 experts, 9.66 B params; its experts on CPU cost ~174 MB per draft token ≈ 1.1 ms; NextN embed_tokens + shared_head ≈ 1.5 GB; shared_head 951 M params Q6_K ≈ 0.77 GB ≈ 5 ms GPU-resident; draft cost 5–10 ms (experts on CPU) versus ~2–3 ms (block on GPU). MTP N=1 estimate: draft 3 ms, verify 237–268 ms, α 1.75 (GLM reportedly 80–90% first-token acceptance) → 6.9–7.7 t/s (+25–40%); with GPU residency α 1.85 → 7.7–8 t/s. Draft-model speeds: a 3B draft ≈ 40–60 t/s (~20 ms/token, too slow); needed is 0.5–1B Q8 at 80–120 t/s (~10 ms). Simple framing: speculation amortizes the GPU dense 90 → 30 ms/token, total 180 → 120 ms/token. VRAM-fill scaling factor on CPU time ≈ 0.774 (13.77 → 10.65 GB); the B=1 VRAM-filled baseline ≈ 165 ms ≈ 6 t/s.
 
 ### State of knowledge at end of session
 
 - The v2 crashes are fully root-caused: ZenDNN (built in with `GGML_ZENDNN=ON`) accepted Q8_0 MUL_MATs at bs=512 and crashed in LIBXSMM, and the 411 GiB `hipHostMalloc` pinned buffer (`420964.22 MiB`) failed against the 497.8 GiB GTT pool after B0 released it. Both causes eliminated (rebuild with `-DGGML_ZENDNN=OFF`; `-mmp 1`), and proven dead by v3's A1/A2 (exit=0, exit=0).
-- `-C`/`--cpu-strict` exonerated; the crash signals were SIGILL/SIGSEGV, never SIGKILL.
+- `-C`/`--cpu-strict` ruled out as crash causes; the crash signals were SIGILL/SIGSEGV, never SIGKILL.
 - `amd_iommu=on iommu=pt` added to the host and confirmed effective: all 96 IOMMU groups now `identity`.
 - `-mmp 1` cut iteration cost from ~14 minutes to seconds-to-one-minute per load (A1 25 min cold from ZFS, A2 1 min warm).
 - Hypothesis H1 (`--poll`) is dead: identical throughput at every thread count. Best decode 5.54 t/s at t=24 (180.5 ms/token); t=96 collapses to 2.76 t/s.

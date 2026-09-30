@@ -8,7 +8,7 @@ MiniMax was retired and removed from the machine on August 16. The April residen
 
 ## Earlier measurements
 
-The specifications and configurations below describe the earlier runs. They do not replace the August conditions above.
+The sections below record earlier runs under their original conditions.
 
 **Model:** MiniMax M2.7, Unsloth UD-Q5_K_M — `minimax-m2` arch, 228.69 B params (≈10 B active), 157.23 GiB.
 **System:** Galactus (EPYC 7713, DDR4-2933 8-channel, 4 × Radeon Pro V620). Platform: [../hardware/galactus/README.md](../hardware/galactus/README.md); method: [methodology.md](methodology.md).
@@ -36,7 +36,7 @@ Prefill peaks near t=96, and decode is flat at 14.4 to 14.8 t/s and best at t=32
 
 ### Resident-expert offload
 
-We placed expert layers on the four GPUs (`-ngl 42`, with `blk.0–41` distributed across ROCm0–3 and the remaining experts on CPU):
+I placed expert layers on the four GPUs (`-ngl 42`, with `blk.0–41` distributed across ROCm0–3 and the remaining experts on CPU):
 
 | Config | pp512 (t/s) | tg128 (t/s) |
 |---|---|---|

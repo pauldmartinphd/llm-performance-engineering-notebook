@@ -1,8 +1,8 @@
 # Lab hardware
 
-The llama.cpp performance measurements in this repository come from [Galactus](galactus/README.md), an AMD EPYC 7713 server with four Radeon Pro V620 GPUs, running llama.cpp with ROCm in an LXC container on Proxmox. The July investigation used 1 TB of DDR4-2933 memory (8 × 128 GB). The August measurements used 2 TB (8 × 256 GB), after replacement of a failing module. Corrected STREAM bandwidth was about 152 GB/s on the earlier population and 148–151 GB/s on the replacement population, a difference of about 2%.
+I measured llama.cpp performance on [Galactus](galactus/README.md), an AMD EPYC 7713 server with four Radeon Pro V620 GPUs, running llama.cpp with ROCm in an LXC container on Proxmox. The July investigation used 1 TB of DDR4-2933 memory (8 × 128 GB). The August measurements used 2 TB (8 × 256 GB), after replacement of a failing module. Corrected STREAM bandwidth was about 152 GB/s on the earlier population and 148–151 GB/s on the replacement population, a difference of about 2%.
 
-[Magneto](magneto/README.md) now has [oMLX/Qwen3.8-27B measurements](../results/qwen-3.8-27b.md), including thermal observations on its 14-inch chassis. The other machines have no published inference benchmarks here yet.
+I also measured [oMLX/Qwen3.8-27B on Magneto](../results/qwen-3.8-27b.md), including thermal behavior in its [14-inch chassis](magneto/README.md). I have not published inference benchmarks for the other machines here yet.
 
 | Machine | Configuration and records |
 |---|---|

@@ -1,6 +1,6 @@
 # Reproducing the measurements
 
-These experiments use a large MoE model with routed experts in system RAM and the dense path on one or more GPUs. You do not need Galactus's exact parts, but you do need to measure your own bandwidth, placement, and effective batch sizes. The commands below describe the recorded llama.cpp workflow; flags and backend behavior can differ by build.
+These experiments use a large MoE model with routed experts in system RAM and the dense path on one or more GPUs. Repeating the method on another machine starts with its measured bandwidth, placement, and effective batch sizes. The commands below describe the recorded llama.cpp workflow; flags and backend behavior can differ by build.
 
 ## Prepare and record the configuration
 
@@ -18,7 +18,7 @@ Use the result to estimate decode time:
 time_per_token ≈ C + bytes_read_per_token / bandwidth
 ```
 
-The bytes term is the active-expert footprint at the chosen quantization. `C` represents the remaining cost for the configuration; the GLM-5.2 investigation estimated about 90 ms on Galactus. Fit and check that term for your model and placement. A large gap between prediction and measurement warrants investigation of both the setup and the model's assumptions.
+The bytes term is the active-expert footprint at the chosen quantization. `C` represents the remaining cost for the configuration; the GLM-5.2 investigation estimated about 90 ms on Galactus. Fit and check that term for your model and placement. A large gap between prediction and measurement leaves two possibilities to check: the setup and the model's assumptions.
 
 ## Establish prefill and decode baselines
 
@@ -67,8 +67,8 @@ Record failed runs, unsupported configurations, and null results as well as impr
 
 ## oMLX measurements on Apple Silicon
 
-The workflow above describes Galactus/llama.cpp. For [Magneto's oMLX record](results/qwen-3.8-27b.md), save the exact Mac model identifier and chassis, chip/GPU-core count, RAM, macOS and oMLX/MLX versions, model repository/revision, and exported recipe. The leaderboard's chip/RAM label does not identify chassis.
+The workflow above describes Galactus/llama.cpp. [Magneto's oMLX record](results/qwen-3.8-27b.md) is separate. A Mac comparison depends on the model identifier and chassis as well as chip/GPU-core count, RAM, macOS and oMLX/MLX versions, model repository/revision, and recipe. The leaderboard's chip/RAM label does not identify chassis.
 
-Record the benchmark corpus, context and generation lengths, full/quick warm-up, ANE-aligned prompt setting, cache state, and every acceleration toggle. Keep single-request PP/TG separate from continuous-batching throughput. Start with a single 4K condition; repeat the same baseline between changes, and test sustained thermal behavior separately from a cool start. Record power mode, adapter, cooling conditions, and timestamped powermetrics alongside prefill/decode boundaries. Do not assign a thermal snapshot to an entire sweep.
+The recorded benchmark conditions include the corpus, context and generation lengths, full/quick warm-up, ANE-aligned prompt setting, cache state, and acceleration toggles. Single-request PP/TG and continuous-batching throughput are separate metrics. Thermal comparisons also depend on power mode, adapter, cooling conditions, and the timing of powermetrics relative to prefill and decode. A thermal snapshot does not establish the state of an entire sweep.
 
-The initial recorded configuration used Lightning MTP on and ANE Prefill, SpecPrefill, DFlash, VLM MTP, and TurboQuant KV off. It is a reference configuration, not an MTP-off control. Change one feature at a time before testing interactions, retain per-run output and quality checks, and report uncertainty from actual repeats. The missing model/MLX revisions, macOS build, full recipes and original logs in [Entry 13](results/lab-notebook/13-magneto-omlx-qwen38.md) currently prevent exact reproduction.
+The initial recorded configuration used Lightning MTP on and ANE Prefill, SpecPrefill, DFlash, VLM MTP, and TurboQuant KV off. It provides a reference with MTP active; no MTP-off control was recorded. Since the model/MLX revisions, macOS build, full benchmark recipes and original logs were not retained, the evidence in [Entry 13](results/lab-notebook/13-magneto-omlx-qwen38.md) does not support exact reproduction of those runs. My settings at the end of the investigation are logged in the [model note](results/qwen-3.8-27b.md).

@@ -1,6 +1,6 @@
 # Galactus — hardware
 
-Galactus is a lab server. It runs one Proxmox host, and all inference runs in a single LXC container.
+Galactus is my lab server. It runs one Proxmox host, with all inference in a single LXC container.
 
 | Component | Detail |
 |---|---|
@@ -15,7 +15,7 @@ Galactus is a lab server. It runs one Proxmox host, and all inference runs in a 
 
 ## Cost (July 2026)
 
-The original 1 TB build cost $9,050 in total (RAM $5,600 at $5.47/GB). The RAM is now 2 TB (8 × 256 GB DDR4-2933 3DS RDIMM) at $7,800 (about $3.81/GB), upgraded in August 2026. The four V620s cost $1,600 in total. At July 2026 street prices, DDR4 was about $5.15/GB and DDR5 about $30.94/GB. A DDR5 or Genoa machine would cost $16–21k for an estimated +46% decode. This project evaluated that option and declined it. The DDR5 evaluation is in the lab notebook: [Session 6](../../results/lab-notebook/06-session-6-ubatch-ladder-and-economics.md).
+The original 1 TB build cost $9,050 in total (RAM $5,600 at $5.47/GB). The RAM is now 2 TB (8 × 256 GB DDR4-2933 3DS RDIMM) at $7,800 (about $3.81/GB), upgraded in August 2026. The four V620s cost $1,600 in total. At July 2026 street prices, DDR4 was about $5.15/GB and DDR5 about $30.94/GB. A DDR5 or Genoa machine would cost $16–21k for an estimated +46% decode. I evaluated that option and decided against it. The DDR5 evaluation is in the lab notebook: [Session 6](../../results/lab-notebook/06-session-6-ubatch-ladder-and-economics.md).
 
 ## Models tested
 

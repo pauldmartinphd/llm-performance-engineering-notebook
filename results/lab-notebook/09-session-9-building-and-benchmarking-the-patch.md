@@ -2,11 +2,11 @@
 
 [Notebook index](00-overview.md) · [Model summaries](../README.md)
 
-This session is the separate thread in which the scheduler patch was actually built and benchmarked end to end. The transcript (`llamacpp_patch.md`, exported 07:37 ET) carries no timestamps; entries below follow sequence order. A second analysis stream, whose output Paul pasted in, appears throughout. Context artifact: "Claude State Export.zip" (saved 7/21 06:53 ET) contains the openwebui system prompt and knowledge files Paul prepared for local-model use — the workload the patched machine was being tuned to serve.
+This session is the separate thread in which the scheduler patch was built and benchmarked. The transcript (`llamacpp_patch.md`, exported 07:37 ET) has no timestamps; entries below follow sequence order. A second analysis stream, whose output Paul pasted in, appears at several points. Context artifact: "Claude State Export.zip" (saved 7/21 06:53 ET) contains the openwebui system prompt and knowledge files Paul prepared for local-model use — the workload the patched machine was being tuned to serve.
 
 ### Entry 1 — The brief: the measured split pin and round-robin patch v1
 
-Paul opened with "Consider the following observation and proposed patch. Will this patch work, does it make sense, and will it dramatically improve my prefill?" and pasted the review's package: the measured split distribution —
+Paul opened with "Consider the following observation and proposed patch. Will this patch work, does it make sense, and will it dramatically improve my prefill?" and pasted the review: the measured split distribution —
 
 ```
 Splits:   ROCm0  731   (49%)
@@ -16,7 +16,7 @@ Splits:   ROCm0  731   (49%)
           CPU    308
 ```
 
-— ROCm0 owning 731 of 1,186 GPU splits (62%), "exactly the `return b`=0 concentration, confirmed at runtime, no longer inferred"; the node-level counts dismissed as a red herring (resident attention nodes); 731 splits on ROCm0 = 731 host→device transfers serialized onto one card's link = the 22 GB/s single-link bottleneck the ubatch ladder measured; the everything-agrees checklist (splits 62% ✓, copy path blocking/serialized ✓, streaming 22 GB/s = one link ✓, peer fabric 49 GB/s healthy ✓, flag tricks cannot move it ✓); the named dead end (the original `src[1]` activation-routing diff is a no-op because the activation is unassigned when the heuristic runs); and patch v1 — the per-op round-robin block for `ggml/src/ggml-backend.cpp` around line 919 with the `int off_rr;` struct field (identical to the version recorded in Session 7 at 19:11), plus the build/verify sequence:
+— ROCm0 owning 731 of 1,186 GPU splits (62%), "exactly the `return b`=0 concentration, confirmed at runtime, no longer inferred"; the node-level counts dismissed as a red herring (resident attention nodes); 731 splits on ROCm0 = 731 host→device transfers serialized onto one card's link = the 22 GB/s single-link bottleneck the ubatch ladder measured; the supporting evidence (splits 62% ✓, copy path blocking/serialized ✓, streaming 22 GB/s = one link ✓, peer fabric 49 GB/s healthy ✓, flag tricks cannot move it ✓); the named dead end (the original `src[1]` activation-routing diff is a no-op because the activation is unassigned when the heuristic runs); and patch v1 — the per-op round-robin block for `ggml/src/ggml-backend.cpp` around line 919 with the `int off_rr;` struct field (identical to the version recorded in Session 7 at 19:11), plus the build/verify sequence:
 
 ```bash
 cd /root/llama.cpp
@@ -44,7 +44,7 @@ llama-bench \
 
 ### Entry 2 — First analysis: the histogram will equalize, but the copies are believed blocking
 
-The patch was assessed as aimed at the right place — it will compile and equalize the split histogram — but the 15 s → 4–5 s claim was rejected: host→device copies cannot take the async path (`cpy_tensor_async` returns false unless both backends are GPU), so every expert-weight transfer goes through the synchronous fallback in `ggml_backend_sched_compute_splits`, blocking the single scheduler thread; copies to different cards cannot overlap regardless of destination. What the patch does buy: the fallback synchronizes the destination before copying, so with targets spread the destination is idle and copy l+1 overlaps GEMM l — while the GEMMs remain a strict serial chain across layers.
+The patch was assessed as aimed at the right place — it will compile and equalize the split histogram — but the 15 s → 4–5 s claim was rejected: host→device copies cannot take the async path (`cpy_tensor_async` returns false unless both backends are GPU), so every expert-weight transfer goes through the synchronous fallback in `ggml_backend_sched_compute_splits`, blocking the single scheduler thread; copies to different cards cannot overlap regardless of destination. What the patch could improve: the fallback synchronizes the destination before copying, so with targets spread the destination is idle and copy l+1 overlaps GEMM l — while the GEMMs remain a strict serial chain across layers.
 
 **Observations**
 
@@ -55,7 +55,7 @@ The patch was assessed as aimed at the right place — it will compile and equal
 
 ### Entry 3 — The 65.7 GB/s measurement and the pasted review's self-correction
 
-Paul returned with the probe result and the pasted review's follow-up. Headline: four concurrent host→device streams sustain 65.7 GB/s, 3× the 22 GB/s single-link offload.
+Paul returned with the probe result and the pasted review's follow-up. The result: four concurrent host→device streams sustain 65.7 GB/s, 3× the 22 GB/s single-link offload.
 
 | | measured |
 |---|---|
@@ -63,7 +63,7 @@ Paul returned with the probe result and the pasted review's follow-up. Headline:
 | 4 concurrent H2D | 65.7 GB/s |
 | 4 concurrent GPU↔GPU peer | 49.4 GB/s |
 
-"The gap between 22 and 65.7 is the prize. The blocking serial copy path leaves 2/3 of your H2D bandwidth on the floor." The pasted review's initial framing: round-robin → ~130 (the serial-copy limit); an async H2D patch (pinned source, `hipMemcpyAsync` per-backend stream, event-gate) is what the 65.7 unlocks → ~200–250 t/s — "The 65.7 says the hard patch is worth writing. If it had come back ~30, I'd have told you to ship round-robin and stop." The pasted review then self-corrected after a search: Issue #20757, citing current line numbers, shows the selective expert copy in `ggml_backend_sched_compute_splits()` moves used expert sub-rows CPU→GPU via `ggml_backend_tensor_set_async()` — not the blocking path. Its revised mechanism: the copies are already async on the split's own stream and already sparse; the serialization is that every split targets ROCm0, so all 731 async copies queue back-to-back on one card's stream — "the async-ness is wasted because there's only one destination." Third-revision hypothesis: the simple round-robin patch is the high-value patch; ~180–220 t/s honest projection; the hard async rewrite largely unnecessary. Upstream context: Issue #20757 (two-tier GPU+RAM expert cache, wants a C++ contributor — "your round-robin + benchmark is a cleaner, smaller, immediately-shippable contribution") and Issue #18530 (`GGML_OP_OFFLOAD_MIN_BATCH` configurability). The instruction: run the histogram check first (`grep '## SPLIT' /root/sched_patched.txt | sed -E 's/.*: (ROCm[0-9]|CPU).*/\1/' | sort | uniq -c`; ROCm0 should drop 731 → ~290), with expectation "well above ~130, plausibly 180+."
+"The gap between 22 and 65.7 is the prize. The blocking serial copy path leaves 2/3 of your H2D bandwidth on the floor." The pasted review's initial framing: round-robin → ~130 (the serial-copy limit); an async H2D patch (pinned source, `hipMemcpyAsync` per-backend stream, event-gate) is what the 65.7 unlocks → ~200–250 t/s — "The 65.7 says the hard patch is worth writing. If it had come back ~30, I'd have told you to ship round-robin and stop." The pasted review then self-corrected after a search: Issue #20757, citing current line numbers, shows the selective expert copy in `ggml_backend_sched_compute_splits()` moves used expert sub-rows CPU→GPU via `ggml_backend_tensor_set_async()` — not the blocking path. Its revised mechanism: the copies are already async on the split's own stream and already sparse; the serialization is that every split targets ROCm0, so all 731 async copies queue back-to-back on one card's stream — "the async-ness is wasted because there's only one destination." Third-revision hypothesis: the simple round-robin patch is the high-value patch; ~180–220 t/s honest projection; the hard async rewrite largely unnecessary. Upstream context: Issue #20757 (two-tier GPU+RAM expert cache, wants a C++ contributor — "your round-robin + benchmark is a cleaner, smaller, immediately-shippable contribution") and Issue #18530 (`GGML_OP_OFFLOAD_MIN_BATCH` configurability). The requested check: run the histogram check first (`grep '## SPLIT' /root/sched_patched.txt | sed -E 's/.*: (ROCm[0-9]|CPU).*/\1/' | sort | uniq -c`; ROCm0 should drop 731 → ~290), with expectation "well above ~130, plausibly 180+."
 
 **Observations**
 
@@ -72,11 +72,11 @@ Paul returned with the probe result and the pasted review's follow-up. Headline:
 
 ### Entry 4 — Upstream master read directly; the ids-read data dependency; a pre-registered null
 
-Rather than adjudicate between recollections, the sources were fetched — Issue #20757 and raw `ggml-backend.cpp` from master — and the saved file grepped for `used_ids|MUL_MAT_ID|set_async|synchronize` and `need_new_split|GGML_SCHED_MAX_SPLIT_INPUTS|prev_ids_tensor`. Verdict: the pasted review's line-level reading is accurate; its conclusion is not.
+The sources were checked directly — Issue #20757 and raw `ggml-backend.cpp` from master — and the saved file grepped for `used_ids|MUL_MAT_ID|set_async|synchronize` and `need_new_split|GGML_SCHED_MAX_SPLIT_INPUTS|prev_ids_tensor`. Verdict: the pasted review's line-level reading is accurate; its conclusion is not.
 
 The binding constraint is a data dependency, not the copy path. In the selective-copy block, per expert weight: wait on the destination, sync the CPU backend, then — once per distinct ids tensor — `ggml_backend_tensor_get_async(ids_backend, ...)` followed by `ggml_backend_synchronize(ids_backend)`, a host-blocking drain of whichever GPU produced the routing ids. Only then are the `tensor_set_async` copies enqueued. The ids for layer *l* come from layer *l*'s router, which needs attention *l*, which needs layer *l−1*'s expert GEMM, which followed layer *l−1*'s copies. Copies → GEMM → attention → ids sync → copies: strictly serial, on any number of cards, under any assignment policy. "Four destinations give you four idle streams that each wait their turn." The pasted review's unbounded caveat "is in fact decidable from the code: it is the whole effect."
 
-The enabling patch was sketched — a large-batch bypass of the ids gate. At ub 8192, selectivity saves nothing (the fraction of experts untouched ≈ e^(−8192k/N) ≈ 0):
+A possible patch was outlined — a large-batch bypass of the ids gate. At ub 8192, selectivity saves nothing (the fraction of experts untouched ≈ e^(−8192k/N) ≈ 0):
 
 ```c
 const int64_t n_sel = node->src[2]->ne[0] * node->src[2]->ne[1]; // top_k * n_tokens
@@ -90,7 +90,7 @@ if (n_sel >= 8 * n_expert) {
 **Observations**
 
 - **Prediction (pre-registered):** build round-robin alone → the histogram equalizes while prefill stays ≈105 t/s. "If it jumps well above ~115, my chain analysis is wrong somewhere and I will re-derive."
-- Synergy argument: with a single target, the per-input destination wait drains the same card running the previous GEMM — run-ahead collapses to zero even with the bypass; with layer-keyed distribution the destination card last worked several layers ago, the wait is free, and copies genuinely prefetch on idle links toward the 65.7 GB/s ceiling. "The two patches are synergistic; neither is sufficient alone."
+- Why both changes were proposed together: with a single target, the per-input destination wait drains the same card running the previous GEMM — run-ahead collapses to zero even with the bypass; with layer-keyed distribution the destination card last worked several layers ago, the wait is free, and copies genuinely prefetch on idle links toward the 65.7 GB/s ceiling. "The two patches are synergistic; neither is sufficient alone."
 - **Correction (of the pasted review):** issue #20757 is closed, not live.
 - Caveats: true async H2D on HIP requires a pinned source — the load log must show expert tensors in a `ROCm_Host` buffer with `-mmp 0`; no throughput number projected without decomposing the remaining ~63 s; confirm the tree matches master via `grep -n "used_ids\|prev_ids_tensor" ggml/src/ggml-backend.cpp`.
 - **Decision (order):** for upstream attribution, run round-robin alone first — "its predicted null result is itself evidence for the dependency analysis."
@@ -209,7 +209,7 @@ Paul's report closing the turn: "I did this. What else should I d now?" — patc
 
 ### Entry 6 — Edit 3 drafted: the ids-gate bypass
 
-With Tests 1/2 pending, the readout table was issued — ROCm0 still ~731 → the patch did not take (check `ldd $(which llama-bench) | grep ggml`); equalized at ~105 → the ids-gated chain binds, proceed to Edit 3; equalized at ~125–145 → destination-wait removed, chain partially binding, still proceed; equalized ≥170 → the chain analysis is wrong somewhere, profile before further patches — and the pasted review's caveat was corrected: `ggml_backend_synchronize(input_backend)` syncs the CPU backend, cheap; the expensive sync is `ggml_backend_synchronize(ids_backend)` inside the ids read, draining the GPU that just ran the router.
+With Tests 1/2 pending, the possible outcomes were listed — ROCm0 still ~731 → the patch did not take (check `ldd $(which llama-bench) | grep ggml`); equalized at ~105 → the ids-gated chain binds, proceed to Edit 3; equalized at ~125–145 → destination-wait removed, chain partially binding, still proceed; equalized ≥170 → the chain analysis is wrong somewhere, profile before further patches — and the pasted review's caveat was corrected: `ggml_backend_synchronize(input_backend)` syncs the CPU backend, cheap; the expensive sync is `ggml_backend_synchronize(ids_backend)` inside the ids read, draining the GPU that just ran the router.
 
 **Edit 3 — skip the ids read at prefill batch sizes.** Rationale: at ub 8192 with top-k routing, P(expert unused) ≈ e^(−top_k·n_tokens/n_expert) ≈ 0 — the ids read saves no bandwidth and only imposes the serializing sync; decode (n_sel = top_k) keeps the selective path. First confirm the tree matches master (`grep -n "prev_ids_tensor" ggml/src/ggml-backend.cpp`; the anchor occurs once, in `ggml_backend_sched_compute_splits`). Find:
 
@@ -240,7 +240,7 @@ Replace with:
 - All-set bits make the existing grouping loop emit one contiguous `copy_experts(0, n_expert - 1)` — identical bytes to a full-tensor copy, no lambda changes; extra bits in the last bitset word are harmless; add `#include <cstring>` if `memset` is undeclared.
 - Extra checks specified after rebuild: rerun Test 1 (histogram stays equalized, split count similar), then Test 2; a decode regression check at `-n 64 -p 0` against baseline 6.01 (the distribution fires only at batch ≥ 32; the Edit 3 condition is false at batch 1); a pinning check — the load log should show expert tensors in `ROCm_Host` with `-mmp 0`.
 
-### Entry 7 — The Vulkan confound: stale CMake cache
+### Entry 7 — The unexpected Vulkan backend: stale CMake cache
 
 Paul reported a Vulkan appearance during the rebuild. Diagnosis: most likely a stale CMake cache — `cmake -B build` on an existing `build/` reuses `build/CMakeCache.txt`, whose variables are sticky; if `GGML_VULKAN` was ever ON in that directory it stays on (it defaults OFF in ggml, pointing at the cache). Alternatives to rule out: a different `llama-bench` on PATH, or dynamic backend loading picking up a stray `libggml-vulkan.so`.
 
@@ -262,7 +262,7 @@ cmake --build build -j64 && cmake --install build
 
 **Observations**
 
-- Why it gates the test: if Vulkan registers devices it enumerates the same four AMD GPUs the HIP backend claims — changing `sched->n_backends` (the exact quantity the patch keys on: `src_backend_id == sched->n_backends - 1` and the modulo over eligible backends) and potentially double-counting devices, so "ROCm0 731" stops meaning what it meant. A histogram showing only `ROCm*` labels is mild evidence Vulkan is listed but idle on the offload path. The stale-binary case is the more consequential: the patch may not be the binary under test.
+- Why this matters for the test: if Vulkan registers devices it enumerates the same four AMD GPUs the HIP backend claims — changing `sched->n_backends` (the exact quantity the patch keys on: `src_backend_id == sched->n_backends - 1` and the modulo over eligible backends) and potentially double-counting devices, so "ROCm0 731" stops meaning what it meant. A histogram showing only `ROCm*` labels is mild evidence Vulkan is listed but idle on the offload path. A stale binary would matter more: the patch may not be the binary under test.
 
 ### Entry 8 — Test 1: the histogram equalizes at 285/300/294/292
 
@@ -279,9 +279,9 @@ Distribution even (285–300, ~5% spread); ROCm0 dropped 731 → 285. The split 
 
 **Observations**
 
-- "Hold the champagne": both theories predicted equalization; the histogram is necessary but not discriminating. The pre-registered claim is that distribution alone equalizes the histogram while prefill stays ≈105 — the ub 8192 ladder is the arbiter.
+- "Hold the champagne": both theories predicted equalization; the histogram is necessary but not discriminating. The pre-registered claim is that distribution alone equalizes the histogram while prefill stays ≈105 — the ub 8192 ladder is the test that can distinguish them.
 - The histogram shows only ROCm0..3 + CPU — five backends, CPU last, exactly `n_backends = 5` — so this run's accounting is trustworthy; clear the cache later regardless.
-- Gating question posed: is Edit 3 compiled into this binary, or only Edit 2? (The histogram cannot distinguish — Edit 3 changes when copies issue, not which card.)
+- The remaining question was whether Edit 3 was compiled into this binary, or only Edit 2. (The histogram cannot distinguish — Edit 3 changes when copies issue, not which card.)
 
 ### Entry 9 — Test 2, Edit 2 alone: 105.71 — the pre-registered null confirmed
 
@@ -335,11 +335,11 @@ ggml_vulkan: 0 = AMD Radeon Pro V620 (RADV NAVI21) (radv) | uma: 0 | fp16: 1 | b
 
 - **Decision:** keep Edit 2 in — "Edit 3 lets the host run ahead, Edit 2 spreads those run-ahead copies onto idle links so they hit your 65.7 GB/s. Neither works alone."
 - **Prediction (pre-registered for Edit 2+3):** prefill breaks above ~115, lands low-to-mid 120s, ceiling ~135. If it stays ~105, the ids-sync was not binding (a residual destination-wait synchronize at line ~1573, or unprofiled) — stop patching, take rocprof/per-split timings.
-- Build hygiene: the clean `-DGGML_VULKAN=OFF` rebuild; optional control sequence (Vulkan-off + Edit 2 only → expect ~105 → proves Vulkan idle → then add Edit 3) versus folding both into one build.
+- Build checks: the clean `-DGGML_VULKAN=OFF` rebuild; optional control sequence (Vulkan-off + Edit 2 only → expect ~105 → proves Vulkan idle → then add Edit 3) versus folding both into one build.
 
 ### Entry 11 — "Alright, it built. What's the test"
 
-The arbiter:
+The throughput test:
 
 ```bash
 llama-bench \
@@ -357,7 +357,7 @@ llama-bench -m /models/GLM-5.2/UD-Q4_K_XL/GLM-5.2-UD-Q4_K_XL-00001-of-00011.gguf
 
 **Observations**
 
-- Interpretation grid: Edit 2+3 in and above ~115 = chain theory holds (expect low-to-mid 120s, ceiling ~135); still ~105 with pinning confirmed = the chain theory is dead alongside the pasted review's — trace. Decode baseline 6.01: "If that moved, something fired that shouldn't have."
+- How to read the result: Edit 2+3 in and above ~115 = chain theory holds (expect low-to-mid 120s, ceiling ~135); still ~105 with pinning confirmed = the chain theory is dead alongside the pasted review's — trace. Decode baseline 6.01: "If that moved, something fired that shouldn't have."
 
 ### Entry 12 — Discovery while waiting: -ot silently disables pipeline parallelism
 
@@ -443,7 +443,7 @@ T(16384) = 16384/86.11  = 190.27s  = 2S + 4A + 2C
 T(16384) - 2·T(8192) = 53.01s = 2A   →   A = 26.5s
 ```
 
-Attention = 26.5 s of 68.6 s = 39%; streaming + expert GEMM = 42.1 s (collinear — separable only by the 22 GB/s measurement pinning S ≈ 17 s, hence expert GEMM ≈ 25 s). **Correction:** the earlier ~60 s "compute floor" had lumped attention in; attention is the larger half. Strategic consequence: attention share 39% at 8k, 56% at 16k, 72% at 32k — "everything we've done to the copy path decays in value as your context grows"; the pipeline patch becomes more valuable (it parallelizes attention), with pp16384 pipeline ON vs OFF (86.11 = OFF baseline) as the clean test.
+Attention = 26.5 s of 68.6 s = 39%; streaming + expert GEMM = 42.1 s (collinear — separable only by the 22 GB/s measurement pinning S ≈ 17 s, hence expert GEMM ≈ 25 s). **Correction:** the earlier ~60 s "compute floor" had lumped attention in; attention is the larger half. What this means for longer prompts: attention share 39% at 8k, 56% at 16k, 72% at 32k — "everything we've done to the copy path decays in value as your context grows"; the pipeline patch becomes more valuable (it parallelizes attention), with pp16384 pipeline ON vs OFF (86.11 = OFF baseline) as the clean test.
 
 **Observations**
 
@@ -552,20 +552,20 @@ cmake --build build -j64 && cmake --install build
 - **Confirmed:** the middle column of the prediction table (patch-only ≈ unchanged).
 - **Prediction:** pp16384 120–145 at full strength (two copies is all two ubatches need); pp32768 85–100, degraded from 105–125 (two overlapped pairs: ~117 s first pair + ~249 s second ≈ 366 s ≈ 90 t/s; still ~1.6× over 55.76). If ~86 with `sched copies = 2` confirmed → the reuse-path analysis is wrong → trace. If n_copies=2 also OOMs → "pipelining is simply unavailable on 30 GiB cards with 4 GiB of expert staging per layer, and 119 / 86 / 56 is where this configuration lands."
 
-### Entry 19 — sched-copies mechanics; the guard vindicated; PR triage
+### Entry 19 — sched-copies mechanics; the guard explained; PR triage
 
 Paul asked "What does sched copies = 2 do." The mechanics: it is the pipeline depth — how many ubatches in flight. For every tensor crossing a device boundary (a split input), the scheduler allocates `n_copies` duplicate buffers (`ggml-backend.cpp:1358–1369`); each graph evaluation claims the next copy round-robin (`cur_copy = next_copy; next_copy = (next_copy + 1) % n_copies` at line 1873) and `compute_splits` reads/writes only that index (line 1562), so ubatch k writes buffer k mod N while k−1 still reads k−1 mod N. With `n_copies = 1` there is one buffer per input — ubatch k+1 would overwrite what k reads — so the scheduler must drain the device first: the host-blocking `ggml_backend_synchronize(split_backend)` at line 1573 "that has been serializing you all along." Multiple copies remove the hazard and populate the `events[backend][copy]` array (line 811), turning the destination wait into a stream-ordered `ggml_backend_event_wait`. The cost is linear in VRAM (as then understood): N× every split-input buffer, and split inputs include staged expert weights at ~4 GiB/layer — which is what blew the compute buffer at n_copies=4. Dropping 4 → 2 gives up depth (at most two stages at once, ~2× compute parallelism instead of 4×): pp16384 unaffected (two ubatches need two buffers), pp32768 drops to 85–100.
 
-Paul then asked the sharper question: "There seems to be a tradeoff here that might prevent this patch from landing upstream then? Or am I wrong." The concession: "You're right, and your OOM is the evidence."
+Paul then asked the sharper question: "There seems to be a tradeoff here that might prevent this patch from landing upstream then? Or am I wrong." The answer: "You're right, and your OOM is the evidence."
 
 **Observations**
 
 - **Correction (of an earlier claim):** `!model.has_tensor_overrides()` had been called "conservative rather than principled" — wrong; the fallback vindicates it. `-ot` turns split inputs from small activations into multi-GB weight tensors; `n_copies` replicates every one; 4× ~4 GiB/layer does not fit in 30 GiB. Over-broad (it denies 80 GiB cards) but not arbitrary.
 - The harder blocker: `LLAMA_GRAPH_REUSE_DISABLE=1` is not shippable — reuse exists because rebuilding per token wrecks decode; the conflict is structural (`split_graph` bakes `cur_copy` into node pointers at line 1374; a reused graph cannot rotate buffers).
-- Upstream-shaped sketch: the scheduler replicates every split input n_copies times — free for activations, catastrophic for offloaded weights, and weights do not need replication (only one ubatch occupies layer L at a time). In the loop at 1358–1369, allocate one copy when `src->buffer->usage == GGML_BACKEND_BUFFER_USAGE_WEIGHTS` and point every copy slot at it; the reuse conflict wants a separate fix (condition reuse on graph type: prefill rebuilds and pipelines, decode reuses and syncs). "Design reasoning from reading, not a measurement."
+- Possible upstream design: the scheduler replicates every split input n_copies times — free for activations, catastrophic for offloaded weights, and weights do not need replication (only one ubatch occupies layer L at a time). In the loop at 1358–1369, allocate one copy when `src->buffer->usage == GGML_BACKEND_BUFFER_USAGE_WEIGHTS` and point every copy slot at it; the reuse conflict wants a separate fix (condition reuse on graph type: prefill rebuilds and pipelines, decode reuses and syncs). "Design reasoning from reading, not a measurement."
 - **Decision (PR triage):** Edit 2 measured zero alone and ignores locality (could regress on a weaker peer fabric) — not a PR by itself. Edit 3 has the cleanest story ("at prefill batch sizes the ids read buys nothing and costs a device drain") — write that up first. Nothing is upstream-ready without a clean before/after.
 
-### Entry 20 — n_copies = 2 also OOMs; the input/output-flag discovery closes pipelining
+### Entry 20 — n_copies = 2 also OOMs; the input/output flags explain the pipeline failure
 
 ```
 llama_context: graph reuse disabled
@@ -574,7 +574,7 @@ sched_reserve: compute buffer allocation failed, retrying without pipeline paral
 sched_reserve: reserve took 516.42 ms, sched copies = 1
 ```
 
-Before chasing memory, the CMake option was confirmed real — `set(GGML_SCHED_MAX_COPIES "4" CACHE STRING "ggml: max input copies for pipeline parallelism")` in `ggml/CMakeLists.txt` (confirmable via `grep GGML_SCHED_MAX_COPIES build/CMakeCache.txt`) — and then the reason no setting above 1 can ever fit surfaced. `ggml-backend.cpp:1363`:
+Before chasing memory, the CMake option was confirmed real — `set(GGML_SCHED_MAX_COPIES "4" CACHE STRING "ggml: max input copies for pipeline parallelism")` in `ggml/CMakeLists.txt` (confirmable via `grep GGML_SCHED_MAX_COPIES build/CMakeCache.txt`) — and the reason no setting above 1 could fit became clear. `ggml-backend.cpp:1363`:
 
 ```c
 if (sched->n_copies > 1) {
@@ -589,7 +589,7 @@ Marking every split-input copy input+output disables ggml-alloc's buffer reuse f
 
 - **Correction (own model):** "the cost isn't 2× or 4×. It's (layers per card) × n_copies, and it was never going to fit at any setting above 1... your two identical OOMs were telling you so while I was blaming VRAM headroom."
 - **Confirmed (upstream guard):** `!model.has_tensor_overrides()` "prevents a *guaranteed* OOM for every `-ot`/`--cpu-moe` user on any hardware. I've now called that condition unprincipled twice and been wrong both times. It's correct as written."
-- **Dead end:** pipeline parallelism under `-ot` on 30 GiB cards, at any n_copies > 1. The sharpened upstream idea — do not set the input/output flags on WEIGHTS-usage split inputs and allocate one copy for them (each device's stream serializes its own work; the flags protect host-written inputs racing the GPU, a hazard streamed weights on the device's own stream do not have) — would make pipelining affordable for CPU-MoE offload, but is allocator-adjacent and subtle: `test-backend-ops` and coherence matter more than the benchmark.
+- **Dead end:** pipeline parallelism under `-ot` on 30 GiB cards, at any n_copies > 1. The revised upstream idea — do not set the input/output flags on WEIGHTS-usage split inputs and allocate one copy for them (each device's stream serializes its own work; the flags protect host-written inputs racing the GPU, a hazard streamed weights on the device's own stream do not have) — would make pipelining affordable for CPU-MoE offload, but is allocator-adjacent and subtle: `test-backend-ops` and coherence matter more than the benchmark.
 - **Decision point posed:** "accept 119 / 86 / 56 and stop, or write that allocator change."
 
 ### Entry 21 — Rollback to Edits 2+3; attribution locked at +14.4; revert verified at 119.29
@@ -664,7 +664,7 @@ git stash pop && cmake --build build -j64 && cmake --install build
 - **What was proven about the scheduler.** The `return b` first-fit in `ggml_backend_sched_backend_id_from_cur` concentrates offloaded ops on backend 0 — measured, not inferred: 731 of 1,186 GPU splits (62%) on ROCm0, equalized to 285/300/294/292 by the layer-keyed patch without split-count inflation (1171 vs 1186 GPU; 1479 vs 1494 total).
 - **Distribution alone is a null result:** Edit 2 by itself measured 105.71 ± 0.56 against 104.97 — confirming the pre-registered prediction and falsifying the 170–220 projection. The copies were already async (`ggml_backend_tensor_set_async`, sparse via `used_ids`); the binding serializer was the ids-read data dependency — `ggml_backend_synchronize(ids_backend)` draining the GPU that produced the routing ids, chaining each layer's copies behind the previous layer's expert GEMM.
 - **Edit 3 (ids-gate bypass at n_sel ≥ 8·n_expert) delivered the entire +14.4 t/s, with Edit 2 as its precondition** — run-ahead requires idle destination links. Neither edit works alone; both are inert at decode by construction.
-- **Prefill decomposition validated to 0.8%:** pp32768 predicted 55.3, measured 55.76 ± 0.03. Attention A ≈ 26.3 s (quadratic — glm-dsa's DSA is not sub-quadratic here), linear terms L ≈ 42.3 s at 8192 scale (S ≈ 17 s streaming pinned by the 22 GB/s measurement; expert GEMM ≈ 25 s). Attention's share grows 38% → 55% → 72% at 8k/16k/32k, so the copy-path win decays with context.
-- **Pipeline parallelism is a dead end on this hardware:** `-ot` trips `!model.has_tensor_overrides()`; bypassing it plus `LLAMA_GRAPH_REUSE_DISABLE=1` OOMed identically at n_copies=4 and n_copies=2 (reserve 522.47 / 516.42 ms, `sched copies = 1`; post-revert 422.59 ms) because `n_copies > 1` sets input/output flags that disable ggml-alloc reuse — staging is layers × copies ≈ ~200 GiB/card against 30. The upstream guard is correct as written; a WEIGHTS-usage single-copy allocator change is the identified upstream-shaped fix.
+- **Prefill decomposition validated to 0.8%:** pp32768 predicted 55.3, measured 55.76 ± 0.03. Attention A ≈ 26.3 s (quadratic — glm-dsa's DSA is not sub-quadratic here), linear terms L ≈ 42.3 s at 8192 scale (S ≈ 17 s streaming pinned by the 22 GB/s measurement; expert GEMM ≈ 25 s). Attention's share grows 38% → 55% → 72% at 8k/16k/32k, so the copy-path gain gets smaller as context grows.
+- **Pipeline parallelism is a dead end on this hardware:** `-ot` trips `!model.has_tensor_overrides()`; bypassing it plus `LLAMA_GRAPH_REUSE_DISABLE=1` OOMed identically at n_copies=4 and n_copies=2 (reserve 522.47 / 516.42 ms, `sched copies = 1`; post-revert 422.59 ms) because `n_copies > 1` sets input/output flags that disable ggml-alloc reuse — staging is layers × copies ≈ ~200 GiB/card against 30. The upstream guard is correct as written; a WEIGHTS-usage single-copy allocator change is the proposed upstream fix.
 - **Deliverable:** the kept configuration is Edits 1+2+3 in `ggml/src/ggml-backend.cpp` (diff saved to `~/moe-offload-edits.patch`; build flags `-DGGML_SCHED_MAX_COPIES=4 -DGGML_HIP=ON -DGGML_VULKAN=OFF -DAMDGPU_TARGETS=gfx1030 -DGGML_ZENDNN=OFF -DCMAKE_BUILD_TYPE=Release`), plus the drafted `PR-moe-offload-prefill.md` with six placeholders outstanding.
-- Net of the whole investigation: prefill 3.2× (37.6 → 119.36), decode held at the memory wall (~5.5–6.0 t/s), and a measured, mechanistic account of why — with the remaining headroom (concurrent copies, ~200 t/s prefill; speculation, ~11 t/s decode) identified and priced.
+- Across the investigation, prefill improved 3.2× (37.6 → 119.36), while decode held at the memory wall (~5.5–6.0 t/s). The measurements and source analysis explain these limits and identify the remaining headroom (concurrent copies, ~200 t/s prefill; speculation, ~11 t/s decode). These further gains remain estimates.

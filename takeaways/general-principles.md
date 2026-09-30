@@ -1,8 +1,8 @@
 # Findings and limits
 
-Every result in this repository so far comes from Galactus (see [../hardware/galactus/README.md](../hardware/galactus/README.md)). Further machines are documented under [../hardware/](../hardware/) and will add their own numbers. This page brings together the benchmark pitfalls, explanatory models, and limits of the evidence. The measurements suggest what to investigate on another machine; the numerical results remain specific to Galactus.
+This page covers the Galactus investigation (see [../hardware/galactus/README.md](../hardware/galactus/README.md)). The other machines are documented under [../hardware/](../hardware/). It brings together the benchmark pitfalls, explanatory models, and limits of the evidence. Although the method applies to other machines, these numerical results remain specific to Galactus.
 
-The main workload is a large MoE model with the routed experts in system RAM (`-ot exps=CPU` or `--cpu-moe`) and the dense path — attention, shared experts, and the KV cache — on the GPUs. Resident-expert and CPU-only runs provide additional comparisons. Most of the method below applies to any system with this workload. The CPU, RAM, and GPUs do not have to match ours.
+The main workload is a large MoE model with the routed experts in system RAM (`-ot exps=CPU` or `--cpu-moe`) and the dense path — attention, shared experts, and the KV cache — on the GPUs. Resident-expert and CPU-only runs provide additional comparisons. Most of the method below applies to any system with this workload. The CPU, RAM, and GPUs do not have to match mine.
 
 ---
 
@@ -10,7 +10,7 @@ The main workload is a large MoE model with the routed experts in system RAM (`-
 
 These behaviors were observed in the llama.cpp builds used for the experiments. Check them when reproducing the work on a different build.
 
-- The `-p N` option limits `n_ubatch` to N. This was the largest error in the project: every op_offload test before we found it had run at ub 512, not the ub 8192 we intended. Set `-ub` directly, keep `-p` large enough, and confirm the effective micro-batch size.
+- The `-p N` option limits `n_ubatch` to N. This was the largest error in the project: every op_offload test before I found it had run at ub 512, not the ub 8192 I intended. Set `-ub` directly, keep `-p` large enough, and confirm the effective micro-batch size.
 - `llama-bench` separates `-ot` rules with semicolons, and commas create separate benchmark configurations — the opposite of `llama-server`. A comma-separated rule set drops the `exps=CPU` catch-all from every configuration after the first, so the GPU tries to allocate the full expert tensor and runs out of memory. The failure is recorded in [../results/raw-logs/llama-bench-ot-oom-failure.txt](../results/raw-logs/llama-bench-ot-oom-failure.txt).
 - `llama-bench` installs a null log callback, so `GGML_SCHED_DEBUG` output appears only with `-v`.
 - `llama-fit-params` turns off if you pass any of `-ngl`, `-ts`, `-ot`, or `-ncmoe`.
@@ -21,7 +21,7 @@ These behaviors were observed in the llama.cpp builds used for the experiments. 
 
 - Run STREAM with the RFO correction to find your true memory bandwidth: multiply Scale by 1.5 and Add and Triad by 4/3, and apply no correction to Copy if it compiled to non-temporal stores. Check the generated stores before applying the correction; an adjusted result above the theoretical limit indicates a problem with the assumed traffic model. See [../experiments/galactus-diag.sh](../experiments/galactus-diag.sh) and [../hardware/galactus/galactus_triad.txt](../hardware/galactus/galactus_triad.txt).
 - Run `GGML_SCHED_DEBUG=2 ... -v` and count the split histogram (`grep '## SPLIT' | sort | uniq -c`). This shows whether the scheduler concentrates the offload on one card, and whether the placement behavior addressed by the [prefill patch](../patches/prefill/README.md) is present. It does not establish a throughput gain.
-- Confirm the histogram first, then the throughput. An equal histogram and a faster prefill are separate facts, so confirm that the mechanism changed before you trust the number.
+- Check the histogram and throughput separately. Equal placement establishes that the scheduler changed; it does not establish that prefill became faster.
 
 ## Speculative decode
 
@@ -52,6 +52,6 @@ The notebook also records pinned-buffer and ZenDNN crashes during v2 testing, an
 
 ## Limits of the evidence
 
-- These numbers come, so far, from one machine and mostly one prompt (a technical-prose ZFS explainer for the decode and speculation tests), with greedy decoding. We did not capture the acceptance rates for the Session 10 DSpark runs; an instrumentation failure caused this, and we recorded it as a finding.
+- These Galactus numbers come from one machine and mostly one prompt (a technical-prose ZFS explainer for the decode and speculation tests), with greedy decoding. An instrumentation failure prevented me from capturing acceptance rates for the Session 10 DSpark runs, as recorded in the notebook.
 - The record spans April through August and includes different llama.cpp builds, model exports, memory populations, and benchmark settings. [Entry 12](../results/lab-notebook/12-common-baseline-2tb.md) provides a common August baseline; earlier results are historical comparisons.
-- Where a figure is an estimate from a model rather than a measurement, the source documents say so. Trust the labels over any summary.
+- I label estimates from a model separately from measurements in the source documents.

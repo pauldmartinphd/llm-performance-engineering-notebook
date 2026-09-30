@@ -1,8 +1,8 @@
-# Session 8 — evening, July 14 – July 16, 2026 — The H2D verdict and the patch, interrupted
+# Session 8 — evening, July 14 – July 16, 2026 — The H2D result and the patch, interrupted
 
 [Notebook index](00-overview.md) · [Model summaries](../README.md)
 
-### 19:25 — Four-stream H2D: 65.7 GB/s; the copy-mechanism diagnosis reverses itself
+### 19:25 — Four-stream H2D: 65.7 GB/s; the copy-mechanism diagnosis changes again
 
 Paul pasted the probe result:
 
@@ -20,14 +20,14 @@ root@openwebui:~#
 | 4 concurrent H2D | 65.7 GB/s |
 | 4 concurrent GPU↔GPU peer | 49.4 GB/s |
 
-The options first framed as: round-robin (copies still sequential on the host thread → streaming stays ~22 GB/s aggregate, but copy l+1 overlaps GEMM l on an idle card; the predicted bound ~130 t/s; does not tap the 65.7) versus a harder async host→device rewrite (pinned source, `hipMemcpyAsync` on each backend's stream, event-gate before compute launch; streaming approaches 65.7 GB/s, the 15 s term collapses toward ~5 s; ~200–250 t/s). Then a web search ("llama.cpp op_offload async host to device copy scheduler pull request 2026") upended the premise.
+The initial options were: round-robin (copies still sequential on the host thread → streaming stays ~22 GB/s aggregate, but copy l+1 overlaps GEMM l on an idle card; the predicted bound ~130 t/s; does not tap the 65.7) versus a harder async host→device rewrite (pinned source, `hipMemcpyAsync` on each backend's stream, event-gate before compute launch; streaming approaches 65.7 GB/s, the 15 s term collapses toward ~5 s; ~200–250 t/s). Then a web search ("llama.cpp op_offload async host to device copy scheduler pull request 2026") changed the premise.
 
 **Observations**
 
 - **Correction (third revision of the copy mechanism):** the offload copy is already async. Issue #20757, citing current line numbers, shows the selective expert copy in `ggml_backend_sched_compute_splits()` copies used expert sub-rows CPU→GPU via `ggml_backend_tensor_set_async()` — not the blocking `tensor_copy` path. The wrong function had been quoted (`ggml_backend_tensor_copy_async`). The "blocking serialized copy" diagnosis had been pointing at the wrong copy site.
 - Reading the function directly: the expert copy is `ggml_backend_tensor_set_async` on the split's own stream (line 48), already asynchronous, already copying only used experts — but `ggml_backend_synchronize(input_backend)` precedes the copy loop (line 6) and the ids read (line 25) forces another sync. Each split: sync → read ids → async-copy its experts → next split sync → and so on.
 - **Hypothesis (revised):** "The copies are already async. They're serialized only because they all target one card. Spreading the target across four cards lets four async streams run concurrently — and your 65.7 GB/s H2D measurement is the ceiling that unlocks." The simple round-robin patch is the high-value patch; the hard async rewrite is largely unnecessary. **Prediction:** ~180–220 t/s honest projection, with the caveat that the per-split `ggml_backend_synchronize(input_backend)` may cap the gain below the full 65.7.
-- Upstream findings: Issue #20757 (two-tier GPU+RAM expert cache for MoE offload, seeking a C++ contributor) and Issue #18530 (`GGML_OP_OFFLOAD_MIN_BATCH` configurability — relevant to the DFlash batch-32 offload cliff). Also surfaced: Issue #22065 (GTT offloading) and Issue #20697 (disk-based context checkpointing, `--cache-disk`). Sources listed for the search: llama.cpp server README, llama-server manpages, llama-cpp-pydist, a tech-insider tutorial, and the four issues. Histogram check re-issued:
+- Related upstream work: Issue #20757 (two-tier GPU+RAM expert cache for MoE offload, seeking a C++ contributor) and Issue #18530 (`GGML_OP_OFFLOAD_MIN_BATCH` configurability — relevant to the DFlash batch-32 offload threshold). Also found: Issue #22065 (GTT offloading) and Issue #20697 (disk-based context checkpointing, `--cache-disk`). Sources listed for the search: llama.cpp server README, llama-server manpages, llama-cpp-pydist, a tech-insider tutorial, and the four issues. Histogram check re-issued:
 
 ```bash
 grep '## SPLIT' /root/sched_patched.txt | sed -E 's/.*: (ROCm[0-9]|CPU).*/\1/' | sort | uniq -c
@@ -112,7 +112,7 @@ cd /root/llama.cpp
 cmake --build build -j64 && cmake --install build
 ```
 
-Test 1 (histogram, gates everything):
+Test 1 (check the histogram before proceeding):
 
 ```bash
 GGML_SCHED_DEBUG=2 llama-bench \
@@ -307,7 +307,7 @@ rocm-smi --showmeminfo vram | grep -E 'GPU|Used'
 
 ### 19:53 — Paul rejects the stranded-VRAM claim
 
-Paul: "the card is already full from a previous run that didn't release its VRAM. That has never happened before and I don't believe it." The epistemics conceded — it had been stated as fact when it's a hypothesis, and "it's never happened before" is a real data point against it — a re-read of the failure (the 225 expert tensors failing over from `ROCm_Host` to CPU suggested the buffer-type resolution had changed between runs, the only changes being the patch and the reconfigure) led to a request for a direct measurement:
+Paul: "the card is already full from a previous run that didn't release its VRAM. That has never happened before and I don't believe it." The earlier claim had been stated as fact even though it was a hypothesis, and "it's never happened before" was evidence against it. On review, the 225 expert tensors falling back from `ROCm_Host` to CPU suggested that buffer-type resolution had changed between runs. Since the only changes were the patch and the reconfigure, the next step was to measure VRAM use directly:
 
 ```bash
 rocm-smi --showmeminfo vram
@@ -315,7 +315,7 @@ rocm-smi --showmeminfo vram
 
 **Observations**
 
-- **Correction:** hypothesis restated as hypothesis; three decisive outcomes pre-registered: all near-empty → the OOM is a pinned-buffer path from the reconfigure; ROCm0 holding GiB with no process → stranded, clearable; a process holding it → `--showpids` names it.
+- **Correction:** hypothesis restated as hypothesis; three possible outcomes were recorded in advance: all near-empty → the OOM is a pinned-buffer path from the reconfigure; ROCm0 holding GiB with no process → stranded, clearable; a process holding it → `--showpids` names it.
 
 ### 19:53 — rocm-smi: all four cards 28–29 GiB used — a live resident server
 
@@ -341,9 +341,9 @@ ps aux | grep -E 'llama-server|llama-cli|llama' | grep -v grep | grep -v bench
 
 - **Correction:** "My 'previous run didn't release' guess was wrong in mechanism — this isn't a leak, it's a running service."
 
-### 19:54 — Container reset; the post-reset checklist
+### 19:54 — Container reset; checks after the reset
 
-Paul offered "I can reset the entire container." Endorsed — the reset kills the resident server and empties the cards — with three checks staged for afterwards:
+Paul offered "I can reset the entire container." Since the reset would stop the resident server and empty the cards, this was accepted, with three checks to run afterwards:
 
 ```bash
 rocm-smi --showmeminfo vram | grep Used
@@ -412,7 +412,7 @@ grep '## SPLIT' /root/sched_patched.txt | grep -oE 'ROCm[0-9]|Vulkan[0-9]|CPU' |
 
 Paul sent an empty file attachment plus a link to llama.cpp PR #23414 and the question. The PR was fetched: "ggml-zendnn : add Q8_0 quantization support by z-sachin" — adds Q8_0 matmul to ZenDNN (previously F32/BF16 only). Headline benchmarks from the PR: Mixtral-8x7B Q8_0 prompt processing +90% to +213%, token gen −0.14%; gemma 31B Q8_0 prompt processing +68% to +115%, token gen −0.35%. Every gain is prompt processing; decode is flat or slightly negative — ZenDNN accelerates compute-bound prefill GEMM and does nothing for bandwidth-bound decode.
 
-Verdict — does not apply to GLM-5.2, three reasons: (1) Q8_0 only, and GLM-5.2's experts are Q4_K/Q5_K (the 411 GiB that dominates prefill compute); (2) GLM-5.2's Q8_0 attention already runs on GPU (`-ngl 99`) and ZenDNN is a CPU backend — only an `-ngl 0` regime would feed it; (3) at that time an open PR, not merged. "No, you won't see an improvement." Keep `-DGGML_ZENDNN=OFF` (it broke the build twice and caused SIGILL crashes). The unfinished histogram was re-flagged:
+Verdict — does not apply to GLM-5.2, three reasons: (1) Q8_0 only, and GLM-5.2's experts are Q4_K/Q5_K (the 411 GiB that dominates prefill compute); (2) GLM-5.2's Q8_0 attention already runs on GPU (`-ngl 99`) and ZenDNN is a CPU backend — only an `-ngl 0` regime would feed it; (3) at that time an open PR, not merged. "No, you won't see an improvement." Keep `-DGGML_ZENDNN=OFF` (it broke the build twice and caused SIGILL crashes). The missing histogram was requested again:
 
 ```bash
 grep '## SPLIT' /root/sched_patched.txt | grep -oE 'ROCm[0-9]|Vulkan[0-9]|CPU' | sort | uniq -c
@@ -424,7 +424,7 @@ grep '## SPLIT' /root/sched_patched.txt | grep -oE 'ROCm[0-9]|Vulkan[0-9]|CPU' |
 
 ### 10:37 — A bare merge notice
 
-Paul pasted "Pull request successfully merged and closed / You're all set — the branch has been merged." Which PR was unclear from the notice — the ZenDNN Q8_0 PR #23414 (nothing changes; keep it off) or Paul's own round-robin patch sent upstream (would be significant, but doubted) — so the number or title was requested, reiterating the standing state: cards cleared to 17 MB, patched binary of 19:41 confirmed, a Vulkan backend that should not be there, and the histogram in /root/sched_patched.txt still unseen.
+Paul pasted "Pull request successfully merged and closed / You're all set — the branch has been merged." Which PR was unclear from the notice — the ZenDNN Q8_0 PR #23414 (nothing changes; keep it off) or Paul's own round-robin patch sent upstream (would be significant, but doubted) — so the number or title was requested, reiterating the standing state: cards cleared to 17 MB, patched binary of 19:41 confirmed, an unexpected Vulkan backend, and the histogram in /root/sched_patched.txt still unseen.
 
 **Observations**
 
@@ -478,7 +478,7 @@ gemma-4-26B-A4B-it Q8_0:
 tg128   33.96    33.83    -0.38%
 ```
 
-This confirmed the merge was #23414, now on master. The tg128 column is the tell: +0.18%, −0.14%, −0.35%, −0.38% — decode nothing across the board. "Your decode is 6.01 t/s against a DDR4 wall — this PR moves it by zero." Prefill does not benefit either: GLM-5.2's experts are Q4_K gate/up plus Q5_K down (411 GiB, from the gguf dump) while the PR is Q8_0-only, and GLM-5.2's Q8_0 attention already lives on GPU. Where it would earn its keep: a Q8_0 dense coding model run on the CPU or under heavy offload (the Llama-8B and gemma-31B rows, +80–115%) — roughly double prompt processing on the 64-core EPYC; a separate llama.cpp build for that use.
+This confirmed the merge was #23414, now on master. The tg128 column shows the decode result: +0.18%, −0.14%, −0.35%, −0.38% — no decode gain across the board. "Your decode is 6.01 t/s against a DDR4 wall — this PR moves it by zero." Prefill does not benefit either: GLM-5.2's experts are Q4_K gate/up plus Q5_K down (411 GiB, from the gguf dump) while the PR is Q8_0-only, and GLM-5.2's Q8_0 attention already lives on GPU. Where it could help: a Q8_0 dense coding model run on the CPU or under heavy offload (the Llama-8B and gemma-31B rows, +80–115%) — roughly double prompt processing on the 64-core EPYC; a separate llama.cpp build for that use.
 
 **Observations**
 
@@ -500,10 +500,10 @@ Paul: "I already handled that in another thread. the short answer is that PP got
 **Observations**
 
 - **Confirmed:** the ~130 bound; the cap is host-thread copy serialization, not a flag or card fix.
-- **Decision (investigation closed):** decode 6.01 t/s at the 152 GB/s DDR4 wall, every software lever dead — only fewer bytes (smaller quant, ruled out) or more bandwidth (Genoa, at absurd RAM prices) moves it. Prefill ~120 t/s, 3.2× banked, capped by host-thread copy serialization. Build config: `-DGGML_ZENDNN=OFF`, fits VRAM, `-t 32`, `-ub 8192`, op_offload on (free for decode).
+- **Decision (investigation closed):** decode 6.01 t/s at the 152 GB/s DDR4 wall, every software lever dead — only fewer bytes (smaller quant, ruled out) or more bandwidth (Genoa, at absurd RAM prices) moves it. Prefill ~120 t/s, 3.2× measured, capped by host-thread copy serialization. Build config: `-DGGML_ZENDNN=OFF`, fits VRAM, `-t 32`, `-ub 8192`, op_offload on (free for decode).
 - The next increment — making copies concurrent by removing per-split syncs — is a real scheduler rewrite, ~120 → maybe ~200 (an 8K prompt from 68 s to 41 s), estimated a week in delicate code. Issue #20757 is where the maintainers discuss the copy subsystem.
 
-### 10:44 — The frontier gap pinned: ~10x
+### 10:44 — The comparison with hosted models: ~10x
 
 Paul: "As of today I'm about 10x slower than claude or chatgpt ai, right? not bad. In the future the gap will close to 5x slower probably." Hosted decode rates were checked (Artificial Analysis): Claude Opus ~58 t/s, GPT-5.6 ~69 t/s, reasoning-tier median ~78. Galactus at 6.01 → ~10x on decode vs Opus, ~11–13x vs the faster ones. End-to-end on an 8K prompt:
 
@@ -518,9 +518,9 @@ Paul: "As of today I'm about 10x slower than claude or chatgpt ai, right? not ba
 
 - **Hypothesis (on the future 5x):** on the current box ~10x → maybe ~7x if DFlash lands (decode 6 → ~11, gated on an external draft). Reaching 5x needs DFlash and the prefill rewrite (~120 → ~200) and the frontier not pulling away (hosted decode 58 → 90+ in a year is plausible). Genoa/Turin at ~450 GB/s: decode 6 → ~9, plus DFlash ~16 = ~4–5x frontier, but DDR5 alone is +$10k+ at 2026 prices. Realistic software ceiling ~7x; 5x is a next-build target.
 
-### 10:46 — The bar restated: 5x of today's frontier
+### 10:46 — The target clarified: 5x of today's frontier
 
-Paul clarified he meant 5x slower than today's frontier as a fixed target, ballparking frontier PP ~1000 and token gen ~50. The yardstick was adjusted (hosted decode ~58–78 t/s — the 50 a touch low; prefill high-hundreds to ~1000+): 5x of frontier = decode ~10–15 t/s, prefill ~200 t/s.
+Paul clarified he meant 5x slower than today's frontier as a fixed target, ballparking frontier PP ~1000 and token gen ~50. The comparison was adjusted (hosted decode ~58–78 t/s — the 50 a touch low; prefill high-hundreds to ~1000+): 5x of frontier = decode ~10–15 t/s, prefill ~200 t/s.
 
 | lever | decode | needs |
 |---|---|---|
@@ -536,7 +536,7 @@ Paul clarified he meant 5x slower than today's frontier as a fixed target, ballp
 
 ### 10:47 — DFlash as a category-level bet
 
-Paul: "Right, and dflash is certain too. It's not here yet, and maybe not in this model. But it will land and it will run for glm5.2 or better class models eventually." The bet held up with two refinements: (1) the dependency is a draft trained against a model that fits the machine's shape — the real bet is that the local-inference ecosystem stays healthy enough to ship drafts for popular open frontier models (z-lab already did it for Qwen); (2) the machine gets better at speculation over time for free — verify-pass cost is dominated by the sparse-MoE expert read, and rising VRAM capacity plus the trend toward more/smaller/sparser experts both shrink it.
+Paul: "Right, and dflash is certain too. It's not here yet, and maybe not in this model. But it will land and it will run for glm5.2 or better class models eventually." The analysis supported the bet, with two qualifications: (1) the dependency is a draft trained against a model that fits the machine's shape — the real bet is that the local-inference ecosystem stays healthy enough to ship drafts for popular open frontier models (z-lab already did it for Qwen); (2) the machine gets better at speculation over time for free — verify-pass cost is dominated by the sparse-MoE expert read, and rising VRAM capacity plus the trend toward more/smaller/sparser experts both shrink it.
 
 | | today | the bet matures |
 |---|---|---|
@@ -556,7 +556,7 @@ Paul: "I'm saying, claude feels pretty fast today. If it's 5x slower that's stil
 
 **Observations**
 
-- Closing framing on the record: "you don't need frontier speed, you need above-reading-speed." A local 744B-class model streaming as fast as its owner reads, entirely on owned hardware, is a genuinely good way to run.
+- The closing observation: "you don't need frontier speed, you need above-reading-speed." A local 744B-class model streaming as fast as its owner reads, entirely on owned hardware, is a useful way to run.
 
 *The session closes the following day, Wednesday, July 16.*
 
@@ -572,6 +572,6 @@ Paul issued `/export`; the transcript closed with the exporter footer ("Powered 
 - The reconfigure resurrected a Vulkan backend (Vulkan0–3, RADV NAVI21) alongside ROCm0–3 — flagged as a confound for `n_backends` and the split accounting; the patched histogram was never seen inside this session.
 - ZenDNN Q8_0 PR #23414 merged upstream (+54.75% to +213.38% prompt processing on Q8_0 models, tg128 flat/negative); irrelevant to GLM-5.2 (Q4_K/Q5_K experts, Q8_0 attention already GPU-resident). `-DGGML_ZENDNN=OFF` stays.
 - Paul reported from a separate thread that prefill plateaued at ~120 with the patches — within noise of the corrected ~130 bound. Tally: prefill 37.6 → 104.97 (ubatch unclamp) → ~120 (patch), 3.2× total; decode 6.01 t/s at the DDR4 wall. Investigation declared closed on this box.
-- Frontier framing: ~10x slower than hosted decode today (~10.5x end-to-end on an 8K prompt: ~54 s vs ~9.5 min); the realistic software path is ~7x, with 5x requiring DFlash (an ecosystem bet — no GLM-5.2 draft exists) and the scheduler copy rewrite; the usability threshold that matters is reading speed, ~7–10 t/s.
+- Comparison with hosted models: ~10x slower than hosted decode today (~10.5x end-to-end on an 8K prompt: ~54 s vs ~9.5 min); the realistic software path is ~7x, with 5x requiring DFlash (an ecosystem bet — no GLM-5.2 draft exists) and the scheduler copy rewrite; the usability threshold that matters is reading speed, ~7–10 t/s.
 
 ---

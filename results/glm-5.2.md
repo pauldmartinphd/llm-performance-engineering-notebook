@@ -12,13 +12,13 @@ MTP was repeated with llama-cli, the ZFS prompt, and greedy decoding on the same
 | n=2 | 6.3 / 6.9 (6.6 ± 0.3) |
 | n=3 | 6.3 |
 
-The n=2 setting remained the selected configuration. Its reported gain was +25% ± 6 over baseline, compared with +31% in the earlier test, with more separation from n=1 than before.
+I kept n=2. Its reported gain was +25% ± 6 over baseline, compared with +31% in the earlier test, with more separation from n=1 than before.
 
 The repeated speculative runs varied by about 9% despite identical token streams. The selected August configuration produced **6.6 ± 0.3 t/s** with MTP n=2.
 
 ## Earlier measurements
 
-The specifications and configurations below describe the earlier runs. They do not replace the August conditions above.
+The sections below record earlier runs under their original conditions.
 
 **Model:** GLM-5.2, Unsloth UD-Q4_K_XL — `glm-dsa` arch, 753.86 B params, 435.19 GiB, 75 MoE layers, 256 experts / 8 active, MLA attention.
 **System:** Galactus (EPYC 7713, 1 TB DDR4-2933 8-channel at the time, 4 × Radeon Pro V620). Platform: [../hardware/galactus/README.md](../hardware/galactus/README.md); method: [methodology.md](methodology.md); the prefill patch: [../patches/prefill/README.md](../patches/prefill/README.md).
@@ -68,8 +68,8 @@ At the July compilation, the loader flagged blk.78 as TENSOR_SKIP, so `--spec-ty
 
 ### Configurations selected during the earlier investigation
 
-- For decode-first use (chat), use the fitter (no manual placement) at 6.01 t/s, or MTP n=2 at 7.1 t/s.
-- For prefill-first use (long context, RAG, agents), use the patched build with `-ngl 99 -ot exps=CPU -b 8192 -ub 8192 -fa 1 -t 32`, which gives 119.36 t/s at pp8192.
+- For decode-first use (chat), I selected the fitter (no manual placement) at 6.01 t/s, or MTP n=2 at 7.1 t/s.
+- For prefill-first use (long context, RAG, agents), I selected the patched build with `-ngl 99 -ot exps=CPU -b 8192 -ub 8192 -fa 1 -t 32`, which gives 119.36 t/s at pp8192.
 
 ### GLM-specific negative results
 

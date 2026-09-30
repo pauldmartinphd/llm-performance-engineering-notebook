@@ -8,7 +8,7 @@ With a large MoE in system RAM and `-ot exps=CPU`, the llama.cpp scheduler offlo
 
 ## The fix
 
-Edit 2 spreads the offload target across all eligible GPUs, keyed on the layer index, so each layer's gate, up, and down stay on one card. Edit 1 adds a fallback cursor for Edit 2. Edit 3 skips the ids read when the number of routing selections reaches its threshold, marking all experts as used. At large batches the investigation expected nearly all experts to be selected, making the selective readback of little benefit. The patch may copy unused experts when routing is uneven; the threshold is a heuristic, not a guarantee that every expert was selected. The async copies can then issue at once and overlap compute across the cards.
+Edit 2 spreads the offload target across all eligible GPUs, keyed on the layer index, so each layer's gate, up, and down stay on one card. Edit 1 adds a fallback cursor for Edit 2. Edit 3 skips the ids read when the number of routing selections reaches its threshold, marking all experts as used. At large batches I expected nearly all experts to be selected, leaving little benefit from the selective readback. The patch may copy unused experts when routing is uneven; the threshold is a heuristic, not a guarantee that every expert was selected. The async copies can then issue at once and overlap compute across the cards.
 
 > The source anchors and line numbers refer to the July 21, 2026 tree. Inspect the corresponding code in your checkout before applying these edits:
 > ```bash
@@ -158,4 +158,4 @@ Split histogram after the patch: ROCm0 731 → 285; distribution 285/300/294/292
 
 ## Submission status
 
-This relates to [issue #20757](https://github.com/ggml-org/llama.cpp/issues/20757) (a two-tier GPU+RAM expert cache for MoE offload). It touches the same code (`compute_splits`, the selective expert copy). An upstream PR for this patch is an open item, and the text above is its basis. The proposed contributions are layer-keyed distribution and the batch-size-gated ids bypass. The distribution-only null result is part of the evidence for the combined change.
+This relates to [issue #20757](https://github.com/ggml-org/llama.cpp/issues/20757) (a two-tier GPU+RAM expert cache for MoE offload). It touches the same code (`compute_splits`, the selective expert copy). I have not submitted an upstream PR for this patch; the text above is the basis for one. The proposed contributions are layer-keyed distribution and the batch-size-gated ids bypass. The distribution-only null result is part of the evidence for the combined change.
