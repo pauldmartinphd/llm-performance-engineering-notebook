@@ -1,6 +1,31 @@
 # LLM Performance Engineering Notebook
 
-This notebook records my measurements of local LLM inference performance. I started with large mixture-of-experts models whose weights exceed GPU memory, placing the routed experts in system RAM while the dense computation runs on GPUs. By measuring where time goes in prompt processing and token generation, I can test changes to the configuration and to llama.cpp itself.
+## [llAMDa.cpp — llama.cpp for AMD GPUs](https://github.com/pauldmartinphd/llAMDa.cpp)
+
+**AMD-focused llama.cpp fork for RDNA, Strix Halo, and Vega.**
+
+I built [llAMDa.cpp](https://github.com/pauldmartinphd/llAMDa.cpp) to bring the AMD work I need into one repository: architecture-specific kernels, support for newer MoE models, and the scheduler changes I developed while testing large models on Galactus. Instead of maintaining separate model integrations for each GPU family, I put the common changes in `amd-main` and built the architecture development branches on that base.
+
+The fork combines AMD patches from Edwin Brown's RDNA fork, halo-box's Strix Halo fork, and mxxm-t's fork with Daniel Han and Unsloth's DeepSeek-V4.1-Flash-1017/DSpark implementation. I preserved the source credits and added both parts of my multi-GPU MoE prefill patch: distributing eligible expert work across GPUs and bypassing the routing-index readback for sufficiently large batches. All four branches include those prefill changes.
+
+| Branch | Purpose |
+|---|---|
+| [`amd-main`](https://github.com/pauldmartinphd/llAMDa.cpp/tree/amd-main) | Default branch: common AMD changes, DeepSeek-V4.1/DSpark, and my MoE prefill patch |
+| [`rdna-dev`](https://github.com/pauldmartinphd/llAMDa.cpp/tree/rdna-dev) | RDNA development, including the V620 work that started the fork |
+| [`halo-dev`](https://github.com/pauldmartinphd/llAMDa.cpp/tree/halo-dev) | Strix Halo development |
+| [`vega-dev`](https://github.com/pauldmartinphd/llAMDa.cpp/tree/vega-dev) | Vega development, including gfx900 and gfx906 targets |
+
+**[Code and build documentation](https://github.com/pauldmartinphd/llAMDa.cpp) · [Source credits](https://github.com/pauldmartinphd/llAMDa.cpp/blob/amd-main/CREDITS-AMD.md) · [Development notes](results/lab-notebook/14-llamda-amd-fork.md)**
+
+In the original July GLM-5.2 experiment, my combined prefill patch raised throughput from **104.97 to 119.36 tokens/s (+13.7%)**. I have built and checked the current port on all four branches, but I have not benchmarked this revision on Galactus. The earlier result explains why I included the patch; it does not establish the gain for the newer models.
+
+## Experiments behind the fork
+
+I started this notebook to measure local LLM inference with models whose weights exceed GPU memory, placing routed experts in system RAM while GPUs handle the dense computation. Those experiments led me from configuration changes to modifying llama.cpp itself.
+
+In the earlier V620 tests, I measured [GLM-5.3-Flash at 19.1–19.4 t/s under automatic placement](results/lab-notebook/15-glm53-flash-placement.md). My [DeepSeek-V4.1 DSpark attempt ran out of VRAM while loading the draft model](results/lab-notebook/16-deepseek41-dspark.md). I kept the raw logs and complete GLM results alongside the analysis, and I discuss the measurements needed to explain the remaining decode bottleneck in [the bandwidth note](results/lab-notebook/17-bandwidth-and-placement.md).
+
+## The earlier scheduler investigation
 
 The most detailed investigation so far is GLM-5.2 on Galactus, an EPYC 7713 server with eight-channel DDR4 and four Radeon Pro V620 GPUs. Memory bandwidth explains much of its decode time. Prefill exposed a different problem: llama.cpp concentrated offloaded expert computation on one GPU, and a routing-index readback serialized the work. A scheduler patch raised prefill from **104.97 to 119.36 tokens/s (+13.7%)** in the July comparison. Distributing the work alone produced no meaningful gain; removing the synchronization was also necessary.
 
@@ -48,7 +73,9 @@ The [March build entry](results/lab-notebook/00-march-build-record.md) preserves
 
 ## Work remaining
 
-As of the August 16 entry, the next comparison is the prefill patch against the stock build on the four retained models. An upstream patch submission, investigation of speculative-run timing variance, a choice between Kimi K2.6 and K2.7-Code, and a Kimi K3 evaluation remain open. The August speculative runs supersede the Session 10 rerun protocol.
+The October integration still needs hardware validation on the current models, including controlled placement/speculation comparisons and a prefill-patch A/B test. The historical Flash CLI captures do not replace that work.
+
+As of the August 16 entry, the next comparison was the prefill patch against the stock build on the four retained models. An upstream patch submission, investigation of speculative-run timing variance, a choice between Kimi K2.6 and K2.7-Code, and a Kimi K3 evaluation remain open. The August speculative runs supersede the Session 10 rerun protocol.
 
 ## License and attribution
 

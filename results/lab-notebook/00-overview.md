@@ -1,13 +1,13 @@
 # Performance engineering lab notebook
 
-**Period covered:** March 23–September 30, 2026. The earlier March build record was added from a dated authored note on September 30. Sessions 1–9 cover the July GLM-5.2 investigation; Session 10 and Entries 11–12 extend the Galactus record through August. Entry 13 adds oMLX/Qwen3.8-27B on Magneto.
+**Period covered:** March 23–October 21, 2026. The earlier March build record was added from a dated authored note on September 30. Sessions 1–9 cover the July GLM-5.2 investigation; Session 10 and Entries 11–12 extend the Galactus record through August. Entry 13 adds oMLX/Qwen3.8-27B on Magneto. Entries 14–17 record the AMD fork and historical Flash experiments on October 21; the supplied captures do not establish the run dates.
 **Investigator:** Paul Martin
 **Original subject:** Measuring and improving inference throughput for GLM-5.2 (753.86 B-parameter mixture-of-experts model) running under llama.cpp/ROCm on the server "Galactus". Later entries extend the record to other models and to oMLX on Magneto.
 **Original July notebook compiled:** July 24, 2026, from the original conversation exports, benchmark logs, and the automated diagnostic run log. All timestamps are US Eastern Time. The July entries were compiled from the saved records. Later entries list their sources and recording limitations, including the hand-collected Session 10 timings.
 
 ---
 
-The entries follow the hypotheses, measurements, mistakes, and corrections in order. Commands and quoted dialogue describe what happened at the time; they are not instructions to execute now. Later findings can supersede earlier conclusions. For the latest measurements in this record, see [Entry 13](13-magneto-omlx-qwen38.md); the Galactus common baseline is in [Entry 12](12-common-baseline-2tb.md); for the shorter account, see the [model summaries](../README.md).
+The entries follow the hypotheses, measurements, mistakes, and corrections in order. Commands and quoted dialogue describe what happened at the time; they are not instructions to execute now. Later findings can supersede earlier conclusions. For the latest integration and historical Flash analysis, see [Entries 14–17](14-llamda-amd-fork.md); for the September measurements, see [Entry 13](13-magneto-omlx-qwen38.md); the Galactus common baseline is in [Entry 12](12-common-baseline-2tb.md); for the shorter account, see the [model summaries](../README.md).
 
 ## July GLM-5.2 results
 
@@ -76,3 +76,8 @@ The [source-note index](../reference-notes/README.md) preserves that full note a
 11. [11-stream-rebaseline-2tb](11-stream-rebaseline-2tb.md) — STREAM re-baseline on the 2 TB population (Aug 15)
 12. [12-common-baseline-2tb](12-common-baseline-2tb.md) — The 2 TB common baseline: five models, one build, stock (Aug 15–16)
 13. [13-magneto-omlx-qwen38](13-magneto-omlx-qwen38.md) — oMLX/Qwen3.8-27B on the 14-inch M2 Max; thermal observations and chassis uncertainty (Sep 30)
+
+- [14: llAMDa.cpp: an AMD integration fork](14-llamda-amd-fork.md)
+- [15: GLM-5.3-Flash: placement mattered more than the build label](15-glm53-flash-placement.md)
+- [16: DeepSeek-V4.1: target inference worked; DSpark ran out of VRAM](16-deepseek41-dspark.md)
+- [17: Why STREAM bandwidth is not a decode prediction](17-bandwidth-and-placement.md)

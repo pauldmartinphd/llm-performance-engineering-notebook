@@ -1,0 +1,101 @@
+hf download vcruz305/DeepSeek-V4.1-Flash-GGUF \
+  --include "DeepSeek-V4.1-Flash-Q4_K_M-*.gguf" \
+  --local-dir /models/DeepSeek-V4.1-Flash/Q4_K_M
+
+root@openwebui:~/llama.cpp-v620-flash# hf download JigSawPT/DeepSeek-V4.1-Flash-DSpark-GGUF \
+  --include "DeepSeek-V4.1-Flash-DSpark.gguf" \
+  --local-dir /models/DeepSeek-V4.1-Flash/DSpark
+  
+root@openwebui:~/llama.cpp-v620-flash# build-v620/bin/llama-cli  -m /models/DeepSeek-V4.1-Flash/Q4_K_M/DeepSeek-V4.1-Flash-Q4_K_M-00001-of-00011.gguf  --load-mode none   -fa on   -t 32   -c 8192   -p "Explain how ZFS copy-on-write snapshots work, including the uberblock, block pointers, and space maps."   -n 256   --temp 0   -st   --perf
+
+
+Loading model...  
+
+▄▄ ▄▄
+██ ██
+██ ██  ▀▀█▄ ███▄███▄  ▀▀█▄    ▄████ ████▄ ████▄
+██ ██ ▄█▀██ ██ ██ ██ ▄█▀██    ██    ██ ██ ██ ██
+██ ██ ▀█▄██ ██ ██ ██ ▀█▄██ ██ ▀████ ████▀ ████▀
+                                    ██    ██
+                                    ▀▀    ▀▀
+
+build      : b0-unknown
+model      : /models/DeepSeek-V4.1-Flash/Q4_K_M/DeepSeek-V4.1-Flash-Q4_K_M-00001-of-00011.gguf
+ftype      : Q4_K - Medium
+modalities : text
+
+available commands:
+  /exit or Ctrl+C     stop or exit
+  /regen              regenerate the last response
+  /clear              clear the chat history
+  /read <file>        add a text file
+  /glob <pattern>     add text files using globbing pattern
+
+
+
+> Explain how ZFS copy-on-write snapshots work, including the uberblock, block pointers, and space maps.
+
+[Start thinking]
+
+We need answer. User asks: "Explain how ZFS copy-on-write snapshots work, including the uberblock, block pointers, and space maps." Need explain. Need likely detailed. We need craft answer. Need include uberblock, block pointers, space maps. Let's think deeply.
+
+We need explain ZFS COW snapshots. ZFS is copy-on-write filesystem. Pool made vdevs. Data stored in blocks. Each block has block pointer (blkptr) with dva (disk virtual address), birth txg, checksum, compression, etc. Block pointers form tree: uberblock -> objset -> DSL directory -> ZPL files -> ZAP -> dnodes -> block pointers -> data. Snapshots are read-only datasets. When snapshot created, ZFS creates a snapshot object in DSL, copies the dataset's objset? Actually snapshot creation is cheap: it records current txg and creates a snapshot dataset whose root is the current objset/root block pointer. It doesn't copy data. It increments reference counts? Let's recall.
+
+ZFS transaction model: changes grouped into transaction groups (txg). Uberblock is root of pool: array of 128 uberblocks in labels, each has txg, rootbp (
+
+[ Prompt: 13.5 t/s | Generation: 11.2 t/s ]
+
+
+Exiting...
+
+root@openwebui:~/llama.cpp-v620-flash# build-v620/bin/llama-cli   -m /models/DeepSeek-V4.1-Flash/Q4_K_M/DeepSeek-V4.1-Flash-Q4_K_M-00001-of-00011.gguf   --model-draft /models/DeepSeek-V4.1-Flash/DSpark/DeepSeek-V4.1-Flash-DSpark.gguf   --spec-type draft-dspark   --spec-draft-ngl 99   --spec-draft-n-max 2   --spec-draft-p-min 0   --load-mode none   -fa on   -t 32   -c 8192   -p "Explain how ZFS copy-on-write snapshots work, including the uberblock, block pointers, and space maps."   -n 256   --temp 0   -st   --perf   2>&1 | tee deepseek-dspark-test.log
+Loading model... \0.01.334.165 E llama_init_from_model: failed to initialize the context: dflash requires ctx_other to be set (this warning is normal during memory fitting)
+/4.50.636.017 E ggml_backend_cuda_buffer_type_alloc_buffer: allocating 2464.20 MiB on device 0: cudaMalloc failed: out of memory
+4.50.636.024 E ggml_backend_buft_alloc_buffer_n_default: failed to allocate ROCm0 buffer of size 2583905536
+4.50.656.114 E llama_model_load: error loading model: unable to allocate ROCm0 buffer
+4.50.656.123 E llama_model_load_from_file_impl: failed to load model
+4.50.656.125 E common_speculative_init_result: failed to load draft model, '/models/DeepSeek-V4.1-Flash/DSpark/DeepSeek-V4.1-Flash-DSpark.gguf'
+4.50.656.144 E srv    load_model: failed to load draft model, '/models/DeepSeek-V4.1-Flash/DSpark/DeepSeek-V4.1-Flash-DSpark.gguf'
+-4.50.660.890 E srv  llama_server: exiting due to model loading error
+
+
+Tests:
+
+MODEL=/models/DeepSeek-V4.1-Flash/Q4_K_M/DeepSeek-V4.1-Flash-Q4_K_M-00001-of-00011.gguf
+DRAFT=/models/DeepSeek-V4.1-Flash/DSpark/DeepSeek-V4.1-Flash-DSpark.gguf
+
+COMMON=(
+  -m "$MODEL"
+  --load-mode none
+  --split-mode layer --tensor-split 1,1,1,1
+  --moe-cache-mib 0
+  -fa on -t 32 -c 8192
+  -p "Explain how ZFS copy-on-write snapshots work, including the uberblock, block pointers, and space maps."
+  -n 256 --temp 0 -st --perf
+)
+
+DSPARK=(
+  --model-draft "$DRAFT"
+  --spec-type draft-dspark
+  --spec-draft-ngl 99
+  --spec-draft-n-max 5
+  --spec-draft-p-min 0
+)
+
+build-v620/bin/llama-cli "${COMMON[@]}" \
+  --spec-type none \
+  2>&1 | tee experiment-1.log
+  
+build-v620/bin/llama-cli "${COMMON[@]}" \
+  --spec-type none -ngl 99 --cpu-moe \
+  2>&1 | tee experiment-2.log
+  
+build-v620/bin/llama-cli "${COMMON[@]}" \
+  "${DSPARK[@]}" \
+  2>&1 | tee experiment-3.log
+  
+build-v620/bin/llama-cli "${COMMON[@]}" \
+  "${DSPARK[@]}" -ngl 99 --cpu-moe \
+  2>&1 | tee experiment-4.log
+  
+  
