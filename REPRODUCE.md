@@ -4,6 +4,18 @@ These experiments use a large MoE model with routed experts in system RAM and th
 
 For the initial March installation, the [earlier build record](results/lab-notebook/2026-03-23-galactus-build.md) links the retained compiler, device-access, and server commands. It is a historical configuration on a different build and storage setup, rather than the recipe for the August common baseline. The [source-note index](results/reference-notes/README.md) records the evidence status of the later model-selection and residency plans.
 
+## October 23 Maya measurements
+
+The [GLM experiment record](results/lab-notebook/2026-10-23-maya-glm53-speculation.md) preserves the actual v1.1.24 HIP arguments, environment, and configuration names used for the 31.6/19.9 tokens/s A/B test. Run the two configurations separately with other inference engines stopped:
+
+```sh
+cd /opt/project-maya
+./maya.sh --backend hip --bench --config maya-ud-q4_k_xl-hip.json
+./maya.sh --backend hip --bench --config maya-glm-no-spec-hip.json
+```
+
+The second file must be a copy of the first with `MAYA_GLM_NO_SPEC=1` in its environment. Preserve each benchmark output before the next run overwrites `maya-bench.txt`. These are the filenames printed during measurement; the later requested renames are recorded separately. On this HIP build, `--calibrate` did not tune the GLM engine. The [DeepSeek record](results/lab-notebook/2026-10-23-deepseek41-cache-and-maya.md) documents its different successful calibration path and the CLI command that returned without testing.
+
 ## Prepare and record the configuration
 
 Build llama.cpp for your GPU backend and record the commit, build options, and loaded backend libraries. The measurements here used ROCm. CUDA, Metal, and Vulkan share scheduler code, but this repository does not establish the patch's performance on those backends.

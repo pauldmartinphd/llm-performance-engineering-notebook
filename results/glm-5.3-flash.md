@@ -1,5 +1,19 @@
 # GLM-5.3-Flash on Galactus
 
+## October 23: 31.6 tokens/s with Project Maya
+
+Using the existing Unsloth UD-Q4_K_XL export, Project Maya v1.1.24 reached **31.6 generated tokens/s** on Galactus's four V620s. Setting `MAYA_GLM_NO_SPEC=1` reduced the same three-prompt benchmark to **19.9 tokens/s**, a **58.8%** gain with speculation. Both runs used context 32768, greedy decoding, thinking off, and three 256-token answers. Dedicated prefill at 8192 tokens was 242 with speculation and 241 without it.
+
+The initial default run measured 29.4 tokens/s. Head settings of one and three GPUs produced 24.6 and 22.9, while MTP_KEEP variants produced 28.2–30.5 tokens/s. The default two-GPU head and KEEP=2 gave the highest observed rate; small differences among KEEP settings need repeated trials. Automatic GLM hardware calibration declined to run on HIP in this version.
+
+[Full A/B test, tuning tables, and captured configuration](lab-notebook/2026-10-23-maya-glm53-speculation.md).
+
+## October 22: llama.cpp and llAMDa baselines
+
+The [revision-identified benchmarks](lab-notebook/2026-10-22-glm53-build-comparison.md) measured 284.36 ± 16.33 pp8192 and 10.16 ± 0.04 tg256 for llama.cpp `184f65360`, versus 284.20 ± 16.42 and 10.09 ± 0.02 for llAMDa `ca3b1fc30`. Their generation-only CLI record reached 17.8–18.1 tokens/s with automatic placement. The CLI banners all print `b11829-184f65360`, including commands named `llamda-cli`, so those CLI names cannot establish an implementation comparison.
+
+## Earlier V620 tests
+
 I tested the six-shard Unsloth UD-Q4_K_XL export on Galactus with 2 TB of eight-channel DDR4 and four V620 GPUs. My V620 build combined the V620 patches, older DeepSeek support, GLM-5.3 MTP support, and my round-robin prefill patch. It reports `b0-unknown`; I clarified the patch combination on October 22, 2026, but the captures do not establish the exact source revision or run dates.
 
 ## Measured configurations

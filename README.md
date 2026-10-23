@@ -1,5 +1,18 @@
 # LLM Performance Engineering Notebook
 
+## October 23: two large MoE models at roughly 30 tokens/s
+
+Galactus now runs **GLM-5.3-Flash UD-Q4_K_XL at 31.6 generated tokens/s** and **DeepSeek-V4.1-Flash-1017 UD-Q8_K_XL at 29.3 tokens/s with DSpark**, using Project Maya v1.1.24 on four Radeon Pro V620 GPUs and 2 TiB of system RAM. This is a substantial step forward for the notebook: both models exceed GPU memory, yet their recorded configurations reach approximately 30 tokens/s on this server.
+
+| Model | Speculative generation | Without speculation | Within-test improvement |
+|---|---:|---:|---:|
+| GLM-5.3-Flash UD-Q4_K_XL | **31.6 tokens/s** | 19.9 tokens/s | **58.8%** |
+| DeepSeek-V4.1-Flash-1017 UD-Q8_K_XL | **29.3 tokens/s** | 21.2 tokens/s | **38%**, with 69% draft acceptance |
+
+These are separate model runs. GLM uses Maya's three-answer benchmark; DeepSeek uses its DSpark calibration workload. GLM's initial default run measured 29.4 tokens/s, and manual speculative-head and MTP-expert sweeps retained the defaults as the highest observed configuration. Dedicated 8192-token prefill measured 240–242 tokens/s for GLM and 282 for DeepSeek in its earlier undrafted benchmark.
+
+**[The milestone, A/B test, and tuning results](results/lab-notebook/2026-10-23-maya-glm53-speculation.md)** · [October 22 llama.cpp and llAMDa comparison](results/lab-notebook/2026-10-22-glm53-build-comparison.md) · [DeepSeek calibration and memory setup](results/lab-notebook/2026-10-23-deepseek41-cache-and-maya.md)
+
 ## [Introducing llamda.cpp — a llama.cpp fork optimized for AMD GPUs](https://github.com/pauldmartinphd/llAMDa.cpp)
 
 **AMD-focused llama.cpp fork for RDNA, Strix Halo, and Vega.**
@@ -17,7 +30,7 @@ The fork combines AMD patches from Edwin Brown's RDNA fork, halo-box's Strix Hal
 
 **[Code and build documentation](https://github.com/pauldmartinphd/llAMDa.cpp) · [Source credits](https://github.com/pauldmartinphd/llAMDa.cpp/blob/amd-main/CREDITS-AMD.md) · [Development notes](results/lab-notebook/2026-10-21-llamda-amd-fork.md)**
 
-In the original July GLM-5.2 experiment, my combined prefill patch raised throughput from **104.97 to 119.36 tokens/s (+13.7%)**. I have built and checked the current port on all four branches, but the new benchmark output does not identify its source revision, so I cannot tie it to this port. The earlier result explains why I included the patch; it does not establish the gain for the newer models.
+In the original July GLM-5.2 experiment, my combined prefill patch raised throughput from **104.97 to 119.36 tokens/s (+13.7%)**. I have built and checked the current port on all four branches, and the October 22 record now supplies revision-identified GLM benchmarks. Those runs do not isolate this patch: the controlled patch-off comparison remains outstanding. The earlier result explains why I included the patch; it does not establish the gain for the newer models.
 
 ## DeepSeek cache sweep and Project Maya (recorded October 23)
 
@@ -41,7 +54,7 @@ The repository includes the measurements, unsuccessful experiments, patch instru
 
 ## Results
 
-### DeepSeek-V4.1-Flash and GLM-5.3-Flash
+### Earlier DeepSeek-V4.1-Flash and GLM-5.3-Flash CLI results
 
 These CLI tests used my combined V620, older DeepSeek, GLM-5.3 MTP, and round-robin patch build. They predate the newer Unsloth integration. I used a short ZFS prompt and a 256-token generation limit, so I keep these rates separate from the normalized benchmark below.
 
@@ -94,7 +107,7 @@ The [March build entry](results/lab-notebook/2026-03-23-galactus-build.md) prese
 
 ## Work remaining
 
-The new DeepSeek cache record adds a hardware measurement, but its executable revision is missing. The October integration still needs revision-matched placement/speculation comparisons and a prefill-patch A/B test.
+The October 22 GLM benchmarks identify their revisions, while the DeepSeek cache capture still lacks one. The October 23 Maya tests establish a GLM speculation A/B result and complete the head and MTP-expert sweeps. Longer-context workloads, repeated tuning trials, and a prefill-patch A/B test remain open.
 
 As of the August 16 entry, the next comparison was the prefill patch against the stock build on the four retained models. An upstream patch submission, investigation of speculative-run timing variance, a choice between Kimi K2.6 and K2.7-Code, and a Kimi K3 evaluation remain open. The August speculative runs supersede the Session 10 rerun protocol.
 
