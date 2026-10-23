@@ -1,6 +1,6 @@
 # LLM Performance Engineering Notebook
 
-## [llAMDa.cpp — llama.cpp for AMD GPUs](https://github.com/pauldmartinphd/llAMDa.cpp)
+## [Introducing llamda.cpp — a llama.cpp fork optimized for AMD GPUs](https://github.com/pauldmartinphd/llAMDa.cpp)
 
 **AMD-focused llama.cpp fork for RDNA, Strix Halo, and Vega.**
 
