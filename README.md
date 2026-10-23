@@ -17,7 +17,13 @@ The fork combines AMD patches from Edwin Brown's RDNA fork, halo-box's Strix Hal
 
 **[Code and build documentation](https://github.com/pauldmartinphd/llAMDa.cpp) · [Source credits](https://github.com/pauldmartinphd/llAMDa.cpp/blob/amd-main/CREDITS-AMD.md) · [Development notes](results/lab-notebook/2026-10-21-llamda-amd-fork.md)**
 
-In the original July GLM-5.2 experiment, my combined prefill patch raised throughput from **104.97 to 119.36 tokens/s (+13.7%)**. I have built and checked the current port on all four branches, but I have not benchmarked this revision on Galactus. The earlier result explains why I included the patch; it does not establish the gain for the newer models.
+In the original July GLM-5.2 experiment, my combined prefill patch raised throughput from **104.97 to 119.36 tokens/s (+13.7%)**. I have built and checked the current port on all four branches, but the new benchmark output does not identify its source revision, so I cannot tie it to this port. The earlier result explains why I included the patch; it does not establish the gain for the newer models.
+
+## DeepSeek cache sweep and Project Maya (recorded October 23)
+
+With DeepSeek-V4.1-Flash-1017 UD-Q8_K_XL, my retained `llamda-bench` output reports **132.66 ± 0.30 pp8192** and **9.51 ± 0.07 tg1024 tokens/s** at a requested 32 GiB expert cache. The conversation summary reports 10.20 generation tokens/s with the cache disabled and 11.54 at 64 GiB; 80 GiB failed with an OOM. Only the 32 GiB row includes its full command and printed output, so the broader sweep remains provisional.
+
+The additional Maya output records **282 tokens/s at 8192-token prefill** and a DSpark calibration improving sustained generation from **21.2 to 29.3 tokens/s (+38%)**, with **69% draft acceptance**. The LXC shell checks show unlimited memlock after the reported residency changes, but several settings changed together and the engine workloads differ. [The new experiment record](results/lab-notebook/2026-10-23-deepseek41-cache-and-maya.md) preserves the evidence and remaining measurement limits.
 
 ## Experiments behind the fork
 
@@ -88,7 +94,7 @@ The [March build entry](results/lab-notebook/2026-03-23-galactus-build.md) prese
 
 ## Work remaining
 
-The October integration still needs hardware validation on the current models, including controlled placement/speculation comparisons and a prefill-patch A/B test. The historical Flash CLI captures do not replace that work.
+The new DeepSeek cache record adds a hardware measurement, but its executable revision is missing. The October integration still needs revision-matched placement/speculation comparisons and a prefill-patch A/B test.
 
 As of the August 16 entry, the next comparison was the prefill patch against the stock build on the four retained models. An upstream patch submission, investigation of speculative-run timing variance, a choice between Kimi K2.6 and K2.7-Code, and a Kimi K3 evaluation remain open. The August speculative runs supersede the Session 10 rerun protocol.
 

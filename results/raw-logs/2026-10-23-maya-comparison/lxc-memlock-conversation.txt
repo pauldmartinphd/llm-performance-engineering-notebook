@@ -1,0 +1,192 @@
+#<div align='center'>
+#  <a href='https%3A//Helper-Scripts.com' target='_blank' rel='noopener noreferr>
+#    <img src='https%3A//raw.githubusercontent.com/community-scripts/ProxmoxVE/m>
+#  </a>
+#
+#  <h2 style='font-size%3A 24px; margin%3A 20px 0;'>Open WebUI LXC</h2>
+#
+#  <p style='margin%3A 16px 0;'>
+#    <a href='https%3A//ko-fi.com/community_scripts' target='_blank' rel='noopen>
+#      <img src='https%3A//img.shields.io/badge/&#x2615;-Buy us a coffee-blue' a>
+#    </a>
+#  </p>
+#
+#  <span style='margin%3A 0 10px;'>
+#    <i class="fa fa-github fa-fw" style="color%3A #f5f5f5;"></i>
+#    <a href='https%3A//github.com/community-scripts/ProxmoxVE' target='_blank' >
+#  </span>
+#  <span style='margin%3A 0 10px;'>
+#    <i class="fa fa-comments fa-fw" style="color%3A #f5f5f5;"></i>
+#    <a href='https%3A//github.com/community-scripts/ProxmoxVE/discussions' targ>
+#  </span>
+#  <span style='margin%3A 0 10px;'>
+#    <i class="fa fa-exclamation-circle fa-fw" style="color%3A #f5f5f5;"></i>
+#    <a href='https%3A//github.com/community-scripts/ProxmoxVE/issues' target='_>
+#  </span>
+#</div>
+arch: amd64
+cores: 128
+dev0: /dev/dri/renderD128,gid=992
+dev1: /dev/dri/renderD129,gid=992
+dev2: /dev/dri/renderD130,gid=992
+dev3: /dev/dri/renderD131,gid=992
+dev4: /dev/dri/card0,gid=44
+dev5: /dev/dri/card1,gid=44
+dev6: /dev/dri/card2,gid=44
+dev7: /dev/dri/card3,gid=44
+dev8: /dev/dri/card4,gid=44
+features: nesting=1,keyctl=1,fuse=1
+hostname: [container hostname]
+memory: 2097152
+net0: name=eth0,bridge=vmbr0,hwaddr=[MAC address],ip=dhcp,ip6=auto,type=veth
+onboot: 1
+ostype: debian
+rootfs: galactus-datastore:subvol-100-disk-0,size=8T
+swap: 512
+tags: ai;community-script;interface
+timezone: America/New_York
+unprivileged: 1
+lxc.mount.entry: /dev/kfd dev/kfd none bind,optional,create=file
+…
+Your configuration confirms this is an unprivileged Proxmox LXC container (CT 100) with 2 TiB of assigned memory and all four V620 GPUs passed through.
+
+The existing configuration looks suitable for Maya. You do not need to change the GPU mappings, container privilege level, or memory allocation.
+
+For the Engram locking requirement, add this line to CT 100's configuration:
+
+lxc.prlimit.memlock: unlimited
+On the Proxmox host, edit:
+
+nano /etc/pve/lxc/100.conf
+
+Add the line alongside your existing lxc.mount.entry setting. Keep the other settings unchanged.
+
+LXC supports this setting directly, and the same fix has been confirmed for Proxmox containers with the default 8192 KiB memlock limit. 
+
+lxc.container.conf.5
++1
+
+Restart CT 100 from the Proxmox host:
+
+pct shutdown 100
+pct start 100
+
+This interrupts Open WebUI and any other services in that container.
+
+After reconnecting over SSH, check:
+
+ulimit -Sl
+ulimit -Hl
+prlimit --pid 1 --memlock
+
+Ideally, all show unlimited. If PID 1 has unlimited memlock but your SSH shell still has an 8192 KiB limit, we'll need to adjust the login-session or systemd limits inside Debian.
+
+Once that is resolved, we can run Maya with its strict-RAM settings. There is no reason to make the container privileged merely to try this configuration.
+
+pmartin@magneto ~ % ssh root@[container IP]                               
+
+The programs included with the Debian GNU/Linux system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+permitted by applicable law.
+Last login: Fri Oct 23 13:50:49 2026 from [client IP]
+❯ ulimit -Sl
+
+unlimited
+❯ ulimit -Hl
+
+unlimited
+Good. Both the soft and hard memlock limits are now unlimited. That resolves the immediate obstacle to locking DeepSeek's approximately 203 GB of Engram tables.
+
+Next, configure Maya for full RAM residency. Since your HIP configuration is /opt/project-maya/maya-ds4-hip.json, run:
+
+cd /opt/project-maya
+
+python3 - <<'PY'
+import json
+from pathlib import Path
+
+p = Path("maya-ds4-hip.json")
+original = p.read_text()
+cfg = json.loads(original)
+
+assert isinstance(cfg["args"], list)
+assert isinstance(cfg.get("env", {}), dict)
+
+p.with_suffix(".json.bak").write_text(original)
+
+cfg.setdefault("env", {}).update({
+    "DS4_ENGRAM_RAM": "1",
+    "DS4_REQUIRE_ALL_RAM": "1",
+    "MAYA_DS4_Q8_BATCH": "1",
+})
+
+args = cfg["args"]
+if "--mmap-experts" in args:
+    args[args.index("--mmap-experts") + 1] = "off"
+else:
+    args.extend(["--mmap-experts", "off"])
+
+p.write_text(json.dumps(cfg, indent=2) + "\n")
+PY
+
+Then benchmark with Maya's server stopped:
+
+./maya.sh --backend hip --bench
+
+The key things to verify in its output are Engram RAM ONLY, the number of CPU experts copied into RAM, and the actual generation throughput. The strict-residency options are designed to fail initialization rather than silently fall back to SSD.
+
+For reference, we're comparing against Maya's previous 3.1 tok/s without DSpark and llamda's 11.56 tok/s.
+
+If Maya remains slow despite complete RAM residency, our next investigation should focus on its DeepSeek HIP execution and multi-GPU scheduling rather than memory capacity.
+
+Was this a problem for llama.cpp as well
+Potentially, yes—but not necessarily in the same way.
+
+Your previous llama.cpp benchmarks used:
+
+-lm mlock -lzm off
+-ot 'engram_embd=CPU;exps=CPU'
+
+The important distinction is that -lm mlock requests memory locking; it does not raise the process's RLIMIT_MEMLOCK limit.
+
+Before we fixed the container, that limit was only 8 MiB. If llama.cpp attempted to lock hundreds of gigabytes, those requests could not have succeeded under that limit.
+
+That means our earlier assumption that the entire model was locked in RAM was not adequately verified.
+
+However, failing to lock memory does not mean the model was necessarily being read from SSD. The Linux page cache can retain the GGUF files in RAM without mlock, particularly on your 2 TiB server.
+
+I checked llama.cpp's implementation. When an mlock() call fails, llama.cpp logs a warning and continues rather than necessarily aborting. 
+
+GitHub
++1
+
+There is another important detail: -lm mlock uses a non-mmap loading path, so your earlier benchmark may still have loaded the CPU weights into allocated system memory even though it could not lock them. In that case, the low memlock limit would not explain the poor throughput. 
+
+GitHub
+
+What I recommend
+Before assuming anything about the effect, rerun your established llamda benchmark now that the memlock limit is fixed:
+
+llamda-bench \
+  -m /models/DeepSeek-V4.1-Flash-1017/UD-Q8_K_XL/DeepSeek-V4.1-Flash-1017-UD-Q8_K_XL-00001-of-00009.gguf \
+  -ngl 99 \
+  -ot 'engram_embd=CPU;exps=CPU' \
+  --moe-cache-mib 65536 \
+  -lm mlock -lzm off \
+  -fa on \
+  -t 32 \
+  -b 8192 -ub 8192 \
+  -p 8192 -n 1024 -r 2 \
+  -o md
+
+Your previous result was 132.11 tok/s prefill and 11.56 tok/s generation.
+
+If those numbers improve substantially, the old memory-locking limitation may have mattered. If they remain similar, the bottleneck lies elsewhere.
+
+I would also capture the startup log and look for failed to mlock warnings. That will tell us whether the old configuration was attempting and failing to lock memory.
+
+Bottom line: The 8 MiB limit was a real configuration problem for any attempt to lock the model, but we have not established that it caused llama.cpp's poor performance.
+

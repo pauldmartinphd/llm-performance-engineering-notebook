@@ -43,3 +43,4 @@ The original July transcripts still refer to sessions in their historical sequen
 - **Earlier V620 integration, run dates unknown:** [GLM-5.3-Flash placement, cache, and MTP tests](undated-glm53-flash-placement.md) and [DeepSeek-V4.1 target inference and DSpark allocation failure](undated-deepseek41-dspark.md). I recorded these on October 21 and clarified the combined patch set on October 22; those are documentation dates, not inferred experiment dates.
 - **October 21:** [AMD fork integration](2026-10-21-llamda-amd-fork.md).
 - **October 21:** [Bandwidth, placement, and decode analysis](2026-10-21-bandwidth-and-placement.md).
+- **Recorded October 23; Maya benchmark dated October 23, cache run dates unknown:** [DeepSeek-V4.1 cache sweep and Maya DSpark results](2026-10-23-deepseek41-cache-and-maya.md). Includes the printed llAMDa cache benchmark, Maya benchmark and DSpark calibration, LXC memlock checks, and separately labeled conversation-summary results.

@@ -2,6 +2,10 @@
 
 These notes collect the measurements, the best configuration I found for each model, and what I could conclude. Each note names the machine: Galactus for llama.cpp, Magneto for oMLX. For machine specifications, see [Hardware](../hardware/README.md). For the method behind the numbers, see [methodology.md](methodology.md). For what transfers to other systems, see [../takeaways/](../takeaways/).
 
+## New DeepSeek-V4.1-Flash-1017 cache record
+
+The [October 23 entry](lab-notebook/2026-10-23-deepseek41-cache-and-maya.md) records **132.66 ± 0.30 pp8192 / 9.51 ± 0.07 tg1024 tokens/s** from `llamda-bench` with UD-Q8_K_XL and a requested 32 GiB expert cache. It preserves the exact command and separately labels summary-only cache-sweep results from the captured Maya benchmark and DSpark calibration. The source revision and individual run date remain unknown.
+
 ## DeepSeek-V4.1-Flash and GLM-5.3-Flash results
 
 I ran these V620 tests with the V620 patches, older DeepSeek implementation, GLM-5.3 MTP support, and my round-robin prefill patch merged together. I clarified the build combination on October 22, 2026; the captures do not establish the run dates or the exact V620 source revision.

@@ -1,5 +1,13 @@
 # DeepSeek-V4.1-Flash on Galactus
 
+## Flash-1017 cache sweep, recorded October 23
+
+The newer UD-Q8_K_XL `llamda-bench` capture reports **132.66 ± 0.30 pp8192** and **9.51 ± 0.07 tg1024 tokens/s** with a requested 32 GiB expert cache, 32 threads, layer splitting, and CPU placement for Engram embeddings and routed experts. The source revision is not printed. The accompanying conversation summary reports generation at 10.20 tokens/s without the cache and 11.54 at 64 GiB, plus an OOM at 80 GiB; those entries lack their original command/output captures.
+
+The [cache and Maya comparison record](lab-notebook/2026-10-23-deepseek41-cache-and-maya.md) includes the exact available command, captured Maya benchmark and DSpark calibration (+38% sustained generation), evidence limits. These measurements use a different export and workload from the earlier tests below.
+
+## Earlier Q4_K_M and DSpark tests
+
 I tested the eleven-shard Q4_K_M export from `vcruz305/DeepSeek-V4.1-Flash-GGUF` with the DSpark export from `JigSawPT/DeepSeek-V4.1-Flash-DSpark-GGUF`. My V620 build combined the V620 patches, older DeepSeek implementation, GLM-5.3 MTP support, and my round-robin prefill patch. It reports `b0-unknown`; the captures do not establish the exact commit or run dates.
 
 | Configuration | Prompt t/s | Generation t/s | Outcome |
