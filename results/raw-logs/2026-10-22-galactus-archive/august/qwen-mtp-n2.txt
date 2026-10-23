@@ -1,0 +1,10 @@
+Script started on 2026-08-16 10:04:43-04:00 [COMMAND="llama-cli -m /models/Qwen3.5-397B-A17B/UD-Q6_K_XL/Qwen3.5-397B-A17B-UD-Q6_K_XL-00001-of-00009.gguf -ngl 99 -ot exps=CPU -fa on -t 64 -c 8192 -b 8192 -ub 8192 -n 256 --temp 0 -st -no-cnv --perf -p 'Explain how ZFS copy-on-write snapshots work, including the uberblock, block pointers, and space maps.' --spec-type draft-mtp --spec-draft-n-max 2" TERM="xterm-256color" TTY="/dev/pts/3" COLUMNS="138" LINES="53"]
+
+
+Loading model... |-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|[34m0.33.138.901[0m [31mE common_speculative_init_result: failed to create MTP context
+[0m[34m0.33.138.912[0m [31mE srv    load_model: failed to create MTP context
+[0m[34m0.33.143.610[0m [31mE srv  llama_server: exiting due to model loading error
+[0m/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|/-\|llama_server exited with code 1
+/- [1m[31mError: the server exited before becoming ready
+[0m
+Script done on 2026-08-16 10:05:26-04:00 [COMMAND_EXIT_CODE="1"]

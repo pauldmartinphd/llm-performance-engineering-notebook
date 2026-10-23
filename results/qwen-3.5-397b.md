@@ -6,7 +6,7 @@ The file changed from April: Unsloth UD-Q6_K_XL (337.43 GiB) replaces bartowski 
 
 Attempts to repeat the April resident-offload configuration at ub 8192 failed: the 5-layer placement failed at weight load and the 4-layer placement failed at context creation, because large-batch prefill and resident experts compete for VRAM. I set further offload testing aside for this workload.
 
-Qwen MTP does not arm on this export (`failed to create MTP context`; the cause is not isolated). See [Entry 12](lab-notebook/12-common-baseline-2tb.md) for the complete conditions. I kept Qwen for further testing.
+Qwen MTP does not arm on this export (`failed to create MTP context`; the cause is not isolated). See [the August common baseline](lab-notebook/2026-08-15-to-16-common-baseline-2tb.md) for the complete conditions. I kept Qwen for further testing.
 
 ## Earlier measurements
 
@@ -63,3 +63,7 @@ Increasing placement from four to five expert layers per card raised decode from
 - The best all-CPU configuration is t=32–64: about 9.7 t/s decode and 63–85 t/s prefill.
 - The best overall configuration is 5-layer resident offload at DDR4-2933: about 11.5 to 11.7 t/s decode (t=32) and about 110 t/s prefill (t=96).
 - Transparent huge pages have no effect. SMT (t=128) collapses decode.
+
+## Original captures added October 22, 2026
+
+I added the original April CPU-thread, resident-expert, batch, and 131072-depth sweeps, including their failed attempts. [the April thread and batch tests](lab-notebook/2026-04-07-to-17-thread-and-batch-tests.md) separates the builds and workloads; the [full ledger](data/galactus-archive-benchmarks.md) retains every printed row.

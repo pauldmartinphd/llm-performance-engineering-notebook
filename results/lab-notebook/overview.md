@@ -1,0 +1,66 @@
+# Performance engineering lab notebook
+
+**Period covered:** March–October 2026. I order experiments by their recorded dates and keep recovery or compilation dates separate. The [chronological index](README.md) places undated captures beside the related work and labels the uncertainty.
+**Investigator:** Paul Martin
+**Original subject:** Measuring and improving inference throughput for GLM-5.2 (753.86 B-parameter mixture-of-experts model) running under llama.cpp/ROCm on the server "Galactus". Later entries extend the record to other models and to oMLX on Magneto.
+**Original July notebook compiled:** July 24, 2026, from the original conversation exports, benchmark logs, and the automated diagnostic run log. All timestamps are US Eastern Time. The July entries were compiled from the saved records. Later entries list their sources and recording limitations, including the hand-collected Session 10 timings.
+
+---
+
+The entries follow the hypotheses, measurements, mistakes, and corrections in order. Commands and quoted dialogue describe what happened at the time; they are not instructions to execute now. Later findings can supersede earlier conclusions. See the [chronological index](README.md) for the experiment sequence and the [model summaries](../README.md) for the shorter account.
+
+## July GLM-5.2 results
+
+| Metric | Start (7/14, 07:00) | End (7/21) | Change |
+|---|---|---|---|
+| Prefill, pp8192-class workload | 37.63 t/s (pp512, clamped ubatch) | 119.36 ± 0.12 t/s (pp8192, patched llama.cpp, ub 8192) | ≈ 3.2× |
+| Decode (short context) | 5.15 t/s (tg128, -t 64) | 6.01 t/s (tg128, fitter config; 5.51–5.54 t/s in the -ot exps=CPU config) | +17% (config-dependent) |
+| Platform memory bandwidth | unknown; NUMA suspected | 152 GB/s measured (STREAM, RFO-corrected), saturating at 16 threads | settled |
+| Root cause of prefill ceiling | unknown | op_offload scheduler pins all MoE offload work to ROCm0 (731 of 1,186 GPU splits) + per-split expert-ids synchronization | proven, patched |
+| Decode ceiling | unknown | DDR4 bandwidth wall: ~13.8 GB/token ÷ 152 GB/s ≈ 91 ms of the ~180 ms token budget | settled |
+
+## System during Sessions 1–9
+
+| Component | Detail |
+|---|---|
+| CPU | AMD EPYC 7713 (Zen 3 "Milan"), 64 cores / 128 threads, single socket, 8 CCDs × 8 cores, 32 MB L3 per CCD. AVX2 + FMA; no AVX-512, no VNNI |
+| RAM | 1 TB DDR4 — 8 × 128 GB 3DS RDIMMs, 8 channels, rated 2666 MT/s, configured (overclocked) to 2933 MT/s. NPS1 (single NUMA node) |
+| GPUs | 4 × AMD Radeon Pro V620 (gfx1030, RDNA2), 30,704 MiB VRAM each = 122,816 MiB total; PCIe 4.0 ×16 each; VMM: no |
+| Storage | Local ZFS on SATA SSD array; dd direct 1.5 GB/s, buffered 2.1 GB/s (verified not a bottleneck) |
+| Host | Proxmox (kernel 7.0.14-4-pve at the time of the v3 run); llama.cpp runs in LXC container "openwebui" (Debian 13 "trixie") with full capabilities and no cgroup limits |
+| GTT pool | 497.8 GiB (half of RAM, amdgpu default) — relevant to pinned-allocation failures |
+| llama.cpp | Baseline: build f84a51940 (9942), backend ROCm+ZenDNN. From 7/14 mid-day: build 657e01125 (10001), rebuilt with -DGGML_ZENDNN=OFF. From 7/21: build 10001 plus the two-edit scheduler patch developed in Session 9 |
+
+## Model during Sessions 1–9
+
+GLM-5.2 (Zai Org), Unsloth UD-Q4_K_XL quantization: 11 GGUF shards, 435.19 GiB on disk, 753.86 B parameters, ~4.96 bits per weight. llama.cpp architecture `glm-dsa`. 79 blocks: blk.0–2 dense, blk.3–77 MoE (75 layers), blk.78 MTP/NextN (TENSOR_SKIP — never allocated, so `--spec-type draft-mtp` cannot work). 256 routed experts, 8 active per token, 1 shared expert. MLA attention (kv_lora_rank 512, q_lora_rank 2048), DSA lightning indexer, 1 M context. Expert tensors per MoE layer: ffn_gate_exps 1728 MiB Q4_K, ffn_up_exps 1728 MiB Q4_K, ffn_down_exps 2112 MiB Q5_K (exceptions: blk.8 Q5_K/Q6_K; blk.75–77 Q6_K down). Decode reads ≈ 13.77 GB per token in the hybrid config; ≈ 27 GB per token CPU-only.
+
+## How to read this notebook
+
+The original July investigation is ordered by wall-clock time and grouped into nine work sessions. The later session and entries follow in sequence. `### HH:MM — title` marks an entry; commands appear verbatim in fenced blocks; benchmark rows are reproduced as llama-bench printed them. Inline labels show what was known when each statement was made: **Hypothesis**, **Prediction**, **Confirmed**, **Refuted**, **Dead end**, **Decision**, **Correction**. "STREAM, RFO-corrected" means Scale ×1.5 and Add/Triad ×4/3 to account for read-for-ownership traffic that STREAM does not count (Copy is compiled to non-temporal stores and needs no correction). The v3 diagnostic run (Session 4) ran unattended from 11:08 to 14:25 on 7/14, while the dialogue of Sessions 3 and 5 continued. Its phases appear together at that point in the timeline; the phase times were reconstructed from elapsed timestamps in the log.
+
+## Primary sources
+
+| File (as kept in `Galactus Testing/`) | Saved (ET) | Content |
+|---|---|---|
+| Claude-Applying concepts to Galactus with GLM5.2.md | exported 7/16 14:45 | Main conversation, 7/13 22:43 – 7/16 14:41 (Sessions 1–3, 5–8) |
+| galactus_triad.txt | 7/14 08:02 | STREAM thread sweep, 16–128 threads, bare-metal host |
+| galactus_dmidecode_memory.txt | 7/14 08:05 | DIMM population: 8 × 128 GB, 2666 rated / 2933 configured |
+| galactus_kernel_tuning.txt | 7/14 08:11 | THP always + defer+madvise; C-states disabled |
+| galactus-diag.sh | 7/14 11:05 | v3 diagnostic script (16 phases) as launched at 11:08 |
+| results.txt | 7/14 14:33 | MAIN.log of diag-20260714-110813 (the full v3 run, 175,463 lines) |
+| newtest.txt | 7/14 18:13 | Failed -ot placement llama-bench log (comma-parse OOM) |
+| Claude State Export.zip | 7/21 06:53 | openwebui system prompt + knowledge files (context setup) |
+| llamacpp_patch.md | exported 7/21 07:37 | Patch-development session transcript (Session 9) |
+
+---
+
+## Earlier build record and reference material
+
+The [March 23 build record](2026-03-23-galactus-build.md) precedes the numbered sessions. Its compiler/device setup, mixed-to-matched DIMM results, and manual placement recipe describe the initial installation. The source is a September 30 edited copy of a dated note; its rates are retained separately because the raw captures and repetition details are missing.
+
+The [source-note index](../reference-notes/README.md) preserves that full note alongside the July model survey, September model/architecture notes, and the undated two-node deployment proposal. Candidate roles, external rankings, and proposed residency are identified separately from measured local results.
+
+## Chronological records
+
+The [chronological index](README.md) links the March build, April sweeps, July scheduler investigation, August rebaseline, Magneto measurements, and October fork work. It also identifies the undated source captures. I use date-based filenames so newly recovered experiments can take their place without renumbering the existing records.

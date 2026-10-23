@@ -1,0 +1,35 @@
+=== tg sweep: -b 512 -ub 4096 -p 65536 -n 128 ===
+ggml_cuda_init: found 4 ROCm devices (Total VRAM: 122816 MiB):
+  Device 0: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 1: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 2: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 3: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+| model                          |       size |     params | backend    | ngl | n_batch | n_ubatch | type_k | type_v | fa | ot                    | mmap | nopo |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ------: | -------: | -----: | -----: | -: | --------------------- | ---: | ---: | --------------: | -------------------: |
+/root/llama.cpp/ggml/src/ggml-cuda/ggml-cuda.cu:97: ROCm error
+/usr/local/lib/libggml-base.so.0(+0x172a5) [0x7606f6e412a5]
+/usr/local/lib/libggml-base.so.0(ggml_print_backtrace+0x1df) [0x7606f6e4166f]
+/usr/local/lib/libggml-base.so.0(ggml_abort+0x11e) [0x7606f6e417fe]
+/usr/local/lib/libggml-hip.so.0(+0x31710b2) [0x7606f53710b2]
+/usr/local/lib/libggml-hip.so.0(+0x31850d7) [0x7606f53850d7]
+/usr/local/lib/libggml-hip.so.0(_Z12launch_fattnILi256ELi4ELi8EEvR25ggml_backend_cuda_contextP11ggml_tensorPFvPKcS5_S5_S5_S5_PKiPfP15HIP_vector_typeIfLj2EEffffjfiS9_IjLj3EEiiiiiiiiiiiliiliiiiilEimibbbi+0xad7) [0x7606f54f9d77]
+/usr/local/lib/libggml-hip.so.0(_Z34ggml_cuda_flash_attn_ext_tile_caseILi256ELi256EEvR25ggml_backend_cuda_contextP11ggml_tensor+0xa59) [0x7606f54f89e9]
+/usr/local/lib/libggml-hip.so.0(+0x3178a1d) [0x7606f5378a1d]
+/usr/local/lib/libggml-hip.so.0(+0x3176be1) [0x7606f5376be1]
+/usr/local/lib/libggml-base.so.0(ggml_backend_sched_graph_compute_async+0x827) [0x7606f6e5dbc7]
+/usr/local/lib/libllama.so.0(_ZN13llama_context13graph_computeEP11ggml_cgraphb+0xa1) [0x7606f6aafad1]
+/usr/local/lib/libllama.so.0(_ZN13llama_context14process_ubatchERK12llama_ubatch14llm_graph_typeP22llama_memory_context_iR11ggml_status+0xe4) [0x7606f6ab2084]
+/usr/local/lib/libllama.so.0(_ZN13llama_context6decodeERK11llama_batch+0x34f) [0x7606f6ab7c8f]
+/usr/local/lib/libllama.so.0(llama_decode+0xb) [0x7606f6ab96bb]
+llama-bench(+0x3568e) [0x62143fded68e]
+llama-bench(+0x315d0) [0x62143fde95d0]
+/lib/x86_64-linux-gnu/libc.so.6(+0x29ca8) [0x7606f5c35ca8]
+/lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0x85) [0x7606f5c35d65]
+llama-bench(+0x33371) [0x62143fdeb371]
+
+=== tg sweep: -b 1024 -ub 4096 -p 65536 -n 128 ===
+ggml_cuda_init: found 4 ROCm devices (Total VRAM: 122816 MiB):
+  Device 0: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 1: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 2: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 3: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB

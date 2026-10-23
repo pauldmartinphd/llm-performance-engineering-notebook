@@ -1,0 +1,480 @@
+#!/usr/bin/env bash
+#===============================================================================
+# galactus-prefill.sh   (v4)
+#
+# GLM-5.2 on Galactus. Decode is SOLVED and at its physical ceiling.
+# This script exists for ONE reason: the op_offload prefill regime was never
+# actually tested, because of a clamping bug in v3.
+#
+#   llama-bench.cpp:1247   cparams.n_ctx   = n_prompt + n_gen + n_depth;
+#   llama-context.cpp:239  cparams.n_batch = min(cparams.n_ctx, params.n_batch);
+#   llama-context.cpp:241  cparams.n_ubatch= min(cparams.n_batch, params.n_ubatch);
+#
+# v3 ran "-p 512 -b 4096 -ub 128,256,512,1024,2048,4096". n_ctx was therefore 512,
+# n_batch was clamped to 512, and n_ubatch was clamped to 512. Every row above
+# ub=512 silently ran AT 512 -- which is exactly why they were all identical
+# (25.94 / 25.95 / 25.87). op_offload was only ever measured in the one regime
+# where the arithmetic says it MUST lose.
+#
+# EVERY -p BELOW IS >= THE LARGEST -ub IN THAT PHASE. That is the whole fix.
+#
+# Usage:
+#   chmod +x galactus-prefill.sh
+#   nohup ./galactus-prefill.sh > /root/console-v4.txt 2>&1 &
+#
+# Env: MODEL= OUTDIR= LLAMA_SRC= BENCH_TIMEOUT=10800 (0=off) SKIP_SLOW=1
+#===============================================================================
+
+set -uo pipefail
+
+MODEL="${MODEL:-/models/GLM-5.2/UD-Q4_K_XL/GLM-5.2-UD-Q4_K_XL-00001-of-00011.gguf}"
+OUTDIR="${OUTDIR:-/root/diag-v4-$(date +%Y%m%d-%H%M%S)}"
+LLAMA_SRC="${LLAMA_SRC:-/root/llama.cpp}"
+BENCH="${BENCH:-llama-bench}"
+BENCH_TIMEOUT="${BENCH_TIMEOUT:-10800}"
+SKIP_SLOW="${SKIP_SLOW:-0}"
+
+mkdir -p "$OUTDIR"; LOG="$OUTDIR/MAIN.log"
+MON="$OUTDIR/monitors"; mkdir -p "$MON"
+START_EPOCH=$(date +%s); PHASE_N=0; MONITOR_PIDS=()
+
+log()  { printf '%s\n' "$*" | tee -a "$LOG"; }
+hr()   { log ""; log "================================================================================"; }
+sec()  { hr; log "## $*"; log "================================================================================"; log ""; }
+elapsed() { local s=$(( $(date +%s) - START_EPOCH )); printf '%dh%02dm' $((s/3600)) $(((s%3600)/60)); }
+
+cap() {
+  local desc="$1"; shift
+  local t0 rc out
+  log ""; log "\$ $*"; log "  # ${desc}"
+  t0=$(date +%s); out=$(eval "$@" 2>&1); rc=$?
+  printf '%s\n' "$out" | sed 's/^/    /' | tee -a "$LOG"
+  log "  [exit=${rc}  $(( $(date +%s)-t0 ))s]"
+}
+
+memsnap() {
+  { echo "--- mem: $1"; grep -E '^(MemFree|Cached|AnonHugePages)' /proc/meminfo; } \
+    | sed 's/^/    /' | tee -a "$LOG"
+}
+
+cleanup() {
+  sec "TEARDOWN"
+  for p in "${MONITOR_PIDS[@]:-}"; do [ -n "${p:-}" ] && kill "$p" 2>/dev/null; done
+  cap "final VRAM" "rocm-smi --showmemuse 2>/dev/null || true"
+  log ""
+  log "PHASES ATTEMPTED : $PHASE_N"
+  log "TOTAL RUNTIME    : $(elapsed)"
+  log "LOG              : $LOG"
+  log "=== END $(date -Is) ==="
+}
+trap cleanup EXIT
+
+#===============================================================================
+cat <<'BRIEF' | tee -a "$LOG"
+################################################################################
+#  GALACTUS / GLM-5.2 — PREFILL HUNT (v4)                                       #
+#  If you are an LLM reading this cold, this section is the entire background.  #
+################################################################################
+
+## HARDWARE (all verified, all clean, do not re-investigate)
+  EPYC 7713, Zen3, 64c/128t, 8 CCDs x 8 cores. AVX2+FMA, NO AVX-512, NO VNNI.
+  1 TB DDR4, 8 channels, NPS1. STREAM (RFO-corrected) = 152 GB/s, saturating at
+  16 threads. Container == host to within 1%. No cgroup limits.
+  4x Radeon Pro V620 (gfx1030/RDNA2), 30704 MiB each = 122816 MiB.
+  All four at PCIe 4.0 x16 ("16.0GT/s x16"). GTT pool = 497.8 GiB.
+  IOMMU = passthrough ("96 identity"). Storage = local ZFS, 1.5-2.1 GB/s.
+  ZenDNN REMOVED from the build. It was the cause of every earlier SIGILL/SIGSEGV.
+
+## THE MODEL
+  GLM-5.2 UD-Q4_K_XL, 435.19 GiB, 753.86 B params, arch "glm-dsa".
+  78 layers; blk.0-2 dense; blk.3-77 = 75 MoE layers. 256 experts, 8 active,
+  1 shared expert. MLA attention. blk.78 = MTP, TENSOR_SKIP, never allocated
+  (so --spec-type draft-mtp CANNOT work -- do not suggest it).
+  Expert tensors PER LAYER (verified by gguf_dump AND the load log):
+      ffn_gate_exps 1728 MiB Q4_K | ffn_up_exps 1728 MiB Q4_K
+      ffn_down_exps 2112 MiB Q5_K                      => 5568 MiB/layer
+      75 layers => 411 GiB of routed experts.
+  DECODE reads 8/256 of that: 13.77 GB per token from DDR4.
+  Graph splits with -ot exps=CPU: 155 per token (verified, GGML_SCHED_DEBUG).
+
+## THE VALIDATED PERFORMANCE MODEL  (fits every measurement to within 3%)
+
+      t_token  =  90 ms  +  CPU_expert_bytes / 152 GB/s
+                  ^^^^^
+                  GPU dense path (18.4 GiB read serially, one card at a
+                  time under -sm layer) + 155 stream syncs. CONSTANT.
+
+      config                       CPU bytes   predicted   MEASURED
+      hybrid (-ot exps=CPU)        13.77 GB    181 ms/5.5   5.53 t/s
+      fitter (~16 layers on GPU)   10.8  GB    161 ms/6.2   6.01 t/s
+      -ngl 0 (+CPU MLA ~167 ms)    27    GB    258 ms/3.9   3.87 t/s
+
+  => The CPU half is at the memory wall from t>=24. It cannot be improved.
+  => The GPUs are worth +43% (-ngl 0 = 3.87 vs hybrid 5.53). They earn their keep.
+  => DECODE IS DONE. Ceiling = 90 ms + bytes/152. Even with EVERY expert in VRAM
+     (impossible: 411 GiB vs 120 GiB) that is 11 t/s. The only remaining decode
+     lever is FEWER BYTES, i.e. a smaller quant.
+
+## CURRENT BEST (this is the production baseline to beat)
+      llama-bench -fitt 2048 -fitc 8192 -mmp 1 -t 64
+      => tg128 = 6.01 t/s     pp512 = 40.11 t/s
+      The fitter fills 106 GiB of VRAM across all four cards, evenly.
+
+## SETTLED AND DEAD — DO NOT RETEST ANY OF THESE
+  --poll 0 vs 100        Zero effect at every thread count, every config.
+  -C / --cpu-strict      No gain, and ACTIVELY HARMFUL: t=16 strict = 3.09 t/s
+                         vs 5.27 unpinned. The OS already places threads well.
+  --no-host / CPU_REPACK ENGAGED PERFECTLY (255,744 MiB = 60.7% of expert bytes,
+                         exactly as predicted) and delivered EXACTLY ZERO.
+                         tg 5.52 vs 5.53. pp 34.64 vs 34.65. The AVX2
+                         q4_K_8x8_q8_K kernel is no faster than the default on Zen3.
+  -sm row                IMPOSSIBLE: "device ROCm0 does not support split buffers".
+                         Hard failure at load. The 90 ms GPU constant CANNOT be
+                         attacked this way.
+  -sm tensor             Not supported for glm-dsa (llm_arch_supports_sm_tensor
+                         returns false). Throws at load.
+  GGML_CUDA_GRAPH_OPT=1  5.40 vs 5.40. Nothing.
+  Transparent huge pages AnonHugePages stayed at 0 kB even with -mmp 0 --no-host 1
+                         (anonymous memory). Never applied. Untestable.
+  -ncmoe                 NEVER USE. Keeps experts of the FIRST N layers on CPU;
+                         with --tensor-split unset llama.cpp apportions layers by
+                         free memory, so every GPU-resident expert layer piles onto
+                         ROCm3 and OOMs. Use the FITTER (-fitt) instead.
+  -d / --n-depth         SIGABRT (exit 134) inside llama_context::state_seq_set_data
+                         with the ROCm backend. Use -pg instead.
+  GPU P2P                Irrelevant under -sm layer: the only cross-GPU traffic is
+                         three 24 KB tensors per token.
+  ZenDNN                 Rejects 256-expert MUL_MAT_ID and Q4_K. Inert. Removed.
+  NUMA / DIMMs / PCIe / storage / cgroups / clocks   All clean.
+
+## THE ONLY THING LEFT: op_offload PREFILL
+
+  op_offload streams CPU-resident weights to a GPU for any op whose batch dim
+  >= 32 (GGML_OP_MUL_MAT_ID uses ne[2] = token count). At tg (batch 1) it never
+  fires, so IT IS FREE FOR DECODE. It only affects prefill.
+
+  TWO STRUCTURAL FACTS, both verified in ggml-backend.cpp / ggml-cuda.cu:
+
+  (1) ALL OFFLOADED OPS GO TO ROCm0.  ggml-backend.cpp:919-925:
+          for (int b = 0; b < src_backend_id; b++) {
+              if (supports_op(backends[b], t) && offload_op(backends[b], t))
+                  return b;          // <-- FIRST supporting backend. Always 0.
+          }
+      It does NOT send the op to the layer's home GPU. So all 225 expert tensors
+      per ubatch stream onto ONE card, over ONE x16 link, and ROCm0 does all 75
+      layers of expert GEMMs while ROCm1-3 idle. This is almost certainly why it
+      OOM'd in the very first attempt, and it is why PHASE B below exists.
+
+  (2) THE COPIES ARE BLOCKING.  ggml_backend_cuda_cpy_tensor_async() returns
+      false immediately when the source backend is not HIP -- and here it is the
+      CPU. So ggml_backend_tensor_copy_async() falls through to its own fallback:
+          ggml_backend_synchronize(backend_src);
+          ggml_backend_synchronize(backend_dst);
+          ggml_backend_tensor_copy(src, dst);      // BLOCKING
+      225 blocking H2D transfers + 450 full backend syncs per ubatch, ZERO
+      overlap with compute. PCIe time and GPU time are strictly additive.
+
+  CONSEQUENCE: ~408 GiB (438 GB) of expert weights move per ubatch, onto one
+  x16 Gen4 link at ~25 GB/s => ~17 s per ubatch REGARDLESS OF UBATCH SIZE.
+  Therefore prefill throughput scales almost LINEARLY with -ub:
+
+      ub  512 -> ~29 t/s   (WORSE than the 34.65 t/s CPU baseline)
+      ub 1024 -> ~58
+      ub 2048 -> ~117
+      ub 4096 -> ~230
+      ub 8192 -> ~460
+
+  MEASURED SO FAR (all at an EFFECTIVE ub of 512, because of the clamping bug):
+      ub 512 pageable (-mmp 1)  25.77 t/s
+      ub 512 pinned   (-mmp 0)  29.72 t/s      <- pinning is worth +15%
+      CPU baseline (-nopo 1)    34.65 t/s
+  The model predicted ~29. It was right. The regime where op_offload WINS has
+  never been touched.
+
+  op_offload does NOT crash. ZenDNN was the crash. Every phase here ran clean.
+
+## WHAT THIS SCRIPT DOES
+  A1  The real ubatch ladder: -p 8192, -ub 512..8192, -nopo 0 AND 1. ONE LOAD.
+      This is the whole point. Everything else is follow-up.
+  A2  Push the ceiling: -p 16384, -ub 8192,16384.
+  A3  Prefill thread count, once op_offload is carrying the GEMMs.
+  B   -ts 0,1,1,1: give ROCm0 ZERO model layers, dedicating its full 30.7 GiB as
+      the offload scratch card. Directly targets structural fact (1).
+  C   Pinned host buffer (-mmp 0) at large ubatch. Expect +15%, costs a 14-min load.
+  D   Fitter + op_offload, margin sweep. The fitter does not model op_offload's
+      staging VRAM, so it may pack the cards too tight. -fitt must leave room.
+  E-G Decode: re-tune the fitter (v3 used -t 64; the sweep says 24-32 is better).
+  H   The final production config, pp and tg together.
+  I   Long context via -pg (NOT -d, which SIGABRTs).
+################################################################################
+BRIEF
+
+log ""
+log "RUN STARTED : $(date -Is)"
+log "OUTDIR      : $OUTDIR"
+log "MODEL       : $MODEL"
+log "NO DEADLINE. Hang guard: ${BENCH_TIMEOUT}s per invocation (0 = off)."
+
+#===============================================================================
+sec "PHASE 0 — QUICK INVENTORY (what could have changed)"
+#===============================================================================
+cap "build rev"        "cd '$LLAMA_SRC' && git log -1 --format='%H %cd %s'"
+cap "*** ZenDNN MUST BE ABSENT ***" "ldd \$(which $BENCH) | grep -i ggml; $BENCH --list-devices 2>&1 | tail -6"
+cap "kernel cmdline (want amd_iommu=on iommu=pt)" "cat /proc/cmdline"
+cap "IOMMU mode (want 'identity')" "cat /sys/kernel/iommu_groups/*/type 2>/dev/null | sort | uniq -c"
+cap "VRAM + GTT" "rocm-smi --showmeminfo all 2>/dev/null | grep -E 'VRAM Total|GTT Total'"
+cap "PCIe link" "rocm-smi --showclocks 2>/dev/null | grep pcie"
+cap "free mem"  "free -h"
+cap "THP"       "cat /sys/kernel/mm/transparent_hugepage/enabled; grep AnonHugePages /proc/meminfo"
+cap "governor"  "cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor 2>/dev/null | sort | uniq -c"
+
+#===============================================================================
+sec "PHASE 1 — MONITORS"
+#===============================================================================
+( while sleep 15; do
+    echo "=== $(date -Is)"
+    rocm-smi --showuse --showmemuse --showpower 2>/dev/null | grep -E 'GPU\[|use|Memory|Power'
+  done > "$MON/rocm-smi.txt" 2>&1 ) & MONITOR_PIDS+=($!)
+vmstat -t 10 > "$MON/vmstat.txt" 2>&1 & MONITOR_PIDS+=($!)
+log "rocm-smi + vmstat samplers -> $MON/"
+log ""
+log "*** WATCH $MON/rocm-smi.txt DURING PHASE A1. ***"
+log "    If op_offload is working, ROCm0's VRAM use and GPU utilisation should"
+log "    spike hard during prefill while ROCm1-3 sit near idle. That asymmetry"
+log "    IS structural fact (1) from the briefing, made visible."
+
+#===============================================================================
+# Harness.  -v is ON (we need load_tensors and the real HIP error strings) but
+# the 232k lines of "CUDA Graph id N reused" from v3 are filtered at source.
+#===============================================================================
+COMMON="-fa 1 --progress -o md -v"
+
+bench() {
+  local phase="$1"; shift
+  local why="$1";  shift
+  PHASE_N=$((PHASE_N+1))
+  hr
+  log "## $phase        [elapsed $(elapsed)]"
+  log ""
+  printf '%s\n' "$why" | sed 's/^/  /' | tee -a "$LOG"
+  log ""
+  memsnap "before $phase"
+  local cmd="timeout --kill-after=180 $BENCH_TIMEOUT $BENCH -m '$MODEL' $COMMON $*"
+  [ -n "${BENCH_ENV:-}" ] && cmd="env $BENCH_ENV $cmd"
+  log ""; log "\$ $cmd"
+  local t0; t0=$(date +%s)
+  eval "$cmd" 2>&1 | grep -vE 'CUDA Graph id [0-9]+ (reused|created|updated)' | tee -a "$LOG"
+  local rc=${PIPESTATUS[0]}
+  log ""
+  log "[$phase  exit=$rc  took $(( ($(date +%s)-t0)/60 )) min]"
+  [ "$rc" -ne 0 ] && log "!!! FAILED (132=SIGILL 139=SIGSEGV 134=SIGABRT 124=timeout). Continuing."
+  memsnap "after $phase"
+  BENCH_ENV=""
+  sleep 15
+}
+BENCH_ENV=""
+
+#===============================================================================
+bench "A1  *** THE UBATCH LADDER — THE ENTIRE POINT OF THIS SCRIPT ***" \
+"-p 8192 so that n_ctx = 8192 and NOTHING IS CLAMPED. This is the fix for the v3
+ bug. -nopo and -ub are BOTH context params, so all 10 combinations come from ONE
+ model load.
+
+ -nopo 1 rows = the CPU-prefill control. Should be ~flat across ubatch (~35 t/s).
+ -nopo 0 rows = op_offload. Should scale ~LINEARLY with ubatch:
+       512 -> ~29 (loses)   2048 -> ~117   4096 -> ~230   8192 -> ~460
+ The crossover should be somewhere around ub 1024.
+
+ If the -nopo 0 rows DO climb with ubatch, that is the 5-10x on prefill and the
+ whole investigation pays off. If they stay flat at ~26, the model is wrong and
+ something else is throttling the H2D path.
+
+ Ordered small->large deliberately: llama-bench prints rows INCREMENTALLY, so an
+ OOM at ub 8192 still leaves every smaller row in this log. -v is on, so a real
+ HIP error string will appear immediately ABOVE any backtrace." \
+  -ngl 99 -ot "exps=CPU" -mmp 1 \
+  -nopo 0,1 -t 64 \
+  -b 8192 -ub 512,1024,2048,4096,8192 \
+  -p 8192 -n 0 -r 2
+
+#===============================================================================
+bench "A2  PUSH THE CEILING — ub 8192 and 16384" \
+"If A1's -nopo 0 rows scaled, keep going. The weight-streaming cost per ubatch is
+ CONSTANT (~17 s), so throughput keeps climbing until VRAM runs out.
+ -p 16384 so ub 16384 is not clamped." \
+  -ngl 99 -ot "exps=CPU" -mmp 1 -nopo 0 -t 64 \
+  -b 16384 -ub 8192,16384 \
+  -p 16384 -n 0 -r 2
+
+#===============================================================================
+bench "A3  PREFILL THREAD COUNT with op_offload carrying the GEMMs" \
+"Without op_offload, prefill is CPU-compute-bound and scales with threads all the
+ way to 96 (12.81 -> 21.17 -> 26.91 -> 30.73 -> 32.92 at t=16/32/48/64/96).
+ WITH op_offload the CPU is only doing attention and routing, so the optimum
+ should collapse to something much lower. Find it -- it matters for the final
+ config, because decode wants t=24-32 and we need ONE number that serves both." \
+  -ngl 99 -ot "exps=CPU" -mmp 1 -nopo 0 \
+  -t 8,16,24,32,48,64,96 \
+  -b 8192 -ub 4096 -p 8192 -n 0 -r 2
+
+#===============================================================================
+bench "B  -ts 0,1,1,1 — DEDICATE ROCm0 AS THE OFFLOAD SCRATCH CARD" \
+"Directly targets structural fact (1): every offloaded matmul goes to ROCm0, so
+ ROCm0 must hold its share of model weights AND the streamed expert copies AND
+ every offloaded layer's MoE activations -- while ROCm1-3 sit at ~5 GiB of a
+ 30 GiB card.
+
+ -ts 0,1,1,1 gives ROCm0 ZERO model layers. Its full 30.7 GiB becomes scratch.
+ ROCm1-3 carry the attention for all 78 layers.
+
+ Cost: the dense path is now spread over 3 cards instead of 4, so decode gets a
+ little worse. For a prefill-optimised config that is a fine trade.
+ If A1 OOM'd at large ubatch and this survives, this is the answer." \
+  -ngl 99 -ot "exps=CPU" -ts 0,1,1,1 -mmp 1 -nopo 0 -t 64 \
+  -b 8192 -ub 2048,4096,8192 \
+  -p 8192 -n 0 -r 2
+
+#===============================================================================
+bench "D1  FITTER + op_offload, margin = 2048 MiB" \
+"The fitter puts ~16 expert layers in VRAM, so only ~59 layers need streaming
+ (344 GB per ubatch instead of 438). That should make op_offload ~20% faster on
+ top of everything else.
+
+ THE RISK: common_fit_params() does NOT model op_offload's staging VRAM. At
+ -fitt 2048 it packs the cards to within 2 GiB of full, leaving no room for the
+ 5.4 GiB of expert weight copies plus the MoE activations -- all of which land on
+ ROCm0. This will probably OOM. D2/D3 give it more room." \
+  -fitt 2048 -fitc 16384 -mmp 1 -nopo 0 -t 64 \
+  -b 8192 -ub 4096 -p 8192 -n 0 -r 2
+
+bench "D2  FITTER + op_offload, margin = 8192 MiB" \
+"8 GiB of headroom per card." \
+  -fitt 8192 -fitc 16384 -mmp 1 -nopo 0 -t 64 \
+  -b 8192 -ub 4096 -p 8192 -n 0 -r 2
+
+bench "D3  FITTER + op_offload, margin = 16384 MiB" \
+"16 GiB of headroom per card. Fewer experts on GPU, but plenty of scratch.
+ D1 vs D2 vs D3 finds the sweet spot between 'more experts resident' and
+ 'enough room to stream the rest'." \
+  -fitt 16384 -fitc 16384 -mmp 1 -nopo 0 -t 64 \
+  -b 8192 -ub 4096 -p 8192 -n 0 -r 2
+
+#===============================================================================
+sec "DECODE RE-TUNING — the fitter was run at -t 64, but the sweep says 24-32"
+#===============================================================================
+
+bench "E  FITTER + decode thread sweep" \
+"v3's Phase J used -t 64 and got tg128 = 6.01. The Phase B thread sweep says the
+ decode optimum is 24-32 (5.53-5.54 vs 5.40 at t=64). Combining the two should
+ give ~6.1-6.2.
+ -nopo 0 is left at the DEFAULT here because op_offload never fires at batch 1
+ (ne[2] = 1 < 32), so it is free for decode. Confirm that by comparing against E2." \
+  -fitt 2048 -fitc 16384 -mmp 1 -nopo 0 \
+  -t 16,24,32,40,48,64 \
+  -b 2048 -ub 2048 -p 0 -n 128 -r 3
+
+bench "E2  FITTER + decode, op_offload OFF (control)" \
+"Proves op_offload is genuinely free for decode. If E and E2 match at the same
+ -t, the production config can leave -nopo at its default and get fast prefill at
+ no cost to decode." \
+  -fitt 2048 -fitc 16384 -mmp 1 -nopo 1 \
+  -t 24,32 -b 2048 -ub 2048 -p 0 -n 128 -r 3
+
+#===============================================================================
+bench "F1  FITTER margin sweep for DECODE — 512 MiB" \
+"A smaller margin means MORE expert layers in VRAM, which means fewer CPU bytes,
+ which means faster decode. The model says: t = 90 ms + bytes/152.
+ Each extra MoE layer on GPU removes 174 MiB/token from the DDR4 read = ~1.2 ms.
+ How tight can we pack before it OOMs or the compute buffers no longer fit?" \
+  -fitt 512 -fitc 16384 -mmp 1 -nopo 1 -t 32 \
+  -b 2048 -ub 2048 -p 512 -n 128 -r 3
+
+bench "F2  FITTER margin sweep for DECODE — 1024 MiB" "" \
+  -fitt 1024 -fitc 16384 -mmp 1 -nopo 1 -t 32 \
+  -b 2048 -ub 2048 -p 512 -n 128 -r 3
+
+#===============================================================================
+bench "G  FITTER context sweep — KV cache vs resident experts" \
+"-fitc tells the fitter how much context to reserve KV for. Every GB reserved for
+ KV is a GB not spent on expert weights. MLA keeps the cache small (44 MiB at 512
+ ctx), so this SHOULD be cheap -- confirm it, because you will want 64-128K in
+ production and need to know what it costs." \
+  -fitt 2048 -fitc 8192,32768,131072 -mmp 1 -nopo 1 -t 32 \
+  -b 2048 -ub 2048 -p 512 -n 128 -r 3
+
+#===============================================================================
+if [ "$SKIP_SLOW" != "1" ]; then
+sec "SLOW PHASES — -mmp 0 pins a large host buffer; loads take 10-15 minutes"
+
+bench "C  PINNED HOST BUFFER (-mmp 0) at large ubatch" \
+"At the (clamped) ub 512, pinning was worth +15%: 29.72 vs 25.77 pageable.
+ ggml_backend_tensor_copy() from PINNED host memory hits full PCIe DMA rate;
+ from PAGEABLE memory the driver stages through an internal bounce buffer at
+ roughly half the bandwidth. Since op_offload's cost is ~100% PCIe, this should
+ be close to a straight +40-80% on the op_offload rows.
+ Costs a 10-15 minute load and ~411 GiB of pinned memory (GTT pool is 497.8 GiB,
+ so it fits -- barely). If it prints 'ggml_cuda_host_malloc: failed to allocate',
+ reboot the container and run this phase first." \
+  -ngl 99 -ot "exps=CPU" -mmp 0 -nopo 0 -t 64 \
+  -b 8192 -ub 2048,4096,8192 \
+  -p 8192 -n 0 -r 2
+
+bench "H  *** FINAL PRODUCTION CONFIG *** — fitter + pinned + best ubatch, pp AND tg" \
+"The candidate for llama-server. -pg reports prompt AND generation from the same
+ run, which is what you actually care about.
+ Adjust -t and -ub by hand to whatever A1/A3/E said was best before trusting this." \
+  -fitt 8192 -fitc 65536 -mmp 0 -nopo 0 -t 32 \
+  -b 8192 -ub 4096 \
+  -pg 8192,128 -r 3
+fi
+
+#===============================================================================
+bench "I  LONG CONTEXT via -pg (NOT -d, which SIGABRTs)" \
+"v3's Phase K aborted (exit 134) inside llama_context::state_seq_set_data -- a
+ llama.cpp bug in the -d/--n-depth path with the ROCm backend. -pg avoids the
+ state save/restore entirely: it prefills N tokens and then generates M, which is
+ exactly the real-world shape anyway.
+ MLA keeps the KV cache tiny, so degradation should be mild. Confirm it." \
+  -fitt 2048 -fitc 65536 -mmp 1 -nopo 0 -t 32 \
+  -b 8192 -ub 4096 \
+  -pg 2048,64 -pg 8192,64 -pg 32768,64 -r 2
+
+#===============================================================================
+sec "SUMMARY  READ IN THIS ORDER"
+cat <<'SUMM' | tee -a "$LOG"
+
+  1. PHASE A1.  Do the -nopo 0 rows CLIMB with ubatch?
+                 YES -> op_offload works, prefill is a 5-10x, and the winning
+                        ubatch is whatever the last surviving row is.
+                 NO (flat ~26) -> the model is wrong. The H2D path is throttled by
+                        something other than raw PCIe bandwidth, and the next step
+                        is to instrument ggml_backend_tensor_copy() directly.
+                 OOM at some ubatch -> that is the ceiling. PHASE B is the fix.
+
+  2. monitors/rocm-smi.txt during A1. ROCm0 should be pegged while ROCm1-3 idle.
+     That asymmetry is structural fact (1) made visible, and it is what PHASE B
+     and the -ts 0,1,1,1 trick exist to correct.
+
+  3. PHASE C.  Pinned vs pageable at the same ubatch. Expect a large gap.
+
+  4. PHASE B / D.  Which VRAM layout serves op_offload best:
+                   ROCm0 as pure scratch (-ts 0,1,1,1), or the fitter with enough
+                   margin (-fitt 8192/16384)?
+
+  5. PHASE E.  Decode with the fitter at the RIGHT thread count. Should beat 6.01.
+     PHASE E2. Confirms op_offload is free at batch 1.
+
+  6. PHASE H.  The number to put in the llama-server command line.
+
+  REFERENCE (v3 measurements):
+      hybrid best     tg 5.54 (t=24)   pp 34.65 (t=64)
+      fitter          tg 6.01 (t=64)   pp 40.11
+      -ngl 0          tg 3.87 (t=32)
+      op_offload      pp 25.77 pageable / 29.72 pinned, BOTH at an effective
+                      ubatch of 512 because of the clamping bug. Never tested
+                      above that.
+      model:  t_token = 90 ms + CPU_expert_bytes / 152 GB/s
+SUMM
+
+log ""
+log "Done. Total runtime: $(elapsed)"

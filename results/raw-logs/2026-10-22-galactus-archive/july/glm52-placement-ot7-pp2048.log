@@ -1,0 +1,10 @@
+ggml_cuda_init: found 4 ROCm devices (Total VRAM: 122816 MiB):
+  Device 0: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 1: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 2: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 3: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+| model                          |       size |     params | backend    | ngl | threads | n_ubatch |  fa | ot                    |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ------: | -------: | --: | --------------------- | --------------: | -------------------: |
+| glm-dsa ?B Q4_K - Medium       | 435.19 GiB |   753.86 B | ROCm       |  99 |      32 |     2048 |   1 | blk\.[3-6]\.ffn_.*_exps\.=ROCm1;blk\.[7-9]\.ffn_.*_exps\.=ROCm2;blk\.10\.ffn_.*_exps\.=ROCm2;exps=CPU |          pp2048 |         51.74 ± 0.00 |
+
+build: 657e01125 (10001)

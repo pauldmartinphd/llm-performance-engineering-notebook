@@ -6,7 +6,7 @@ The notes are authored records, not raw machine output. A local observation, a v
 
 | Source | Date and status | Use in this notebook |
 |---|---|---|
-| [Galactus build notebook](2026-03-23-galactus-build.md) | March 23 subject date; September 30 edited copy | Container/device setup, compiler choice, DIMM replacement, placement patterns, unsuccessful trials, and the complete production command. [March entry](../lab-notebook/00-march-build-record.md) separates those conditions from later benchmarks. |
+| [Galactus build notebook](2026-03-23-galactus-build.md) | March 23 subject date; September 30 edited copy | Container/device setup, compiler choice, DIMM replacement, placement patterns, unsuccessful trials, and the complete production command. [March entry](../lab-notebook/2026-03-23-galactus-build.md) separates those conditions from later benchmarks. |
 | [Open-weights survey](2026-07-31-open-weights-survey.md) | July 31 shortlist; September 30 source checks | OCR, speech, and translation candidates. External scores and runtime support guide selection; the note contains no completed local deployment comparison. |
 | [Practical local frontier stack](2026-09-13-local-frontier-stack.md) | September 13 comparison; September 30 edited copy | A proposed role table, quantization distinctions, and a Jan/HIP/Vulkan observation. The overlapping public essay uses the material on benchmark equivalence; this copy preserves the dated candidates. |
 | [September frontier-model roundup](2026-09-13-frontier-model-roundup.md) | September 13 snapshot; September 30 edited copy | Architecture and cost-accounting questions. Its recorded index and endpoint values are historical notes, with live links that do not reproduce an archived September result. |
@@ -33,6 +33,6 @@ Model agreement also does not supply independent confirmation. A primary source,
 
 ## How these notes relate to the results
 
-The [August common baseline](../lab-notebook/12-common-baseline-2tb.md) remains the latest normalized Galactus model comparison. [Entry 13](../lab-notebook/13-magneto-omlx-qwen38.md) remains the latest measurement entry, with the final Magneto settings recorded in its model summary. None of the imported surveys supplies a later common baseline, a measured multi-model residency configuration, or a controlled replacement test.
+The [August common baseline](../lab-notebook/2026-08-15-to-16-common-baseline-2tb.md) remains the latest normalized Galactus model comparison. [the Magneto measurements](../lab-notebook/undated-magneto-omlx-qwen38.md) remains the latest measurement entry, with the final Magneto settings recorded in its model summary. None of the imported surveys supplies a later common baseline, a measured multi-model residency configuration, or a controlled replacement test.
 
 The build record supports reproducing an earlier configuration. The surveys support understanding why a candidate was considered. The architecture proposal supports examining a design before implementation. Retaining all three kinds of material makes the notebook more complete without turning a shortlist or plan into a measured result.

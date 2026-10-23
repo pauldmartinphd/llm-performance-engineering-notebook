@@ -4,7 +4,7 @@ I ran the first Apple Silicon benchmarks in this notebook with `Qwen3.8-27B-oQ4e
 
 ## Results and evidence
 
-PP is prompt-processing throughput; TG is generation throughput, both in tokens/s. TTFT is time to first token; TPOT is time per output token. The baseline and intermediate rows come from the conversation PDF; the original exports are missing. [Entry 13](lab-notebook/13-magneto-omlx-qwen38.md) gives the source pages. The last two rows are readable in the retained [benchmark screenshot](raw-logs/omlx-magneto/2026-09-30-throughput.png). I have no repeatability estimate for these runs.
+PP is prompt-processing throughput; TG is generation throughput, both in tokens/s. TTFT is time to first token; TPOT is time per output token. The baseline and intermediate rows come from the conversation PDF; the original exports are missing. [the Magneto measurements](lab-notebook/undated-magneto-omlx-qwen38.md) gives the source pages. The last two rows are readable in the retained [benchmark screenshot](raw-logs/omlx-magneto/2026-09-30-throughput.png). I have no repeatability estimate for these runs.
 
 | Run | Context | PP (t/s) | TG (t/s) | TTFT (s) | TPOT (ms) |
 |---|---:|---:|---:|---:|---:|

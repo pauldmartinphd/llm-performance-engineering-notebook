@@ -4,7 +4,7 @@
 
 This is the final measurement, on the identical file to April (UD-Q5_K_M, 157.23 GiB): pp8192 418.83 ± 24.11, the machine record and 4.1× the April baseline-class 101.71, and tg128 15.18 ± 0.18 (t=64), which is +2.8% over the April baseline-class 14.76. MiniMax is the only model to beat its April decode baseline, using the same model file. The build, memory population, and benchmark conditions changed, so this is not an isolated test of the build alone.
 
-MiniMax was retired and removed from the machine on August 16. The April resident-offload result of 17.37 t/s was not remeasured before retirement. See [Entry 12](lab-notebook/12-common-baseline-2tb.md) for the complete conditions.
+MiniMax was retired and removed from the machine on August 16. The April resident-offload result of 17.37 t/s was not remeasured before retirement. See [the August common baseline](lab-notebook/2026-08-15-to-16-common-baseline-2tb.md) for the complete conditions.
 
 ## Earlier measurements
 
@@ -50,3 +50,7 @@ Resident-expert offload is worth +53 t/s prefill and +2.6 t/s decode here, becau
 - The best all-CPU configuration is t=32: 14.76 t/s decode and 71.82 t/s prefill.
 - The best overall configuration is resident-expert offload at ngl 42: 17.37 t/s decode and 154.93 t/s prefill.
 - Using t=128 reduced decode sharply in this sweep; the best settings avoided SMT siblings.
+
+## Original captures added October 22, 2026
+
+I added the original April 17 thread sweep and the preceding model-path failure. [the April thread and batch tests](lab-notebook/2026-04-07-to-17-thread-and-batch-tests.md) records the successful 32-thread decode peak and the regression at 128 threads.

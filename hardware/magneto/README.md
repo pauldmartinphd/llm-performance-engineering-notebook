@@ -28,7 +28,7 @@ The [September 30 oMLX record](../../results/qwen-3.8-27b.md) contains Qwen3.8-2
 
 ## Thermal observations
 
-The September investigation captured Heavy thermal pressure with about 21.6 W GPU power, 942 MHz active frequency, and 84.4% active residency. Earlier Nominal samples around 27–29 W are reported in the conversation but lack recovered captures. These observations do not establish a fixed chassis power limit. The oMLX leaderboard hardware label omits chassis; a 38-core/64-GB M2 Max label alone cannot identify a 14-inch MacBook Pro, 16-inch MacBook Pro, or Mac Studio. [Entry 13](../../results/lab-notebook/13-magneto-omlx-qwen38.md) separates the observations from the larger-chassis hypothesis.
+The September investigation captured Heavy thermal pressure with about 21.6 W GPU power, 942 MHz active frequency, and 84.4% active residency. Earlier Nominal samples around 27–29 W are reported in the conversation but lack recovered captures. These observations do not establish a fixed chassis power limit. The oMLX leaderboard hardware label omits chassis; a 38-core/64-GB M2 Max label alone cannot identify a 14-inch MacBook Pro, 16-inch MacBook Pro, or Mac Studio. [the Magneto measurements](../../results/lab-notebook/undated-magneto-omlx-qwen38.md) separates the observations from the larger-chassis hypothesis.
 
 ## Current configuration
 

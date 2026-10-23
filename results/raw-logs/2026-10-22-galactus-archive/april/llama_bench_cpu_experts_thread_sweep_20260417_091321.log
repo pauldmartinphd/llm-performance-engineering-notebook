@@ -1,0 +1,39 @@
+============================================================
+THREADS=16  TIME=2026-04-17T09:13:21-04:00
+============================================================
+ggml_cuda_init: found 4 ROCm devices (Total VRAM: 122816 MiB):
+  Device 0: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 1: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 2: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 3: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+main: error: failed to load model 'root/models/MiniMax-M2.7-UD-Q5_K_M/UD-Q5_K_M/MiniMax-M2.7-UD-Q5_K_M-00001-of-00005.gguf'
+| model                          |       size |     params | backend    | ngl | threads | n_batch | n_ubatch | type_k | type_v | fa | ot                    | mmap | nopo |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ------: | ------: | -------: | -----: | -----: | -: | --------------------- | ---: | ---: | --------------: | -------------------: |
+
+============================================================
+THREADS=32  TIME=2026-04-17T09:13:22-04:00
+============================================================
+ggml_cuda_init: found 4 ROCm devices (Total VRAM: 122816 MiB):
+  Device 0: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 1: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 2: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 3: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+main: error: failed to load model 'root/models/MiniMax-M2.7-UD-Q5_K_M/UD-Q5_K_M/MiniMax-M2.7-UD-Q5_K_M-00001-of-00005.gguf'
+| model                          |       size |     params | backend    | ngl | threads | n_batch | n_ubatch | type_k | type_v | fa | ot                    | mmap | nopo |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ------: | ------: | -------: | -----: | -----: | -: | --------------------- | ---: | ---: | --------------: | -------------------: |
+
+============================================================
+THREADS=48  TIME=2026-04-17T09:13:23-04:00
+============================================================
+ggml_cuda_init: found 4 ROCm devices (Total VRAM: 122816 MiB):
+  Device 0: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 1: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 2: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 3: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+main: error: failed to load model 'root/models/MiniMax-M2.7-UD-Q5_K_M/UD-Q5_K_M/MiniMax-M2.7-UD-Q5_K_M-00001-of-00005.gguf'
+| model                          |       size |     params | backend    | ngl | threads | n_batch | n_ubatch | type_k | type_v | fa | ot                    | mmap | nopo |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ------: | ------: | -------: | -----: | -----: | -: | --------------------- | ---: | ---: | --------------: | -------------------: |
+
+============================================================
+THREADS=64  TIME=2026-04-17T09:13:24-04:00
+============================================================

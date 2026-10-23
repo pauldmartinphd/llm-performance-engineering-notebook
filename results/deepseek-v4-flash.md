@@ -2,7 +2,7 @@
 
 ## August baseline and DSpark (2 TB, build 3653e6d6d, stock scheduler)
 
-[Entry 12](lab-notebook/12-common-baseline-2tb.md) normalized all five models on one build. V4-Flash stock measured pp8192 143.54 ± 1.64, the first recorded V4-Flash prefill at the standing configuration, and tg128 10.34 ± 0.10, 44% higher than the July result of 7.16 t/s. This historical comparison includes changes beyond the llama.cpp build.
+[The August common baseline](lab-notebook/2026-08-15-to-16-common-baseline-2tb.md) normalized all five models on one build. V4-Flash stock measured pp8192 143.54 ± 1.64, the first recorded V4-Flash prefill at the standing configuration, and tg128 10.34 ± 0.10, 44% higher than the July result of 7.16 t/s. This historical comparison includes changes beyond the llama.cpp build.
 
 The DSpark repeat measurement kept p-min off:
 
@@ -16,7 +16,7 @@ The DSpark repeat measurement kept p-min off:
 
 The curve has the same broad shape as Session 10: 12.8, 14.3–14.5, 14.6–14.8, and 11.4 t/s at n=1, 2, 3, and 5 respectively. The n=2 and n=3 results are equivalent within the observed timing variation.
 
-The repeated speculative runs varied by about 9%. Entry 12 supersedes the [Session 10 rerun protocol](../experiments/session-10-rerun.sh). The selected August configuration produced **14.1 ± 0.7 t/s** with DSpark n=3.
+The repeated speculative runs varied by about 9%. The August common baseline supersedes the [Session 10 rerun protocol](../experiments/session-10-rerun.sh). The selected August configuration produced **14.1 ± 0.7 t/s** with DSpark n=3.
 
 ## Earlier measurements
 
@@ -25,7 +25,7 @@ The sections below record earlier runs under their original conditions.
 **Model:** DeepSeek-V4-Flash-0731, Unsloth UD-Q8_K_XL — 162 GB, MXFP4 routed experts (~13 B active).
 **System:** Galactus (EPYC 7713, 2 TB DDR4-2933 8-channel, 4 × Radeon Pro V620). Platform: [../hardware/galactus/README.md](../hardware/galactus/README.md); method: [methodology.md](methodology.md).
 **Drafter:** am17an `DeepseekV4-Flash-20260731-DSpark.gguf` — `dflash` arch, block size 5, ~10.9 GB, in VRAM.
-**Date:** 2026-08-08 (Session 10). Full narrative: [Session 10](lab-notebook/10-dspark-deepseek-v4-flash.md).
+**Date:** 2026-08-08 (Session 10). Full narrative: [Session 10](lab-notebook/undated-deepseek-v4-dspark-investigation.md).
 
 ### Initial DSpark result
 
@@ -65,3 +65,7 @@ The baseline progressed as follows: 7.16 t/s (July, build 9942), then about 10.1
 ### Contrast with GLM-5.2
 
 V4-Flash speculates better than GLM-5.2 MTP (+45% at n=3 against +31% at n=2), because its streaming share of the token budget is smaller (about 29 of about 100 ms, against GLM-5.2's about 91 of about 180 ms). That leaves more amortizable cost for speculation to reduce.
+
+## Original captures added October 22, 2026
+
+I added the original V4-Flash-0731 DSpark server logs with acceptance counts and the August CLI transcripts. [the speculation and rebenchmark records](lab-notebook/2026-08-16-speculation-and-rebench-records.md) records the n-max settings and final rates, including a second n-max 5 result at 12.22 t/s. These are not V4.1 tests.

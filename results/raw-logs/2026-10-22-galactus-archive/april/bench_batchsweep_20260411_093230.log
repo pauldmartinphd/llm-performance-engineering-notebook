@@ -1,0 +1,143 @@
+=== tg sweep: -b 512 -ub 4096 -p 65536 -n 128 ===
+ggml_cuda_init: found 4 ROCm devices (Total VRAM: 122816 MiB):
+  Device 0: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 1: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 2: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 3: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+| model                          |       size |     params | backend    | ngl | n_batch | n_ubatch | type_k | type_v | fa | ot                    | mmap | nopo |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ------: | -------: | -----: | -----: | -: | --------------------- | ---: | ---: | --------------: | -------------------: |
+| qwen35moe 397B.A17B Q6_K       | 319.21 GiB |   396.35 B | ROCm       |  99 |     512 |     4096 |   q8_0 |   q8_0 |  1 | blk\.([0-4])\.ffn_.*_exps\.=ROCm0;blk\.([5-9])\.ffn_.*_exps\.=ROCm1;blk\.(1[0-4])\.ffn_.*_exps\.=ROCm2;blk\.(1[5-9])\.ffn_.*_exps\.=ROCm3;exps=CPU |    0 |    1 |         pp16384 |        103.27 ± 0.11 |
+| qwen35moe 397B.A17B Q6_K       | 319.21 GiB |   396.35 B | ROCm       |  99 |     512 |     4096 |   q8_0 |   q8_0 |  1 | blk\.([0-4])\.ffn_.*_exps\.=ROCm0;blk\.([5-9])\.ffn_.*_exps\.=ROCm1;blk\.(1[0-4])\.ffn_.*_exps\.=ROCm2;blk\.(1[5-9])\.ffn_.*_exps\.=ROCm3;exps=CPU |    0 |    1 |           tg128 |         11.49 ± 0.05 |
+
+build: 0893f50f2 (8746)
+
+=== tg sweep: -b 1024 -ub 4096 -p 65536 -n 128 ===
+ggml_cuda_init: found 4 ROCm devices (Total VRAM: 122816 MiB):
+  Device 0: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 1: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 2: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 3: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+| model                          |       size |     params | backend    | ngl | n_batch | n_ubatch | type_k | type_v | fa | ot                    | mmap | nopo |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ------: | -------: | -----: | -----: | -: | --------------------- | ---: | ---: | --------------: | -------------------: |
+/root/llama.cpp/ggml/src/ggml-cuda/ggml-cuda.cu:97: ROCm error
+/usr/local/lib/libggml-base.so.0(+0x172a5) [0x7e36ad9602a5]
+/usr/local/lib/libggml-base.so.0(ggml_print_backtrace+0x1df) [0x7e36ad96066f]
+/usr/local/lib/libggml-base.so.0(ggml_abort+0x11e) [0x7e36ad9607fe]
+/usr/local/lib/libggml-hip.so.0(+0x31710b2) [0x7e36ac1710b2]
+/usr/local/lib/libggml-hip.so.0(+0x31850d7) [0x7e36ac1850d7]
+/usr/local/lib/libggml-hip.so.0(_Z12launch_fattnILi256ELi4ELi8EEvR25ggml_backend_cuda_contextP11ggml_tensorPFvPKcS5_S5_S5_S5_PKiPfP15HIP_vector_typeIfLj2EEffffjfiS9_IjLj3EEiiiiiiiiiiiliiliiiiilEimibbbi+0xad7) [0x7e36ac2f9d77]
+/usr/local/lib/libggml-hip.so.0(_Z34ggml_cuda_flash_attn_ext_tile_caseILi256ELi256EEvR25ggml_backend_cuda_contextP11ggml_tensor+0xa59) [0x7e36ac2f89e9]
+/usr/local/lib/libggml-hip.so.0(+0x3178a1d) [0x7e36ac178a1d]
+/usr/local/lib/libggml-hip.so.0(+0x3176be1) [0x7e36ac176be1]
+/usr/local/lib/libggml-base.so.0(ggml_backend_sched_graph_compute_async+0x827) [0x7e36ad97cbc7]
+/usr/local/lib/libllama.so.0(_ZN13llama_context13graph_computeEP11ggml_cgraphb+0xa1) [0x7e36adaafad1]
+/usr/local/lib/libllama.so.0(_ZN13llama_context14process_ubatchERK12llama_ubatch14llm_graph_typeP22llama_memory_context_iR11ggml_status+0xe4) [0x7e36adab2084]
+/usr/local/lib/libllama.so.0(_ZN13llama_context6decodeERK11llama_batch+0x34f) [0x7e36adab7c8f]
+/usr/local/lib/libllama.so.0(llama_decode+0xb) [0x7e36adab96bb]
+llama-bench(+0x3568e) [0x6503c335468e]
+llama-bench(+0x315d0) [0x6503c33505d0]
+/lib/x86_64-linux-gnu/libc.so.6(+0x29ca8) [0x7e36acc35ca8]
+/lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0x85) [0x7e36acc35d65]
+llama-bench(+0x33371) [0x6503c3352371]
+
+=== tg sweep: -b 2048 -ub 4096 -p 65536 -n 128 ===
+ggml_cuda_init: found 4 ROCm devices (Total VRAM: 122816 MiB):
+  Device 0: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 1: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 2: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 3: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+main: error: failed to create context with model '/root/models/Qwen3.5-397B-A17B-GGUF/Qwen_Qwen3.5-397B-A17B-Q6_K_L/Qwen_Qwen3.5-397B-A17B-Q6_K_L-00001-of-00009.gguf'
+| model                          |       size |     params | backend    | ngl | n_ubatch | type_k | type_v | fa | ot                    | mmap | nopo |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | -------: | -----: | -----: | -: | --------------------- | ---: | ---: | --------------: | -------------------: |
+
+=== tg sweep: -b 4096 -ub 4096 -p 65536 -n 128 ===
+ggml_cuda_init: found 4 ROCm devices (Total VRAM: 122816 MiB):
+  Device 0: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 1: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 2: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 3: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+main: error: failed to create context with model '/root/models/Qwen3.5-397B-A17B-GGUF/Qwen_Qwen3.5-397B-A17B-Q6_K_L/Qwen_Qwen3.5-397B-A17B-Q6_K_L-00001-of-00009.gguf'
+| model                          |       size |     params | backend    | ngl | n_batch | n_ubatch | type_k | type_v | fa | ot                    | mmap | nopo |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ------: | -------: | -----: | -----: | -: | --------------------- | ---: | ---: | --------------: | -------------------: |
+
+=== tg sweep: -b 8192 -ub 4096 -p 65536 -n 128 ===
+ggml_cuda_init: found 4 ROCm devices (Total VRAM: 122816 MiB):
+  Device 0: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 1: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 2: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 3: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+main: error: failed to create context with model '/root/models/Qwen3.5-397B-A17B-GGUF/Qwen_Qwen3.5-397B-A17B-Q6_K_L/Qwen_Qwen3.5-397B-A17B-Q6_K_L-00001-of-00009.gguf'
+| model                          |       size |     params | backend    | ngl | n_batch | n_ubatch | type_k | type_v | fa | ot                    | mmap | nopo |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ------: | -------: | -----: | -----: | -: | --------------------- | ---: | ---: | --------------: | -------------------: |
+
+=== pp sweep: -b 4096 -ub 512 -p 65536 -n 0 ===
+ggml_cuda_init: found 4 ROCm devices (Total VRAM: 122816 MiB):
+  Device 0: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 1: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 2: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 3: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+| model                          |       size |     params | backend    | ngl | n_batch | type_k | type_v | fa | ot                    | mmap | nopo |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ------: | -----: | -----: | -: | --------------------- | ---: | ---: | --------------: | -------------------: |
+| qwen35moe 397B.A17B Q6_K       | 319.21 GiB |   396.35 B | ROCm       |  99 |    4096 |   q8_0 |   q8_0 |  1 | blk\.([0-4])\.ffn_.*_exps\.=ROCm0;blk\.([5-9])\.ffn_.*_exps\.=ROCm1;blk\.(1[0-4])\.ffn_.*_exps\.=ROCm2;blk\.(1[5-9])\.ffn_.*_exps\.=ROCm3;exps=CPU |    0 |    1 |         pp16384 |        103.72 ± 0.10 |
+
+build: 0893f50f2 (8746)
+
+=== pp sweep: -b 4096 -ub 1024 -p 65536 -n 0 ===
+ggml_cuda_init: found 4 ROCm devices (Total VRAM: 122816 MiB):
+  Device 0: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 1: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 2: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 3: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+| model                          |       size |     params | backend    | ngl | n_batch | n_ubatch | type_k | type_v | fa | ot                    | mmap | nopo |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ------: | -------: | -----: | -----: | -: | --------------------- | ---: | ---: | --------------: | -------------------: |
+/root/llama.cpp/ggml/src/ggml-cuda/ggml-cuda.cu:97: ROCm error
+/usr/local/lib/libggml-base.so.0(+0x172a5) [0x7cd28851b2a5]
+/usr/local/lib/libggml-base.so.0(ggml_print_backtrace+0x1df) [0x7cd28851b66f]
+/usr/local/lib/libggml-base.so.0(ggml_abort+0x11e) [0x7cd28851b7fe]
+/usr/local/lib/libggml-hip.so.0(+0x31710b2) [0x7cd2869710b2]
+/usr/local/lib/libggml-hip.so.0(+0x31850d7) [0x7cd2869850d7]
+/usr/local/lib/libggml-hip.so.0(_Z12launch_fattnILi256ELi4ELi8EEvR25ggml_backend_cuda_contextP11ggml_tensorPFvPKcS5_S5_S5_S5_PKiPfP15HIP_vector_typeIfLj2EEffffjfiS9_IjLj3EEiiiiiiiiiiiliiliiiiilEimibbbi+0xad7) [0x7cd286af9d77]
+/usr/local/lib/libggml-hip.so.0(_Z34ggml_cuda_flash_attn_ext_tile_caseILi256ELi256EEvR25ggml_backend_cuda_contextP11ggml_tensor+0xa59) [0x7cd286af89e9]
+/usr/local/lib/libggml-hip.so.0(+0x3178a1d) [0x7cd286978a1d]
+/usr/local/lib/libggml-hip.so.0(+0x3176be1) [0x7cd286976be1]
+/usr/local/lib/libggml-base.so.0(ggml_backend_sched_graph_compute_async+0x827) [0x7cd288537bc7]
+/usr/local/lib/libllama.so.0(_ZN13llama_context13graph_computeEP11ggml_cgraphb+0xa1) [0x7cd2882afad1]
+/usr/local/lib/libllama.so.0(_ZN13llama_context14process_ubatchERK12llama_ubatch14llm_graph_typeP22llama_memory_context_iR11ggml_status+0xe4) [0x7cd2882b2084]
+/usr/local/lib/libllama.so.0(_ZN13llama_context6decodeERK11llama_batch+0x34f) [0x7cd2882b7c8f]
+/usr/local/lib/libllama.so.0(llama_decode+0xb) [0x7cd2882b96bb]
+llama-bench(+0x3568e) [0x56de3b92e68e]
+llama-bench(+0x315d0) [0x56de3b92a5d0]
+/lib/x86_64-linux-gnu/libc.so.6(+0x29ca8) [0x7cd287435ca8]
+/lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0x85) [0x7cd287435d65]
+llama-bench(+0x33371) [0x56de3b92c371]
+
+=== pp sweep: -b 4096 -ub 2048 -p 65536 -n 0 ===
+ggml_cuda_init: found 4 ROCm devices (Total VRAM: 122816 MiB):
+  Device 0: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 1: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 2: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 3: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+main: error: failed to create context with model '/root/models/Qwen3.5-397B-A17B-GGUF/Qwen_Qwen3.5-397B-A17B-Q6_K_L/Qwen_Qwen3.5-397B-A17B-Q6_K_L-00001-of-00009.gguf'
+| model                          |       size |     params | backend    | ngl | n_batch | n_ubatch | type_k | type_v | fa | ot                    | mmap | nopo |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ------: | -------: | -----: | -----: | -: | --------------------- | ---: | ---: | --------------: | -------------------: |
+
+=== pp sweep: -b 4096 -ub 4096 -p 65536 -n 0 ===
+ggml_cuda_init: found 4 ROCm devices (Total VRAM: 122816 MiB):
+  Device 0: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 1: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 2: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 3: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+main: error: failed to create context with model '/root/models/Qwen3.5-397B-A17B-GGUF/Qwen_Qwen3.5-397B-A17B-Q6_K_L/Qwen_Qwen3.5-397B-A17B-Q6_K_L-00001-of-00009.gguf'
+| model                          |       size |     params | backend    | ngl | n_batch | n_ubatch | type_k | type_v | fa | ot                    | mmap | nopo |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ------: | -------: | -----: | -----: | -: | --------------------- | ---: | ---: | --------------: | -------------------: |
+
+=== pp sweep: -b 4096 -ub 8192 -p 65536 -n 0 ===
+ggml_cuda_init: found 4 ROCm devices (Total VRAM: 122816 MiB):
+  Device 0: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 1: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 2: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 3: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+main: error: failed to create context with model '/root/models/Qwen3.5-397B-A17B-GGUF/Qwen_Qwen3.5-397B-A17B-Q6_K_L/Qwen_Qwen3.5-397B-A17B-Q6_K_L-00001-of-00009.gguf'
+| model                          |       size |     params | backend    | ngl | n_batch | n_ubatch | type_k | type_v | fa | ot                    | mmap | nopo |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ------: | -------: | -----: | -----: | -: | --------------------- | ---: | ---: | --------------: | -------------------: |
+

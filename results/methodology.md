@@ -2,7 +2,7 @@
 
 This is the procedure I used to find the system's inference limits and test changes. It was developed for hybrid Mixture-of-Experts (MoE) inference, in which the routed experts sit in system RAM and the dense path runs on the GPUs, but the test loop also applies to other systems. Every step below uses numbers from **Galactus** (EPYC 7713, DDR4-2933, 4 × Radeon Pro V620); see the [per-model results](README.md) and the [hardware note](../hardware/galactus/README.md).
 
-The investigation starts with memory bandwidth and an estimate of time per token. Controlled sweeps test that estimate and identify the settings or code paths to inspect. This page uses the July GLM-5.2 investigation as its worked example; the [August common baseline](lab-notebook/12-common-baseline-2tb.md) records the later build and memory population.
+The investigation starts with memory bandwidth and an estimate of time per token. Controlled sweeps test that estimate and identify the settings or code paths to inspect. This page uses the July GLM-5.2 investigation as its worked example; the [August common baseline](lab-notebook/2026-08-15-to-16-common-baseline-2tb.md) records the later build and memory population.
 
 > A companion article on the Technicomp Labs blog presents this method as a narrative, with the full patch investigation: [A Scientific Method for Measuring the Limits of Local LLM Inference Speed](https://technicomplabs.io/posts/2026/08/measuring-local-llm-inference-limits/).
 

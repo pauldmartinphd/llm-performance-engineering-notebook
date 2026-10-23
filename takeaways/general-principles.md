@@ -53,5 +53,5 @@ The notebook also records pinned-buffer and ZenDNN crashes during v2 testing, an
 ## Limits of the evidence
 
 - These Galactus numbers come from one machine and mostly one prompt (a technical-prose ZFS explainer for the decode and speculation tests), with greedy decoding. An instrumentation failure prevented me from capturing acceptance rates for the Session 10 DSpark runs, as recorded in the notebook.
-- The record spans April through August and includes different llama.cpp builds, model exports, memory populations, and benchmark settings. [Entry 12](../results/lab-notebook/12-common-baseline-2tb.md) provides a common August baseline; earlier results are historical comparisons.
+- The record spans April through August and includes different llama.cpp builds, model exports, memory populations, and benchmark settings. [the August common baseline](../results/lab-notebook/2026-08-15-to-16-common-baseline-2tb.md) provides a common August baseline; earlier results are historical comparisons.
 - I label estimates from a model separately from measurements in the source documents.

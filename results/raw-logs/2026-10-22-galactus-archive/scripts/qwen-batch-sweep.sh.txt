@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+set -u
+
+MODEL="/root/models/Qwen3.5-397B-A17B-GGUF/Qwen_Qwen3.5-397B-A17B-Q6_K_L/Qwen_Qwen3.5-397B-A17B-Q6_K_L-00001-of-00009.gguf"
+LOG="/root/bench-qwen35-397b-$(date +%Y%m%d-%H%M%S).log"
+T=64
+DEPTH=131072
+
+OT='blk\.([0-3])\.ffn_.*_exps\.=ROCm0;blk\.([4-7])\.ffn_.*_exps\.=ROCm1;blk\.(8|9|1[0-1])\.ffn_.*_exps\.=ROCm2;blk\.(1[2-5])\.ffn_.*_exps\.=ROCm3;exps=CPU'
+
+COMMON=(
+  -m "$MODEL"
+  -ngl 99 -nopo 1 -mmp 0 -t "$T"
+  -ctk q8_0 -ctv q8_0 -fa 1
+  -ot "$OT"
+  -r 2
+)
+
+run() {
+  local b="$1" ub="$2" p="$3" n="$4" d="$5"
+  echo "=== b=$b ub=$ub p=$p n=$n d=$d ===" | tee -a "$LOG"
+  /root/llama.cpp/build/bin/llama-bench "${COMMON[@]}" \
+    -b "$b" -ub "$ub" -p "$p" -n "$n" -d "$d" 2>&1 | tee -a "$LOG"
+  echo | tee -a "$LOG"
+}
+
+# Phase 1: tg + light pp at full depth — find best (b,ub) for generation.
+for b in 1024 2048 4096; do
+  for ub in 512 1024; do
+    [ "$ub" -gt "$b" ] && continue
+    run "$b" "$ub" 512 128 "$DEPTH"
+  done
+done
+
+# Phase 2: prefill throughput at full depth.
+for b in 2048 4096; do
+  for ub in 512 1024; do
+    run "$b" "$ub" 4096 0 "$DEPTH"
+  done
+done
+
+# Phase 3: deep prefill chunks at full depth, ub capped at 512 to dodge gfx1030 FA tile abort.
+for p in 16384 32768; do
+  for b in 2048 4096; do
+    run "$b" 512 "$p" 0 "$DEPTH"
+  done
+done
+
+echo "DONE. Log: $LOG"

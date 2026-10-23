@@ -1,7 +1,7 @@
 # Experiment scripts
 
-[galactus-diag.sh](galactus-diag.sh) is the 16-phase diagnostic harness used in the July investigation. Its commands and assumptions belong to that historical configuration; [Session 4](../results/lab-notebook/04-session-4-v3-diagnostic-run.md) records the run and its failures.
+[galactus-diag.sh](galactus-diag.sh) is the 16-phase diagnostic harness used in the July investigation. Its commands and assumptions belong to that historical configuration; [Session 4](../results/lab-notebook/2026-07-14-1108-v3-diagnostic-run.md) records the run and its failures.
 
-[session-10-rerun.sh](session-10-rerun.sh) records the proposed controlled rerun of the first DSpark sweep. The later measurements in [Entry 12](../results/lab-notebook/12-common-baseline-2tb.md) superseded that protocol. It remains here as part of the experimental record.
+[session-10-rerun.sh](session-10-rerun.sh) records the proposed controlled rerun of the first DSpark sweep. The later measurements in [the August common baseline](../results/lab-notebook/2026-08-15-to-16-common-baseline-2tb.md) superseded that protocol. It remains here as part of the experimental record.
 
 The [reproduction guide](../REPRODUCE.md) covers the model file, build, memory population, effective batch sizes, and placement needed to compare another run with these results.

@@ -1,0 +1,120 @@
+============================================================
+THREADS=16  TIME=2026-04-07T19:47:50-04:00
+============================================================
+ggml_cuda_init: found 4 ROCm devices (Total VRAM: 122816 MiB):
+  Device 0: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 1: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 2: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 3: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+ggml_vulkan: Found 4 Vulkan devices:
+ggml_vulkan: 0 = AMD Radeon Pro V620 (RADV NAVI21) (radv) | uma: 0 | fp16: 1 | bf16: 0 | warp size: 32 | shared memory: 65536 | int dot: 1 | matrix cores: none
+ggml_vulkan: 1 = AMD Radeon Pro V620 (RADV NAVI21) (radv) | uma: 0 | fp16: 1 | bf16: 0 | warp size: 32 | shared memory: 65536 | int dot: 1 | matrix cores: none
+ggml_vulkan: 2 = AMD Radeon Pro V620 (RADV NAVI21) (radv) | uma: 0 | fp16: 1 | bf16: 0 | warp size: 32 | shared memory: 65536 | int dot: 1 | matrix cores: none
+ggml_vulkan: 3 = AMD Radeon Pro V620 (RADV NAVI21) (radv) | uma: 0 | fp16: 1 | bf16: 0 | warp size: 32 | shared memory: 65536 | int dot: 1 | matrix cores: none
+| model                          |       size |     params | backend    | ngl | threads | n_batch | n_ubatch | type_k | type_v | fa | ot                    | mmap | nopo |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ------: | ------: | -------: | -----: | -----: | -: | --------------------- | ---: | ---: | --------------: | -------------------: |
+| qwen35moe 397B.A17B Q6_K       | 319.21 GiB |   396.35 B | ROCm,Vulkan |  99 |      16 |    4096 |     4096 |   q8_0 |   q8_0 |  1 | exps=CPU              |    0 |    1 |           pp512 |         36.28 ± 0.01 |
+| qwen35moe 397B.A17B Q6_K       | 319.21 GiB |   396.35 B | ROCm,Vulkan |  99 |      16 |    4096 |     4096 |   q8_0 |   q8_0 |  1 | exps=CPU              |    0 |    1 |           tg128 |          9.46 ± 0.04 |
+
+build: 58190cc84 (8671)
+
+============================================================
+THREADS=32  TIME=2026-04-07T19:57:25-04:00
+============================================================
+ggml_cuda_init: found 4 ROCm devices (Total VRAM: 122816 MiB):
+  Device 0: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 1: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 2: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 3: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+ggml_vulkan: Found 4 Vulkan devices:
+ggml_vulkan: 0 = AMD Radeon Pro V620 (RADV NAVI21) (radv) | uma: 0 | fp16: 1 | bf16: 0 | warp size: 32 | shared memory: 65536 | int dot: 1 | matrix cores: none
+ggml_vulkan: 1 = AMD Radeon Pro V620 (RADV NAVI21) (radv) | uma: 0 | fp16: 1 | bf16: 0 | warp size: 32 | shared memory: 65536 | int dot: 1 | matrix cores: none
+ggml_vulkan: 2 = AMD Radeon Pro V620 (RADV NAVI21) (radv) | uma: 0 | fp16: 1 | bf16: 0 | warp size: 32 | shared memory: 65536 | int dot: 1 | matrix cores: none
+ggml_vulkan: 3 = AMD Radeon Pro V620 (RADV NAVI21) (radv) | uma: 0 | fp16: 1 | bf16: 0 | warp size: 32 | shared memory: 65536 | int dot: 1 | matrix cores: none
+| model                          |       size |     params | backend    | ngl | threads | n_batch | n_ubatch | type_k | type_v | fa | ot                    | mmap | nopo |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ------: | ------: | -------: | -----: | -----: | -: | --------------------- | ---: | ---: | --------------: | -------------------: |
+| qwen35moe 397B.A17B Q6_K       | 319.21 GiB |   396.35 B | ROCm,Vulkan |  99 |      32 |    4096 |     4096 |   q8_0 |   q8_0 |  1 | exps=CPU              |    0 |    1 |           pp512 |         62.81 ± 0.05 |
+| qwen35moe 397B.A17B Q6_K       | 319.21 GiB |   396.35 B | ROCm,Vulkan |  99 |      32 |    4096 |     4096 |   q8_0 |   q8_0 |  1 | exps=CPU              |    0 |    1 |           tg128 |          9.69 ± 0.02 |
+
+build: 58190cc84 (8671)
+
+============================================================
+THREADS=48  TIME=2026-04-07T20:07:46-04:00
+============================================================
+ggml_cuda_init: found 4 ROCm devices (Total VRAM: 122816 MiB):
+  Device 0: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 1: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 2: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 3: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+ggml_vulkan: Found 4 Vulkan devices:
+ggml_vulkan: 0 = AMD Radeon Pro V620 (RADV NAVI21) (radv) | uma: 0 | fp16: 1 | bf16: 0 | warp size: 32 | shared memory: 65536 | int dot: 1 | matrix cores: none
+ggml_vulkan: 1 = AMD Radeon Pro V620 (RADV NAVI21) (radv) | uma: 0 | fp16: 1 | bf16: 0 | warp size: 32 | shared memory: 65536 | int dot: 1 | matrix cores: none
+ggml_vulkan: 2 = AMD Radeon Pro V620 (RADV NAVI21) (radv) | uma: 0 | fp16: 1 | bf16: 0 | warp size: 32 | shared memory: 65536 | int dot: 1 | matrix cores: none
+ggml_vulkan: 3 = AMD Radeon Pro V620 (RADV NAVI21) (radv) | uma: 0 | fp16: 1 | bf16: 0 | warp size: 32 | shared memory: 65536 | int dot: 1 | matrix cores: none
+| model                          |       size |     params | backend    | ngl | threads | n_batch | n_ubatch | type_k | type_v | fa | ot                    | mmap | nopo |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ------: | ------: | -------: | -----: | -----: | -: | --------------------- | ---: | ---: | --------------: | -------------------: |
+| qwen35moe 397B.A17B Q6_K       | 319.21 GiB |   396.35 B | ROCm,Vulkan |  99 |      48 |    4096 |     4096 |   q8_0 |   q8_0 |  1 | exps=CPU              |    0 |    1 |           pp512 |         76.05 ± 0.11 |
+| qwen35moe 397B.A17B Q6_K       | 319.21 GiB |   396.35 B | ROCm,Vulkan |  99 |      48 |    4096 |     4096 |   q8_0 |   q8_0 |  1 | exps=CPU              |    0 |    1 |           tg128 |          9.63 ± 0.01 |
+
+build: 58190cc84 (8671)
+
+============================================================
+THREADS=64  TIME=2026-04-07T20:17:06-04:00
+============================================================
+ggml_cuda_init: found 4 ROCm devices (Total VRAM: 122816 MiB):
+  Device 0: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 1: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 2: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 3: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+ggml_vulkan: Found 4 Vulkan devices:
+ggml_vulkan: 0 = AMD Radeon Pro V620 (RADV NAVI21) (radv) | uma: 0 | fp16: 1 | bf16: 0 | warp size: 32 | shared memory: 65536 | int dot: 1 | matrix cores: none
+ggml_vulkan: 1 = AMD Radeon Pro V620 (RADV NAVI21) (radv) | uma: 0 | fp16: 1 | bf16: 0 | warp size: 32 | shared memory: 65536 | int dot: 1 | matrix cores: none
+ggml_vulkan: 2 = AMD Radeon Pro V620 (RADV NAVI21) (radv) | uma: 0 | fp16: 1 | bf16: 0 | warp size: 32 | shared memory: 65536 | int dot: 1 | matrix cores: none
+ggml_vulkan: 3 = AMD Radeon Pro V620 (RADV NAVI21) (radv) | uma: 0 | fp16: 1 | bf16: 0 | warp size: 32 | shared memory: 65536 | int dot: 1 | matrix cores: none
+| model                          |       size |     params | backend    | ngl | n_batch | n_ubatch | type_k | type_v | fa | ot                    | mmap | nopo |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ------: | -------: | -----: | -----: | -: | --------------------- | ---: | ---: | --------------: | -------------------: |
+| qwen35moe 397B.A17B Q6_K       | 319.21 GiB |   396.35 B | ROCm,Vulkan |  99 |    4096 |     4096 |   q8_0 |   q8_0 |  1 | exps=CPU              |    0 |    1 |           pp512 |         84.64 ± 0.21 |
+| qwen35moe 397B.A17B Q6_K       | 319.21 GiB |   396.35 B | ROCm,Vulkan |  99 |    4096 |     4096 |   q8_0 |   q8_0 |  1 | exps=CPU              |    0 |    1 |           tg128 |          9.56 ± 0.02 |
+
+build: 58190cc84 (8671)
+
+============================================================
+THREADS=96  TIME=2026-04-07T20:26:24-04:00
+============================================================
+ggml_cuda_init: found 4 ROCm devices (Total VRAM: 122816 MiB):
+  Device 0: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 1: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 2: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 3: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+ggml_vulkan: Found 4 Vulkan devices:
+ggml_vulkan: 0 = AMD Radeon Pro V620 (RADV NAVI21) (radv) | uma: 0 | fp16: 1 | bf16: 0 | warp size: 32 | shared memory: 65536 | int dot: 1 | matrix cores: none
+ggml_vulkan: 1 = AMD Radeon Pro V620 (RADV NAVI21) (radv) | uma: 0 | fp16: 1 | bf16: 0 | warp size: 32 | shared memory: 65536 | int dot: 1 | matrix cores: none
+ggml_vulkan: 2 = AMD Radeon Pro V620 (RADV NAVI21) (radv) | uma: 0 | fp16: 1 | bf16: 0 | warp size: 32 | shared memory: 65536 | int dot: 1 | matrix cores: none
+ggml_vulkan: 3 = AMD Radeon Pro V620 (RADV NAVI21) (radv) | uma: 0 | fp16: 1 | bf16: 0 | warp size: 32 | shared memory: 65536 | int dot: 1 | matrix cores: none
+| model                          |       size |     params | backend    | ngl | threads | n_batch | n_ubatch | type_k | type_v | fa | ot                    | mmap | nopo |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ------: | ------: | -------: | -----: | -----: | -: | --------------------- | ---: | ---: | --------------: | -------------------: |
+| qwen35moe 397B.A17B Q6_K       | 319.21 GiB |   396.35 B | ROCm,Vulkan |  99 |      96 |    4096 |     4096 |   q8_0 |   q8_0 |  1 | exps=CPU              |    0 |    1 |           pp512 |         87.54 ± 0.41 |
+| qwen35moe 397B.A17B Q6_K       | 319.21 GiB |   396.35 B | ROCm,Vulkan |  99 |      96 |    4096 |     4096 |   q8_0 |   q8_0 |  1 | exps=CPU              |    0 |    1 |           tg128 |          9.42 ± 0.00 |
+
+build: 58190cc84 (8671)
+
+============================================================
+THREADS=128  TIME=2026-04-07T20:36:23-04:00
+============================================================
+ggml_cuda_init: found 4 ROCm devices (Total VRAM: 122816 MiB):
+  Device 0: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 1: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 2: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+  Device 3: AMD Radeon Pro V620, gfx1030 (0x1030), VMM: no, Wave Size: 32, VRAM: 30704 MiB
+ggml_vulkan: Found 4 Vulkan devices:
+ggml_vulkan: 0 = AMD Radeon Pro V620 (RADV NAVI21) (radv) | uma: 0 | fp16: 1 | bf16: 0 | warp size: 32 | shared memory: 65536 | int dot: 1 | matrix cores: none
+ggml_vulkan: 1 = AMD Radeon Pro V620 (RADV NAVI21) (radv) | uma: 0 | fp16: 1 | bf16: 0 | warp size: 32 | shared memory: 65536 | int dot: 1 | matrix cores: none
+ggml_vulkan: 2 = AMD Radeon Pro V620 (RADV NAVI21) (radv) | uma: 0 | fp16: 1 | bf16: 0 | warp size: 32 | shared memory: 65536 | int dot: 1 | matrix cores: none
+ggml_vulkan: 3 = AMD Radeon Pro V620 (RADV NAVI21) (radv) | uma: 0 | fp16: 1 | bf16: 0 | warp size: 32 | shared memory: 65536 | int dot: 1 | matrix cores: none
+| model                          |       size |     params | backend    | ngl | threads | n_batch | n_ubatch | type_k | type_v | fa | ot                    | mmap | nopo |            test |                  t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | --: | ------: | ------: | -------: | -----: | -----: | -: | --------------------- | ---: | ---: | --------------: | -------------------: |
+| qwen35moe 397B.A17B Q6_K       | 319.21 GiB |   396.35 B | ROCm,Vulkan |  99 |     128 |    4096 |     4096 |   q8_0 |   q8_0 |  1 | exps=CPU              |    0 |    1 |           pp512 |         85.61 ± 1.65 |
+| qwen35moe 397B.A17B Q6_K       | 319.21 GiB |   396.35 B | ROCm,Vulkan |  99 |     128 |    4096 |     4096 |   q8_0 |   q8_0 |  1 | exps=CPU              |    0 |    1 |           tg128 |          4.57 ± 0.64 |
+
+build: 58190cc84 (8671)
+

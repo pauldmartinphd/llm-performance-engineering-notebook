@@ -2,7 +2,7 @@
 
 These experiments use a large MoE model with routed experts in system RAM and the dense path on one or more GPUs. Repeating the method on another machine starts with its measured bandwidth, placement, and effective batch sizes. The commands below describe the recorded llama.cpp workflow; flags and backend behavior can differ by build.
 
-For the initial March installation, the [earlier build record](results/lab-notebook/00-march-build-record.md) links the retained compiler, device-access, and server commands. It is a historical configuration on a different build and storage setup, rather than the recipe for the August common baseline. The [source-note index](results/reference-notes/README.md) records the evidence status of the later model-selection and residency plans.
+For the initial March installation, the [earlier build record](results/lab-notebook/2026-03-23-galactus-build.md) links the retained compiler, device-access, and server commands. It is a historical configuration on a different build and storage setup, rather than the recipe for the August common baseline. The [source-note index](results/reference-notes/README.md) records the evidence status of the later model-selection and residency plans.
 
 ## Prepare and record the configuration
 
@@ -33,7 +33,7 @@ llama-bench -m <model> -ngl 99 -ot "exps=CPU" -fa 1 \
 
 Sweep thread counts rather than assuming that all logical CPUs will help. Galactus's GLM-5.2 decode peaked around 24–32 threads and slowed sharply when the sweep reached SMT siblings. Other models and prefill had different optima.
 
-Set `-ub` explicitly and keep `-p` large enough for the intended micro-batch: in the recorded builds, `-p` clamps the effective `n_ubatch`. Asking for `-ub 8192` with `-p 512` still tests the smaller regime. Record the effective values from the run. The [August baseline](results/lab-notebook/12-common-baseline-2tb.md) used f16 KV; the April runs used q8_0 and smaller prompts.
+Set `-ub` explicitly and keep `-p` large enough for the intended micro-batch: in the recorded builds, `-p` clamps the effective `n_ubatch`. Asking for `-ub 8192` with `-p 512` still tests the smaller regime. Record the effective values from the run. The [August baseline](results/lab-notebook/2026-08-15-to-16-common-baseline-2tb.md) used f16 KV; the April runs used q8_0 and smaller prompts.
 
 ## Inspect scheduler placement
 
@@ -51,7 +51,7 @@ Concentration on one GPU is a reason to inspect the [prefill patch](patches/pref
 
 Follow the patch note's source anchors, build instructions, and two checks. Hold the model, flags, loading mode, and hardware state constant across stock and patched runs. Confirm the changed split distribution, measure large-batch prefill, and check decode for regressions. The recorded gain was 13.7% on GLM-5.2; the four-model comparison on the August build remains open.
 
-The July commands use `-mmp 0` for pinned host loading. The [Session 10 interval notes](results/lab-notebook/10-dspark-deepseek-v4-flash.md) record its later replacement by `--load-mode none`; `-dio 1` maps to `--load-mode dio`. Use the flags supported by the build under test and record the buffer type actually allocated.
+The July commands use `-mmp 0` for pinned host loading. The [Session 10 interval notes](results/lab-notebook/undated-deepseek-v4-dspark-investigation.md) record its later replacement by `--load-mode none`; `-dio 1` maps to `--load-mode dio`. Use the flags supported by the build under test and record the buffer type actually allocated.
 
 ## Measure speculative decode separately
 
@@ -63,7 +63,7 @@ Use llama-server's JSON timings or capture llama-cli through a pseudo-terminal. 
 
 ## Save the evidence
 
-Keep raw output alongside the [CSV extracts](results/data/). Record date, experiment, configuration (including exact flags and build), metric, value, and source. Preserve individual repetitions and explain what a reported ± value represents. The speculative repeats in Entry 12 show about 9% timing variation, so a single run cannot reliably distinguish nearby settings.
+Keep raw output alongside the [CSV extracts](results/data/). Record date, experiment, configuration (including exact flags and build), metric, value, and source. Preserve individual repetitions and explain what a reported ± value represents. The speculative repeats in the August common baseline show about 9% timing variation, so a single run cannot reliably distinguish nearby settings.
 
 Record failed runs, unsupported configurations, and null results as well as improvements. The [negative-results table](takeaways/refuted-hypotheses.md) is specific to the tested workload and machine; it helps prioritize new experiments without ruling out different behavior elsewhere.
 
@@ -73,4 +73,4 @@ The workflow above describes Galactus/llama.cpp. [Magneto's oMLX record](results
 
 The recorded benchmark conditions include the corpus, context and generation lengths, full/quick warm-up, ANE-aligned prompt setting, cache state, and acceleration toggles. Single-request PP/TG and continuous-batching throughput are separate metrics. Thermal comparisons also depend on power mode, adapter, cooling conditions, and the timing of powermetrics relative to prefill and decode. A thermal snapshot does not establish the state of an entire sweep.
 
-The initial recorded configuration used Lightning MTP on and ANE Prefill, SpecPrefill, DFlash, VLM MTP, and TurboQuant KV off. It provides a reference with MTP active; no MTP-off control was recorded. Since the model/MLX revisions, macOS build, full benchmark recipes and original logs were not retained, the evidence in [Entry 13](results/lab-notebook/13-magneto-omlx-qwen38.md) does not support exact reproduction of those runs. My settings at the end of the investigation are logged in the [model note](results/qwen-3.8-27b.md).
+The initial recorded configuration used Lightning MTP on and ANE Prefill, SpecPrefill, DFlash, VLM MTP, and TurboQuant KV off. It provides a reference with MTP active; no MTP-off control was recorded. Since the model/MLX revisions, macOS build, full benchmark recipes and original logs were not retained, the evidence in [the Magneto measurements](results/lab-notebook/undated-magneto-omlx-qwen38.md) does not support exact reproduction of those runs. My settings at the end of the investigation are logged in the [model note](results/qwen-3.8-27b.md).

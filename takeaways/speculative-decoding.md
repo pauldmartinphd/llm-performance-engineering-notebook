@@ -15,7 +15,7 @@ The decode cost per token is C + S. C is the amortizable part: the GPU dense pat
 | GLM-5.2 (Q4_K experts, 40 B active) | ~90 | ~91 | 50% | +31% (MTP n=2 → 7.1 t/s) | ~11 t/s |
 | DS-V4-Flash (MXFP4 experts, 13 B active) | ~70 | ~29 | 30% | +45% (DSpark n=3 → 14.7 t/s) | ~35 t/s |
 
-C and S are fitted estimates, and the gains in this table are the earlier measurements. The August common-build repeats were GLM-5.2 **6.6 ± 0.3 t/s** (+25% ± 6) and DeepSeek-V4-Flash **14.1 ± 0.7 t/s** (+36% ± 7). See [Entry 12](../results/lab-notebook/12-common-baseline-2tb.md). Since I did not capture acceptance rates in Session 10, explanations based on acceptance remain hypotheses.
+C and S are fitted estimates, and the gains in this table are the earlier measurements. The August common-build repeats were GLM-5.2 **6.6 ± 0.3 t/s** (+25% ± 6) and DeepSeek-V4-Flash **14.1 ± 0.7 t/s** (+36% ± 7). See [the August common baseline](../results/lab-notebook/2026-08-15-to-16-common-baseline-2tb.md). Since I did not capture acceptance rates in Session 10, explanations based on acceptance remain hypotheses.
 
 ## Methods in llama.cpp (as of August 2026)
 
@@ -29,4 +29,4 @@ The flag set is `--spec-type <type> [-md <drafter> -ngld 99] --spec-draft-n-max 
 
 ## Measurement rules
 
-In the tested builds, llama-cli required terminal-aware capture: `tee` breaks its terminal display, and `--log-file` drops the info-level acceptance and timing lines. Capture with `script -q <file> -c "<command>"`, or benchmark through `llama-server` (the `/completion` JSON `timings`; the logs print `draft acceptance`). `llama-bench` does not support speculation. The full flag set belongs with every number. I had to add a conditions ledger to Session 10’s table after the fact. The proposed [rerun protocol](../experiments/session-10-rerun.sh) is retained as history; Entry 12 superseded it with the common-build measurements. The original p-min conflict remains part of Session 10’s record.
+In the tested builds, llama-cli required terminal-aware capture: `tee` breaks its terminal display, and `--log-file` drops the info-level acceptance and timing lines. Capture with `script -q <file> -c "<command>"`, or benchmark through `llama-server` (the `/completion` JSON `timings`; the logs print `draft acceptance`). `llama-bench` does not support speculation. The full flag set belongs with every number. I had to add a conditions ledger to Session 10’s table after the fact. The proposed [rerun protocol](../experiments/session-10-rerun.sh) is retained as history; the August common baseline superseded it with the common-build measurements. The original p-min conflict remains part of Session 10’s record.

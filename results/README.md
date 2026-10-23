@@ -2,9 +2,22 @@
 
 These notes collect the measurements, the best configuration I found for each model, and what I could conclude. Each note names the machine: Galactus for llama.cpp, Magneto for oMLX. For machine specifications, see [Hardware](../hardware/README.md). For the method behind the numbers, see [methodology.md](methodology.md). For what transfers to other systems, see [../takeaways/](../takeaways/).
 
+## DeepSeek-V4.1-Flash and GLM-5.3-Flash results
+
+I ran these V620 tests with the V620 patches, older DeepSeek implementation, GLM-5.3 MTP support, and my round-robin prefill patch merged together. I clarified the build combination on October 22, 2026; the captures do not establish the run dates or the exact V620 source revision.
+
+| Experiment | Result | Full record |
+|---|---|---|
+| [GLM-5.3-Flash](glm-5.3-flash.md), V620 build, MTP on, automatic placement | 19.1–19.4 generated tokens/s | [Configuration and all 15 launches](lab-notebook/undated-glm53-flash-placement.md) |
+| [GLM-5.3-Flash](glm-5.3-flash.md), V620 build, MTP on, forced-RAM experts, no explicit cache allocation | 13.7–14.4 generated tokens/s | [Placement and cache comparisons](lab-notebook/undated-glm53-flash-placement.md) |
+| [DeepSeek-V4.1-Flash](deepseek-v4.1-flash.md) Q4_K_M, target only | 13.5 prompt / 11.2 generation tokens/s | [Target run and failed DSpark launch](lab-notebook/undated-deepseek41-dspark.md) |
+| [DeepSeek-V4.1-Flash](deepseek-v4.1-flash.md) with DSpark | Draft model failed to load after a 2464.20 MiB allocation failed on ROCm0 | [Failure and proposed test matrix](lab-notebook/undated-deepseek41-dspark.md) |
+
+I did not run a round-robin-off control, so these results do not isolate my patch's contribution. The GLM record also includes comparisons with a separate PATH binary. These short-prompt CLI tests predate the newer Unsloth integration and use a different workload from the normalized baseline below. I retained the [original logs and hashes](raw-logs/2026-10-21-flash-experiments/) and [all GLM launch records](data/glm53-flash-historical.csv).
+
 ## The normalized baseline (2026-08-15/16, build 3653e6d6d, stock scheduler)
 
-This table uses a common command structure and one build over August 15–16. Thread counts and model files are recorded in Entry 12; the speculative column uses separate llama-cli runs. [Entry 12](lab-notebook/12-common-baseline-2tb.md) has the full conditions ledger. The rows are sorted by baseline decode.
+This table uses a common command structure and one build over August 15–16. Thread counts and model files are recorded in the August common baseline; the speculative column uses separate llama-cli runs. [The August common baseline](lab-notebook/2026-08-15-to-16-common-baseline-2tb.md) has the full conditions ledger. The rows are sorted by baseline decode.
 
 | Model | pp8192 (t/s) | tg128 (t/s) | Speculative decode, same build |
 |---|---|---|---|
@@ -16,7 +29,7 @@ This table uses a common command structure and one build over August 15–16. Th
 
 † This is the final MiniMax measurement; the model was removed afterward.
 
-Baseline ± values are reproduced from llama-bench. The speculative ± values summarize two llama-cli repetitions, not confidence intervals; those runs used a ZFS prompt, greedy decoding, and 256 generated tokens rather than the baseline’s tg128 test. Entry 12 records the cross-tool comparison and about 9% speculative timing variation.
+Baseline ± values are reproduced from llama-bench. The speculative ± values summarize two llama-cli repetitions, not confidence intervals; those runs used a ZFS prompt, greedy decoding, and 256 generated tokens rather than the baseline’s tg128 test. The August common baseline records the cross-tool comparison and about 9% speculative timing variation.
 
 The model notes retain earlier results with their builds and configurations. They include the July patched prefill (GLM-5.2 at 119.36), the April resident-offload rows (MiniMax at 17.37 t/s, Qwen at about 11.7 t/s), and the April K2.5 numbers.
 
@@ -24,15 +37,21 @@ Memory bandwidth and the active-expert footprint explain part of decode time; th
 
 ## Apple Silicon: oMLX on Magneto
 
-[Qwen3.8-27B](qwen-3.8-27b.md) records a six-context Lightning MTP baseline and later 4K/16K measurements on the 14-inch M2 Max (38 GPU cores, 64 GB). Tuned ANE improved measured prefill about 8–9% in the recorded comparison. DFlash was slower with ANE inactive at runtime; SpecPrefill setup never established a successful local run. These observations apply to the configurations I tested. The thermal investigation and the leaderboard's missing chassis field are recorded separately from throughput measurements in [Entry 13](lab-notebook/13-magneto-omlx-qwen38.md). I measured these separately from the Galactus normalized baseline.
+[Qwen3.8-27B](qwen-3.8-27b.md) records a six-context Lightning MTP baseline and later 4K/16K measurements on the 14-inch M2 Max (38 GPU cores, 64 GB). Tuned ANE improved measured prefill about 8–9% in the recorded comparison. DFlash was slower with ANE inactive at runtime; SpecPrefill setup never established a successful local run. These observations apply to the configurations I tested. The thermal investigation and the leaderboard's missing chassis field are recorded separately from throughput measurements in [the Magneto measurements](lab-notebook/undated-magneto-omlx-qwen38.md). I measured these separately from the Galactus normalized baseline.
 
 ## The full record
 
 | Path | Content |
 |---|---|
 | [methodology.md](methodology.md) | The measurement method these results were produced with. |
-| [lab-notebook/00-overview.md](lab-notebook/00-overview.md) | The chronological record: Sessions 1–10 and Entries 11–13, every command and result in order. |
+| [lab-notebook/overview.md](lab-notebook/overview.md) | Hardware and source background; the [chronological index](lab-notebook/README.md) links dated experiments and clearly labeled undated captures. |
 | [raw-logs/](raw-logs/) | The primary captures: the diagnostic run, the MTP A/B test, the per-model benchmark logs, and the failure logs. |
-| [data/](data/) | CSV extracts, with every benchmark row in machine-readable form. |
-| [lab-notebook/00-march-build-record.md](lab-notebook/00-march-build-record.md) | Earlier build, device setup, DIMM replacement, and placement trials, recorded separately from the normalized baseline. |
+| [data/](data/) | CSV and JSONL extracts, plus a readable ledger of the recovered benchmark rows. |
+| [lab-notebook/2026-03-23-galactus-build.md](lab-notebook/2026-03-23-galactus-build.md) | Earlier build, device setup, DIMM replacement, and placement trials, recorded separately from the normalized baseline. |
 | [reference-notes/](reference-notes/README.md) | Retained authored notes: dated surveys, architecture comparisons, and an unmeasured residency proposal, with a source manifest. |
+
+## April–August experiment archive
+
+I added 46 original files from `tests.tar.gz`, including 270 printed benchmark rows, 11 completed CLI timings, and four DSpark server captures with acceptance counts. The first July diagnostic repeats the 94 rows already extracted here; I have not counted them as additional runs. See the [archive inventory](raw-logs/2026-10-22-galactus-archive/README.md), [complete benchmark ledger](data/galactus-archive-benchmarks.md), and [April](lab-notebook/2026-04-07-to-17-thread-and-batch-tests.md), [July](lab-notebook/2026-07-14-diagnostic-reconstruction.md), and [August/speculation](lab-notebook/2026-08-16-speculation-and-rebench-records.md) entries.
+
+Undated supporting records: [scheduler traces](lab-notebook/undated-glm52-scheduler-traces.md) and [V4 DSpark acceptance logs](lab-notebook/undated-deepseek-v4-dspark-acceptance.md).

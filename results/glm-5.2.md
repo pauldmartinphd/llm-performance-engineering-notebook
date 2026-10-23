@@ -2,7 +2,7 @@
 
 ## August baseline and MTP (2 TB, build 3653e6d6d, stock scheduler)
 
-[Entry 12](lab-notebook/12-common-baseline-2tb.md) normalized all five models on one build. GLM-5.2 stock measured pp8192 95.99 ± 3.36 and tg128 5.30 ± 0.00 (t=32, no prefill patch; 119.36 remains the July patched-build figure).
+[The August common baseline](lab-notebook/2026-08-15-to-16-common-baseline-2tb.md) normalized all five models on one build. GLM-5.2 stock measured pp8192 95.99 ± 3.36 and tg128 5.30 ± 0.00 (t=32, no prefill patch; 119.36 remains the July patched-build figure).
 
 MTP was repeated with llama-cli, the ZFS prompt, and greedy decoding on the same build:
 
@@ -76,3 +76,7 @@ At the July compilation, the loader flagged blk.78 as TENSOR_SKIP, so `--spec-ty
 - Placing resident experts on ROCm1/2 with `-ot` ran 17% worse than all-CPU op_offload, because the resident-weight path is not the op_offload path.
 - DFlash speculation was set aside because no GLM-5.2 draft model was available during the investigation; the projected 11 to 12.5 t/s was not measured.
 - `llama-bench -d` crashes on KV restore at 16,384 cells (a `hipMemcpyAsync` illegal access); the notebook records it as unreported upstream at the time.
+
+## Original captures added October 22, 2026
+
+I added the original July diagnostic and scheduler traces in [the July diagnostic reconstruction](lab-notebook/2026-07-14-diagnostic-reconstruction.md). The August archive also contains a distinct 96.17/5.21 benchmark pair; [the speculation and rebenchmark records](lab-notebook/2026-08-16-speculation-and-rebench-records.md) preserves it separately from the existing common baseline.

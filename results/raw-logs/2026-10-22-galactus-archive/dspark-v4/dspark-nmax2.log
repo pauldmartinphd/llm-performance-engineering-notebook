@@ -1,0 +1,30 @@
+[34m0.00.674.452[0m [32mI [0mcmn  common_param: common_params_print_info: verbosity = 3 (adjust with the `-lv N` CLI arg)
+[34m0.00.675.788[0m [35mW srv  llama_server: -----------------
+[0m[34m0.00.675.791[0m [35mW srv  llama_server: CORS is set to allow all origins ('*') and no API key is set
+[0m[34m0.00.675.791[0m [35mW srv  llama_server: this can be a security risk (cross-origin attacks)
+[0m[34m0.00.675.792[0m [35mW srv  llama_server: more info: https://github.com/ggml-org/llama.cpp/pull/25655
+[0m[34m0.00.675.792[0m [35mW srv  llama_server: -----------------
+[0m[34m0.00.677.142[0m [32mI [0msrv    load_model: loading model '/models/DeepSeek-V4-Flash/UD-Q8_K_XL/DeepSeek-V4-Flash-0731-UD-Q8_K_XL-00001-of-00005.gguf'
+[34m0.00.862.924[0m [31mE llama_init_from_model: failed to initialize the context: dflash requires ctx_other to be set (this warning is normal during memory fitting)
+[0m[34m0.00.882.222[0m [35mW srv    load_model: [spec] failed to measure draft model memory: failed to create llama_context from model
+[0m[34m0.01.514.751[0m [35mW llama_model_loader: tensor overrides to CPU are used with mmap enabled - consider using --no-mmap for better performance
+[0m[34m0.14.459.998[0m [32mI [0mcommon_speculative_init_result: loading draft model '/models/DeepSeek-V4-Flash/DSpark/DeepseekV4-Flash-20260731-DSpark.gguf'
+[34m0.16.753.271[0m [32mI [0msrv    load_model: initializing, n_slots = 1, n_ctx_slot = 8192, kv_unified = 'false'
+[34m0.16.753.326[0m [32mI [0mcommon_speculative_impl_draft_dflash: adding speculative implementation 'draft-dspark'
+[34m0.16.753.329[0m [32mI [0mcommon_speculative_impl_draft_dflash: - n_max=2, n_min=0, p_min=0.00
+[34m0.16.753.329[0m [32mI [0mcommon_speculative_impl_draft_dflash: - block_size=5, mask_token_id=128799, n_extract=3
+[34m0.17.245.310[0m [32mI [0msrv  llama_server: model loaded
+[34m0.17.245.315[0m [32mI [0msrv  llama_server: listening on http://127.0.0.1:36273
+[34m0.17.260.361[0m [32mI [0mslot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = -1
+[34m0.17.260.450[0m [32mI [0mslot launch_slot_: id  0 | task 0 | processing task, is_child = 0
+[34m0.25.910.799[0m [32mI [0mslot print_timing: id  0 | task 0 | n_decoded =    100, tg =  15.51 t/s, tg_3s =  15.51 t/s
+[34m0.29.037.725[0m [32mI [0mslot print_timing: id  0 | task 0 | n_decoded =    139, tg =  14.52 t/s, tg_3s =  12.47 t/s
+[34m0.32.147.580[0m [32mI [0mslot print_timing: id  0 | task 0 | n_decoded =    186, tg =  14.67 t/s, tg_3s =  15.11 t/s
+[34m0.35.307.086[0m [32mI [0mslot print_timing: id  0 | task 0 | n_decoded =    233, tg =  14.71 t/s, tg_3s =  14.88 t/s
+[34m0.37.182.205[0m [32mI [0mslot print_timing: id  0 | task 0 | prompt eval time =    2204.55 ms /    28 tokens (   78.73 ms per token,    12.70 tokens per second)
+[34m0.37.182.210[0m [32mI [0mslot print_timing: id  0 | task 0 |        eval time =   17717.16 ms /   256 tokens (   69.21 ms per token,    14.45 tokens per second)
+[34m0.37.182.210[0m [32mI [0mslot print_timing: id  0 | task 0 |       total time =   19921.71 ms /   284 tokens
+[34m0.37.182.216[0m [32mI [0mslot print_timing: id  0 | task 0 |    graphs reused =        104
+[34m0.37.182.219[0m [32mI [0mslot print_timing: id  0 | task 0 | draft acceptance = 0.67593 (  146 accepted /   216 generated), mean len =  2.35
+[34m0.37.182.284[0m [32mI [0mslot      release: id  0 | task 0 | stop processing: n_tokens = 283, truncated = 0
+[34m0.37.183.065[0m [32mI [0msrv    operator(): operator(): cleaning up before exit...
