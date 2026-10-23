@@ -1,6 +1,6 @@
 # Galactus experiment archive
 
-I added these records on October 22, 2026, from `tests.tar.gz`. They cover April thread/batch sweeps, July diagnostics and scheduler traces, and August rebenchmarks. Undated DSpark server logs name DeepSeek-V4-Flash-0731, not V4.1. These earlier tests do not measure the later combined V620/GLM-5.3/DeepSeek-V4.1 build.
+I added these records on October 22, 2026, from `tests.tar.gz`. They cover April thread/batch sweeps, July diagnostics and scheduler traces, and August rebenchmarks. August 7 DSpark server logs name DeepSeek-V4-Flash-0731, not V4.1. These earlier tests do not measure the later combined V620/GLM-5.3/DeepSeek-V4.1 build.
 
 I preserved all member contents, including failed runs, two empty files, terminal control characters, and the original scripts. Files over 1 MB use lossless gzip compression. The scripts have a `.txt` suffix because they are historical records, not current run instructions. I did not execute them. The manifest maps the descriptive filenames to original archive members and records both original and stored SHA-256 hashes.
 
@@ -59,4 +59,8 @@ I preserved all member contents, including failed runs, two empty files, termina
 
 Use `gzip -dc path/to/log.gz` to read compressed logs. `SHA256SUMS` verifies stored files; `manifest.json` also verifies the decompressed originals. The two empty files establish no measurement.
 
-Undated supporting records: [scheduler traces](../../lab-notebook/undated-glm52-scheduler-traces.md) and [V4 DSpark acceptance logs](../../lab-notebook/undated-deepseek-v4-dspark-acceptance.md).
+Supporting records dated from original file modification times: [scheduler traces](../../lab-notebook/2026-07-14-glm52-scheduler-traces.md) and [V4 DSpark acceptance logs](../../lab-notebook/2026-08-07-deepseek-v4-dspark-acceptance.md).
+
+## Source timestamps
+
+I recovered the original file modification times on October 23 and added them to the manifest and [timestamp ledger](source-timestamps.md). They place the scheduler comparison on July 14 and the V4 DSpark acceptance captures on August 7. These dates come from the retained extraction, whose 46 file hashes match the manifest, rather than the notebook copies or Git checkout times.

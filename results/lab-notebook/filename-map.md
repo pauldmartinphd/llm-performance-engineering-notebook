@@ -26,3 +26,10 @@ I replaced entry-number filenames with experiment dates and descriptive titles. 
 | `18-galactus-april-thread-and-batch-tests.md` | [2026-04-07-to-17-thread-and-batch-tests.md](2026-04-07-to-17-thread-and-batch-tests.md) |
 | `19-galactus-july-diagnostics.md` | [2026-07-14-diagnostic-reconstruction.md](2026-07-14-diagnostic-reconstruction.md) |
 | `20-galactus-speculation-and-rebench-records.md` | [2026-08-16-speculation-and-rebench-records.md](2026-08-16-speculation-and-rebench-records.md) |
+
+## Dates recovered October 23
+
+| Previous filename | Dated record |
+|---|---|
+| `undated-glm52-scheduler-traces.md` | [2026-07-14-glm52-scheduler-traces.md](2026-07-14-glm52-scheduler-traces.md) |
+| `undated-deepseek-v4-dspark-acceptance.md` | [2026-08-07-deepseek-v4-dspark-acceptance.md](2026-08-07-deepseek-v4-dspark-acceptance.md) |

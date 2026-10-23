@@ -44,4 +44,4 @@ The v4 vmstat capture spans 15:01:17–19:54:11 and contains 1,758 samples, agai
 
 The smaller placement captures also matter. `ot3` fails during model loading; `ot6` and `ts` fail while creating the context. `ts2` contains only the four-device list. The successful `ot7` configuration explicitly places some expert layers on ROCm1 and ROCm2 and reports pp2048 at 51.74 ± 0.00 t/s. I kept these outcomes separate because fitting the weights, allocating the compute graph, and completing inference are different stages of the experiment.
 
-I discuss the undated [scheduler traces](undated-glm52-scheduler-traces.md) alongside the July patch investigation.
+I discuss the undated [scheduler traces](2026-07-14-glm52-scheduler-traces.md) alongside the July patch investigation.

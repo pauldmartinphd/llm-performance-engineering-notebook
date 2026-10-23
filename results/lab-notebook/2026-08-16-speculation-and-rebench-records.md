@@ -1,6 +1,6 @@
 # August 16: speculation and rebenchmark captures
 
-**Experiments:** August 16, 2026 for the CLI transcripts; the adjacent benchmark files lack independent run timestamps. **Added:** October 22, 2026. [Original files](../raw-logs/2026-10-22-galactus-archive/README.md) · [Extracted CLI results](../data/galactus-archive-cli.jsonl).
+**Experiments:** August 16, 2026 for the CLI transcripts; original file modification times place the adjacent benchmark captures on August 15–16. **Added:** October 22, 2026. [Original files](../raw-logs/2026-10-22-galactus-archive/README.md) · [Extracted CLI results](../data/galactus-archive-cli.jsonl).
 
 The archive supplies direct evidence for much of the speculation work already summarized in the notebook. It also contains additional results and filename traps. I used the commands, loaded model paths, and final timing lines to identify each run instead of assuming that a filename described everything inside it.
 
@@ -42,4 +42,6 @@ The file named `deepseek-v4-flash.md` prints `deepseek2 671B BF16`, **553.71 GiB
 
 I did not change the normalized baseline or infer a new model ranking from these files. They strengthen the evidence behind some existing rows, add a distinct GLM pair, and make the filename mismatch explicit. The archive also preserves the commands and failures needed to reconstruct how I reached the later configurations.
 
-The separate [V4-Flash-0731 DSpark acceptance logs](undated-deepseek-v4-dspark-acceptance.md) contain no wall-clock date. I keep them with the related speculation work without assigning them to August 16.
+The separate [V4-Flash-0731 DSpark acceptance logs](2026-08-07-deepseek-v4-dspark-acceptance.md) contain no wall-clock date, but their original modification times place them on August 7. They are not August 16 runs.
+
+The benchmark files were last written August 15 at 13:07:13 EDT (`glm-5.2.md`) and 21:58:56 EDT (`deepseek-v4-flash.md`), then August 16 at 09:01:23 (`qwen-3.5-397b.md`), 09:44:29 (`qwen-3.5-397b-offload.md`), and 09:54:48 (`minimax-m2.7.md`). These file dates do not resolve the model-identity discrepancy above. [Timestamp evidence](../raw-logs/2026-10-22-galactus-archive/source-timestamps.md).

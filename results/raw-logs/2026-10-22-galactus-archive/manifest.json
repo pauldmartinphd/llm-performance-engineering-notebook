@@ -10,7 +10,9 @@
       "stored_bytes": 21859,
       "stored_sha256": "f16e7e415e3eb75cfa088ed59ed5d30a1fcbcc3db38734e408a23723ffc0e90b",
       "encoding": "original",
-      "empty": false
+      "empty": false,
+      "source_mtime_unix": 1775981704.0,
+      "source_mtime_utc": "2026-04-12T08:15:04+00:00"
     },
     {
       "archive_member": "tests/bench_batchsweep_20260411_091944.log",
@@ -20,7 +22,9 @@
       "stored_bytes": 8674,
       "stored_sha256": "02161706054076967b07cab3fc5be0f017f39e07ca2da7754b4479fe849a6337",
       "encoding": "original",
-      "empty": false
+      "empty": false,
+      "source_mtime_unix": 1775913585.0,
+      "source_mtime_utc": "2026-04-11T13:19:45+00:00"
     },
     {
       "archive_member": "tests/bench_batchsweep_20260411_092044.log",
@@ -30,7 +34,9 @@
       "stored_bytes": 3018,
       "stored_sha256": "776079452f254ab389ccdb35bc7f1ee123114a854c61a0c5b9d1ae0fb2a60e5a",
       "encoding": "original",
-      "empty": false
+      "empty": false,
+      "source_mtime_unix": 1775914176.0,
+      "source_mtime_utc": "2026-04-11T13:29:36+00:00"
     },
     {
       "archive_member": "tests/bench_batchsweep_20260411_093230.log",
@@ -40,7 +46,9 @@
       "stored_bytes": 14136,
       "stored_sha256": "615610199a1704e7160d2ff9fb67d19b5891792d9b39f09e30eb614692a1cada",
       "encoding": "original",
-      "empty": false
+      "empty": false,
+      "source_mtime_unix": 1775917560.0,
+      "source_mtime_utc": "2026-04-11T14:26:00+00:00"
     },
     {
       "archive_member": "tests/diag-20260714-110813/MAIN.log",
@@ -50,7 +58,9 @@
       "stored_bytes": 952634,
       "stored_sha256": "966c5703492e9b0d98043ac5bc257ecb85af4eb2d790cc588085882a474ff0c5",
       "encoding": "gzip",
-      "empty": false
+      "empty": false,
+      "source_mtime_unix": 1784053510.0,
+      "source_mtime_utc": "2026-07-14T18:25:10+00:00"
     },
     {
       "archive_member": "tests/diag-20260714-110813/monitors/cpumhz.txt",
@@ -60,7 +70,9 @@
       "stored_bytes": 44498,
       "stored_sha256": "63af5da3a78c39d8ed85863eaf912741fc673d8832370ec4c1f5646ce15427a8",
       "encoding": "original",
-      "empty": false
+      "empty": false,
+      "source_mtime_unix": 1784053502.0,
+      "source_mtime_utc": "2026-07-14T18:25:02+00:00"
     },
     {
       "archive_member": "tests/diag-20260714-110813/monitors/meminfo.txt",
@@ -70,7 +82,9 @@
       "stored_bytes": 110250,
       "stored_sha256": "d4ed2beb146a4f1507659fb48a5452f9c76df22ff354ea035c3fc5528c06fb91",
       "encoding": "original",
-      "empty": false
+      "empty": false,
+      "source_mtime_unix": 1784053500.0,
+      "source_mtime_utc": "2026-07-14T18:25:00+00:00"
     },
     {
       "archive_member": "tests/diag-20260714-110813/monitors/rocm-smi.txt",
@@ -80,7 +94,9 @@
       "stored_bytes": 877909,
       "stored_sha256": "1893496a7416576e4dbead8b9cecc94c4bd0bb1a1d0135a91870f6207123c629",
       "encoding": "original",
-      "empty": false
+      "empty": false,
+      "source_mtime_unix": 1784053502.0,
+      "source_mtime_utc": "2026-07-14T18:25:02+00:00"
     },
     {
       "archive_member": "tests/diag-20260714-110813/monitors/vmstat.txt",
@@ -90,7 +106,9 @@
       "stored_bytes": 143645,
       "stored_sha256": "07fc04814bad84d23bc5ca889f771d3699b8f06dba9da6a58c64fe8493a1c996",
       "encoding": "original",
-      "empty": false
+      "empty": false,
+      "source_mtime_unix": 1784053506.0,
+      "source_mtime_utc": "2026-07-14T18:25:06+00:00"
     },
     {
       "archive_member": "tests/diag-v4-20260714-150115/MAIN.log",
@@ -100,7 +118,9 @@
       "stored_bytes": 5734415,
       "stored_sha256": "bbf5d2710bd9340a3e901d91c31b472b22f54dd20a1215cd35f9fb2486003adf",
       "encoding": "gzip",
-      "empty": false
+      "empty": false,
+      "source_mtime_unix": 1784073212.0,
+      "source_mtime_utc": "2026-07-14T23:53:32+00:00"
     },
     {
       "archive_member": "tests/diag-v4-20260714-150115/monitors/rocm-smi.txt",
@@ -110,7 +130,9 @@
       "stored_bytes": 25253,
       "stored_sha256": "a422e1da40ec7b300f3c8ac6de5b4d2c4a96dcc27e5aa9df111a0a56ad2fcfd5",
       "encoding": "gzip",
-      "empty": false
+      "empty": false,
+      "source_mtime_unix": 1784073246.0,
+      "source_mtime_utc": "2026-07-14T23:54:06+00:00"
     },
     {
       "archive_member": "tests/diag-v4-20260714-150115/monitors/vmstat.txt",
@@ -120,7 +142,9 @@
       "stored_bytes": 214392,
       "stored_sha256": "965fcc4f25654dbe278eefb639bd4db957b0deec90d2d2060f376e08e5d5f540",
       "encoding": "original",
-      "empty": false
+      "empty": false,
+      "source_mtime_unix": 1784073251.0,
+      "source_mtime_utc": "2026-07-14T23:54:11+00:00"
     },
     {
       "archive_member": "tests/dspark-armed-test.log",
@@ -130,7 +154,9 @@
       "stored_bytes": 3418,
       "stored_sha256": "91dafc3d813fcbcbf50cc70c5100248fd0b5c055f3e1ea63aca6e4f42bf97f12",
       "encoding": "original",
-      "empty": false
+      "empty": false,
+      "source_mtime_unix": 1786146926.0,
+      "source_mtime_utc": "2026-08-07T23:55:26+00:00"
     },
     {
       "archive_member": "tests/dspark-baseline.log",
@@ -140,7 +166,9 @@
       "stored_bytes": 0,
       "stored_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "encoding": "original",
-      "empty": true
+      "empty": true,
+      "source_mtime_unix": 1786146190.0,
+      "source_mtime_utc": "2026-08-07T23:43:10+00:00"
     },
     {
       "archive_member": "tests/dspark-nmax1.log",
@@ -150,7 +178,9 @@
       "stored_bytes": 3605,
       "stored_sha256": "d645a721d61c58ab044aaf8a6c562c1a6a4e5c37c42cde1bf1f5134400c6f7fd",
       "encoding": "original",
-      "empty": false
+      "empty": false,
+      "source_mtime_unix": 1786146422.0,
+      "source_mtime_utc": "2026-08-07T23:47:02+00:00"
     },
     {
       "archive_member": "tests/dspark-nmax2.log",
@@ -160,7 +190,9 @@
       "stored_bytes": 3605,
       "stored_sha256": "784d75dc418ccf75e79533289191679e260ca2b94c39e728b4ee937fa17b18aa",
       "encoding": "original",
-      "empty": false
+      "empty": false,
+      "source_mtime_unix": 1786146466.0,
+      "source_mtime_utc": "2026-08-07T23:47:46+00:00"
     },
     {
       "archive_member": "tests/dspark-nmax5.log",
@@ -170,7 +202,9 @@
       "stored_bytes": 3730,
       "stored_sha256": "48526c81995201287496492bb5611ccbba5cc74004e1aff6bd203328d8cb05c4",
       "encoding": "original",
-      "empty": false
+      "empty": false,
+      "source_mtime_unix": 1786146514.0,
+      "source_mtime_utc": "2026-08-07T23:48:34+00:00"
     },
     {
       "archive_member": "tests/galactus-prefill.sh",
@@ -180,7 +214,9 @@
       "stored_bytes": 24215,
       "stored_sha256": "3856c591316e630b70cb49d2136f2c0c4d4937160d5ec1c6c44d2af0701afe25",
       "encoding": "original",
-      "empty": false
+      "empty": false,
+      "source_mtime_unix": 1784055668.0,
+      "source_mtime_utc": "2026-07-14T19:01:08+00:00"
     },
     {
       "archive_member": "tests/llama_bench_cpu_experts_thread_sweep_20260407_102636.log",
@@ -190,7 +226,9 @@
       "stored_bytes": 12867,
       "stored_sha256": "f8d6c46507249f2ec4b8e135cb09603f689685efb67eb5b5196cdfbba3506feb",
       "encoding": "original",
-      "empty": false
+      "empty": false,
+      "source_mtime_unix": 1775579514.0,
+      "source_mtime_utc": "2026-04-07T16:31:54+00:00"
     },
     {
       "archive_member": "tests/llama_bench_cpu_experts_thread_sweep_20260408_130516.log",
@@ -200,7 +238,9 @@
       "stored_bytes": 25734,
       "stored_sha256": "7e91fc2fbc57f076dd5655aeab0679b1dfe1cac3f6d4db8af628ebc480ca200b",
       "encoding": "original",
-      "empty": false
+      "empty": false,
+      "source_mtime_unix": 1775683340.0,
+      "source_mtime_utc": "2026-04-08T21:22:20+00:00"
     },
     {
       "archive_member": "tests/llama_bench_cpu_experts_thread_sweep_20260409_121606.log",
@@ -210,7 +250,9 @@
       "stored_bytes": 11985,
       "stored_sha256": "dd71897188fa4e7ba9a22e4323ba8af05ad16a43575595b9a31f661ff7763050",
       "encoding": "original",
-      "empty": false
+      "empty": false,
+      "source_mtime_unix": 1775756814.0,
+      "source_mtime_utc": "2026-04-09T17:46:54+00:00"
     },
     {
       "archive_member": "tests/llama_bench_cpu_experts_thread_sweep_20260410_183103.log",
@@ -220,7 +262,9 @@
       "stored_bytes": 10293,
       "stored_sha256": "7c96487f7c65773ca57cc59b657cac496dc8737f28e28682f5f09a4ded01edf6",
       "encoding": "original",
-      "empty": false
+      "empty": false,
+      "source_mtime_unix": 1775862138.0,
+      "source_mtime_utc": "2026-04-10T23:02:18+00:00"
     },
     {
       "archive_member": "tests/llama_bench_cpu_experts_thread_sweep_20260417_091321.log",
@@ -230,7 +274,9 @@
       "stored_bytes": 3594,
       "stored_sha256": "6390fcfae0d7885c05bd6c51123a215b21b5d5499a3ffc1b10a0d78e514c68fa",
       "encoding": "original",
-      "empty": false
+      "empty": false,
+      "source_mtime_unix": 1776431604.0,
+      "source_mtime_utc": "2026-04-17T13:13:24+00:00"
     },
     {
       "archive_member": "tests/llama_bench_cpu_experts_thread_sweep_20260417_091356.log",
@@ -240,7 +286,9 @@
       "stored_bytes": 8841,
       "stored_sha256": "501097d4269c40042fc4002b11eda6f4ec5079ce4dada2e97b5594b99f46bb0b",
       "encoding": "original",
-      "empty": false
+      "empty": false,
+      "source_mtime_unix": 1776432952.0,
+      "source_mtime_utc": "2026-04-17T13:35:52+00:00"
     },
     {
       "archive_member": "tests/llama_bench_cpu_experts_thread_sweep_20260417_103237.log",
@@ -250,7 +298,9 @@
       "stored_bytes": 8829,
       "stored_sha256": "ff8924213a604a2cb27b9d2de7b8a1c1b93b7673539fbde05ae81ce182bdd08a",
       "encoding": "original",
-      "empty": false
+      "empty": false,
+      "source_mtime_unix": 1776439441.0,
+      "source_mtime_utc": "2026-04-17T15:24:01+00:00"
     },
     {
       "archive_member": "tests/ot-placement-test.txt",
@@ -260,7 +310,9 @@
       "stored_bytes": 123320,
       "stored_sha256": "fbaca64e97cef20d642636c368567122db4949ff23d9b6087a4a73501dfcaba8",
       "encoding": "original",
-      "empty": false
+      "empty": false,
+      "source_mtime_unix": 1784067205.0,
+      "source_mtime_utc": "2026-07-14T22:13:25+00:00"
     },
     {
       "archive_member": "tests/ot3.txt",
@@ -270,7 +322,9 @@
       "stored_bytes": 900,
       "stored_sha256": "59bbc4ae4a90510fbe74452bd2955ff318b4693c3da025ae433a359a2f4cda7c",
       "encoding": "original",
-      "empty": false
+      "empty": false,
+      "source_mtime_unix": 1784067345.0,
+      "source_mtime_utc": "2026-07-14T22:15:45+00:00"
     },
     {
       "archive_member": "tests/ot6.txt",
@@ -280,7 +334,9 @@
       "stored_bytes": 915,
       "stored_sha256": "fb3819fbe7a815de9201d2cfce7fc9e32a206ca1ece0e163468e6fc1f7b038dd",
       "encoding": "original",
-      "empty": false
+      "empty": false,
+      "source_mtime_unix": 1784067539.0,
+      "source_mtime_utc": "2026-07-14T22:18:59+00:00"
     },
     {
       "archive_member": "tests/ot7.txt",
@@ -290,7 +346,9 @@
       "stored_bytes": 1050,
       "stored_sha256": "682b569f95b6fb07a4c6feabab6e200c3280d9ac26ac0b1b2da1fd9535295bb1",
       "encoding": "original",
-      "empty": false
+      "empty": false,
+      "source_mtime_unix": 1784067773.0,
+      "source_mtime_utc": "2026-07-14T22:22:53+00:00"
     },
     {
       "archive_member": "tests/qwen-benchmark.log",
@@ -300,7 +358,9 @@
       "stored_bytes": 12867,
       "stored_sha256": "51863f0254bf3e2193a7a433b72643261af627a16c3aa98282409a44000ee9b8",
       "encoding": "original",
-      "empty": false
+      "empty": false,
+      "source_mtime_unix": 1775609237.0,
+      "source_mtime_utc": "2026-04-08T00:47:17+00:00"
     },
     {
       "archive_member": "tests/qwen_batch_sweep.sh",
@@ -310,7 +370,9 @@
       "stored_bytes": 1321,
       "stored_sha256": "33826a0a70a314587e0b4a9ddacf2f20ee13ca81fbba10e69be0f3a50d1ef7ce",
       "encoding": "original",
-      "empty": false
+      "empty": false,
+      "source_mtime_unix": 1775924672.0,
+      "source_mtime_utc": "2026-04-11T16:24:32+00:00"
     },
     {
       "archive_member": "tests/rebench-2tb/build.txt",
@@ -320,7 +382,9 @@
       "stored_bytes": 66,
       "stored_sha256": "a8ebf1b6f757e05f926a69c1548951d273f4c5d3f74e2597543bed773b9c0634",
       "encoding": "original",
-      "empty": false
+      "empty": false,
+      "source_mtime_unix": 1786803360.0,
+      "source_mtime_utc": "2026-08-15T14:16:00+00:00"
     },
     {
       "archive_member": "tests/rebench-2tb/deepseek-v4-flash.md",
@@ -330,7 +394,9 @@
       "stored_bytes": 1143,
       "stored_sha256": "bbfe20a19869df2bcb5423ad58f445bb9b92f26f6897a6ca0b7d684fb0414641",
       "encoding": "original",
-      "empty": false
+      "empty": false,
+      "source_mtime_unix": 1786845536.0,
+      "source_mtime_utc": "2026-08-16T01:58:56+00:00"
     },
     {
       "archive_member": "tests/rebench-2tb/dsv4-dspark-n3.txt",
@@ -340,7 +406,9 @@
       "stored_bytes": 29945,
       "stored_sha256": "3e9271f91d38a982d511cd5f3152d2518dcab1b2b66950a0f362410e1c34f469",
       "encoding": "original",
-      "empty": false
+      "empty": false,
+      "source_mtime_unix": 1786898338.0,
+      "source_mtime_utc": "2026-08-16T16:38:58+00:00"
     },
     {
       "archive_member": "tests/rebench-2tb/glm-5.2.md",
@@ -350,7 +418,9 @@
       "stored_bytes": 1145,
       "stored_sha256": "b946dff083c649dc99b9c349d2e164c1f49fc937149953e401f6f6c2454787f5",
       "encoding": "original",
-      "empty": false
+      "empty": false,
+      "source_mtime_unix": 1786813633.0,
+      "source_mtime_utc": "2026-08-15T17:07:13+00:00"
     },
     {
       "archive_member": "tests/rebench-2tb/glm-base.txt",
@@ -360,7 +430,9 @@
       "stored_bytes": 31085,
       "stored_sha256": "2637e098cd6b42e6e3dc877dcad4d2bdddf799fea598e3fe9b0a6e7ad5445fc9",
       "encoding": "original",
-      "empty": false
+      "empty": false,
+      "source_mtime_unix": 1786890804.0,
+      "source_mtime_utc": "2026-08-16T14:33:24+00:00"
     },
     {
       "archive_member": "tests/rebench-2tb/glm-mtp-n2.txt",
@@ -370,7 +442,9 @@
       "stored_bytes": 14066,
       "stored_sha256": "7d49d29c0f83499ee78da3ca502acaa524617ee831eb3a0a239bf8596ac65957",
       "encoding": "original",
-      "empty": false
+      "empty": false,
+      "source_mtime_unix": 1786897408.0,
+      "source_mtime_utc": "2026-08-16T16:23:28+00:00"
     },
     {
       "archive_member": "tests/rebench-2tb/minimax-m2.7.md",
@@ -380,7 +454,9 @@
       "stored_bytes": 1151,
       "stored_sha256": "a9a782ab1a3533c5e692cd3f1ec614889d82a5e00b2fc8a238a42526feab5db4",
       "encoding": "original",
-      "empty": false
+      "empty": false,
+      "source_mtime_unix": 1786888488.0,
+      "source_mtime_utc": "2026-08-16T13:54:48+00:00"
     },
     {
       "archive_member": "tests/rebench-2tb/qwen-3.5-397b-offload.md",
@@ -390,7 +466,9 @@
       "stored_bytes": 915,
       "stored_sha256": "c20def82330eb1b0db1073ab9159b1be65eec4b7b17b78c5383c1373cce9a04c",
       "encoding": "original",
-      "empty": false
+      "empty": false,
+      "source_mtime_unix": 1786887869.0,
+      "source_mtime_utc": "2026-08-16T13:44:29+00:00"
     },
     {
       "archive_member": "tests/rebench-2tb/qwen-3.5-397b.md",
@@ -400,7 +478,9 @@
       "stored_bytes": 1143,
       "stored_sha256": "4586b5fa9ea9149b38ea71736398bd5477c701f031fb979bb4c9e8ea47e36e82",
       "encoding": "original",
-      "empty": false
+      "empty": false,
+      "source_mtime_unix": 1786885283.0,
+      "source_mtime_utc": "2026-08-16T13:01:23+00:00"
     },
     {
       "archive_member": "tests/rebench-2tb/qwen-mtp-n2.txt",
@@ -410,7 +490,9 @@
       "stored_bytes": 1772,
       "stored_sha256": "bf94b1fab8c8cd3ba01c5a1b228a9b9d56f8e406b23d4a32ccc5d92ad44d2d2d",
       "encoding": "original",
-      "empty": false
+      "empty": false,
+      "source_mtime_unix": 1786889126.0,
+      "source_mtime_utc": "2026-08-16T14:05:26+00:00"
     },
     {
       "archive_member": "tests/sched.txt",
@@ -420,7 +502,9 @@
       "stored_bytes": 0,
       "stored_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "encoding": "original",
-      "empty": true
+      "empty": true,
+      "source_mtime_unix": 1784068380.0,
+      "source_mtime_utc": "2026-07-14T22:33:00+00:00"
     },
     {
       "archive_member": "tests/sched_full.txt",
@@ -430,7 +514,9 @@
       "stored_bytes": 408388,
       "stored_sha256": "4529c25281a1b18bc0f85bd3101bb28982000cbfb2e27c21b9c1a49c54fae185",
       "encoding": "gzip",
-      "empty": false
+      "empty": false,
+      "source_mtime_unix": 1784070474.0,
+      "source_mtime_utc": "2026-07-14T23:07:54+00:00"
     },
     {
       "archive_member": "tests/sched_patched.txt",
@@ -440,7 +526,9 @@
       "stored_bytes": 412015,
       "stored_sha256": "2b8e850c979ec3d4c265f4c4f053e024f8d86f45b3093e65dd120f8de6348d56",
       "encoding": "gzip",
-      "empty": false
+      "empty": false,
+      "source_mtime_unix": 1784073506.0,
+      "source_mtime_utc": "2026-07-14T23:58:26+00:00"
     },
     {
       "archive_member": "tests/ts.txt",
@@ -450,7 +538,9 @@
       "stored_bytes": 945,
       "stored_sha256": "6eaa641ea5ba30cb863fed9d19c7051176b0f59f84ab7318b21772c30e1428b4",
       "encoding": "original",
-      "empty": false
+      "empty": false,
+      "source_mtime_unix": 1784068253.0,
+      "source_mtime_utc": "2026-07-14T22:30:53+00:00"
     },
     {
       "archive_member": "tests/ts2.txt",
@@ -460,7 +550,10 @@
       "stored_bytes": 427,
       "stored_sha256": "08782c4897518a430a0949bc87c3a8265422212158e405c6df06af6ebd1d3338",
       "encoding": "original",
-      "empty": false
+      "empty": false,
+      "source_mtime_unix": 1784068293.0,
+      "source_mtime_utc": "2026-07-14T22:31:33+00:00"
     }
-  ]
+  ],
+  "timestamp_provenance": "Modification times read on 2026-10-23 from the retained original extraction of tests.tar.gz; all 46 extracted file hashes match the manifest. These are file modification times, not embedded run-start timestamps."
 }

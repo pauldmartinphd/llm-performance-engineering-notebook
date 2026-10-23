@@ -54,4 +54,4 @@ Memory bandwidth and the active-expert footprint explain part of decode time; th
 
 I added 46 original files from `tests.tar.gz`, including 270 printed benchmark rows, 11 completed CLI timings, and four DSpark server captures with acceptance counts. The first July diagnostic repeats the 94 rows already extracted here; I have not counted them as additional runs. See the [archive inventory](raw-logs/2026-10-22-galactus-archive/README.md), [complete benchmark ledger](data/galactus-archive-benchmarks.md), and [April](lab-notebook/2026-04-07-to-17-thread-and-batch-tests.md), [July](lab-notebook/2026-07-14-diagnostic-reconstruction.md), and [August/speculation](lab-notebook/2026-08-16-speculation-and-rebench-records.md) entries.
 
-Undated supporting records: [scheduler traces](lab-notebook/undated-glm52-scheduler-traces.md) and [V4 DSpark acceptance logs](lab-notebook/undated-deepseek-v4-dspark-acceptance.md).
+Undated supporting records: [scheduler traces](lab-notebook/2026-07-14-glm52-scheduler-traces.md) and [V4 DSpark acceptance logs](lab-notebook/2026-08-07-deepseek-v4-dspark-acceptance.md).

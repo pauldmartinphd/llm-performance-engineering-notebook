@@ -12,7 +12,7 @@ The captures identify four V620s with 30,704 MiB each. The early build reports `
 |---|---|---:|---:|---:|
 | April 7 | `deepseek2`, 1026.41 B parameters, Q4_K Medium; experts in RAM | 6.76 ± 0.02 at 32 threads | 3.25 ± 0.57 | 44.41 ± 0.03 at 96 threads |
 | April 9 | Same printed model size/type and build; experts in RAM | 7.64 ± 0.00 at 32 threads | No completed 128-thread row | 44.05 ± 0.04 at 96 threads |
-| Qwen capture, date not in filename | Qwen3.5 397B Q6_K, 319.21 GiB; experts in RAM | 9.69 ± 0.02 at 32 threads | 4.57 ± 0.64 | 87.54 ± 0.41 at 96 threads |
+| April 7 (file modification date) | Qwen3.5 397B Q6_K, 319.21 GiB; experts in RAM | 9.69 ± 0.02 at 32 threads | 4.57 ± 0.64 | 87.54 ± 0.41 at 96 threads |
 | April 10 | Qwen3.5 397B Q6_K; five expert layers per GPU, remaining experts in RAM | 11.67 ± 0.07 at 32 threads | 5.78 ± 0.69 | 110.23 ± 0.25 at 96 threads |
 | April 17 | MiniMax M2.7 Q5_K Medium; experts in RAM | 14.76 ± 0.01 at 32 threads | 8.96 ± 2.84 | 101.71 ± 0.13 at 96 threads |
 | April 17 | Qwen3.5 397B Q4_K Medium; experts in RAM | 11.43 ± 0.02 at 32 threads | 5.69 ± 0.43 | 100.58 ± 0.04 at 96 threads |
@@ -22,6 +22,8 @@ I got the best decode rate at 32 threads in each of these sweeps, while prefill 
 The April 8 file contains two full sweeps, not one. At 32 threads they both reached 6.76 t/s; at 128 threads they fell to 3.11 and 3.69 t/s with larger spreads. I kept both sequences rather than averaging them into a single experiment. The April 9 run reached 7.64 t/s at 32 threads despite the same printed build and model summary. The captures do not identify the changed condition, so I cannot attribute that improvement to a code change.
 
 The early files print `deepseek2 671B` in the model label but **1026.41 B** in the parameter column. I retained both fields. An architecture label is not enough to identify the model export, and these are not DeepSeek-V4.1 measurements.
+
+The original `qwen-benchmark.log` was last modified April 7 at 20:47:17 EDT. I use that as its inferred capture date; the log itself does not record a run-start date. [Source timestamps](../raw-logs/2026-10-22-galactus-archive/source-timestamps.md).
 
 ## Resident experts changed the Qwen comparison
 
