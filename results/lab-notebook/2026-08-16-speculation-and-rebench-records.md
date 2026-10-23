@@ -8,27 +8,27 @@ The archive supplies direct evidence for much of the speculation work already su
 
 The file named `dsv4-dspark-n3.txt` contains six completed runs:
 
-| Start time (EDT) | Requested n-max | Prompt t/s | Generation t/s |
-|---|---:|---:|---:|
-| 12:25:42 | 3 | 12.2 | 14.7 |
-| 12:34:55 | 3 | 13.0 | 13.4 |
-| 12:35:43 | 2 | 13.2 | 14.3 |
-| 12:36:31 | 4 | 13.0 | 13.6 |
-| 12:37:19 | 8 | 12.8 | 12.5 |
-| 12:38:13 | 1 | 12.8 | 12.9 |
+| Start time (EDT) | Requested n-max | Generation t/s |
+| --- | ---: | ---: |
+| 12:25:42 | 3 | 14.7 |
+| 12:34:55 | 3 | 13.4 |
+| 12:35:43 | 2 | 14.3 |
+| 12:36:31 | 4 | 13.6 |
+| 12:37:19 | 8 | 12.5 |
+| 12:38:13 | 1 | 12.9 |
 
 The commands specify the V4-Flash-0731 target and DSpark sidecar, 64 threads, CPU-MoE placement, flash attention, context/batch/microbatch 8192, greedy decoding, and the 256-token ZFS prompt test. The table records the requested draft length; the earlier notebook explains the block-size clamp. These transcripts confirm the run order behind the August common baseline, rather than adding six new repetitions to it.
 
 The GLM file similarly changes n-max despite its `n2` filename:
 
-| Start time (EDT) | Requested n-max | Prompt t/s | Generation t/s |
-|---|---:|---:|---:|
-| 12:13:27 | 2 | 2.5 | 6.3 |
-| 12:17:50 | 2 | 1.9 | 6.9 |
-| 12:19:44 | 3 | 2.5 | 6.3 |
-| 12:21:35 | 1 | 2.5 | 5.9 |
+| Start time (EDT) | Requested n-max | Generation t/s |
+| --- | ---: | ---: |
+| 12:13:27 | 2 | 6.3 |
+| 12:17:50 | 2 | 6.9 |
+| 12:19:44 | 3 | 6.3 |
+| 12:21:35 | 1 | 5.9 |
 
-These commands use GLM-5.2, 32 threads, CPU expert overrides, and the same 8192 context/batch/microbatch and 256-token greedy prompt. The separate target-only GLM transcript reports 1.9 prompt and 5.3 generation t/s. The two n-max 2 runs average 6.6 t/s, matching the earlier summary. I retain the individual rates because two observations do not establish a tight uncertainty estimate.
+These commands use GLM-5.2, 32 threads, CPU expert overrides, and the same 8192 context/batch/microbatch and 256-token greedy prompt. The separate target-only GLM transcript reports 5.3 generation t/s. The two n-max 2 runs average 6.6 t/s, matching the earlier summary. I retain the individual rates because two observations do not establish a tight uncertainty estimate.
 
 The Qwen3.5 MTP transcript ends with exit code 1 before the server becomes ready. It supplies no speculation timing. Likewise, the Qwen resident-expert benchmark fails during context creation. Neither failure should enter a throughput average as zero.
 

@@ -45,12 +45,12 @@ The repository includes the measurements, unsuccessful experiments, patch instru
 
 These CLI tests used my combined V620, older DeepSeek, GLM-5.3 MTP, and round-robin patch build. They predate the newer Unsloth integration. I used a short ZFS prompt and a 256-token generation limit, so I keep these rates separate from the normalized benchmark below.
 
-| Model and configuration | Prompt t/s | Generation t/s |
-|---|---:|---:|
-| [GLM-5.3-Flash, MTP, automatic placement](results/glm-5.3-flash.md) | 21.7–22.3 | 19.1–19.4 |
-| [GLM-5.3-Flash, MTP, forced-RAM experts, no explicit cache allocation](results/glm-5.3-flash.md) | 18.1–18.2 | 13.7–14.4 |
-| [DeepSeek-V4.1-Flash Q4_K_M, target only](results/deepseek-v4.1-flash.md) | 13.5 | 11.2 |
-| [DeepSeek-V4.1-Flash with DSpark](results/deepseek-v4.1-flash.md) | — | Draft loading failed: insufficient VRAM |
+| Model and configuration | Generation t/s |
+| --- | ---: |
+| [GLM-5.3-Flash, MTP, automatic placement](results/glm-5.3-flash.md) | 19.1–19.4 |
+| [GLM-5.3-Flash, MTP, forced-RAM experts, no explicit cache allocation](results/glm-5.3-flash.md) | 13.7–14.4 |
+| [DeepSeek-V4.1-Flash Q4_K_M, target only](results/deepseek-v4.1-flash.md) | 11.2 |
+| [DeepSeek-V4.1-Flash with DSpark](results/deepseek-v4.1-flash.md) | Draft loading failed: insufficient VRAM |
 
 ### August common baseline
 

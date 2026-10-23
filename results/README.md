@@ -14,7 +14,7 @@ I ran these V620 tests with the V620 patches, older DeepSeek implementation, GLM
 |---|---|---|
 | [GLM-5.3-Flash](glm-5.3-flash.md), V620 build, MTP on, automatic placement | 19.1–19.4 generated tokens/s | [Configuration and all 15 launches](lab-notebook/undated-glm53-flash-placement.md) |
 | [GLM-5.3-Flash](glm-5.3-flash.md), V620 build, MTP on, forced-RAM experts, no explicit cache allocation | 13.7–14.4 generated tokens/s | [Placement and cache comparisons](lab-notebook/undated-glm53-flash-placement.md) |
-| [DeepSeek-V4.1-Flash](deepseek-v4.1-flash.md) Q4_K_M, target only | 13.5 prompt / 11.2 generation tokens/s | [Target run and failed DSpark launch](lab-notebook/undated-deepseek41-dspark.md) |
+| [DeepSeek-V4.1-Flash](deepseek-v4.1-flash.md) Q4_K_M, target only | 11.2 generated tokens/s | [Target run and failed DSpark launch](lab-notebook/undated-deepseek41-dspark.md) |
 | [DeepSeek-V4.1-Flash](deepseek-v4.1-flash.md) with DSpark | Draft model failed to load after a 2464.20 MiB allocation failed on ROCm0 | [Failure and proposed test matrix](lab-notebook/undated-deepseek41-dspark.md) |
 
 I did not run a round-robin-off control, so these results do not isolate my patch's contribution. The GLM record also includes comparisons with a separate PATH binary. These short-prompt CLI tests predate the newer Unsloth integration and use a different workload from the normalized baseline below. I retained the [original logs and hashes](raw-logs/2026-10-21-flash-experiments/) and [all GLM launch records](data/glm53-flash-historical.csv).

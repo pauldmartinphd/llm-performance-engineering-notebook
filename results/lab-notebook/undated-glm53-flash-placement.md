@@ -18,23 +18,23 @@ The V620 binary reports `b0-unknown`; the executable found on PATH reports `b115
 
 Rates are tokens/s. RAM means the command explicitly requested `-ngl all -cmoe`; auto means those options were absent. Cache values are requested MiB, not measured allocations or per-device occupancy.
 
-| Command line | Binary | Model | Placement | Cache | MTP n-max | Prompt | Generation |
-|---|---|---|---|---:|---:|---:|---:|
-| 194 | V620 | Flash | RAM | 0 | 2 | 18.2 | 14.4 |
-| 255 | V620 | non-Flash | RAM | 0 | 2 | 4.1 | 6.3 |
-| 311 | V620 | non-Flash | RAM | 0 | 3 | 4.1 | 6.1 |
-| 367 | V620 | Flash | RAM | 64536 | 2 | 9.4 | 12.0 |
-| 428 | V620 | Flash | RAM | 98304 | 2 | 9.3 | 16.0 |
-| 490 | V620 | Flash | RAM | 98304 | 3 | 9.3 | 15.1 |
-| 552 | PATH | Flash | RAM | 98304 | 3 | — | Allocation failure |
-| 565 | PATH | Flash | RAM | omitted | 3 | 18.2 | 14.0 |
-| 626 | PATH | Flash | RAM | omitted | omitted | 18.2 | 14.0 |
-| 688 | V620 | Flash | RAM | omitted | omitted | 18.2 | 13.7 |
-| 749 | V620 | Flash | RAM | omitted | omitted | 18.1 | 13.8 |
-| 811 | V620 | Flash | auto | omitted | omitted | 21.7 | 19.1 |
-| 874 | PATH | Flash | auto | omitted | omitted | 21.3 | 18.3 |
-| 933 | V620 | Flash | auto | omitted | 2 | 22.3 | 19.4 |
-| 998 | PATH | Flash | RAM | omitted | omitted | 18.2 | 13.9 |
+| Command line | Binary | Model | Placement | Cache | MTP n-max | Generation |
+| --- | --- | --- | --- | ---: | ---: | ---: |
+| 194 | V620 | Flash | RAM | 0 | 2 | 14.4 |
+| 255 | V620 | non-Flash | RAM | 0 | 2 | 6.3 |
+| 311 | V620 | non-Flash | RAM | 0 | 3 | 6.1 |
+| 367 | V620 | Flash | RAM | 64536 | 2 | 12.0 |
+| 428 | V620 | Flash | RAM | 98304 | 2 | 16.0 |
+| 490 | V620 | Flash | RAM | 98304 | 3 | 15.1 |
+| 552 | PATH | Flash | RAM | 98304 | 3 | Allocation failure |
+| 565 | PATH | Flash | RAM | omitted | 3 | 14.0 |
+| 626 | PATH | Flash | RAM | omitted | omitted | 14.0 |
+| 688 | V620 | Flash | RAM | omitted | omitted | 13.7 |
+| 749 | V620 | Flash | RAM | omitted | omitted | 13.8 |
+| 811 | V620 | Flash | auto | omitted | omitted | 19.1 |
+| 874 | PATH | Flash | auto | omitted | omitted | 18.3 |
+| 933 | V620 | Flash | auto | omitted | 2 | 19.4 |
+| 998 | PATH | Flash | RAM | omitted | omitted | 13.9 |
 
 ## Placement, cache size, and draft length
 
@@ -42,7 +42,7 @@ For the V620 runs with draft length omitted, automatic placement at 19.1 t/s is 
 
 The build comparison is weaker. Automatic placement gave 19.1 t/s for V620 and 18.3 t/s for PATH, a 4.4% difference in these individual runs. Under forced RAM, the V620 results of 13.7–13.8 t/s did not exceed the PATH results of 13.9–14.0 t/s. I did not find a consistent decode advantage from the V620 build in these tests.
 
-Cache behavior was not monotonic. With n-max 2, requesting 64536 MiB reduced generation from 14.4 to 12.0 t/s; requesting 98304 MiB raised it to 16.0 t/s. Prompt throughput fell from 18.2 to roughly 9.3 t/s in those cache runs. I ran each of these settings once and did not record cache-hit statistics or control the warm state, so I cannot identify an optimal cache budget from this comparison. The PATH attempt at 98304 MiB failed while allocating a 3483.11 MiB compute buffer on ROCm3 and produced no timing result.
+Cache behavior was not monotonic. With n-max 2, requesting 64536 MiB reduced generation from 14.4 to 12.0 t/s; requesting 98304 MiB raised it to 16.0 t/s. I ran each of these settings once and did not record cache-hit statistics or control the warm state, so I cannot identify an optimal cache budget from this comparison. The PATH attempt at 98304 MiB failed while allocating a 3483.11 MiB compute buffer on ROCm3 and produced no timing result.
 
 Increasing n-max from 2 to 3 also failed to improve the two directly recorded pairs: Flash at cache 98304 fell from 16.0 to 15.1 t/s, and the larger non-Flash model fell from 6.3 to 6.1 t/s. Drafting more tokens creates additional work; without acceptance counts I cannot separate lower acceptance from draft or verification cost. Since every successful run has MTP enabled, none measures MTP's benefit over ordinary decoding.
 

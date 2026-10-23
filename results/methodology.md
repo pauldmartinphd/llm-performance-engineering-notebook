@@ -1,5 +1,7 @@
 # A performance-testing methodology for LLM inference
 
+For CLI tests using bespoke prompts, I report generation throughput only. Prefill comparisons use dedicated benchmarks with an explicit prompt length, such as pp8192. The original logs retain their printed timings, but short-prompt CLI processing rates are omitted from the result tables and analysis.
+
 This is the procedure I used to find the system's inference limits and test changes. It was developed for hybrid Mixture-of-Experts (MoE) inference, in which the routed experts sit in system RAM and the dense path runs on the GPUs, but the test loop also applies to other systems. Every step below uses numbers from **Galactus** (EPYC 7713, DDR4-2933, 4 × Radeon Pro V620); see the [per-model results](README.md) and the [hardware note](../hardware/galactus/README.md).
 
 The investigation starts with memory bandwidth and an estimate of time per token. Controlled sweeps test that estimate and identify the settings or code paths to inspect. This page uses the July GLM-5.2 investigation as its worked example; the [August common baseline](lab-notebook/2026-08-15-to-16-common-baseline-2tb.md) records the later build and memory population.

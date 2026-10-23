@@ -10,10 +10,10 @@ The [cache and Maya comparison record](lab-notebook/2026-10-23-deepseek41-cache-
 
 I tested the eleven-shard Q4_K_M export from `vcruz305/DeepSeek-V4.1-Flash-GGUF` with the DSpark export from `JigSawPT/DeepSeek-V4.1-Flash-DSpark-GGUF`. My V620 build combined the V620 patches, older DeepSeek implementation, GLM-5.3 MTP support, and my round-robin prefill patch. It reports `b0-unknown`; the captures do not establish the exact commit or run dates.
 
-| Configuration | Prompt t/s | Generation t/s | Outcome |
-|---|---:|---:|---|
-| Target only | 13.5 | 11.2 | Completed the 256-token generation test |
-| DSpark, n-max 2, draft GPU offload | — | — | Failed to allocate 2464.20 MiB on ROCm0 while loading the draft |
+| Configuration | Generation t/s | Outcome |
+| --- | ---: | --- |
+| Target only | 11.2 | Completed the 256-token generation test |
+| DSpark, n-max 2, draft GPU offload | — | Failed to allocate 2464.20 MiB on ROCm0 while loading the draft |
 
 I used 32 threads, context 8192, flash attention, `--load-mode none`, and greedy decoding for the ZFS explanation prompt. The target-only command did not explicitly specify CPU-MoE placement or tensor splitting. The output contained unfinished reasoning at the token limit; I did not score answer quality.
 
