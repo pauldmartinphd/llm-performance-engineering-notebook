@@ -1,5 +1,11 @@
 # GLM-5.3-Flash on Galactus
 
+## October 29 record: 80 GiB expert-cache benchmark
+
+A recovered `llamda-bench` capture for build `754aa4151 (11811)` reports **279.51 ± 15.37 pp8192** and **8.63 ± 2.84 tg256** with `--moe-cache-mib 81920`, forced CPU expert placement, 32 threads, flash attention, and batch/microbatch 8192 on four V620s. The run date is not printed. Two repetitions and no matching cache-disabled run leave the cache's effect unresolved; the earlier build comparison uses different revisions.
+
+The [complete cache investigation record](lab-notebook/2026-10-29-glm53-expert-cache.md) preserves the command, hardware report, historical untested 96 GiB patch proposal, implementation claims awaiting verification, and proposed controlled comparisons. The October 29 continuation could not access `/root/llama.cpp`; no cache counters, new timings, or validated fixes were obtained.
+
 ## October 23: 31.6 tokens/s with Project Maya
 
 Using the existing Unsloth UD-Q4_K_XL export, Project Maya v1.1.24 reached **31.6 generated tokens/s** on Galactus's four V620s. Setting `MAYA_GLM_NO_SPEC=1` reduced the same three-prompt benchmark to **19.9 tokens/s**, a **58.8%** gain with speculation. Both runs used context 32768, greedy decoding, thinking off, and three 256-token answers. Dedicated prefill at 8192 tokens was 242 with speculation and 241 without it.
