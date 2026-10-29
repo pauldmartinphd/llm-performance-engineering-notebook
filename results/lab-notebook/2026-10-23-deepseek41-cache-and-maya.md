@@ -145,3 +145,65 @@ For the next run, I will preserve the old checkout, raw results, tuned configura
 
 
 **October 29 follow-up:** The backup JSON was subsequently found and printed. TP=2 and a 3072 MiB reserve are now documented, and v1.1.30 was restored. The forward-looking v1.1.34 rebuild plan above is superseded by [the October 28 recovery and tuning record](2026-10-28-maya-prefill-and-regression.md).
+
+
+## October 24 continuation: live context, cooling, and Hermes
+
+**Added:** October 29, 2026. **Sources:** [Speculative Node Setup](https://chatgpt.com/c/6adb5c97-ef6c-83e9-b985-9d01d55530f8), the October 29 continuation supplied with this notebook update, and the existing records linked below. The retrieved conversation contains the final setup exchange, but no older-page cursor; the live-context figures below are therefore retained as user-reported observations rather than reconstructed benchmark output. This section records the October 23–24 deployment and does not supersede the [October 29 production configuration](2026-10-29-maya-production-64k.md).
+
+### Performance and context in use
+
+The platform remains the EPYC 7713 with **2 TB RAM and four Radeon PRO V620s**. The [GLM entry](2026-10-23-maya-glm53-speculation.md) retains Project Maya **v1.1.24**, **GLM-5.3-Flash UD-Q4_K_XL**, the speculation A/B comparison, the speculative-head sweep, and the `MAYA_GLM_MTP_KEEP` sweep. The best observed default was **31.6 tokens/s generation and 242 tokens/s PP8192**, with two head GPUs and KEEP=2. Those defaults won the recorded trials, but repeated interleaved runs remain necessary to distinguish the nearby KEEP results reliably.
+
+For **DeepSeek-V4.1-Flash-1017 UD-Q8_K_XL**, the full-RAM-residency configuration and DSpark retest above produced **29.3 tokens/s calibrated versus 21.2 undrafted**, with **69% draft acceptance**. The configuration requests Engram and CPU-expert residency through `DS4_ENGRAM_RAM=1`, `DS4_REQUIRE_ALL_RAM=1`, and `--mmap-experts off`; shell-history edits establish the requested settings, while the [October 24 dashboard](../deepseek-v4.1-flash.md#october-24-dashboard-from-ongoing-use) provides separate runtime evidence of 11,773 experts in pinned RAM, 3,587 in VRAM, and zero SSD-only experts. This supports RAM/VRAM expert residency for that session, without establishing every Engram allocation or proving that memory locking alone caused the calibration gain.
+
+| Observation | Value | Evidence and limit |
+|---|---|---|
+| Configured context after calibration | **1,048,576 tokens (1M / 1024K)** | October 23 configuration-edit command and October 24 dashboard; the calibration itself used a 32K configuration |
+| Context during later live use | **Approximately 69–82K tokens** | User-reported in the October 29 continuation; no corresponding request log retained here |
+| Generation during that live use | **Approximately 27–30 tokens/s** | User-reported operating range, not a controlled long-context benchmark |
+| Separate retained dashboard | **28.0 tokens/s aggregate**, 90 requests, 86,075 output tokens | October 24 screenshot; its last request used 2.2K context, so it does not verify the reported 69–82K interval |
+
+The configured ceiling, live context in use, and benchmark prompt length are different quantities. Neither the live-use report nor the dashboard establishes throughput or answer quality at a full million tokens.
+
+### Deployment and Hermes on magneto
+
+The intended route is **Hermes on `magneto` → authenticated Open WebUI API → Maya on the inference container's localhost**. The conversation records Open WebUI's upstream connection as `http://localhost:8081/v1`, with Chat Completions enabled and no upstream authentication. It describes Maya as bound to localhost on port 8081; that is the recorded deployment arrangement, not a fresh listener inspection in this update.
+
+| Component | Recorded name or endpoint | Status |
+|---|---|---|
+| Open WebUI | `http://10.0.0.51:8080` | Existing frontend; user reports API keys enabled |
+| Hermes API base | `http://10.0.0.51:8080/api` | Setup value; answer **no** to appending `/v1` |
+| Model discovery | `GET /api/models` | Authenticated check still to confirm |
+| Chat inference through Open WebUI | `POST /api/chat/completions` | Normal response and tool calling still to validate from Hermes |
+| DeepSeek configuration | `maya-ds4.1-flash-hip.json`, port **8081** | Rename and port edit appear in shell history; dashboard separately confirms port 8081 |
+| GLM configuration | `maya-glm5.3-flash-hip.json`, proposed port **8082** | Requested deployment arrangement; the original run used a temporary **8100** benchmark port, and the retained source does not confirm the final listener on 8082 |
+
+On `magneto`, run `hermes model`, select the custom OpenAI-compatible endpoint, and use the API base above. Supply the Open WebUI account's API key privately. Use the exact model ID returned by `/api/models`; `deepseek-v4.1-flash` is the proposed ID, pending discovery. API-key enablement is recorded, but a successful authenticated model listing, completed Hermes configuration, and end-to-end tool call have not yet been demonstrated in the available exchange.
+
+The model-list check uses zsh's hidden-input syntax. This procedure holds the key in a temporary shell variable and clears it afterward; the notebook contains no key value.
+
+```zsh
+read -rs "WEBUI_KEY?Open WebUI API key: "
+echo
+curl -fsS 'http://10.0.0.51:8080/api/models' \
+  -H "Authorization: Bearer $WEBUI_KEY" \
+  | python3 -m json.tool
+unset WEBUI_KEY
+```
+
+After configuring Hermes, test a normal response and a small tool-calling request. Offering Hermes itself as an additional Open WebUI model was discussed as a separate arrangement; no completed deployment of that route is established here.
+
+### GPU and RDIMM cooling
+
+The [October 1 thermal record](../../hardware/galactus/README.md#thermal-testing-and-fan-control) establishes that the GPU duct also cools the adjacent RDIMMs. FAN2 drives the two high-pressure 80 mm fans feeding the four-GPU duct. At **70%**, the recorded speed was about **5,100 RPM**, with the hottest DIMM around **70–74 °C** during inference. At 100%, the hottest DIMM reached about 63 °C after ten minutes; this was an observation during cooling, not a demonstrated equilibrium. The earlier low-airflow incident reached approximately 84–85 °C and was followed by ECC/RAS trouble, without captured error counts or a diagnosis of permanent damage.
+
+The **70–80% fan comparison remains an open test**. The existing proposed curve includes 80% duty at a 70 °C DDR4C reading, but that control point is not a measured 80% trial. A matched sustained inference workload should record GPU temperature, RDIMM temperatures by channel, fan RPM, ambient conditions, and throughput at each duty setting, with enough time to assess stabilization. The available record does not establish an 80% thermal result, a GPU throttling threshold, or a throughput gain from increasing the fans.
+
+### Remaining validation
+
+- [ ] Confirm the authenticated model list and exact model ID, then complete a normal Hermes response and tool call through Open WebUI.
+- [ ] Capture the effective configuration and listener state for the historical naming/port arrangement if it is still needed; keep it distinct from the newer production configuration.
+- [ ] Retain request timings, actual prompt/context counts, and quality checks for the reported 69–82K live-use range; a full 1M-context test remains unperformed in this record.
+- [ ] Run a controlled 70% versus 80% fan comparison with GPU and RDIMM telemetry.
+- [ ] Repeat the close GLM MTP_KEEP cases with interleaved baselines before treating the observed default as a stable optimum.
