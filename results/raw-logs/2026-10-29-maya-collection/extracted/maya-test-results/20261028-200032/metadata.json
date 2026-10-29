@@ -1,0 +1,218 @@
+{
+  "created_utc": "2026-10-29T00:00:32.757743+00:00",
+  "options": {
+    "maya": "/opt/project-maya",
+    "config": "maya-ds4-hip.json",
+    "out": "/opt/maya-test-results",
+    "port": 8082,
+    "chunks": [
+      8192,
+      16384,
+      32768
+    ],
+    "rings": [
+      128,
+      400,
+      800
+    ],
+    "lengths": [
+      8192,
+      32768,
+      65536
+    ],
+    "repeats": 2,
+    "startup_timeout": 1200,
+    "request_timeout": 1200,
+    "tp": null,
+    "cpu_threads": null,
+    "corpus": "None"
+  },
+  "source_config_sha256": "0ae446c9aa5feeca742a13145312dd95f86113df4890af8d184b4bfbfbba7cc5",
+  "script_sha256": "42471dc77c92e9c2fee1b6148b5f6ee35af37467a0e6fff7aaceee9467827fcf",
+  "engine_sha256": "48fcd11d9701a836069db0b633b7f42ef175ec1363bee06d29b2f65c37e10697",
+  "corpus_sha256": "2478f6f55df95f210def6fb9db16f5d61d144e2ab41d39f35042ddbeff33b571",
+  "cases": [
+    [
+      8192,
+      400
+    ],
+    [
+      32768,
+      400
+    ],
+    [
+      32768,
+      128
+    ],
+    [
+      32768,
+      800
+    ],
+    [
+      16384,
+      128
+    ],
+    [
+      8192,
+      800
+    ],
+    [
+      16384,
+      800
+    ],
+    [
+      16384,
+      400
+    ],
+    [
+      8192,
+      128
+    ],
+    [
+      8192,
+      400
+    ]
+  ],
+  "note": "Token lengths are document targets; actual API prompt counts are in results.csv. Two repeats share one engine start. DSpark and vision are retained from the source config. First timed request has 128 output tokens, as do all other timed requests. No TTFT is inferred from wall time.",
+  "commands": [
+    {
+      "command": [
+        "git",
+        "-C",
+        "/opt/project-maya",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit": 0,
+      "stdout": "8621e33159f426da2d376be4ec012b0ce8fe2948\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "-C",
+        "/opt/project-maya",
+        "describe",
+        "--tags",
+        "--always",
+        "--dirty"
+      ],
+      "exit": 0,
+      "stdout": "v1.1.30\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "-C",
+        "/opt/project-maya/third_party/llama.cpp",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit": 0,
+      "stdout": "8621e33159f426da2d376be4ec012b0ce8fe2948\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "uname",
+        "-a"
+      ],
+      "exit": 0,
+      "stdout": "Linux openwebui 7.0.14-15-pve #1 SMP PREEMPT_DYNAMIC PMX 7.0.14-15 (2026-08-26T14:21Z) x86_64 GNU/Linux\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "lscpu"
+      ],
+      "exit": 0,
+      "stdout": "Architecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           48 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  128\nOn-line CPU(s) list:                     0-127\nVendor ID:                               AuthenticAMD\nModel name:                              AMD EPYC 7713 64-Core Processor\nCPU family:                              25\nModel:                                   1\nThread(s) per core:                      2\nCore(s) per socket:                      64\nSocket(s):                               1\nStepping:                                1\nFrequency boost:                         enabled\nCPU(s) scaling MHz:                      57%\nCPU max MHz:                             3720.7029\nCPU min MHz:                             1500.0000\nBogoMIPS:                                4000.36\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology nonstop_tsc cpuid extd_apicid aperfmperf rapl pni pclmulqdq monitor ssse3 fma cx16 pcid sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand lahf_lm cmp_legacy svm extapic cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw ibs skinit wdt tce topoext perfctr_core perfctr_nb bpext perfctr_llc mwaitx cpb cat_l3 cdp_l3 hw_pstate ssbd mba ibrs ibpb stibp vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid cqm rdt_a rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local user_shstk clzero irperf xsaveerptr rdpru wbnoinvd amd_ppin brs arat npt lbrv svm_lock nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold v_vmsave_vmload vgif v_spec_ctrl umip pku ospke vaes vpclmulqdq rdpid overflow_recov succor smca fsrm debug_swap\nVirtualization:                          AMD-V\nL1d cache:                               2 MiB (64 instances)\nL1i cache:                               2 MiB (64 instances)\nL2 cache:                                32 MiB (64 instances)\nL3 cache:                                256 MiB (8 instances)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-127\nVulnerability Gather data sampling:      Not affected\nVulnerability Ghostwrite:                Not affected\nVulnerability Indirect target selection: Not affected\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Not affected\nVulnerability Mds:                       Not affected\nVulnerability Meltdown:                  Not affected\nVulnerability Mmio stale data:           Not affected\nVulnerability Old microcode:             Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Not affected\nVulnerability Spec rstack overflow:      Mitigation; Safe RET\nVulnerability Spec store bypass:         Mitigation; Speculative Store Bypass disabled via prctl\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; Retpolines; IBPB conditional; IBRS_FW; STIBP always-on; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Mitigation; Clear CPU buffers\nVulnerability Tsx async abort:           Not affected\nVulnerability Vmscape:                   Mitigation; IBPB before exit to userspace\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "free",
+        "-h"
+      ],
+      "exit": 0,
+      "stdout": "               total        used        free      shared  buff/cache   available\nMem:           2.0Ti       1.3Gi       2.0Ti       188Ki       116Mi       2.0Ti\nSwap:             0B          0B          0B\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "rocm-smi",
+        "--showproductname",
+        "--showmeminfo",
+        "vram",
+        "--showuse"
+      ],
+      "exit": 0,
+      "stdout": "\n\n============================ ROCm System Management Interface ============================\n=================================== % time GPU is busy ===================================\nGPU[0]\t\t: GPU use (%): 0\nGPU[1]\t\t: GPU use (%): 0\nGPU[2]\t\t: GPU use (%): 0\nGPU[3]\t\t: GPU use (%): 0\n==========================================================================================\n================================== Memory Usage (Bytes) ==================================\nGPU[0]\t\t: VRAM Total Memory (B): 32195477504\nGPU[0]\t\t: VRAM Total Used Memory (B): 17182720\nGPU[1]\t\t: VRAM Total Memory (B): 32195477504\nGPU[1]\t\t: VRAM Total Used Memory (B): 17182720\nGPU[2]\t\t: VRAM Total Memory (B): 32195477504\nGPU[2]\t\t: VRAM Total Used Memory (B): 17182720\nGPU[3]\t\t: VRAM Total Memory (B): 32195477504\nGPU[3]\t\t: VRAM Total Used Memory (B): 17158144\n==========================================================================================\n====================================== Product Info ======================================\nGPU[0]\t\t: Card Series: \t\tAMD RADEON PRO V620 Azure\nGPU[0]\t\t: Card Model: \t\t0x73a1\nGPU[0]\t\t: Card Vendor: \t\tAdvanced Micro Devices, Inc. [AMD/ATI]\nGPU[0]\t\t: Card SKU: \t\tD6030500\nGPU[0]\t\t: Subsystem ID: \t0x0e34\nGPU[0]\t\t: Device Rev: \t\t0x00\nGPU[0]\t\t: Node ID: \t\t4\nGPU[0]\t\t: GUID: \t\t8042\nGPU[0]\t\t: GFX Version: \t\tgfx1030\nGPU[1]\t\t: Card Series: \t\tAMD RADEON PRO V620 Azure\nGPU[1]\t\t: Card Model: \t\t0x73a1\nGPU[1]\t\t: Card Vendor: \t\tAdvanced Micro Devices, Inc. [AMD/ATI]\nGPU[1]\t\t: Card SKU: \t\tD6030500\nGPU[1]\t\t: Subsystem ID: \t0x0e34\nGPU[1]\t\t: Device Rev: \t\t0x00\nGPU[1]\t\t: Node ID: \t\t2\nGPU[1]\t\t: GUID: \t\t48907\nGPU[1]\t\t: GFX Version: \t\tgfx1030\nGPU[2]\t\t: Card Series: \t\tAMD RADEON PRO V620 Azure\nGPU[2]\t\t: Card Model: \t\t0x73a1\nGPU[2]\t\t: Card Vendor: \t\tAdvanced Micro Devices, Inc. [AMD/ATI]\nGPU[2]\t\t: Card SKU: \t\tD6030500\nGPU[2]\t\t: Subsystem ID: \t0x0e34\nGPU[2]\t\t: Device Rev: \t\t0x00\nGPU[2]\t\t: Node ID: \t\t3\nGPU[2]\t\t: GUID: \t\t31753\nGPU[2]\t\t: GFX Version: \t\tgfx1030\nGPU[3]\t\t: Card Series: \t\tAMD RADEON PRO V620 Azure\nGPU[3]\t\t: Card Model: \t\t0x73a1\nGPU[3]\t\t: Card Vendor: \t\tAdvanced Micro Devices, Inc. [AMD/ATI]\nGPU[3]\t\t: Card SKU: \t\tD6030500\nGPU[3]\t\t: Subsystem ID: \t0x0e34\nGPU[3]\t\t: Device Rev: \t\t0x00\nGPU[3]\t\t: Node ID: \t\t1\nGPU[3]\t\t: GUID: \t\t20282\nGPU[3]\t\t: GFX Version: \t\tgfx1030\n==========================================================================================\n================================== End of ROCm SMI Log ===================================\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/opt/project-maya/.venv/bin/python",
+        "-m",
+        "pip",
+        "freeze"
+      ],
+      "exit": 0,
+      "stdout": "anyio==4.15.1\nattrs==26.1.0\ncertifi==2026.10.23\ncharset-normalizer==3.5.2\nclick==8.5.0\ncmake==4.4.4\nfilelock==4.2.4\nfsspec==2026.9.0\nh11==0.16.0\nhf-xet==1.7.0\nhttpcore2==2.16.0\nhttpx2==2.16.0\nhuggingface_hub==2.3.0\nidna==3.20\nJinja2==3.1.6\njsonschema==4.26.0\njsonschema-specifications==2025.9.1\nlinkify-it-py==2.2.0\nmarkdown-it-py==4.2.0\nMarkupSafe==3.0.4\nmdit-py-plugins==0.6.1\nmdurl==0.1.2\nninja==1.13.2\nnumpy==2.5.4\npackaging==26.3\npillow==13.0.0\nplatformdirs==4.12.4\npsutil==7.2.2\nPygments==2.21.0\nPyYAML==6.0.3\nreferencing==0.37.0\nregex==2026.9.29\nrequests==2.34.2\nrich==15.0.0\nrpds-py==2026.9.1\ntextual==8.2.8\ntokenizers==0.23.3\ntqdm==4.70.1\ntruststore==0.10.5\ntyping_extensions==4.16.0\nurllib3==2.8.0\n",
+      "stderr": ""
+    }
+  ],
+  "memlock_limits": [
+    -1,
+    -1
+  ],
+  "model_inventory": [
+    {
+      "path": "/models/DeepSeek-V4.1-Flash-1017/UD-Q8_K_XL/DeepSeek-V4.1-Flash-1017-UD-Q8_K_XL-00001-of-00009.gguf",
+      "bytes": 5780589,
+      "mtime_ns": 1792721502940599537
+    },
+    {
+      "path": "/models/DeepSeek-V4.1-Flash-1017/UD-Q8_K_XL/DeepSeek-V4.1-Flash-1017-UD-Q8_K_XL-00002-of-00009.gguf",
+      "bytes": 50536121984,
+      "mtime_ns": 1792724617291617384
+    },
+    {
+      "path": "/models/DeepSeek-V4.1-Flash-1017/UD-Q8_K_XL/DeepSeek-V4.1-Flash-1017-UD-Q8_K_XL-00003-of-00009.gguf",
+      "bytes": 50536121984,
+      "mtime_ns": 1792724616423624066
+    },
+    {
+      "path": "/models/DeepSeek-V4.1-Flash-1017/UD-Q8_K_XL/DeepSeek-V4.1-Flash-1017-UD-Q8_K_XL-00004-of-00009.gguf",
+      "bytes": 50536122016,
+      "mtime_ns": 1792724618341609300
+    },
+    {
+      "path": "/models/DeepSeek-V4.1-Flash-1017/UD-Q8_K_XL/DeepSeek-V4.1-Flash-1017-UD-Q8_K_XL-00005-of-00009.gguf",
+      "bytes": 50536122016,
+      "mtime_ns": 1792724596844774802
+    },
+    {
+      "path": "/models/DeepSeek-V4.1-Flash-1017/UD-Q8_K_XL/DeepSeek-V4.1-Flash-1017-UD-Q8_K_XL-00006-of-00009.gguf",
+      "bytes": 50536122016,
+      "mtime_ns": 1792724624311563338
+    },
+    {
+      "path": "/models/DeepSeek-V4.1-Flash-1017/UD-Q8_K_XL/DeepSeek-V4.1-Flash-1017-UD-Q8_K_XL-00007-of-00009.gguf",
+      "bytes": 36097230048,
+      "mtime_ns": 1792723886716241995
+    },
+    {
+      "path": "/models/DeepSeek-V4.1-Flash-1017/UD-Q8_K_XL/DeepSeek-V4.1-Flash-1017-UD-Q8_K_XL-00008-of-00009.gguf",
+      "bytes": 202758032592,
+      "mtime_ns": 1792725917818604790
+    },
+    {
+      "path": "/models/DeepSeek-V4.1-Flash-1017/UD-Q8_K_XL/DeepSeek-V4.1-Flash-1017-UD-Q8_K_XL-00009-of-00009.gguf",
+      "bytes": 16835109952,
+      "mtime_ns": 1792723704991641070
+    }
+  ],
+  "model_inventory_note": "Size/time inventory only; model weights were not hashed or modified."
+}

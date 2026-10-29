@@ -1,0 +1,37 @@
+{
+  "id": "chatcmpl-db20752e481a471ba2b34d9f",
+  "object": "chat.completion",
+  "created": 1793245361,
+  "model": "deepseek-v4.1-flash",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "This document is a technical README/study for **Project Maya**, an inference engine for large MoE models (GLM-5.3-Flash, DeepSeek-V4.1-Flash-1017, MiniMax-M3.1-Flash) with experimental AMD HIP support. Key points:\n\n**Models & Quants**\n- Maya quant tiers (XS/S/M/L) named by model + bits-per-expert; GLM-5.3-Flash quants range 94.7\u2013156.3 GB, retaining 97.7\u201399.2% of FP8 accuracy.\n- DeepSeek"
+      },
+      "finish_reason": "length"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 32800,
+    "completion_tokens": 128,
+    "total_tokens": 32928,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 32800,
+    "prompt_ms": 102107.6,
+    "prompt_per_token_ms": 3.113,
+    "prompt_per_second": 321.2,
+    "predicted_n": 128,
+    "predicted_ms": 4932.3,
+    "predicted_per_token_ms": 38.534,
+    "predicted_per_second": 26.0,
+    "draft_n": 88,
+    "draft_n_accepted": 80
+  }
+}

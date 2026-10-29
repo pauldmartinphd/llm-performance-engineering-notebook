@@ -1,0 +1,37 @@
+{
+  "id": "chatcmpl-5e2baa78e26f48ac94e2a36d",
+  "object": "chat.completion",
+  "created": 1793253107,
+  "model": "deepseek-v4.1-flash",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "This text is a warm-up/setup document for **Project Maya**, a local LLM inference stack. Here's a summary:\n\n## Core purpose\nMaya sets up and runs large models (GLM-5.3-Flash, DeepSeek-V4.1-Flash-1017, MiniMax"
+      },
+      "finish_reason": "length"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 8206,
+    "completion_tokens": 64,
+    "total_tokens": 8270,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 8206,
+    "prompt_ms": 49658.4,
+    "prompt_per_token_ms": 6.051,
+    "prompt_per_second": 165.2,
+    "predicted_n": 64,
+    "predicted_ms": 2660.7,
+    "predicted_per_token_ms": 41.573,
+    "predicted_per_second": 24.1,
+    "draft_n": 44,
+    "draft_n_accepted": 39
+  }
+}

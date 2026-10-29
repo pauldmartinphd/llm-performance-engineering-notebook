@@ -48,3 +48,5 @@ The original July transcripts still refer to sessions in their historical sequen
 - **October 21:** [Bandwidth, placement, and decode analysis](2026-10-21-bandwidth-and-placement.md).
 - **October 22 record:** [Revision-identified GLM benchmarks, CLI placement tests, and build provenance](2026-10-22-glm53-build-comparison.md).
 - **Recorded October 23; Maya benchmark dated October 23, cache run dates unknown:** [DeepSeek-V4.1 cache sweep and Maya DSpark results](2026-10-23-deepseek41-cache-and-maya.md). Includes the printed llAMDa cache benchmark, Maya benchmark and DSpark calibration, LXC memlock checks, and separately labeled conversation-summary results.
+
+- **October 28–29:** [Maya recovery, prefill sweep, and regression investigation](2026-10-28-maya-prefill-and-regression.md). Ten starts and 60 valid measurements; 32K chunks with an 800 MiB ring selected. The TP/workspace sweep was intentionally stopped after 15 completed cases; priority-on deadlock reproduced, with a captured v1.1.36 priority-off benchmark. Quality-reducing prompt skipping excluded.

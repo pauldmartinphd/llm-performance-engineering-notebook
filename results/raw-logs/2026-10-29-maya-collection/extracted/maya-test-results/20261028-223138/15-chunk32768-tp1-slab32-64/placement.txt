@@ -1,0 +1,27 @@
+ds4: CUDA0 prompt slabs: the attention 1024 rows, the dense weights' FP16 scratch 64 MB
+ds4: CUDA1 prompt slabs: the attention 1024 rows, the dense weights' FP16 scratch 64 MB
+ds4: CUDA2 prompt slabs: the attention 1024 rows, the dense weights' FP16 scratch 64 MB
+ds4: CUDA3 prompt slabs: the attention 1024 rows, the dense weights' FP16 scratch 64 MB
+ds4: the experts VRAM leaves over (~235.5 GB) are read in place from the model's files (copied into RAM after the GPUs' share when the RAM holds them all; --mmap-experts on keeps them in place) (2126.9 GB of RAM free to keep them: the most-routed 235.5 GB read ahead; prompts in chunks of 32768)
+ds4: group 0 (1 GPUs): 7.22 GB a member for experts, 767 of 3840 in VRAM
+ds4: group 1 (1 GPUs): 15.52 GB a member for experts, 825 of 3840 in VRAM
+ds4: group 2 (1 GPUs): 15.53 GB a member for experts, 825 of 4224 in VRAM
+ds4: group 3 (1 GPUs): 14.56 GB a member for experts, 774 of 3840 in VRAM
+ds4: 12593 of the CPU lane's 12593 experts copied into RAM (236.8 GB, 1 NUMA part) in 108.1 s
+ds4: CPU lane: 64 threads, MXFP4 rows avx2 ()
+ds4: CPU lane's experts pinned in 0.0 s
+ds4: prompts through the flow or windows by this PC's speeds: DMA 28.1 GB/s, RAM to staging 35.2 GB/s, the disk not measured; the CPU lane 75.8 GB/s in RAM, not measured from the disk (40 ms)
+ds4: PCIe lane: CUDA0 MXFP4/MXFP4/MXFP4 18800640 B: an expert 0.154 ms on the CPU lane (+0.041 a call), 0.913 streamed (+1.396 a request), 0.030 on the GPU, 9.40 from the disk -> of 0..6 picks in RAM it streams 0 0 0 0 0 0 0 (decode's check of streaming - picks all in RAM: being measured, some from the disk: being measured)
+ds4: PCIe lane: CUDA1 MXFP4/MXFP4/MXFP4 18800640 B: an expert 0.320 ms on the CPU lane (+0.041 a call), 0.962 streamed (+1.716 a request), 0.030 on the GPU, 9.40 from the disk -> of 0..6 picks in RAM it streams 0 0 0 0 0 0 0 (decode's check of streaming - picks all in RAM: being measured, some from the disk: being measured)
+ds4: PCIe lane: CUDA2 MXFP4/MXFP4/MXFP4 18800640 B: an expert 0.320 ms on the CPU lane (+0.041 a call), 1.157 streamed (+1.178 a request), 0.030 on the GPU, 9.40 from the disk -> of 0..6 picks in RAM it streams 0 0 0 0 0 0 0 (decode's check of streaming - picks all in RAM: being measured, some from the disk: being measured)
+ds4: PCIe lane: CUDA3 MXFP4/MXFP4/MXFP4 18800640 B: an expert 0.136 ms on the CPU lane (+0.041 a call), 1.423 streamed (+1.719 a request), 0.029 on the GPU, 9.40 from the disk -> of 0..6 picks in RAM it streams 0 0 0 0 0 0 0 (decode's check of streaming - picks all in RAM: being measured, some from the disk: being measured)
+ds4: CUDA0 layers [0, 42]: weights 4.00 GB, experts 14.42 GB (758 of 3840 in VRAM), caches 0.39 GB, 3072 MiB free
+ds4: CUDA1 layers [9, 18]: weights 3.69 GB, experts 15.51 GB (815 of 3840 in VRAM), caches 0.34 GB, 3066 MiB free
+ds4: CUDA2 layers [19, 29]: weights 3.73 GB, experts 15.51 GB (814 of 4224 in VRAM), caches 0.54 GB, 3072 MiB free
+ds4: CUDA3 layers [30, 39] + head: weights 4.84 GB, experts 14.55 GB (764 of 3840 in VRAM), caches 0.39 GB, 3072 MiB free
+ds4: 12593 routed experts on the CPU lane (236.8 GB): 12593 copied into RAM (1 NUMA parts), the rest in place in the model's files; 64 threads
+ds4: CUDA0 layers [0, 42]: weights 4.00 GB, experts 14.42 GB (758 of 3840 in VRAM), caches 0.39 GB, 3072 MiB free
+ds4: CUDA1 layers [9, 18]: weights 3.69 GB, experts 15.51 GB (815 of 3840 in VRAM), caches 0.34 GB, 3066 MiB free
+ds4: CUDA2 layers [19, 29]: weights 3.73 GB, experts 15.51 GB (814 of 4224 in VRAM), caches 0.54 GB, 3072 MiB free
+ds4: CUDA3 layers [30, 39] + head: weights 4.84 GB, experts 14.55 GB (764 of 3840 in VRAM), caches 0.39 GB, 3072 MiB free
+ds4: 12593 routed experts on the CPU lane (236.8 GB): 12593 copied into RAM (1 NUMA parts), the rest in place in the model's files; 64 threads

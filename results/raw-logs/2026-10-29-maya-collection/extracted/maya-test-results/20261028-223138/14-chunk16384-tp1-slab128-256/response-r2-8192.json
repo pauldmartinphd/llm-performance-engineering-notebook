@@ -1,0 +1,37 @@
+{
+  "id": "chatcmpl-da9ab04b6ef74bc2babd9ae9",
+  "object": "chat.completion",
+  "created": 1793252329,
+  "model": "deepseek-v4.1-flash",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "This document is a README for **Project Maya**, a local LLM inference engine. Here are its key technical points:\n\n## Models Supported\n- **GLM-5.3-Flash** (primary): multiple quant formats (Maya's own 2-3 bit quants, EXL3 2.9/3.5 bpw, unsloth GGUFs), sizes 277\u2013508 GB\n- **DeepSeek-V4.1-Flash-1017** (`maya-ds4`): Maya-XS (~1.6 bit experts, 277 GB), EXL3 qu"
+      },
+      "finish_reason": "length"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 8224,
+    "completion_tokens": 128,
+    "total_tokens": 8352,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 8224,
+    "prompt_ms": 49436.1,
+    "prompt_per_token_ms": 6.011,
+    "prompt_per_second": 166.4,
+    "predicted_n": 128,
+    "predicted_ms": 5002.3,
+    "predicted_per_token_ms": 39.08,
+    "predicted_per_second": 25.6,
+    "draft_n": 93,
+    "draft_n_accepted": 79
+  }
+}

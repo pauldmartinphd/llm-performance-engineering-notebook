@@ -1,0 +1,37 @@
+{
+  "id": "chatcmpl-0ee10644ac98487f87781b98",
+  "object": "chat.completion",
+  "created": 1793249088,
+  "model": "deepseek-v4.1-flash",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "This text is a collection of Maya documentation covering several topics. Here's a summary:\n\n**1. MiniMax-M3.1-Flash prefill calibration & environment variables**\n- `tools/mm3/pack_gguf.py --model <folder>` builds the pack manually (`--text-only` omits companions).\n"
+      },
+      "finish_reason": "length"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 8206,
+    "completion_tokens": 64,
+    "total_tokens": 8270,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 8206,
+    "prompt_ms": 30731.0,
+    "prompt_per_token_ms": 3.745,
+    "prompt_per_second": 267.0,
+    "predicted_n": 64,
+    "predicted_ms": 2501.0,
+    "predicted_per_token_ms": 39.078,
+    "predicted_per_second": 25.6,
+    "draft_n": 48,
+    "draft_n_accepted": 35
+  }
+}

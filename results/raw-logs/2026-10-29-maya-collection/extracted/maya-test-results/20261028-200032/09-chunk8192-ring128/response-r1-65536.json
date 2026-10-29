@@ -1,0 +1,37 @@
+{
+  "id": "chatcmpl-71e598d382524390a4fe4f24",
+  "object": "chat.completion",
+  "created": 1793239440,
+  "model": "deepseek-v4.1-flash",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "This document is a technical README for **Project Maya**, an open-source inference engine for running large MoE models (GLM-5.3-Flash, DeepSeek-V4.1-Flash, MiniMax-M3.1-Flash) on consumer and prosumer hardware. Key technical points:\n\n**Architecture & Memory**\n- Three-tier expert storage: VRAM cache \u2192 pinned RAM \u2192 NVMe SSD, with experts streamed on demand. Runs from 32 GB RAM upward; more VRAM/RAM = faster.\n- Supports NVIDIA (compute 7.0+, up to 16 GPUs), AMD"
+      },
+      "finish_reason": "length"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 65568,
+    "completion_tokens": 128,
+    "total_tokens": 65696,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 65568,
+    "prompt_ms": 169368.3,
+    "prompt_per_token_ms": 2.583,
+    "prompt_per_second": 387.1,
+    "predicted_n": 128,
+    "predicted_ms": 3847.8,
+    "predicted_per_token_ms": 30.061,
+    "predicted_per_second": 33.3,
+    "draft_n": 87,
+    "draft_n_accepted": 73
+  }
+}

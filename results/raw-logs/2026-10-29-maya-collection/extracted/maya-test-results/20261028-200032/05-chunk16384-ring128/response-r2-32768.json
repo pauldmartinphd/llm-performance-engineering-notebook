@@ -1,0 +1,37 @@
+{
+  "id": "chatcmpl-d41d93dffc4e490dbdd0e50f",
+  "object": "chat.completion",
+  "created": 1793236450,
+  "model": "deepseek-v4.1-flash",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "This document is a technical README and engineering log for **Project Maya**, an open-source inference engine for large MoE models (GLM-5.3-Flash, DeepSeek-V4.1-Flash-1017, MiniMax-M3.1-Flash) on NVIDIA and AMD hardware. Key technical points:\n\n**Architecture & Memory**\n- Expert-tiered memory: hot experts in VRAM, overflow in pinned RAM, remainder streamed from NVMe SSD via mmap; dense weights in VRAM.\n- Supports multi-GPU layer splits (up to 16 GPUs), tensor parallel, and an experimental"
+      },
+      "finish_reason": "length"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 32800,
+    "completion_tokens": 128,
+    "total_tokens": 32928,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 32800,
+    "prompt_ms": 85655.0,
+    "prompt_per_token_ms": 2.611,
+    "prompt_per_second": 382.9,
+    "predicted_n": 128,
+    "predicted_ms": 3817.5,
+    "predicted_per_token_ms": 29.824,
+    "predicted_per_second": 33.5,
+    "draft_n": 84,
+    "draft_n_accepted": 72
+  }
+}

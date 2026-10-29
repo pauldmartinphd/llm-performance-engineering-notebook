@@ -1,0 +1,66 @@
+{
+  "exe": "/opt/project-maya/build-hip/maya-ds4",
+  "args": [
+    "--pack",
+    "/models/DeepSeek-V4.1-Flash-1017/UD-Q8_K_XL/maya-ds4",
+    "--max-context",
+    "1048576",
+    "--tp",
+    "2",
+    "--reserve-mib",
+    "3072",
+    "--mmap-experts",
+    "off",
+    "--dspark",
+    "on",
+    "--prefill-chunk",
+    "32768",
+    "--threads",
+    "on",
+    "--verbose"
+  ],
+  "cwd": "/opt/project-maya",
+  "tokenizer": "/models/DeepSeek-V4.1-Flash-1017/UD-Q8_K_XL/maya-ds4/tokenizer",
+  "backend": "hip",
+  "model_name": "deepseek-v4.1-flash",
+  "gpu": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "sampling": {
+    "temperature": 1.0,
+    "top_p": 1.0
+  },
+  "reasoning_effort": "high",
+  "lib_dirs": [
+    "/opt/rocm-7.2.0/lib"
+  ],
+  "port": 8082,
+  "env": {
+    "DS4_ENGRAM_RAM": "1",
+    "DS4_REQUIRE_ALL_RAM": "1",
+    "MAYA_DS4_Q8_BATCH": "1",
+    "DS4_CHUNK": "32768",
+    "DS4_RING_MB": "800"
+  },
+  "log": "/opt/maya-test-results/20261028-223138/01-chunk32768-tp2-slabauto/engine.log",
+  "installer": {
+    "family": "deepseek",
+    "models_dir": "/opt/Maya-data/models",
+    "quant": "DeepSeek-V4.1-Flash-1017",
+    "ds4_quant": "gguf-q8",
+    "model_dir": "/models/DeepSeek-V4.1-Flash-1017/UD-Q8_K_XL",
+    "written": "2026-10-28 17:05",
+    "speed_calibration": {
+      "date": "2026-10-28 17:05",
+      "version": "1.1.30",
+      "skipped": "chosen",
+      "kept": "dspark"
+    }
+  },
+  "host": "127.0.0.1",
+  "api_key": "",
+  "mcp_servers": {}
+}

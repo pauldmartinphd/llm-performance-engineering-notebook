@@ -1,0 +1,37 @@
+{
+  "id": "chatcmpl-cc7be112c6d941f19cee682e",
+  "object": "chat.completion",
+  "created": 1793251425,
+  "model": "deepseek-v4.1-flash",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "This document is a technical README/study for **Project Maya**, an inference engine for large MoE models (GLM-5.3-Flash, DeepSeek-V4.1-Flash, MiniMax-M3.1-Flash) with a focus on running them on consumer/prosumer hardware. Key technical points:\n\n## Models & Quantization\n- **GLM-5.3-Flash** (320B total, 18B active): Maya quants named by tier (XS/S/M/L by expert bit-width). Maya-S default 96.5 GB, S24 (4-bit attention for \u2264"
+      },
+      "finish_reason": "length"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 32800,
+    "completion_tokens": 128,
+    "total_tokens": 32928,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 32800,
+    "prompt_ms": 73615.2,
+    "prompt_per_token_ms": 2.244,
+    "prompt_per_second": 445.6,
+    "predicted_n": 128,
+    "predicted_ms": 4677.1,
+    "predicted_per_token_ms": 36.54,
+    "predicted_per_second": 27.4,
+    "draft_n": 94,
+    "draft_n_accepted": 69
+  }
+}

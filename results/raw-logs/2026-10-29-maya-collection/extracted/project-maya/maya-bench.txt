@@ -1,0 +1,51 @@
+Project Maya v1.1.36 benchmark, 2026-10-29 03:11
+GPUs: AMD RADEON PRO V620 Azure 30 GB, AMD RADEON PRO V620 Azure 30 GB, AMD RADEON PRO V620 Azure 30 GB, AMD RADEON PRO V620 Azure 30 GB; RAM 2004 GB; CPU AMD EPYC 7713 64-Core Processor
+setup: maya-ds4-production-no-stream-prio.json, context 1048576, GPUs [0, 1, 2, 3]
+decode (writing the answer): mean 31.1 tokens/s over 3 answers of up to 256 tokens (greedy, thinking off)
+    31.3 tokens/s  Write a Python function that parses a CSV file into a list of dictionaries, with type hints and a docstring.
+    25.4 tokens/s  Explain how photosynthesis works, step by step, for a high-school student.
+    36.7 tokens/s  Write a complete HTML page with a canvas that draws a bouncing ball animation in JavaScript.
+prefill (reading the prompt): 195 tokens/s, 2048 tokens
+prefill (reading the prompt): 334 tokens/s, 8192 tokens
+
+engine lines:
+ds4: the one-GPU decode path (in-place pulls, windows streamed, landings): off (v1.1.27's path: not Linux + NVIDIA + one GPU)
+ds4: Engram RAM file 7 locked 0.27 / 101.38 GB
+ds4: Engram RAM file 7 locked 8.86 / 101.38 GB
+ds4: Engram RAM file 7 locked 17.45 / 101.38 GB
+ds4: Engram RAM file 7 locked 26.04 / 101.38 GB
+ds4: Engram RAM file 7 locked 34.63 / 101.38 GB
+ds4: Engram RAM file 7 locked 43.22 / 101.38 GB
+ds4: Engram RAM file 7 locked 51.81 / 101.38 GB
+ds4: Engram RAM file 7 locked 60.40 / 101.38 GB
+ds4: Engram RAM file 7 locked 68.99 / 101.38 GB
+ds4: Engram RAM file 7 locked 77.58 / 101.38 GB
+ds4: Engram RAM file 7 locked 86.17 / 101.38 GB
+ds4: Engram RAM file 7 locked 94.76 / 101.38 GB
+ds4: Engram RAM file 7 locked 101.38 / 101.38 GB
+ds4: Engram RAM file 7 locked 0.27 / 101.38 GB
+ds4: Engram RAM file 7 locked 8.86 / 101.38 GB
+ds4: Engram RAM file 7 locked 17.45 / 101.38 GB
+ds4: Engram RAM file 7 locked 26.04 / 101.38 GB
+ds4: Engram RAM file 7 locked 34.63 / 101.38 GB
+ds4: Engram RAM file 7 locked 43.22 / 101.38 GB
+ds4: Engram RAM file 7 locked 51.81 / 101.38 GB
+ds4: Engram RAM file 7 locked 60.40 / 101.38 GB
+ds4: Engram RAM file 7 locked 68.99 / 101.38 GB
+ds4: Engram RAM file 7 locked 77.58 / 101.38 GB
+ds4: Engram RAM file 7 locked 86.17 / 101.38 GB
+ds4: Engram RAM file 7 locked 94.76 / 101.38 GB
+ds4: Engram RAM file 7 locked 101.38 / 101.38 GB
+ds4: Engram RAM ONLY: 2 complete tables (Q6_K/IQ4_NL/FP8), 202.758 GB locked; reads use memcpy
+ds4: the experts VRAM leaves over (~238.0 GB) are read in place from the model's files (copied into RAM after the GPUs' share when the RAM holds them all; --mmap-experts on keeps them in place) (2132.9 GB of RAM free to keep them: the most-routed 238.0 GB read ahead; prompts in chunks of 32768)
+ds4: strict RAM: all 13129 CPU experts selected, no disk fallback
+ds4: copied expert cache: DONTNEED hints accepted for 246.672 GB of whole source pages (eviction is advisory)
+ds4: the copied experts pinned (247.6 GB in 22.6 s): the prompt path DMAs them in place
+ds4: 13129 of the CPU lane's 13129 experts copied into RAM (246.8 GB, 1 NUMA part) in 137.0 s
+ds4: CUDA0 layers [0, 42] (tensor parallel 2, part 0): weights 4.97 GB, experts 13.64 GB (1047 of 8064 in VRAM), caches 0.58 GB, 3052 MiB free
+ds4: CUDA1 layers [0, 19] (tensor parallel 2, part 1): weights 4.35 GB, experts 6.42 GB (663 of 7680 in VRAM), caches 0.58 GB, 10628 MiB free
+ds4: CUDA2 layers [20, 39] (tensor parallel 2, part 0) + head: weights 4.55 GB, experts 14.93 GB (1568 of 7680 in VRAM), caches 0.39 GB, 3062 MiB free
+ds4: CUDA3 layers [20, 39] (tensor parallel 2, part 1): weights 4.42 GB, experts 14.93 GB (1568 of 7680 in VRAM), caches 0.39 GB, 3198 MiB free
+ds4: 13129 routed experts on the CPU lane (246.8 GB): 13129 copied into RAM (1 NUMA parts), the rest in place in the model's files; 64 threads
+rocblaslt error: Cannot read "/opt/rocm-7.2.0/lib/hipblaslt/library/TensileLibrary_lazy_gfx1030.dat": No such file or directory
+rocblaslt error: Could not load "/opt/rocm-7.2.0/lib/hipblaslt/library/TensileLibrary_lazy_gfx1030.dat"

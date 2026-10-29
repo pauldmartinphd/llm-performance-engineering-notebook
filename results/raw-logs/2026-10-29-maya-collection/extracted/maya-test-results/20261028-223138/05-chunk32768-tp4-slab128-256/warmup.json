@@ -1,0 +1,37 @@
+{
+  "id": "chatcmpl-6a4a71db87cb4965b7e6bd69",
+  "object": "chat.completion",
+  "created": 1793244473,
+  "model": "deepseek-v4.1-flash",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "This text is a warm-up/reference document for **Project Maya**, a local LLM inference stack. It covers four areas:\n\n**1. MiniMax-M3.1-Flash prefill calibration & tuning variables**\n- `tools/mm3/pack_gguf.py --model <folder>` builds the model pack"
+      },
+      "finish_reason": "length"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 8206,
+    "completion_tokens": 64,
+    "total_tokens": 8270,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 8206,
+    "prompt_ms": 31406.0,
+    "prompt_per_token_ms": 3.827,
+    "prompt_per_second": 261.3,
+    "predicted_n": 64,
+    "predicted_ms": 2541.2,
+    "predicted_per_token_ms": 39.706,
+    "predicted_per_second": 25.2,
+    "draft_n": 45,
+    "draft_n_accepted": 35
+  }
+}

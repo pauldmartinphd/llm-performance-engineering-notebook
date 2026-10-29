@@ -1,0 +1,37 @@
+{
+  "id": "chatcmpl-f9e92274ac584ac2bf1b65ec",
+  "object": "chat.completion",
+  "created": 1793234638,
+  "model": "deepseek-v4.1-flash",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "This document is a technical README and engineering log for **Project Maya**, an open-source inference engine for running very large Mixture-of-Experts (MoE) language models on consumer and prosumer hardware. Here are the key technical points:\n\n## Models Supported\n- **GLM-5.3-Flash** (320B params, 18B active): the primary model, with Maya's own quants (Maya-S, Maya-M, Maya-L, Maya-S24) plus community EXL3 quants.\n- **DeepSeek-V4.1-Flash-1017**: supported via `maya"
+      },
+      "finish_reason": "length"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 32800,
+    "completion_tokens": 128,
+    "total_tokens": 32928,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 32800,
+    "prompt_ms": 84437.0,
+    "prompt_per_token_ms": 2.574,
+    "prompt_per_second": 388.5,
+    "predicted_n": 128,
+    "predicted_ms": 3937.8,
+    "predicted_per_token_ms": 30.764,
+    "predicted_per_second": 32.5,
+    "draft_n": 91,
+    "draft_n_accepted": 74
+  }
+}

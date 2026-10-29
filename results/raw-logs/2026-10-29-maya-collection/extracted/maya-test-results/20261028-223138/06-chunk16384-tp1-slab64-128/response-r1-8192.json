@@ -1,0 +1,37 @@
+{
+  "id": "chatcmpl-b0731f3c3c4c4ef0893c1137",
+  "object": "chat.completion",
+  "created": 1793245697,
+  "model": "deepseek-v4.1-flash",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "This document describes **Project Maya**, a local LLM inference stack for running large MoE models on consumer/prosumer hardware. Key technical points:\n\n**Quantization system (\"Maya\" quants)**\n- Quants named by model + tier (XS/S/M/L) based on bits kept per expert, avoiding name collisions across models.\n- Built from FP8 releases using FP8-derived statistics; retain the model's MTP (multi-token prediction) drafting block.\n- GLM-5.3-Flash variants: Maya-S (96.5 GB, 97.9% zero-shot accuracy, 83% same"
+      },
+      "finish_reason": "length"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 8224,
+    "completion_tokens": 128,
+    "total_tokens": 8352,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 8224,
+    "prompt_ms": 49738.2,
+    "prompt_per_token_ms": 6.048,
+    "prompt_per_second": 165.3,
+    "predicted_n": 128,
+    "predicted_ms": 5433.3,
+    "predicted_per_token_ms": 42.448,
+    "predicted_per_second": 23.6,
+    "draft_n": 94,
+    "draft_n_accepted": 74
+  }
+}

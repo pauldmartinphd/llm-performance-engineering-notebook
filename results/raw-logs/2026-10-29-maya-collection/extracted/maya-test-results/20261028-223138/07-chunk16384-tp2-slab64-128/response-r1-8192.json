@@ -1,0 +1,37 @@
+{
+  "id": "chatcmpl-2bb565152a174895b0064ea5",
+  "object": "chat.completion",
+  "created": 1793246679,
+  "model": "deepseek-v4.1-flash",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "This document describes **Project Maya**, a local LLM inference stack for running large MoE models on consumer/prosumer hardware. Key technical points:\n\n**Core design**\n- Runs quantized MoE models with experts streamed from RAM/SSD when they don't fit in VRAM (\"any amount of memory\").\n- OpenAI- and Anthropic-compatible APIs with streamed tool calls; supports up to 8 concurrent requests (`--parallel`), which improves aggregate throughput by batching dense-weight reads.\n- Browser chat + live hardware monitor; thinking levels (Off/Low/High/Max); vision support.\n\n**Models offered"
+      },
+      "finish_reason": "length"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 8224,
+    "completion_tokens": 128,
+    "total_tokens": 8352,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 8224,
+    "prompt_ms": 30685.2,
+    "prompt_per_token_ms": 3.731,
+    "prompt_per_second": 268.0,
+    "predicted_n": 128,
+    "predicted_ms": 4548.3,
+    "predicted_per_token_ms": 35.534,
+    "predicted_per_second": 28.1,
+    "draft_n": 83,
+    "draft_n_accepted": 61
+  }
+}

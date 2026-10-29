@@ -1,0 +1,37 @@
+{
+  "id": "chatcmpl-f9b710eb3a9c4822bee85135",
+  "object": "chat.completion",
+  "created": 1793253347,
+  "model": "deepseek-v4.1-flash",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "This document is a technical README and engineering log for **Project Maya**, an open-source inference engine for large MoE models (GLM-5.3-Flash, DeepSeek-V4.1-Flash, MiniMax-M3.1-Flash). Key technical points:\n\n**Architecture & Models**\n- Serves 320B-parameter GLM-5.3-Flash (18B active), DeepSeek-V4.1-Flash, and MiniMax-M3.1-Flash via a tiered memory system: VRAM expert cache \u2192 pinned RAM \u2192 NVMe SSD streaming.\n- Supports NVIDIA ("
+      },
+      "finish_reason": "length"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 65568,
+    "completion_tokens": 128,
+    "total_tokens": 65696,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 65568,
+    "prompt_ms": 202535.8,
+    "prompt_per_token_ms": 3.089,
+    "prompt_per_second": 323.7,
+    "predicted_n": 128,
+    "predicted_ms": 4712.8,
+    "predicted_per_token_ms": 36.819,
+    "predicted_per_second": 27.2,
+    "draft_n": 93,
+    "draft_n_accepted": 84
+  }
+}

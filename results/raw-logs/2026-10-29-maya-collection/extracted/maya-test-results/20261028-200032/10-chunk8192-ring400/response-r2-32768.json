@@ -1,0 +1,37 @@
+{
+  "id": "chatcmpl-1f41ac0ca07146d4bed0785e",
+  "object": "chat.completion",
+  "created": 1793240618,
+  "model": "deepseek-v4.1-flash",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "This document is a technical README and engineering log for **Project Maya**, an open-source inference engine for running very large Mixture-of-Experts (MoE) language models on consumer and prosumer hardware. Here are the key technical points:\n\n## Core System\n- **Purpose:** Runs GLM-5.3-Flash, DeepSeek-V4.1-Flash-1017, and MiniMax-M3.1-Flash locally, tiering experts across VRAM \u2192 RAM \u2192 NVMe SSD.\n- **Architecture:** Built on Strata (MIT) and ggml/llama.cpp; supports CUDA"
+      },
+      "finish_reason": "length"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 32800,
+    "completion_tokens": 128,
+    "total_tokens": 32928,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 32800,
+    "prompt_ms": 81201.4,
+    "prompt_per_token_ms": 2.476,
+    "prompt_per_second": 403.9,
+    "predicted_n": 128,
+    "predicted_ms": 3619.3,
+    "predicted_per_token_ms": 28.276,
+    "predicted_per_second": 35.4,
+    "draft_n": 95,
+    "draft_n_accepted": 77
+  }
+}

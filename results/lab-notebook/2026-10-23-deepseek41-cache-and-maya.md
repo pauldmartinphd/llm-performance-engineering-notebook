@@ -75,3 +75,73 @@ Each mode first read a 512-token document and answered once as an uncounted warm
 DSpark improved sustained generation by **38%** within this calibration, and the tool reports selecting it for the configuration. This is the clearest measured comparison in the record. The initial 3.1 tokens/s without drafting and 1.3 with drafting appear only in conversation summaries. They provide context for the retest, but not a controlled before/after measurement of the memory changes. Likewise, the shorter calibration load times cannot be attributed to a particular change without controlling the cache state.
 
 The older discussion cites a 64 GiB llAMDa result of **132.11 / 11.56 tokens/s**, while the later cache summary gives **132.82 / 11.54**. I retain both as distinct summary records, rather than silently substitute one for the other. Neither includes its printed output in the supplied material. Maya's three-prompt benchmark and its DSpark calibration also differ from llAMDa's separate pp8192/tg1024 tests. The rates make Maya worth pursuing, but do not establish an engine-only speedup. The conversation describes the intended common weights as UD-Q8_K_XL; the actual Maya model path and effective configuration still need capture.
+
+
+
+## Configuration recovered from shell history on October 28
+
+I recovered the setup and configuration-edit commands from my exported `zsh_history`. The timestamps below are the history's Unix timestamps converted to America/New_York (EDT, UTC−04:00). History records commands entered, not their exit status or output; I therefore distinguish these commands from the benchmark and calibration output retained above. I have included the relevant settings and sequence here without publishing unrelated shell history.
+
+At **13:51:33 on October 23** (1792777893), the recorded setup command selected:
+
+```sh
+./maya.sh \
+  --backend hip \
+  --setup \
+  --model DeepSeek-V4.1-Flash-1017 \
+  --ds4-quant gguf-q8 \
+  --model-dir /models/DeepSeek-V4.1-Flash-1017/UD-Q8_K_XL \
+  --gpus 0,1,2,3 \
+  --context 32768 \
+  --no-vision \
+  --port 8099 \
+  --no-start
+```
+
+The history records cloning the v1.1.24 tag immediately before this setup. The setup entry also begins with `cd ~/project-maya`, while neighboring entries use `/opt/project-maya`; the history alone cannot establish whether that directory change succeeded. The later configuration edits explicitly begin in `/opt/project-maya`.
+
+At **14:38:56** (1792780736), a Python command read `maya-ds4-hip.json`, saved its prior text to `maya-ds4-hip.json.bak`, set `DS4_ENGRAM_RAM=1` and `DS4_REQUIRE_ALL_RAM=1`, and set or appended `--mmap-experts off`. After memlock checks and a recorded shutdown, another command at **14:42:04** (1792780924) repeated those edits and added `MAYA_DS4_Q8_BATCH=1`. That second command used the same backup filename, so the history does not establish that `.json.bak` still contains the original pre-edit configuration.
+
+| Setting | Recovered value | Evidence and remaining limit |
+|---|---|---|
+| Backend and GPUs | HIP; 0,1,2,3 | Setup command; four V620s also confirmed by benchmark output |
+| Model | DeepSeek-V4.1-Flash-1017, UD-Q8_K_XL | Explicit setup model directory and `gguf-q8`; shard hashes not captured |
+| Context | 32768 | Setup command and benchmark output |
+| Vision | Off | Explicit `--no-vision` in setup command |
+| Engram residency | `DS4_ENGRAM_RAM=1` | Recorded JSON edit; successful locking still requires runtime evidence |
+| CPU expert residency | `DS4_REQUIRE_ALL_RAM=1`, `--mmap-experts off` | Recorded JSON edit; actual allocation still requires runtime evidence |
+| Q8 batching | `MAYA_DS4_Q8_BATCH=1` | Recorded JSON edit immediately before benchmark invocation |
+| Initial port | 8099 | Setup command; later changed to 8081 |
+| CPU threads, TP groups, layer split, VRAM reserve | Not recovered as effective values | No final JSON or corresponding output in the supplied history |
+
+The benchmark command was entered at **14:42:25** (1792780945), after the second edit. Its retained output prints 14:55 after loading and running the tests. These timestamps are consistent with a command start followed by a later benchmark report; they are not two separate measured runs.
+
+At **15:00:28** (1792782028), the history records:
+
+```sh
+cp -a maya-ds4-hip.json maya-ds4-hip.json.before-dspark-retest
+```
+
+Three seconds later, the recorded Python invocation calls `maya.speed_calibration_ds4(path, cfg, "retest after full RAM residency")`. The separate retained output confirms that this calibration completed at 21.2 tokens/s without drafting and 29.3 tokens/s with DSpark, with 69% draft acceptance. If `maya-ds4-hip.json.before-dspark-retest` still exists, it is the strongest identified candidate for recovering the exact pre-calibration arguments. Its present existence and contents have not been checked.
+
+### Changes after the measured baseline
+
+At **16:54:40 on October 23** (1792788880), the history records renaming `maya-ds4-hip.json` to `maya-ds4.1-flash-hip.json`. At **16:54:54** (1792788894), a JSON edit sets its port to **8081**. At **16:59:46** (1792789186), another edit changes `--max-context` to **1048576**.
+
+The 1M-token context therefore belongs to a later configuration change. It is not the context associated with the measured 32K benchmark and subsequent DSpark retest. These commands do not establish that the larger context caused the later stall.
+
+The history also records a detached checkout command for **v1.1.34 on October 27 at 22:44:13** (1793155453), followed by setup commands. At **22:57:35** (1793156255), it records `cp -a maya-*.json config-backup/`. That directory is another potential source of earlier tuned configurations, but the copy occurred after the first recorded setup invocation on the new version.
+
+Finally, the history contains checkout attempts for **v1.1.35**, including one after fetching tags on **October 28 at 12:24:41** (1793204681), followed by `./setup.sh --backend hip`. The live checkout must therefore be inspected rather than assumed to remain at v1.1.34. No command output in this history confirms the checkout or build outcome.
+
+### Rebuilding the recorded configuration
+
+A v1.1.34 rebuild can explicitly restore the recovered 32K, four-GPU, text-only, RAM-residency settings. It cannot yet be called an exact reproduction of the October 23 configuration because the effective CPU-thread count, TP groups, layer split, and other generated arguments remain unknown. The [v1.1.34 setup source](https://github.com/mw00/project-maya/blob/b04264526e93a3c7d3c051cb9cec97af86ae8a37/maya.py) defaults to TP=2 with four GPUs; that default is not evidence of October 23's effective TP setting.
+
+The verified v1.1.34 tag resolves to `b04264526e93a3c7d3c051cb9cec97af86ae8a37`. Its [settings documentation](https://github.com/mw00/project-maya/blob/b04264526e93a3c7d3c051cb9cec97af86ae8a37/docs/SETTINGS.md) documents the three recovered environment settings and the relationship between `DS4_REQUIRE_ALL_RAM=1` and `--mmap-experts off`.
+
+For the next run, I will preserve the old checkout, raw results, tuned configurations, and existing model pack before rebuilding. Model shards and DSpark files remain in place. I will record the Maya and llama.cpp revisions, package versions, build log, ROCm version, GPU inventory, shell and process memlock limits, generated JSON, and model file identities. Model sizes and modification times provide an inventory; content hashes are needed to verify identical weights. Benchmark output and calibration output remain separate, with configuration snapshots before and after calibration.
+
+
+
+**October 29 follow-up:** The backup JSON was subsequently found and printed. TP=2 and a 3072 MiB reserve are now documented, and v1.1.30 was restored. The forward-looking v1.1.34 rebuild plan above is superseded by [the October 28 recovery and tuning record](2026-10-28-maya-prefill-and-regression.md).

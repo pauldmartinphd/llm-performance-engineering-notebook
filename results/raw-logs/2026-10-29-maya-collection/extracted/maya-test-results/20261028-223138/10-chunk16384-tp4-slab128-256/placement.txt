@@ -1,0 +1,21 @@
+ds4: tensor parallel 4 -> 2: the experts' 32-value blocks split n_ff 2304 no other way (each GPU its own layers)
+ds4: CUDA0 prompt slabs: the attention 8192 rows, the dense weights' FP16 scratch 256 MB
+ds4: CUDA1 prompt slabs: the attention 8192 rows, the dense weights' FP16 scratch 256 MB
+ds4: CUDA2 prompt slabs: the attention 8192 rows, the dense weights' FP16 scratch 256 MB
+ds4: CUDA3 prompt slabs: the attention 8192 rows, the dense weights' FP16 scratch 256 MB
+ds4: the experts VRAM leaves over (~228.5 GB) are read in place from the model's files (copied into RAM after the GPUs' share when the RAM holds them all; --mmap-experts on keeps them in place) (2143.5 GB of RAM free to keep them: the most-routed 228.5 GB read ahead; prompts in chunks of 16384)
+ds4: group 0 (2 GPUs): 8.97 GB a member for experts, 1337 of 7680 in VRAM
+ds4: group 1 (2 GPUs): 16.99 GB a member for experts, 1807 of 8064 in VRAM
+ds4: 12640 of the CPU lane's 12640 experts copied into RAM (237.6 GB, 1 NUMA part) in 118.8 s
+ds4: CPU lane: 64 threads, MXFP4 rows avx2 ()
+ds4: CPU lane's experts pinned in 0.0 s
+ds4: CUDA0 layers [0, 42] (tensor parallel 2, part 0): weights 4.79 GB, experts 16.18 GB (1318 of 7680 in VRAM), caches 0.58 GB, 3054 MiB free
+ds4: CUDA1 layers [0, 18] (tensor parallel 2, part 1): weights 4.17 GB, experts 8.96 GB (934 of 7296 in VRAM), caches 0.58 GB, 10922 MiB free
+ds4: CUDA2 layers [19, 39] (tensor parallel 2, part 0) + head: weights 4.73 GB, experts 16.99 GB (1786 of 8064 in VRAM), caches 0.54 GB, 3050 MiB free
+ds4: CUDA3 layers [19, 39] (tensor parallel 2, part 1): weights 4.60 GB, experts 16.99 GB (1786 of 8064 in VRAM), caches 0.54 GB, 3186 MiB free
+ds4: 12640 routed experts on the CPU lane (237.6 GB): 12640 copied into RAM (1 NUMA parts), the rest in place in the model's files; 64 threads
+ds4: CUDA0 layers [0, 42] (tensor parallel 2, part 0): weights 4.79 GB, experts 16.18 GB (1318 of 7680 in VRAM), caches 0.58 GB, 3054 MiB free
+ds4: CUDA1 layers [0, 18] (tensor parallel 2, part 1): weights 4.17 GB, experts 8.96 GB (934 of 7296 in VRAM), caches 0.58 GB, 10922 MiB free
+ds4: CUDA2 layers [19, 39] (tensor parallel 2, part 0) + head: weights 4.73 GB, experts 16.99 GB (1786 of 8064 in VRAM), caches 0.54 GB, 3050 MiB free
+ds4: CUDA3 layers [19, 39] (tensor parallel 2, part 1): weights 4.60 GB, experts 16.99 GB (1786 of 8064 in VRAM), caches 0.54 GB, 3186 MiB free
+ds4: 12640 routed experts on the CPU lane (237.6 GB): 12640 copied into RAM (1 NUMA parts), the rest in place in the model's files; 64 threads

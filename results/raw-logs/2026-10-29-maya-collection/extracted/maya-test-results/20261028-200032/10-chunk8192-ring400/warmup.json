@@ -1,0 +1,37 @@
+{
+  "id": "chatcmpl-21611ffaac534175bbc81492",
+  "object": "chat.completion",
+  "created": 1793240121,
+  "model": "deepseek-v4.1-flash",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "This text is a warm-up document covering Maya's setup, tuning, and platform-specific details. Here's a summary:\n\n**Prefill calibration (MiniMax-M3.1):** How fast a PC reads prompts depends on its GPU, so it's measured locally via `./maya.sh --calibrate`"
+      },
+      "finish_reason": "length"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 8206,
+    "completion_tokens": 64,
+    "total_tokens": 8270,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 8206,
+    "prompt_ms": 30424.7,
+    "prompt_per_token_ms": 3.708,
+    "prompt_per_second": 269.7,
+    "predicted_n": 64,
+    "predicted_ms": 2191.9,
+    "predicted_per_token_ms": 34.248,
+    "predicted_per_second": 29.2,
+    "draft_n": 41,
+    "draft_n_accepted": 37
+  }
+}

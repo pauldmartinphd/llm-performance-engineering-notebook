@@ -1,0 +1,37 @@
+{
+  "id": "chatcmpl-8a4809f926e14d10b712717f",
+  "object": "chat.completion",
+  "created": 1793252169,
+  "model": "deepseek-v4.1-flash",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "This text is a collection of Maya documentation covering several topics. Here's a summary:\n\n**MiniMax-M3.1-Flash prefill calibration & environment variables:** The `pack_gguf.py` tool builds model packs by hand. Prefill calibration measures how fast a PC reads prompts (GPU-dependent) by running"
+      },
+      "finish_reason": "length"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 8206,
+    "completion_tokens": 64,
+    "total_tokens": 8270,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 8206,
+    "prompt_ms": 49192.2,
+    "prompt_per_token_ms": 5.995,
+    "prompt_per_second": 166.8,
+    "predicted_n": 64,
+    "predicted_ms": 3391.8,
+    "predicted_per_token_ms": 52.997,
+    "predicted_per_second": 18.9,
+    "draft_n": 38,
+    "draft_n_accepted": 28
+  }
+}

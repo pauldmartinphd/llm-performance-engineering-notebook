@@ -1,0 +1,25 @@
+{
+ "since": 1793258335.5534947,
+ "models": {
+  "maya-ds4-production-no-stream-prio.json": {
+   "since": 1793258335.5535262,
+   "bands": {
+    "base": {
+     "input": 720488,
+     "cached": 265681,
+     "output": 28718,
+     "requests": 14
+    },
+    "peak": {
+     "input": 65568,
+     "cached": 0,
+     "output": 128,
+     "requests": 1
+    }
+   },
+   "model": "deepseek-v4.1-flash",
+   "quant": "UD-Q8_K_XL"
+  }
+ },
+ "prices": {}
+}

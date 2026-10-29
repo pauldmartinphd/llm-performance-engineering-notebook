@@ -1,0 +1,37 @@
+{
+  "id": "chatcmpl-44f5e180e9e349a899dc74bf",
+  "object": "chat.completion",
+  "created": 1793253554,
+  "model": "deepseek-v4.1-flash",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "This document describes **Project Maya**, a local LLM inference stack for running large MoE models on consumer/prosumer hardware. Key technical points:\n\n**Quantization & Models**\n- Maya quants are named by model + tier (XS/S/M/L) based on expert bit-width. Tiers trade size for fidelity vs. the FP8 original (e.g., GLM-5.3 Maya-L hits 99.2% zero-shot accuracy and 90% next-token match; Maya-S is 97.9%/83%).\n- Supports GLM-5.3-Flash (Maya's own quants"
+      },
+      "finish_reason": "length"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 8224,
+    "completion_tokens": 128,
+    "total_tokens": 8352,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 8224,
+    "prompt_ms": 49906.5,
+    "prompt_per_token_ms": 6.068,
+    "prompt_per_second": 164.8,
+    "predicted_n": 128,
+    "predicted_ms": 5446.4,
+    "predicted_per_token_ms": 42.55,
+    "predicted_per_second": 23.5,
+    "draft_n": 85,
+    "draft_n_accepted": 72
+  }
+}

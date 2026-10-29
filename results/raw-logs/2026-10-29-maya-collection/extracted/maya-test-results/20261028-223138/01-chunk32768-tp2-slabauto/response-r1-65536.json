@@ -1,0 +1,37 @@
+{
+  "id": "chatcmpl-d8eb08931045439589bb1bae",
+  "object": "chat.completion",
+  "created": 1793241437,
+  "model": "deepseek-v4.1-flash",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "This document is a technical README and set of engineering notes for **Project Maya**, an open-source inference engine for large MoE models (GLM-5.3-Flash, DeepSeek-V4.1-Flash-1017, MiniMax-M3.1-Flash). Key technical points:\n\n**Architecture & memory model**\n- Tiered expert storage: VRAM expert cache \u2192 pinned RAM tier \u2192 NVMe SSD, with CPU-lane computation of RAM-tier experts balanced against PCIe transfer.\n- Multi-GPU layer splitting (up to 16 GPUs), auto split search priced by VRAM, expert coverage"
+      },
+      "finish_reason": "length"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 65568,
+    "completion_tokens": 128,
+    "total_tokens": 65696,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 65568,
+    "prompt_ms": 136117.6,
+    "prompt_per_token_ms": 2.076,
+    "prompt_per_second": 481.7,
+    "predicted_n": 128,
+    "predicted_ms": 4137.3,
+    "predicted_per_token_ms": 32.323,
+    "predicted_per_second": 30.9,
+    "draft_n": 80,
+    "draft_n_accepted": 72
+  }
+}

@@ -1,5 +1,9 @@
 # LLM Performance Engineering Notebook
 
+## October 28: Maya prefill tuning
+
+On v1.1.30, the four-V620 DeepSeek UD-Q8_K_XL sweep completed 60 valid measurements. **32K chunks with an 800 MiB ring reached about 439 tokens/s at 32K and 480 at 64K**, approximately 8% and 11% above the initial baseline. I selected that combination for subsequent tuning. The [full record](results/lab-notebook/2026-10-28-maya-prefill-and-regression.md) covers recovery from the later-release hang, all nine combinations, the next TP/workspace sweep, and the decision to exclude quality-reducing optimizations. The server archive is now retained. The second sweep was intentionally stopped after 15 completed cases: TP=1 was slower, TP=4 requests fell back to TP=2, and workspace changes gave no clear improvement. A v1.1.36 benchmark completes with `DS4_STREAM_PRIO=0`; priority enabled reproduces a deadlock on this setup.
+
 ## October 24: DeepSeek in use
 
 The next morning, Maya's DeepSeek-V4.1-Flash dashboard shows **90 requests and 86,075 output tokens at a reported aggregate 28.0 tokens/s**. The last request generated 422 tokens at **31.6 tokens/s**. This adds a view of ongoing use on Galactus to the previous day's controlled calibration.

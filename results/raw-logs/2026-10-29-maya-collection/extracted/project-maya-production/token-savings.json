@@ -1,0 +1,44 @@
+{
+ "since": 1793155897.883587,
+ "models": {
+  "maya-ds4.1-flash-hip.json": {
+   "since": 1793155897.8836524,
+   "bands": {
+    "base": {
+     "input": 0,
+     "cached": 0,
+     "output": 0,
+     "requests": 0
+    },
+    "peak": {
+     "input": 576,
+     "cached": 0,
+     "output": 0,
+     "requests": 2
+    }
+   },
+   "model": "deepseek-v4.1-flash",
+   "quant": "UD-Q8_K_XL"
+  },
+  "maya-ds4-hip.json": {
+   "since": 1793157279.9747493,
+   "bands": {
+    "base": {
+     "input": 0,
+     "cached": 0,
+     "output": 0,
+     "requests": 0
+    },
+    "peak": {
+     "input": 287,
+     "cached": 0,
+     "output": 112,
+     "requests": 1
+    }
+   },
+   "model": "deepseek-v4.1-flash",
+   "quant": "UD-Q8_K_XL"
+  }
+ },
+ "prices": {}
+}

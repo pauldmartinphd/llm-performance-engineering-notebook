@@ -1,0 +1,37 @@
+{
+  "id": "chatcmpl-467ad70553f84704af21d6fc",
+  "object": "chat.completion",
+  "created": 1793249382,
+  "model": "deepseek-v4.1-flash",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "This document describes **Project Maya**, a local LLM inference stack for running large MoE models on consumer/prosumer hardware. Key technical points:\n\n**Models & Quantization**\n- Maya provides its own quantized versions of **GLM-5.3-Flash** (XS/S/M/L tiers by expert bit-width), plus **DeepSeek-V4.1-Flash-1017** (748B params, MIT) and **MiniMax-M3.1-Flash** (428B, 23B active) on separate engines (`maya-ds4`, `maya-mm3`).\n- Quants"
+      },
+      "finish_reason": "length"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 8224,
+    "completion_tokens": 128,
+    "total_tokens": 8352,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 8224,
+    "prompt_ms": 30880.0,
+    "prompt_per_token_ms": 3.755,
+    "prompt_per_second": 266.3,
+    "predicted_n": 128,
+    "predicted_ms": 3413.3,
+    "predicted_per_token_ms": 26.666,
+    "predicted_per_second": 37.5,
+    "draft_n": 93,
+    "draft_n_accepted": 82
+  }
+}

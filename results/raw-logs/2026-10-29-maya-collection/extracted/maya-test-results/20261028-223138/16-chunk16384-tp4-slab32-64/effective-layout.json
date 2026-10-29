@@ -1,0 +1,37 @@
+{
+  "status": "mismatch",
+  "reasons": [
+    "Effective TP differs from requested TP"
+  ],
+  "tp_values": [
+    2
+  ],
+  "tp_by_gpu": {
+    "0": 2,
+    "1": 2,
+    "2": 2,
+    "3": 2
+  },
+  "slabs_by_gpu": {
+    "0": {
+      "attention_rows": 2048,
+      "scratch_mb": 64
+    },
+    "1": {
+      "attention_rows": 2048,
+      "scratch_mb": 64
+    },
+    "2": {
+      "attention_rows": 2048,
+      "scratch_mb": 64
+    },
+    "3": {
+      "attention_rows": 2048,
+      "scratch_mb": 64
+    }
+  },
+  "attention_rows": [
+    2048
+  ],
+  "chunk": 16384
+}

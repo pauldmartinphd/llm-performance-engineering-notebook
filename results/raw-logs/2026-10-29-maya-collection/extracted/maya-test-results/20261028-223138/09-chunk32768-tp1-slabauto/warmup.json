@@ -1,0 +1,37 @@
+{
+  "id": "chatcmpl-aecc61aa8e894c93982dd9ba",
+  "object": "chat.completion",
+  "created": 1793248023,
+  "model": "deepseek-v4.1-flash",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "This text is a warm-up document covering Maya's setup, configuration, and platform-specific details. Here's a summary:\n\n**Pack building & prefill calibration (MiniMax-M3.1):** `tools/mm3/pack_gguf.py --model <folder>` builds the pack manually (`--text-only`"
+      },
+      "finish_reason": "length"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 8206,
+    "completion_tokens": 64,
+    "total_tokens": 8270,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 8206,
+    "prompt_ms": 49429.2,
+    "prompt_per_token_ms": 6.024,
+    "prompt_per_second": 166.0,
+    "predicted_n": 64,
+    "predicted_ms": 2905.2,
+    "predicted_per_token_ms": 45.394,
+    "predicted_per_second": 22.0,
+    "draft_n": 50,
+    "draft_n_accepted": 38
+  }
+}

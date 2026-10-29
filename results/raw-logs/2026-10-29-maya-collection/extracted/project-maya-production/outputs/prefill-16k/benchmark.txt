@@ -1,0 +1,20 @@
+Project Maya v1.1.30 - GLM-5.3-Flash, DeepSeek-V4.1-Flash-1017 or MiniMax-M3.1-Flash on your own GPU(s).
+
+=== Step 1: benchmark: maya-ds4-hip.json (loading the model first - a minute or a few) ===
+  [ok] loaded in 300 s
+  decode    32.0 tokens/s   Write a Python function that parses a CSV file into a list o
+  decode    27.7 tokens/s   Explain how photosynthesis works, step by step, for a high-s
+  decode    38.3 tokens/s   Write a complete HTML page with a canvas that draws a bounci
+  prefill    123 tokens/s   a 2048-token prompt
+  prefill    266 tokens/s   a 8192-token prompt
+
+  Project Maya v1.1.30 benchmark, 2026-10-28 19:51
+  GPUs: AMD RADEON PRO V620 Azure 30 GB, AMD RADEON PRO V620 Azure 30 GB, AMD RADEON PRO V620 Azure 30 GB, AMD RADEON PRO V620 Azure 30 GB; RAM 2004 GB; CPU AMD EPYC 7713 64-Core Processor
+  setup: maya-ds4-hip.json, context 1048576, GPUs [0, 1, 2, 3]
+  decode (writing the answer): mean 32.7 tokens/s over 3 answers of 256 tokens (greedy, thinking off)
+      32.0 tokens/s  Write a Python function that parses a CSV file into a list of dictionaries, with type hints and a docstring.
+      27.7 tokens/s  Explain how photosynthesis works, step by step, for a high-school student.
+      38.3 tokens/s  Write a complete HTML page with a canvas that draws a bouncing ball animation in JavaScript.
+  prefill (reading the prompt): 123 tokens/s, 2048 tokens
+  prefill (reading the prompt): 266 tokens/s, 8192 tokens
+  [ok] written: /opt/project-maya/maya-bench.txt - attach it (with ./maya.sh --report) to a speed report
