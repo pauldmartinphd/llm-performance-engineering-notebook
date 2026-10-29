@@ -1,5 +1,13 @@
 # LLM Performance Engineering Notebook
 
+## October 24: DeepSeek in use
+
+The next morning, Maya's DeepSeek-V4.1-Flash dashboard shows **90 requests and 86,075 output tokens at a reported aggregate 28.0 tokens/s**. The last request generated 422 tokens at **31.6 tokens/s**. This adds a view of ongoing use on Galactus to the previous day's controlled calibration.
+
+![Project Maya v1.1.24 dashboard showing DeepSeek-V4.1-Flash at 31.6 tokens/s on four Radeon Pro V620 GPUs](results/images/2026-10-24-maya-deepseek-dashboard.png)
+
+*October 24 dashboard capture. The large rate is for the last request; the session aggregate appears at the bottom. [Snapshot details and measurement limits](results/deepseek-v4.1-flash.md#october-24-dashboard-from-ongoing-use).*
+
 ## October 23: two large MoE models at roughly 30 tokens/s
 
 Galactus now runs **GLM-5.3-Flash UD-Q4_K_XL at 31.6 generated tokens/s** and **DeepSeek-V4.1-Flash-1017 UD-Q8_K_XL at 29.3 tokens/s with DSpark**, using Project Maya v1.1.24 on four Radeon Pro V620 GPUs and 2 TiB of system RAM. This is a substantial step forward for the notebook: both models exceed GPU memory, yet their recorded configurations reach approximately 30 tokens/s on this server.

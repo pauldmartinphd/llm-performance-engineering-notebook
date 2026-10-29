@@ -1,5 +1,15 @@
 # DeepSeek-V4.1-Flash on Galactus
 
+## October 24: dashboard from ongoing use
+
+![Maya DeepSeek dashboard with request history, expert placement, and four V620 GPUs](images/2026-10-24-maya-deepseek-dashboard.png)
+
+The screenshot captured at 08:52 shows Project Maya v1.1.24 serving DeepSeek-V4.1-Flash-1017. Since the displayed Friday 17:02 session start, the dashboard reports **90 requests**, **86,075 output tokens**, and an aggregate generation rate of **28.0 tokens/s**. Its last request generated **422 tokens at 31.6 tokens/s**; the displayed 29-second request duration includes more than generation time and should not be used as that rate's denominator.
+
+The expert panel shows **3,587 experts in VRAM**, **11,773 in pinned RAM**, and **zero SSD-only experts**. GPU memory use is **101.1 / 120 GB**, and system RAM use is **410.0 / 2,004 GB**, as displayed. The dashboard is idle at capture time, so its power and GPU-load readings do not describe active inference.
+
+The configured context is **1024K**, with **2.2k** in use for the last request. This is evidence of the configured capacity, not a million-token performance test. The screenshot does not print the quantization or draft settings; those remain documented by the earlier Q8_K_XL investigation. These are dashboard observations from mixed requests, kept separate from the controlled DSpark calibration below.
+
 ## October 23: 29.3 tokens/s with Maya and DSpark
 
 DeepSeek-V4.1-Flash-1017 UD-Q8_K_XL reached **29.3 sustained generated tokens/s** in Project Maya v1.1.24 on four V620s, compared with **21.2 without drafting** in the same calibration. The measured gain was **38%**, with **69% draft acceptance**. Each mode generated 1152 measured tokens after warm-up. The separate undrafted benchmark reported 20.5 generation tokens/s and 282 tokens/s for an 8192-token prefill test.
