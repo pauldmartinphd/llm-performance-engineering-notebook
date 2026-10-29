@@ -40,7 +40,7 @@ The original July transcripts still refer to sessions in their historical sequen
 
 ## October: the AMD fork and Flash models
 
-**October 23 milestone:** [GLM-5.3-Flash at 31.6 tokens/s and DeepSeek-V4.1 Q8_K_XL at 29.3 tokens/s with Maya](2026-10-23-maya-glm53-speculation.md). Includes the GLM speculation A/B and completed tuning sweeps.
+**October 23 milestone:** [GLM-5.3-Flash at 31.6 tokens/s and DeepSeek-V4.1 at 29.3 tokens/s with Maya](2026-10-23-maya-glm53-speculation.md). Includes the GLM speculation A/B and manual head/KEEP measurements. KEEP=4 lacks its final summary; repeated tuning trials and a controlled prefill-patch A/B comparison remain open.
 
 
 - **Earlier V620 integration, run dates unknown:** [GLM-5.3-Flash placement, cache, and MTP tests](undated-glm53-flash-placement.md) and [DeepSeek-V4.1 target inference and DSpark allocation failure](undated-deepseek41-dspark.md). I recorded these on October 21 and clarified the combined patch set on October 22; those are documentation dates, not inferred experiment dates.

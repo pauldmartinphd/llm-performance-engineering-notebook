@@ -4,7 +4,7 @@
 
 This is a substantial milestone for Galactus. I now have **GLM-5.3-Flash UD-Q4_K_XL at 31.6 generated tokens/s** and **DeepSeek-V4.1-Flash-1017 UD-Q8_K_XL at 29.3 tokens/s with DSpark** on the same four V620s. Both models exceed the available GPU memory, yet the recorded configurations reach approximately 30 tokens/s using the server's GPU and system memory together. I am using Maya for this stage of the investigation.
 
-The GLM result uses the existing Unsloth Q4_K_XL export. DeepSeek uses the Q8_K_XL export; that filename describes a mixed-format model, not uniform eight-bit weights. The measurements are separate runs, not evidence that both models sustain these rates concurrently. The GLM result is for Flash, not the larger GLM-5.3 flagship.
+The GLM result uses the existing Unsloth Q4_K_XL export. The DeepSeek conversation identifies UD-Q8_K_XL as the intended export; the retained Maya output does not print its actual model path. That filename describes a mixed-format model, not uniform eight-bit weights. The measurements are separate runs, not evidence that both models sustain these rates concurrently. The GLM result is for Flash, not the larger GLM-5.3 flagship.
 
 | Model and quantization | Speculative generation | Without speculation | Measured gain | Workload |
 |---|---:|---:|---:|---|
@@ -80,7 +80,7 @@ An initial benchmark refused to run because port 8080 was occupied. The process 
 
 The attempted HIP `--calibrate --no-start` returned that the tuning measures the CUDA engine's CPU lane and that this PC was **not tuned**. The reported GLM results therefore come from the retained HIP settings and manual sweeps, not a completed automatic hardware calibration.
 
-The conversation ends with requests to rename the configurations to `maya-glm5.3-flash-hip.json` and `maya-ds4.1-flash-hip.json`, using ports 8082 and 8081 while Open WebUI remains on 8080. Those are the requested deployment names and ports; the source has no confirming output for the final changes. Benchmark provenance uses the filenames actually printed during the runs.
+The conversation ends with requests to rename the configurations to `maya-glm5.3-flash-hip.json` and `maya-ds4.1-flash-hip.json`, using ports 8082 and 8081 while Open WebUI remains on 8080. Those are the requested deployment names and ports; the source has no confirming output for the final changes. Benchmark provenance uses the filenames actually printed during the runs. Deleting the experimental configurations and benchmark files was also proposed without confirming output. The later [October 24 dashboard](../deepseek-v4.1-flash.md#october-24-dashboard-from-ongoing-use) shows DeepSeek on port 8081, but does not establish either JSON rename or GLM’s move to 8082.
 
 ## How this changes the earlier comparison
 

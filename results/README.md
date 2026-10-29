@@ -7,9 +7,9 @@ These notes collect the measurements, the best configuration I found for each mo
 | Model and quantization | Generation with speculation | Without speculation | Test |
 |---|---:|---:|---|
 | GLM-5.3-Flash UD-Q4_K_XL | **31.6 tokens/s** | 19.9 tokens/s | Three 256-token answers, greedy, thinking off |
-| DeepSeek-V4.1-Flash-1017 UD-Q8_K_XL | **29.3 tokens/s** | 21.2 tokens/s | DSpark calibration, 1152 measured tokens per mode |
+| DeepSeek-V4.1-Flash-1017 UD-Q8_K_XL, as identified in the conversation | **29.3 tokens/s** | 21.2 tokens/s | DSpark calibration, 1152 measured tokens per mode |
 
-Maya v1.1.24 on Galactus now reaches roughly 30 tokens/s with each model in separate runs. GLM's speculation A/B gives a 58.8% gain; DeepSeek's calibration gives 38% with 69% draft acceptance. The [October 23 record](lab-notebook/2026-10-23-maya-glm53-speculation.md) includes the initial GLM result of 29.4, all head/KEEP variants, configurations, and limits. The [October 22 record](lab-notebook/2026-10-22-glm53-build-comparison.md) adds dedicated llama.cpp/llAMDa benchmarks with printed revisions and generation-only CLI results.
+Maya v1.1.24 on Galactus reached roughly 30 tokens/s with each model in separate October 23 runs. Maya’s actual DeepSeek model path and effective configuration remain uncaptured; the calibration output establishes the reported throughput and draft acceptance. GLM's speculation A/B gives a 58.8% gain; DeepSeek's calibration gives 38% with 69% draft acceptance. The [October 23 record](lab-notebook/2026-10-23-maya-glm53-speculation.md) includes the initial GLM result of 29.4, all head/KEEP variants, configurations, and limits. The [October 22 record](lab-notebook/2026-10-22-glm53-build-comparison.md) adds dedicated llama.cpp/llAMDa benchmarks with printed revisions and generation-only CLI results.
 
 ## DeepSeek-V4.1-Flash-1017 cache record
 

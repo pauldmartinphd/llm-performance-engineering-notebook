@@ -8,11 +8,11 @@ The screenshot captured at 08:52 shows Project Maya v1.1.24 serving DeepSeek-V4.
 
 The expert panel shows **3,587 experts in VRAM**, **11,773 in pinned RAM**, and **zero SSD-only experts**. GPU memory use is **101.1 / 120 GB**, and system RAM use is **410.0 / 2,004 GB**, as displayed. The dashboard is idle at capture time, so its power and GPU-load readings do not describe active inference.
 
-The configured context is **1024K**, with **2.2k** in use for the last request. This is evidence of the configured capacity, not a million-token performance test. The screenshot does not print the quantization or draft settings; those remain documented by the earlier Q8_K_XL investigation. These are dashboard observations from mixed requests, kept separate from the controlled DSpark calibration below.
+The configured context is **1024K**, with **2.2k** in use for the last request. This is evidence of the configured capacity, not a million-token performance test. The screenshot does not print the quantization or draft settings. The earlier investigation identifies UD-Q8_K_XL as the intended export and records a successful DSpark calibration; the screenshot does not establish that this session retained either setting. It does show DeepSeek’s endpoint on port 8081. These are dashboard observations from mixed requests, kept separate from the controlled DSpark calibration below.
 
 ## October 23: 29.3 tokens/s with Maya and DSpark
 
-DeepSeek-V4.1-Flash-1017 UD-Q8_K_XL reached **29.3 sustained generated tokens/s** in Project Maya v1.1.24 on four V620s, compared with **21.2 without drafting** in the same calibration. The measured gain was **38%**, with **69% draft acceptance**. Each mode generated 1152 measured tokens after warm-up. The separate undrafted benchmark reported 20.5 generation tokens/s and 282 tokens/s for an 8192-token prefill test.
+DeepSeek-V4.1-Flash-1017, attributed in the conversation to UD-Q8_K_XL, reached **29.3 sustained generated tokens/s** in Project Maya v1.1.24 on four V620s, compared with **21.2 without drafting** in the same calibration. The measured gain was **38%**, with **69% draft acceptance**. Each mode generated 1152 measured tokens after warm-up. The separate undrafted benchmark reported 20.5 generation tokens/s and 282 tokens/s for an 8192-token prefill test.
 
 The [calibration and memory record](lab-notebook/2026-10-23-deepseek41-cache-and-maya.md) preserves the outputs and configuration limits. Together with [GLM-5.3-Flash at 31.6 tokens/s](lab-notebook/2026-10-23-maya-glm53-speculation.md), this gives Galactus two large MoE models running at approximately 30 tokens/s in separate Maya tests.
 

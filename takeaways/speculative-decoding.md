@@ -4,7 +4,7 @@ This note covers what the speculative decoding tests have in common, alongside t
 
 ## October 23: Maya on four V620s
 
-The [Maya measurements](../results/lab-notebook/2026-10-23-maya-glm53-speculation.md) add two successful speculative configurations: GLM-5.3-Flash UD-Q4_K_XL at **31.6 versus 19.9 tokens/s (+58.8%)**, and DeepSeek-V4.1-Flash-1017 UD-Q8_K_XL at **29.3 versus 21.2 (+38%)**, with 69% draft acceptance for DeepSeek. Each gain is measured within its own workload; the two models use different benchmark procedures.
+The [Maya measurements](../results/lab-notebook/2026-10-23-maya-glm53-speculation.md) add two successful speculative configurations: GLM-5.3-Flash UD-Q4_K_XL at **31.6 versus 19.9 tokens/s (+58.8%)**, and DeepSeek-V4.1-Flash-1017 UD-Q8_K_XL, as identified in the conversation, at **29.3 versus 21.2 (+38%)**, with 69% draft acceptance for DeepSeek. Each gain is measured within its own workload; the two models use different benchmark procedures. Maya’s actual DeepSeek model path and effective configuration remain uncaptured; the calibration output establishes the reported throughput and draft acceptance.
 
 GLM's default two-GPU speculative head and MTP_KEEP=2 gave the highest observed throughput in the manual sweeps. These controls are different from llama.cpp's requested draft length. The initial default run measured 29.4 tokens/s, so the smaller KEEP differences require repeated trials before assigning a reliable ranking. The older cost model below describes the earlier llama.cpp experiments; it is not a fitted explanation of Maya's new results.
 

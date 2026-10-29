@@ -10,14 +10,14 @@ The next morning, Maya's DeepSeek-V4.1-Flash dashboard shows **90 requests and 8
 
 ## October 23: two large MoE models at roughly 30 tokens/s
 
-Galactus now runs **GLM-5.3-Flash UD-Q4_K_XL at 31.6 generated tokens/s** and **DeepSeek-V4.1-Flash-1017 UD-Q8_K_XL at 29.3 tokens/s with DSpark**, using Project Maya v1.1.24 on four Radeon Pro V620 GPUs and 2 TiB of system RAM. This is a substantial step forward for the notebook: both models exceed GPU memory, yet their recorded configurations reach approximately 30 tokens/s on this server.
+In separate October 23 Maya tests, Galactus recorded **GLM-5.3-Flash UD-Q4_K_XL at 31.6 generated tokens/s** and **DeepSeek-V4.1-Flash-1017 UD-Q8_K_XL at 29.3 tokens/s with DSpark**, using Project Maya v1.1.24 on four Radeon Pro V620 GPUs and 2 TiB of system RAM. This is a substantial step forward for the notebook: both models exceed GPU memory, yet their recorded configurations reach approximately 30 tokens/s on this server.
 
 | Model | Speculative generation | Without speculation | Within-test improvement |
 |---|---:|---:|---:|
 | GLM-5.3-Flash UD-Q4_K_XL | **31.6 tokens/s** | 19.9 tokens/s | **58.8%** |
 | DeepSeek-V4.1-Flash-1017 UD-Q8_K_XL | **29.3 tokens/s** | 21.2 tokens/s | **38%**, with 69% draft acceptance |
 
-These are separate model runs. GLM uses Maya's three-answer benchmark; DeepSeek uses its DSpark calibration workload. GLM's initial default run measured 29.4 tokens/s, and manual speculative-head and MTP-expert sweeps retained the defaults as the highest observed configuration. Dedicated 8192-token prefill measured 240–242 tokens/s for GLM and 282 for DeepSeek in its earlier undrafted benchmark.
+These are separate model runs. GLM uses Maya's three-answer benchmark; DeepSeek uses its DSpark calibration workload. GLM's initial default run measured 29.4 tokens/s, and manual speculative-head and MTP-expert sweeps retained the defaults as the highest observed configuration. Dedicated 8192-token prefill measured 240–242 tokens/s for GLM and 282 for DeepSeek in its earlier undrafted benchmark. The DeepSeek conversation identifies the intended export as UD-Q8_K_XL; its actual Maya model path and effective configuration were not captured.
 
 **[The milestone, A/B test, and tuning results](results/lab-notebook/2026-10-23-maya-glm53-speculation.md)** · [October 22 llama.cpp and llAMDa comparison](results/lab-notebook/2026-10-22-glm53-build-comparison.md) · [DeepSeek calibration and memory setup](results/lab-notebook/2026-10-23-deepseek41-cache-and-maya.md)
 
@@ -115,7 +115,9 @@ The [March build entry](results/lab-notebook/2026-03-23-galactus-build.md) prese
 
 ## Work remaining
 
-The October 22 GLM benchmarks identify their revisions, while the DeepSeek cache capture still lacks one. The October 23 Maya tests establish a GLM speculation A/B result and complete the head and MTP-expert sweeps. Longer-context workloads, repeated tuning trials, and a prefill-patch A/B test remain open.
+The October 22 GLM benchmarks identify their revisions, while the DeepSeek cache capture still lacks one. The October 23 Maya tests establish a GLM speculation A/B result and record the head and MTP-expert measurements. The KEEP=4 capture lacks its final summary. Longer-context workloads, repeated tuning trials, and a prefill-patch A/B test remain open.
+
+The later configuration cleanup, both Maya configuration renames, and GLM’s requested move to port 8082 lack confirming output. GLM’s port 8100 setting is printed in the October 23 record; the October 24 dashboard subsequently shows DeepSeek’s endpoint on port 8081.
 
 As of the August 16 entry, the next comparison was the prefill patch against the stock build on the four retained models. An upstream patch submission, investigation of speculative-run timing variance, a choice between Kimi K2.6 and K2.7-Code, and a Kimi K3 evaluation remain open. The August speculative runs supersede the Session 10 rerun protocol.
 

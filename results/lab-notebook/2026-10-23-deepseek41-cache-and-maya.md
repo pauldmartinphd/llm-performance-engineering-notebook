@@ -2,7 +2,7 @@
 
 **Recorded:** October 23, 2026. Maya prints a benchmark date of October 23 at 14:55; the llAMDa cache runs lack individual timestamps. **Machine:** Galactus, Proxmox LXC, EPYC 7713, 2 TiB RAM, four Radeon Pro V620 GPUs. **Source:** [retained conversation export](../raw-logs/2026-10-23-maya-comparison/README.md). The device output reports 30,704 MiB per GPU, 122,816 MiB in total, gfx1030, wave size 32, and no VMM.
 
-I am comparing llAMDa.cpp with Project Maya v1.1.24 to understand how much performance depends on the inference engine and its placement decisions. The latest DeepSeek result gives me a reproducible command for one cache setting. The supplied conversations preserve a broader cache sweep, a Maya benchmark, and a successful DSpark calibration. Only the 32 GiB cache row has its full llAMDa command and output; Maya has its own benchmark and calibration output. Their workloads differ, so I keep the engine results separate.
+I am comparing llAMDa.cpp with Project Maya v1.1.24 to understand how much performance depends on the inference engine and its placement decisions. The latest DeepSeek result preserves a command and printed output for one cache setting, although the executable’s source revision remains unknown. The supplied conversations preserve a broader cache sweep, a Maya benchmark, and a successful DSpark calibration. Only the 32 GiB cache row has its full llAMDa command and output; Maya has its own benchmark and calibration output. Their workloads differ, so I keep the engine results separate.
 
 ## DeepSeek cache sweep
 
@@ -44,7 +44,7 @@ The conversation identifies an earlier 8 MiB memlock limit and proposes `lxc.prl
 
 The next proposed Maya configuration sets `DS4_ENGRAM_RAM=1`, `DS4_REQUIRE_ALL_RAM=1`, and `MAYA_DS4_Q8_BATCH=1`, with `--mmap-experts off`. The later discussion describes the benchmark as running after these residency changes. I have retained that sequence, but the final JSON and engine residency diagnostics are still needed to confirm every effective setting.
 
-Maya v1.1.24's [release notes](https://github.com/mw00/project-maya/releases/tag/v1.1.24) document the locked-Engram and required-RAM options, along with the Q8 batching option. Several settings changed together, so the improvement cannot be assigned to memlock alone. The release's new RDNA 4 attention path also does not establish acceleration on the gfx1030 V620s.
+Maya v1.1.24's [release notes](https://github.com/mw00/project-maya/releases/tag/v1.1.24) document the locked-Engram and required-RAM options, along with the Q8 batching option. The discussion proposes several settings together, but their effective application is not fully captured. The improvement cannot be assigned to memlock alone. The release's new RDNA 4 attention path also does not establish acceleration on the gfx1030 V620s.
 
 For llAMDa, `-lm mlock` in the command is not evidence that locking succeeded. A failed locking request would also not, by itself, prove that SSD reads limited inference. I need the loader warnings, process limits and locked-memory counters, and I/O measurements before attributing its performance to the container limit.
 
