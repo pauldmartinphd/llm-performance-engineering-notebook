@@ -87,3 +87,38 @@ The conversation ends with requests to rename the configurations to `maya-glm5.3
 The [October 22 dedicated benchmarks](2026-10-22-glm53-build-comparison.md) measured approximately 284 tokens/s at pp8192 and 10 tokens/s at tg128/tg256 for both llama.cpp and llAMDa. Their CLI runs reached 17.8–18.1 generated tokens/s with automatic placement and requested MTP. Maya now delivers roughly 30 tokens/s from the same named GLM export, with a speculation-off control that explains a substantial part of its own generation improvement.
 
 The engines still differ in context allocation, prompts, speculation paths, and placement. I therefore do not treat the ratio between Maya generation and a llama-bench tg row as an isolated engine speedup. Nor does Maya lead every metric: the dedicated llama-bench pp8192 rates are numerically higher than Maya's 240–242. The practical milestone is that both large models now generate at roughly 30 tokens/s in the recorded Maya configurations, with the GLM A/B result and DeepSeek calibration showing why speculative execution is worth retaining.
+
+
+## Setup choices and proposals retained from the source discussion
+
+**Consolidated October 29:** The original AI dialogue has been removed from the current notebook tree. Its terminal evidence is retained in the [extracted captures](../raw-logs/2026-10-23-maya-glm-and-builds/2026-10-23-evidence.md). The following records preserve the setup choices and superseded proposals without treating them as additional experiments.
+
+The initial plan was to compare Flash across llAMDa and Maya using the same weights, then test the full GLM-5.3 flagship separately. The discussion described Flash as approximately 320–321B total / 18B active (`glm5-next`) and the flagship as approximately 754B (`glm-dsa`), with an approximately 467 GB, eleven-shard flagship UD-Q4_K_XL export. Those flagship sizing and support statements were planning claims, not a completed flagship run in this record. Maya support for the flagship remained a separate question.
+
+Before reusing the existing six-shard Flash GGUF, the discussion proposed two Maya-native quantizations:
+
+| Candidate | Size quoted in the discussion | Quoted accuracy relative to FP8 | Quoted next-token agreement with FP8 | Status |
+|---|---:|---:|---:|---|
+| Maya-M | Approximately 116 GB | 97.9% | 86% | Superseded proposal; no local run here |
+| Maya-L | Approximately 156–156.3 GB | 99.2% | 90% | Superseded proposal; no local run here |
+| Unsloth UD-Q4_K_XL | Initially ~190 GB; later 199.7 GB | Not supplied | 92.2% against **BF16**, as quoted | Selected export; the agreement figure uses a different reference |
+
+These quoted publisher figures and sizing estimates lacked usable source URLs in the export and were not independently checked during consolidation. They explain the original choice discussion, not a verified quality ranking. The discussion described Maya-M as primarily 2–3-bit routed experts and Maya-L as primarily 3–4-bit, with IQ3_S gate/up experts, IQ4_XS down experts, Q5_K sensitive layers, and Q6_K dense weights. The roughly 28% size difference between 199.7 and 156.3 GB is not a measurement of quality loss. The two agreement percentages cannot isolate a quantization effect because their references differ.
+
+The proposed native setup used `--model Maya-M` or `--model Maya-L`, HIP, GPUs `0,1,2,3`, context 32768, `--no-vision`, and `--no-start`; expected filenames were `maya-maya-m-hip.json` and `maya-maya-l-hip.json`. A later Maya-L proposal added `--vram-reserve-mib 3072` and `--env MAYA_GLM_RAM_RESIDENT=1`. Neither native quantization was needed for the recorded run. The selected setup recipe instead reused the local GGUF directory:
+
+```sh
+cd /opt/project-maya
+./maya.sh --backend hip --setup \
+  --gguf-dir /models/GLM-5.3-Flash/UD-Q4_K_XL \
+  --gpus 0,1,2,3 --context 32768 --no-vision \
+  --vram-reserve-mib 3072 --no-start
+```
+
+The source describes a writable model directory for pack creation and treats non-Maya quantizations as experimental. The subsequent inventory and benchmark verify this particular pack/configuration path; they do not establish support for every GGUF. Using `tmux` during a long setup and stopping the other inference engine before benchmarks were operational suggestions, not additional measured settings.
+
+For the A/B test, the proposed preparation copied the baseline to `maya-glm-mtp-original.json`, then set `env.MAYA_GLM_NO_SPEC` to `"1"` in `maya-glm-no-spec-hip.json`. Benchmark copies were named `maya-bench-mtp.txt` and `maya-bench-no-spec.txt`. `NO_SPEC=1` tests the default speculative execution path against decoding without speculation; it need not mean that the MTP block is removed. The baseline environment printed neither `MAYA_GLM_NO_SPEC` nor `MAYA_GLM_NO_MTP`.
+
+The head variants set `env.MAYA_GLM_SPEC_HEAD` to `"1"` or `"3"` in `maya-glm-head1-hip.json` and `maya-glm-head3-hip.json`. KEEP variants were named `maya-glm-mtp-keep{0,1,3,4}-hip.json`, with benchmark copies `maya-bench-mtp-keep{0,1,3,4}.txt`; the source includes the run loop but not a complete dump of every variant. Head=1 reduced the observed mean by 22.2% and head=3 by 27.5% relative to 31.6 tokens/s. A group imbalance is a hypothesis, not a profiled cause. KEEP changes trade draft work against potential acceptance, but no acceptance counts were captured.
+
+The final cleanup request proposed deleting those experimental JSONs, the original backup, and the named benchmark copies, while retaining the two model configurations. It has no confirming execution output. Renaming configurations also requires updating any startup scripts or services that reference their old names. The recorded route uses localhost; binding Maya to `0.0.0.0` with authentication or using SSH forwarding were alternative access proposals, not confirmed changes. GPU layer distribution, expert-cache allocation, and HIP prefill tuning remained later experiments rather than results of this sweep.

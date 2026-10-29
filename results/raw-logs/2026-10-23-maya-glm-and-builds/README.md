@@ -1,17 +1,17 @@
 # October 22 builds and October 23 Maya GLM measurements
 
-These user-supplied records extend the [earlier DeepSeek/Maya sources](../2026-10-23-maya-comparison/README.md).
+- [October 22 build and CLI output](2026-10-22.txt): compiler and installation output, GLM-5.3-Flash launches, and two revision-identified benchmark tables. Preserved byte for byte. The filename dates the record; individual CLI launches do not print wall-clock timestamps.
+- [October 23 terminal evidence](2026-10-23-evidence.md): generated config inventory, listener check, port edit, printed settings, HIP calibration response, and all nine GLM benchmark captures, including the incomplete KEEP=4 result. Extracted October 29 from the mixed conversation export; AI dialogue and repeated summaries were removed.
+- [October 23 notebook](../../lab-notebook/2026-10-23-maya-glm53-speculation.md): all benchmark tables and interpretation, plus original setup choices, superseded quantization proposals, A/B preparation, naming/port requests, cleanup proposal, and remaining validation.
 
-- [2026-10-22.txt](2026-10-22.txt): compiler and installation output, GLM-5.3-Flash CLI launches, and two revision-identified benchmark tables. The filename dates the record; individual CLI launches do not print wall-clock timestamps. Preserved byte for byte.
-- [2026-10-23.txt](2026-10-23.txt): mixed conversation and terminal output, including the Maya GLM benchmark, speculation A/B test, head and MTP_KEEP sweeps, and later configuration naming/port requests. Benchmark summaries print October 23 timestamps. The private container IP is replaced with `[container-IP]`; the rest of the text is preserved.
+Commands proposed in the source are not evidence of execution. Maya-M/L suggestions were superseded by the existing Unsloth UD-Q4_K_XL export. Cleanup and final GLM deployment requests lack confirming output. The first benchmark repeats a 2048-token progress line; the summary establishes one measurement. Missing KEEP=4 summary and acceptance counts remain missing. DeepSeek rename/port shell-history evidence is linked from the notebook.
 
-Commands proposed in the conversation are not evidence of execution. In particular, the initial Maya-L suggestion was superseded by use of the existing Unsloth UD-Q4_K_XL export. The later cleanup, renaming and final port-change instructions have no confirming output in this file. The first benchmark repeats a 2048-token prefill progress line; its final summary identifies one measurement, not an additional trial.
+The October 22 CLI output includes model-generated answers as experiment output, not as verified explanations. It is retained as benchmark evidence rather than an AI-assistant conversation.
 
-The CLI summaries omit bespoke-prompt processing rates. The original source retains the printed timings and generated text as evidence, not as verified technical explanations.
+## Source hashes
 
-## Checksums of retained files
+The unchanged October 22 file has SHA-256 `59c4e27e751dca14edd6ec911299db2873be69fa84902c761165854cce86d87e`.
 
-- `2026-10-22.txt`: `59c4e27e751dca14edd6ec911299db2873be69fa84902c761165854cce86d87e`
-- `2026-10-23.txt`: `0aa44826a39ea5902013321aa73c812a53e20187bd811d3bf9c355611d6078ad`
+The removed October 23 mixed export had SHA-256 `0aa44826a39ea5902013321aa73c812a53e20187bd811d3bf9c355611d6078ad`. It remains recoverable in Git history before consolidation; this hash identifies that historical source, not the new terminal extract.
 
-[October 22 analysis](../../lab-notebook/2026-10-22-glm53-build-comparison.md) · [October 23 milestone and tuning](../../lab-notebook/2026-10-23-maya-glm53-speculation.md)
+[October 22 analysis](../../lab-notebook/2026-10-22-glm53-build-comparison.md) · [DeepSeek evidence](../2026-10-23-maya-comparison/README.md)

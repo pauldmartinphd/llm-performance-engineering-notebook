@@ -1,6 +1,6 @@
 # GLM-5.3-Flash: 80 GiB expert-cache benchmark and investigation
 
-**Added:** October 29, 2026. **Run dates:** not printed in the supplied benchmark captures. **Hardware:** four AMD Radeon Pro V620 GPUs, consistent with the Galactus configuration. **Source:** [Benchmark configuration analysis, complete retrieved conversation](../raw-logs/2026-10-29-glm53-expert-cache/benchmark-configuration-analysis.md), followed by the October 29 continuation in Work mode. The original conversation is `6adace95-5744-83e9-8348-9e84b6b03966`.
+**Added:** October 29, 2026. **Run dates:** not printed in the supplied benchmark captures. **Hardware:** four AMD Radeon Pro V620 GPUs, consistent with the Galactus configuration. **Source:** [Original benchmark captures](../raw-logs/2026-10-29-glm53-expert-cache/benchmark-captures.md), followed by the October 29 continuation in Work mode. The original conversation is `6adace95-5744-83e9-8348-9e84b6b03966`.
 
 ## Recorded measurement
 
@@ -43,7 +43,7 @@ if (n_tokens == 0 || n_tokens > max_batch ||
 
 One reply described this as bypassing the cached-expert execution path above 32 tokens; another said large batches bypass insertion but may still read cached experts. These descriptions may refer to different paths, but the source checkout was not inspected in the continuation, so their relationship remains unresolved. Neither description is a verified finding for build `754aa4151`.
 
-Other prior claims were that initialization allocates and clears GPU cache buffers, generation starts with a cold cache, and the implementation records hits, misses, and upload bytes. The suggested 20 GiB per GPU was an even-division estimate, not a measured allocation. The printed 80 GiB request does not establish actual occupancy, distribution, or hit rate. The earlier assistant also referred to regressions in other caching experiments; the retrieved citation markers do not provide usable URLs, so that assertion is retained only in the source transcript.
+Other prior claims were that initialization allocates and clears GPU cache buffers, generation starts with a cold cache, and the implementation records hits, misses, and upload bytes. The suggested 20 GiB per GPU was an even-division estimate, not a measured allocation. The printed 80 GiB request does not establish actual occupancy, distribution, or hit rate. The earlier assistant also referred to regressions in other caching experiments; the retrieved citation markers do not provide usable URLs, so the assertion remains unverified and is not evidence for a regression in this run.
 
 Candidate explanations remain cache misses and PCIe transfers, ROCm synchronization or GPU execution overhead, cache initialization, and pressure on memory needed for compute buffers. None has been isolated. A hit rate by itself would not distinguish these costs; transfer and execution timing are also needed.
 
@@ -55,7 +55,27 @@ Before the measured run, the assistant proposed a one-line change for commit `18
 mparams.moe_cache_size = 98304ULL * 1024 * 1024;
 ```
 
-This hardcodes 96 GiB. The historical instructions were to save `llama-bench-moe-cache.patch`, run `git apply --check`, apply it, rebuild with `cmake --build build --target llama-bench -j 32`, and omit `--moe-cache-mib` from the benchmark command. The complete proposed diff and commands are in the source transcript. The assistant explicitly said the patch had not been compiled or tested. There is no evidence here that it was applied, and it targets a different revision from the measured run. It is retained as a proposal, not installed as a working patch.
+This hardcodes 96 GiB. The historical instructions were to save `llama-bench-moe-cache.patch`, run `git apply --check`, apply it, rebuild with `cmake --build build --target llama-bench -j 32`, and omit `--moe-cache-mib` from the benchmark command. The complete historical diff is retained below, with whitespace on its blank context line normalized. The assistant explicitly said the patch had not been compiled or tested. There is no evidence here that it was applied, and it targets a different revision from the measured run. It is retained as a proposal, not installed as a working patch.
+
+```diff
+diff --git a/tools/llama-bench/llama-bench.cpp b/tools/llama-bench/llama-bench.cpp
+--- a/tools/llama-bench/llama-bench.cpp
++++ b/tools/llama-bench/llama-bench.cpp
+@@ -1241,6 +1241,7 @@
+     llama_model_params to_llama_mparams() const {
+         llama_model_params mparams = llama_model_default_params();
++        mparams.moe_cache_size = 98304ULL * 1024 * 1024;
+
+         mparams.n_gpu_layers = n_gpu_layers;
+```
+
+The proposed application sequence, not executed or validated here, was:
+
+```sh
+git apply --check llama-bench-moe-cache.patch
+git apply llama-bench-moe-cache.patch
+cmake --build build --target llama-bench -j 32
+```
 
 The proposed follow-up was proper option parsing, parameter propagation, and result reporting for `--moe-cache-mib`. The later captured binary already accepts and prints that option, but its implementation and linkage have not been checked. Adding a hardcoded override now could invalidate a cache-disabled comparison.
 
