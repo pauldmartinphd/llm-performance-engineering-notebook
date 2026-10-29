@@ -102,6 +102,8 @@ On October 29 I confirmed that `DS4_STREAM_PRIO=1` causes a deadlock. The captur
 
 This upgrades stream priority from a code-inspection hypothesis to a reproduced trigger on my setup. The exact deadlock mechanism and introducing commit remain unresolved. The v1.1.36 short benchmark is not a controlled release-performance comparison with the earlier v1.1.30 benchmark: chunk size, layer placement, and other conditions differ. It also does not establish indefinite production stability.
 
+The [October 29 production follow-up](2026-10-29-maya-production-64k.md) records the subsequent 65,568-token request: **488.6 tokens/s prefill**, **24.4 tokens/s decode**, and **zero cache hits**, using the same named no-stream-priority production configuration. It retains TP2, 32768-token chunks, an 800 MiB ring, and port 8081. This is conversation-derived evidence separate from the archive and preserves approximately the earlier ~480 tokens/s prefill performance.
+
 ## Reproducibility and remaining limits
 
 The [evidence ledger](../raw-logs/2026-10-29-maya-collection/README.md) records archive validation, per-file hashes, exact script provenance, checkout and binary identities, and the derived partial summary. Both sweeps record v1.1.30 commit `8621e33159f426da2d376be4ec012b0ce8fe2948` and the same engine binary hash. Prompt targets differ from actual API token counts: for example, a target 32768 produces 32800 prompt tokens in the retained rows. Raw counts and timings are preserved.

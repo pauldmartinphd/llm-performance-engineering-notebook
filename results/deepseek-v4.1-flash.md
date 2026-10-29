@@ -1,5 +1,9 @@
 # DeepSeek-V4.1-Flash on Galactus
 
+## October 29: production v1.1.36 at 488.6 tokens/s prefill
+
+The confirmed production configuration, `maya-ds4-production-no-stream-prio.json`, completed a 65,568-token prompt with zero cache hits at **488.6 tokens/s prefill** and **24.4 tokens/s decode**. It uses four V620s, ROCm 7.2, TP2, a 32,768-token chunk, an 800 MiB ring, `DS4_STREAM_PRIO=0`, and port 8081 with DeepSeek-V4.1-Flash-1017 UD-Q8_K_XL. The prefill rate is about 1.8% above the prior ~480 baseline; one request does not establish a meaningful release improvement. The [dated record](lab-notebook/2026-10-29-maya-production-64k.md) preserves the pasted output, request provenance, working configuration, and historical comparison limits. This documents the existing run without repeating tests or changing production.
+
 ## October 24: dashboard from ongoing use
 
 ![Maya DeepSeek dashboard with request history, expert placement, and four V620 GPUs](images/2026-10-24-maya-deepseek-dashboard.png)

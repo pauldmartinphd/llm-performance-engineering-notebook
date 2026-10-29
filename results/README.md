@@ -2,6 +2,10 @@
 
 These notes collect the measurements, the best configuration I found for each model, and what I could conclude. Each note names the machine: Galactus for llama.cpp, llAMDa and Project Maya; Magneto for oMLX. For machine specifications, see [Hardware](../hardware/README.md). For the method behind the numbers, see [methodology.md](methodology.md). For what transfers to other systems, see [../takeaways/](../takeaways/).
 
+## October 29: DeepSeek production prefill confirmation
+
+Project Maya v1.1.36 on Galactus completed **65,568 prompt tokens with zero cache hits at 488.6 tokens/s prefill**, followed by **24.4 tokens/s decode**. The working configuration retains TP2, a 32768-token chunk, an 800 MiB ring, and `DS4_STREAM_PRIO=0` on four V620s. The [production follow-up](lab-notebook/2026-10-29-maya-production-64k.md) preserves the result and configuration; the approximately 1.8% difference from the earlier ~480 baseline is not an established release speedup.
+
 ## October 23: approximately 30 tokens/s with Maya
 
 | Model and quantization | Generation with speculation | Without speculation | Test |
