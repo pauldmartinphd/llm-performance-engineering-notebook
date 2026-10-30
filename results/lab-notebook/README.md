@@ -58,3 +58,5 @@ The original July transcripts still refer to sessions in their historical sequen
 - **October 29:** [Maya v1.1.36 production configuration and uncached 64K confirmation](2026-10-29-maya-production-64k.md). 65,568 prompt tokens, zero cache hits, 488.6 tokens/s prefill and 24.4 decode; retained production settings and historical comparison limits.
 
 - **October 29 research notes; no experiments run:** [Learned memory, sparse attention sharing, and active expert count](2026-10-29-sparse-architecture-research.md). Four proposed experiments, separate from the architectural memo. SSD residency concerns future capacity beyond RAM; Galactus is not serving these components from SSD, and this entry contains no SSD benchmarks.
+
+- **October 29 retrospective; no new benchmark:** [llamda: experimental fork, measurements, pipeline limitations, and complete handoff](2026-10-29-llamda-experimental-fork-retrospective.md). Withdraws the announcement and retains integration history, source credits, tested and untested changes, model/cache failures, and the independent-patch test queue.

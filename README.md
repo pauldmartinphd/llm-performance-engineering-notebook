@@ -25,24 +25,11 @@ These are separate model runs. GLM uses Maya's three-answer benchmark; DeepSeek 
 
 **[The milestone, A/B test, and tuning results](results/lab-notebook/2026-10-23-maya-glm53-speculation.md)** · [October 22 llama.cpp and llAMDa comparison](results/lab-notebook/2026-10-22-glm53-build-comparison.md) · [DeepSeek calibration and memory setup](results/lab-notebook/2026-10-23-deepseek41-cache-and-maya.md)
 
-## [Introducing llamda.cpp — a llama.cpp fork optimized for AMD GPUs](https://github.com/pauldmartinphd/llAMDa.cpp)
+## llamda: an experimental fork, not an established performance improvement
 
-**AMD-focused llama.cpp fork for RDNA, Strix Halo, and Vega.**
+I am withdrawing the llamda announcement. The fork brought model support, AMD patches, and my prefill scheduler work together, but the revision-identified GLM tests showed essentially the same throughput as upstream llama.cpp. Maya subsequently gave me substantially better generation performance. Strata and Gufo informed the architectural comparison; I have not retained a matched Galactus benchmark for either.
 
-I built [llAMDa.cpp](https://github.com/pauldmartinphd/llAMDa.cpp) to bring the AMD work I need into one repository: architecture-specific kernels, support for newer MoE models, and the scheduler changes I developed while testing large models on Galactus. Instead of maintaining separate model integrations for each GPU family, I put the common changes in `amd-main` and built the architecture development branches on that base.
-
-The fork combines AMD patches from Edwin Brown's RDNA fork, halo-box's Strix Halo fork, and mxxm-t's fork with Daniel Han and Unsloth's DeepSeek-V4.1-Flash-1017/DSpark implementation. I preserved the source credits and added both parts of my multi-GPU MoE prefill patch: distributing eligible expert work across GPUs and bypassing the routing-index readback for sufficiently large batches. All four branches include those prefill changes.
-
-| Branch | Purpose |
-|---|---|
-| [`amd-main`](https://github.com/pauldmartinphd/llAMDa.cpp/tree/amd-main) | Default branch: common AMD changes, DeepSeek-V4.1/DSpark, and my MoE prefill patch |
-| [`rdna-dev`](https://github.com/pauldmartinphd/llAMDa.cpp/tree/rdna-dev) | RDNA development, including the V620 work that started the fork |
-| [`halo-dev`](https://github.com/pauldmartinphd/llAMDa.cpp/tree/halo-dev) | Strix Halo development |
-| [`vega-dev`](https://github.com/pauldmartinphd/llAMDa.cpp/tree/vega-dev) | Vega development, including gfx900 and gfx906 targets |
-
-**[Code and build documentation](https://github.com/pauldmartinphd/llAMDa.cpp) · [Source credits](https://github.com/pauldmartinphd/llAMDa.cpp/blob/amd-main/CREDITS-AMD.md) · [Development notes](results/lab-notebook/2026-10-21-llamda-amd-fork.md)**
-
-In the original July GLM-5.2 experiment, my combined prefill patch raised throughput from **104.97 to 119.36 tokens/s (+13.7%)**. I have built and checked the current port on all four branches, and the October 22 record now supplies revision-identified GLM benchmarks. Those runs do not isolate this patch: the controlled patch-off comparison remains outstanding. The earlier result explains why I included the patch; it does not establish the gain for the newer models.
+The [complete retrospective](results/lab-notebook/2026-10-29-llamda-experimental-fork-retrospective.md) preserves the integration history, important tests and failures, source review, pipeline limitations, experimental patches, and uncompleted comparisons. It explains why tuning kernels and adding an expert cache did not reproduce a runtime that overlaps CPU work, GPU work, transfers, and speculative verification. The fork remains an experiment, and its historical results remain below.
 
 ## DeepSeek cache sweep and Project Maya (recorded October 23)
 
@@ -50,7 +37,7 @@ With DeepSeek-V4.1-Flash-1017 UD-Q8_K_XL, my retained `llamda-bench` output repo
 
 The additional Maya output records **282 tokens/s at 8192-token prefill** and a DSpark calibration improving sustained generation from **21.2 to 29.3 tokens/s (+38%)**, with **69% draft acceptance**. The LXC shell checks show unlimited memlock after the reported residency changes, but several settings changed together and the engine workloads differ. [The new experiment record](results/lab-notebook/2026-10-23-deepseek41-cache-and-maya.md) preserves the evidence and remaining measurement limits.
 
-## Experiments behind the fork
+## Earlier experiments
 
 I started this notebook to measure local LLM inference with models whose weights exceed GPU memory, placing routed experts in system RAM while GPUs handle the dense computation. Those experiments led me from configuration changes to modifying llama.cpp itself.
 

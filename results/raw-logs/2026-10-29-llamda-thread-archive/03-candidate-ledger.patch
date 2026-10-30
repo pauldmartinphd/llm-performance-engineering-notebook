@@ -1,0 +1,73 @@
+From c9431a8c24e6cbcd89a26c5b54d1ebc7b1f3c968 Mon Sep 17 00:00:00 2001
+From: "Paul D. Martin, Ph.D."
+ <1087972+pauldmartinphd@users.noreply.github.com>
+Date: Sat, 24 Oct 2026 19:10:51 -0400
+Subject: [PATCH] docs: track performance candidates and sequential validation
+
+---
+ docs/performance-patch-queue.md | 53 +++++++++++++++++++++++++++++++++
+ 1 file changed, 53 insertions(+)
+ create mode 100644 docs/performance-patch-queue.md
+
+diff --git a/docs/performance-patch-queue.md b/docs/performance-patch-queue.md
+new file mode 100644
+index 000000000..329a0b51f
+--- /dev/null
++++ b/docs/performance-patch-queue.md
+@@ -0,0 +1,53 @@
++# Performance patch evaluation queue
++
++Snapshot: 2026-10-24. Initial shortlist, not an exhaustive inventory. All 18 PRs were open and unmerged when queried. Review states are evidence, not proof of correctness. No new hardware performance claim has been established locally.
++
++## One candidate at a time
++
++1. Read discussion and inline reviews, check license and exact source revision, then check upstream and fork ancestry for duplicates.
++2. Apply one candidate to a fixed baseline in its own branch. Build and run relevant correctness tests before hardware measurement.
++3. Run baseline/candidate/candidate/baseline with identical models, prompts, placement, cache budget, KV types, affinity, compiler and ROCm. Keep individual samples, logs and source/build IDs. Use at least three measured repetitions and separate cold from warm cache results.
++4. Check output correctness, PP, TG, memory use, speculative acceptance, and short-prompt regressions. Retain only reproducible benefits for the intended workload. Approximation or quant changes require separate quality evaluation.
++5. Merge an accepted candidate into the experimental integration branch. Test the next patch against that accepted revision. A rejected candidate must not remain in the next baseline.
++
++## First experiment
++
++Baseline: amd-main `e3f526dd7`. Candidate: `experimental/perf-29963` at `04587fd2f`, containing only PR 29963 and conflict resolution. It excludes provisional MXFP4 batching and pinned staging.
++
++Use the same four-GPU layer split, disable automatic fitting initially, and test its changed fitting policy separately. Test DeepSeek and GLM with real identical prompts at 512, 8192 and 32768 tokens and 256-token generation. Start without speculation, then test DSpark/MTP at intended production settings. Compare cache off and the same known-fitting cache budget on both builds. Confirm pipeline activation in candidate logs. Record exact input/output token counts and save generated content.
++
++The user runs hardware tests on Galactus; no SSH is authorized. Local CPU builds and allocator tests do not validate HIP stream correctness or performance. Do not stack the next candidate while this result is pending.
++
++## Candidate ledger
++
++| PR | Author | Pinned head | Review disposition |
++| --- | --- | --- | --- |
++| [30966: llama_moe_cache: run missed experts on CPU, add tuning script](https://github.com/ggml-org/llama.cpp/pull/30966) | am17an | `bffc55813e361990f7c26611299b136f219b1456` | NEXT: CPU cache misses; approving review and independent R9700 gain. Review NaN handling, tuner accounting, multi-GPU and speculation. |
++| [30971: llama : add adaptive single-graph MoE offload](https://github.com/ggml-org/llama.cpp/pull/30971) | pwilkin | `f8c7d3092252cff4548b1c7bac9117dd74ff6023` | HOLD: large draft alternative to 30966; do not combine implementations. |
++| [30848: Handle small moe caches better](https://github.com/ggml-org/llama.cpp/pull/30848) | eapache | `da05b4628a912f78916f62aa161cc60bc2613299` | Review: small-cache policy; test separately from CPU-miss changes. |
++| [21067: ggml: allow prefetching tensor overrides](https://github.com/ggml-org/llama.cpp/pull/21067) | am17an | `6e3d2ef73006cbd8e2bf686b8386202dbbe07c1d` | HOLD: CUDA prefetch implementation; pinned memory and scheduler overlap need inspection. |
++| [25319: ggml: asynchronous scheduler memory copies](https://github.com/ggml-org/llama.cpp/pull/25319) | JohannesGaessler | `124d3d9428e90169a84cf903fd60d842dc3019de` | Review separately: scheduler copies overlap 29963. |
++| [27258: Formalizing scheduler and async backend behavior through tests](https://github.com/ggml-org/llama.cpp/pull/27258) | aendk | `7a2261a26fd5e3d440d095741b184a235613b24f` | Validation reference: draft scheduler tests, not wholesale performance import. |
++| [27558: HIP: Expand Q5_K and Q6_K tile widths for RDNA2](https://github.com/ggml-org/llama.cpp/pull/27558) | draetheus | `d05dc061bb7316d82b2579151042f5b1aa63f316` | Review: V620 Q5_K/Q6_K tile measurements, but pp128 regressions. Check existing RDNA imports. |
++| [23685: HIP: Adds 4x packed Q8_1 activation for Q4_K_M models in MMVQ Extension to Q5_K and Q6_K Models](https://github.com/ggml-org/llama.cpp/pull/23685) | ravel7524 | `c54d684d7af74735a12a1195d2b565b073908f3b` | Review: packed Q8_1 activations; check AMD dispatch and existing RDNA code. |
++| [28613: HIP: tune MMVQ batch thresholds on RDNA3.5](https://github.com/ggml-org/llama.cpp/pull/28613) | SimonTeixidor | `6617683e43f90989430528617a5f55f0f0f4c27d` | HOLD: independent Q4_K regression; author confirms width dependence. |
++| [30591: vulkan: add tiled-transpose concat shader for Qwen models](https://github.com/ggml-org/llama.cpp/pull/30591) | 0cc4m | `52e41a44519ec15ae197c65244bba8260af35978` | Halo review: Vulkan concat-transpose; check already imported code. |
++| [20596: ggml-cpu: improve `--n-cpu-moe` TG performance](https://github.com/ggml-org/llama.cpp/pull/20596) | am17an | `5d03c12a1345a130d25386f06189718b74d53b19` | Review: CPU expert decode; thread-count sensitivity and mixed results. |
++| [30846: Improvements to the Memory Access Pattern in `ggml_compute_forward_mul_mat_one_chunk`](https://github.com/ggml-org/llama.cpp/pull/30846) | kazutoshi-ak | `22957f5737d272ea2fe62c5c6d49f4f259117d58` | Review: CPU matmul locality; verify active quant path. |
++| [31009: glm5-next : QSA without kq_mask (+ DSA)](https://github.com/ggml-org/llama.cpp/pull/31009) | sanmai | `439723a10ac840c8e5d78f83b414198e416b0df5` | Review: GLM5-next/DSA mask memory savings; hold cache budget fixed first. |
++| [30196: sampling : read context outputs with one synchronization](https://github.com/ggml-org/llama.cpp/pull/30196) | hthadicherla | `0715571e1077206f5f0a89edf3cc71bfe913f29c` | Review: speculative output synchronization. |
++| [30489: ggml-cuda: fuse GLU into the MMQ Q8_1 activation quantization](https://github.com/ggml-org/llama.cpp/pull/30489) | SongXiaoXi | `784fd01678cb91227c8de2fa1566308e7e3e2244` | Review: GLU quantization fusion; check HIP support and existing fusion. |
++| [29796: cuda: skip redundant stream synchronization](https://github.com/ggml-org/llama.cpp/pull/29796) | hthadicherla | `fc92d666c734635b708ca078683ab93b6535aa58` | HOLD: author parked draft pending robust solution. |
++| [27210: spec : add adaptive MTP draft depth (draft-mtp-adaptive)](https://github.com/ggml-org/llama.cpp/pull/27210) | stew675 | `c1c2b286f900b930f0afd2a4f8b0beb59599d016` | Review: adaptive MTP; real-workload acceptance and throughput needed. |
++| [29963: ggml : pipeline parallelism with MoE experts in host RAM](https://github.com/ggml-org/llama.cpp/pull/29963) | drrros | `3ca7eed13274e406822fa1ba3e69a883560566bc` | FIRST: isolated hardware A/B pending. Independent MI50 gains; severe mixed-GPU regressions. No local HIP validation. |
++
++## Additional leads, not yet reviewed
++
++- [30344: GCN flash-attention tiles](https://github.com/ggml-org/llama.cpp/pull/30344), Vega/gfx906.
++- [21698: Q8_0 tile loading](https://github.com/ggml-org/llama.cpp/pull/21698), check GCN scope.
++- [26621: weight-row padding](https://github.com/ggml-org/llama.cpp/pull/26621), RDNA3.5 cache aliasing, AMD contributor.
++- [31114: Vulkan buffer-range check](https://github.com/ggml-org/llama.cpp/pull/31114), correctness prerequisite for affected older cards.
++- The initial gfx900 search established no specific performance candidate. Shared CPU/scheduler changes still apply; CDNA tuning cannot be presumed to apply to Vega.
++- [justinappler's retired Strix Halo fork](https://github.com/justinappler/llama.cpp-strix-halo) reports its useful tuning is upstream. Check ancestry instead of importing retired patches.
++
++PR 29963 remains an experiment: independent AMD evidence is encouraging, but changes remain requested and regressions include the revision imported here. PR 30966 is a stronger hybrid candidate than the CUDA-only forks previously reviewed. Its AMD report changes the earlier assessment that the reviewed hybrid candidates lacked a usable HIP path; it still needs source and inline-review verification.
+-- 
+2.54.0 (Apple Git-157)
+

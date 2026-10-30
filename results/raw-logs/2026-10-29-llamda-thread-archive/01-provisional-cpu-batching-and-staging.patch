@@ -1,0 +1,715 @@
+From fceebbb3f3871fb4f095685e23b2b1fd015561a4 Mon Sep 17 00:00:00 2001
+From: "Paul D. Martin, Ph.D."
+ <1087972+pauldmartinphd@users.noreply.github.com>
+Date: Sat, 24 Oct 2026 18:35:25 -0400
+Subject: [PATCH] Experiment with MXFP4 token batching and pinned MoE uploads
+
+---
+ CREDITS-AMD.md                      |   6 ++
+ docs/expert-execution.md            |  42 +++++++++++
+ ggml/src/ggml-cpu/arch/x86/quants.c |  52 +++++++++++++
+ ggml/src/ggml-cpu/ggml-cpu.c        |  25 ++++++
+ ggml/src/ggml-cpu/quants.c          |   9 +++
+ ggml/src/ggml-cpu/quants.h          |   2 +
+ src/llama-context.cpp               |  12 ++-
+ src/llama-moe-cache-upload.h        | 109 +++++++++++++++++++++++++++
+ src/llama-moe-cache.cpp             |  42 ++++++++++-
+ src/llama-moe-cache.h               |   3 +
+ tests/CMakeLists.txt                |   1 +
+ tests/test-alloc.cpp                | 113 ++++++++++++++++++++++++++++
+ tests/test-backend-ops.cpp          |   9 +++
+ tests/test-quantize-fns.cpp         |  35 +++++++++
+ 14 files changed, 457 insertions(+), 3 deletions(-)
+ create mode 100644 docs/expert-execution.md
+ create mode 100644 src/llama-moe-cache-upload.h
+
+diff --git a/CREDITS-AMD.md b/CREDITS-AMD.md
+index e106b7984..8920f6dbd 100644
+--- a/CREDITS-AMD.md
++++ b/CREDITS-AMD.md
+@@ -22,3 +22,9 @@ Daniel Han and Unsloth supply the shared DeepSeek-V4.1-Flash-1017 implementation
+ ## Multi-GPU MoE prefill distribution
+ 
+ Paul D. Martin, Ph.D., supplies the layer-keyed distribution with round-robin fallback and the routing-readback bypass, adapted from the [performance notebook patch](https://github.com/pauldmartinphd/llm-performance-engineering-notebook/blob/main/patches/prefill/README.md). See [port details and validation](docs/moe-prefill-offload.md). Both are enabled by default for eligible prefill operations; `GGML_MOE_PREFILL=0` disables them.
++
++## Expert execution research
++
++Project Maya (Peasant Smith, Niko1221, and contributors), version 1.1.24 at `75798d4280dcc282b2f2224417fe8fa11e26ea89`, supplies the design reference for reusing decoded MXFP4 expert weights across multiple routed tokens and for bounded, event-protected expert-transfer staging. The initial CPU implementation adapts this approach to llama.cpp's existing Q8_0 layout and dot-product arithmetic; it does not import Maya's activation layout or runtime. See [implementation and validation](docs/expert-execution.md).
++
++Gufo contributors, revision `d4eaaad438a498bf9ba541afe3d655f70dd4196d`, supply an additional reference for grouped expert computation and Strix Halo fusion. This review is not a claim that Gufo's runtime or kernels have been imported.
+diff --git a/docs/expert-execution.md b/docs/expert-execution.md
+new file mode 100644
+index 000000000..d1f14e4ca
+--- /dev/null
++++ b/docs/expert-execution.md
+@@ -0,0 +1,42 @@
++# Experimental expert execution
++
++All Maya-derived changes live on `experimental/moe-execution`, based on `amd-main`. They are not enabled or present on `amd-main`, `rdna-dev`, `halo-dev`, or `vega-dev`. This branch is the shared development point; promotion requires correctness and performance validation on the affected hardware. The clean upstream routing submission remains separate.
++
++## Implemented: MXFP4 CPU token batching
++
++The AVX2 CPU MUL_MAT_ID path groups up to four tokens routed to the same expert. It loads and decodes each pair of MXFP4 weight blocks once, then applies them to the group's Q8_0 activation rows. This reduces repeated weight loads and nibble decoding during speculative verification and other multi-token CPU expert work. Single-token expert groups retain the existing path. Non-AVX2 builds retain their existing execution path.
++
++The implementation preserves each output's existing accumulation order, FP16 activation scales, and tail handling. It accepts nonadjacent activation rows through explicit pointers, including broadcast inputs. It does not change quantization, expert selection, model weights, or speculative acceptance.
++
++This follows Project Maya's multi-token expert-weight reuse approach, adapted to llama.cpp's existing arithmetic. Maya's source is [ds4_mx_kern.inc](https://github.com/mw00/project-maya/blob/75798d4280dcc282b2f2224417fe8fa11e26ea89/src/ds4/ds4_mx_kern.inc). Gufo applies related grouping to GPU expert down projections in [ds4_rocm_moe.hip.hpp](https://github.com/gufo-org/gufo/blob/d4eaaad438a498bf9ba541afe3d655f70dd4196d/src/models/deepseek_v4_flash/kernels/rocm/detail/ds4_rocm_moe.hip.hpp).
++
++## Validation
++
++The x86_64 AVX2 build runs locally under macOS x86 emulation. The targeted MUL_MAT_ID suite covers 36 combinations of token counts, broadcast inputs, and odd block counts. Direct batched-versus-single dot tests cover 24 combinations and require bitwise equality. These checks do not establish EPYC throughput or HIP performance.
++
++On Galactus, build the same revision with normal AVX2 CPU support and run:
++
++```sh
++cmake --build build --target test-quantize-fns test-backend-ops
++build/bin/test-quantize-fns
++build/bin/test-backend-ops test -b CPU -o MUL_MAT_ID -p 'type_a=mxfp4.*m=17'
++build/bin/test-backend-ops perf -b CPU -o MUL_MAT_ID -p 'type_a=mxfp4'
++```
++
++Use the same CPU affinity and thread settings for comparisons. End-to-end DSpark benefits depend on whether its expert verification actually runs on the CPU. Enabling the existing VRAM expert cache can move those operations to the GPU, where this CPU change does not apply.
++
++## Implemented: bounded pinned upload staging
++
++Cache misses and uncached portions of large prefill expert transfers on discrete GPUs use the same two 8 MiB pinned host buffers when the MoE cache is enabled. A CPU copy fills one buffer while an earlier upload can consume the other. Each slot has a backend event; the host waits for that event before overwriting the slot. Destruction also drains outstanding uploads. The requested VRAM cache budget is unchanged; staging adds up to 16 MiB of host memory per active cache device, included in the memory breakdown.
++
++Backends without asynchronous copies, pinned buffers, or events retain direct uploads. Failed allocations, including a backend's silent fallback to pageable memory, also retain the original path. Integrated GPUs skip staging. Weights already in the backend's pinned buffer type use direct uploads. Large-batch cache hits still use device-to-device copies; the staging path handles only the remaining host ranges, including the padding required by MMQ. With the MoE cache disabled, transfers retain the original behavior.
++
++`LLAMA_MOE_CACHE_STAGING=0` disables staging for an A/B comparison with the same model, cache budget, and placement. A startup log reports the staging allocation when enabled. The allocation test uses delayed asynchronous copies to check buffer reuse, partial chunks, nonzero destination offsets, destruction with pending work, and fallback after allocation/event failure. This host-side protocol has been tested locally; HIP transfer throughput has not.
++
++This overlaps host staging with uploads. It does not yet overlap CPU expert computation with GPU expert computation, or execute prefill experts as streaming groups arrive. The current graph still orders expert execution after its required uploads.
++
++## Work still required
++
++The larger Maya mechanisms remain unported: concurrent CPU and GPU expert execution, asynchronous hot-expert promotion, and pipelined prefill expert staging. These need explicit buffer-lifetime and synchronization handling in the shared scheduler. The CPU batching change alone does not reproduce Maya's measured end-to-end speedup.
++
++The Gufo review found that halo-dev already has normalization/RoPE/KV-write fusion and fused activation quantization. Importing equivalent kernels would duplicate existing functionality. Further Gufo changes require a demonstrated missing path and HIP correctness checks before becoming defaults.
+diff --git a/ggml/src/ggml-cpu/arch/x86/quants.c b/ggml/src/ggml-cpu/arch/x86/quants.c
+index 21cd6312a..f1a00b1eb 100644
+--- a/ggml/src/ggml-cpu/arch/x86/quants.c
++++ b/ggml/src/ggml-cpu/arch/x86/quants.c
+@@ -1065,6 +1065,58 @@ void ggml_vec_dot_mxfp4_q8_0(int n, float * GGML_RESTRICT s, size_t bs, const vo
+     *s = sumf;
+ }
+ 
++
++#if defined(__AVX2__)
++// Reuse decoded expert weights across tokens, as in Project Maya's MXFP4 CPU lane.
++void ggml_vec_dot_mxfp4_q8_0_batch(int n, float * s, const void * vx, const void * const * vy, int nvec) {
++    GGML_ASSERT(n % QK_MXFP4 == 0 && nvec >= 1 && nvec <= 4);
++    const block_mxfp4 * x = vx;
++    const block_q8_0 * y[4];
++    __m256 accum1[4], accum2[4];
++    for (int j = 0; j < nvec; ++j) {
++        y[j] = vy[j];
++        accum1[j] = accum2[j] = _mm256_setzero_ps();
++    }
++    const __m128i values = _mm_loadu_si128((const __m128i *) kvalues_fp4);
++    const __m128i mask = _mm_set1_epi8(15);
++    const __m256i ones = _mm256_set1_epi16(1);
++    const int nb = n / QK_MXFP4;
++    int ib = 0;
++    for (; ib + 1 < nb; ib += 2) {
++        const __m128i a = _mm_loadu_si128((const __m128i *) x[ib].qs);
++        const __m128i b = _mm_loadu_si128((const __m128i *) x[ib + 1].qs);
++        const __m256i qa = MM256_SET_M128I(_mm_shuffle_epi8(values, _mm_and_si128(_mm_srli_epi16(a, 4), mask)),
++                                         _mm_shuffle_epi8(values, _mm_and_si128(a, mask)));
++        const __m256i qb = MM256_SET_M128I(_mm_shuffle_epi8(values, _mm_and_si128(_mm_srli_epi16(b, 4), mask)),
++                                         _mm_shuffle_epi8(values, _mm_and_si128(b, mask)));
++        const float da = GGML_CPU_E8M0_TO_FP32_HALF(x[ib].e);
++        const float db = GGML_CPU_E8M0_TO_FP32_HALF(x[ib + 1].e);
++        for (int j = 0; j < nvec; ++j) {
++            const __m256i ya = _mm256_loadu_si256((const __m256i *) y[j][ib].qs);
++            const __m256i yb = _mm256_loadu_si256((const __m256i *) y[j][ib + 1].qs);
++            const __m256i pa = _mm256_madd_epi16(mul_add_epi8(qa, ya), ones);
++            const __m256i pb = _mm256_madd_epi16(mul_add_epi8(qb, yb), ones);
++            const __m256 sa = _mm256_set1_ps(GGML_CPU_FP16_TO_FP32(y[j][ib].d) * da);
++            const __m256 sb = _mm256_set1_ps(GGML_CPU_FP16_TO_FP32(y[j][ib + 1].d) * db);
++            accum1[j] = _mm256_fmadd_ps(sa, _mm256_cvtepi32_ps(pa), accum1[j]);
++            accum2[j] = _mm256_fmadd_ps(sb, _mm256_cvtepi32_ps(pb), accum2[j]);
++        }
++    }
++    for (int j = 0; j < nvec; ++j) {
++        float sum = hsum_float_8(_mm256_add_ps(accum1[j], accum2[j]));
++        if (ib < nb) {
++            int lo = 0, hi = 0;
++            for (int k = 0; k < QK_MXFP4/2; ++k) {
++                lo += y[j][ib].qs[k] * kvalues_fp4[x[ib].qs[k] & 15];
++                hi += y[j][ib].qs[k + QK_MXFP4/2] * kvalues_fp4[x[ib].qs[k] >> 4];
++            }
++            sum += GGML_CPU_FP16_TO_FP32(y[j][ib].d) * GGML_CPU_E8M0_TO_FP32_HALF(x[ib].e) * (lo + hi);
++        }
++        s[j] = sum;
++    }
++}
++#endif
++
+ void ggml_vec_dot_nvfp4_q8_0(int n, float * GGML_RESTRICT s, size_t bs, const void * GGML_RESTRICT vx, size_t bx, const void * GGML_RESTRICT vy, size_t by, int nrc) {
+     assert(nrc == 1);
+     UNUSED(nrc);
+diff --git a/ggml/src/ggml-cpu/ggml-cpu.c b/ggml/src/ggml-cpu/ggml-cpu.c
+index 4c33369ee..b4127278d 100644
+--- a/ggml/src/ggml-cpu/ggml-cpu.c
++++ b/ggml/src/ggml-cpu/ggml-cpu.c
+@@ -1503,6 +1503,31 @@ static void ggml_compute_forward_mul_mat_id_one_chunk(
+     ggml_vec_dot_t    const vec_dot      = type_traits_cpu[type].vec_dot;
+     enum ggml_type    const vec_dot_type = type_traits_cpu[type].vec_dot_type;
+ 
++#if defined(__AVX2__)
++    if (type == GGML_TYPE_MXFP4 && ir1_end - ir1_start >= 2) {
++        for (int64_t ir1 = ir1_start; ir1 < ir1_end; ir1 += 4) {
++            const int nvec = MIN(4, ir1_end - ir1);
++            const void * inputs[4];
++            float * outputs[4];
++            for (int j = 0; j < nvec; ++j) {
++                const struct mmid_row_mapping row = MMID_MATRIX_ROW(cur_a, ir1 + j);
++                const int64_t i11 = row.i1 % ne11;
++                inputs[j] = (const char *) wdata + (src1_cont || src1->type != vec_dot_type
++                        ? (i11 + row.i2 * ne11) * row_size : i11 * nb11 + row.i2 * nb12);
++                outputs[j] = (float *) ((char *) dst->data + row.i1 * nb1 + row.i2 * nb2);
++            }
++            for (int64_t ir0 = ir0_start; ir0 < ir0_end; ++ir0) {
++                float values[4];
++                ggml_vec_dot_mxfp4_q8_0_batch(ne00, values, src0_cur + ir0 * nb01, inputs, nvec);
++                for (int j = 0; j < nvec; ++j) {
++                    outputs[j][ir0] = values[j];
++                }
++            }
++        }
++        return;
++    }
++#endif
++
+     const int64_t blck_0 = 16;
+     const int64_t blck_1 = 16;
+ 
+diff --git a/ggml/src/ggml-cpu/quants.c b/ggml/src/ggml-cpu/quants.c
+index 5e36459f8..a8b8d588b 100644
+--- a/ggml/src/ggml-cpu/quants.c
++++ b/ggml/src/ggml-cpu/quants.c
+@@ -1337,3 +1337,12 @@ void quantize_row_iq4_xs(const float * GGML_RESTRICT x, void * GGML_RESTRICT y,
+     assert(k % QK_K == 0);
+     quantize_iq4_xs(x, y, 1, k, NULL);
+ }
++
++#if !defined(__AVX2__)
++void ggml_vec_dot_mxfp4_q8_0_batch(int n, float * s, const void * vx, const void * const * vy, int nvec) {
++    GGML_ASSERT(nvec >= 1 && nvec <= 4);
++    for (int j = 0; j < nvec; ++j) {
++        ggml_vec_dot_mxfp4_q8_0(n, s + j, 0, vx, 0, vy[j], 0, 1);
++    }
++}
++#endif
+diff --git a/ggml/src/ggml-cpu/quants.h b/ggml/src/ggml-cpu/quants.h
+index 93ea7eeff..ea408c941 100644
+--- a/ggml/src/ggml-cpu/quants.h
++++ b/ggml/src/ggml-cpu/quants.h
+@@ -101,6 +101,8 @@ void ggml_vec_dot_iq1_m_q8_K_generic(int n, float * GGML_RESTRICT s, size_t bs,
+ void ggml_vec_dot_iq4_nl_q8_0_generic(int n, float * GGML_RESTRICT s, size_t bs, const void * GGML_RESTRICT vx, size_t bx, const void * GGML_RESTRICT vy, size_t by, int nrc);
+ void ggml_vec_dot_iq4_xs_q8_K_generic(int n, float * GGML_RESTRICT s, size_t bs, const void * GGML_RESTRICT vx, size_t bx, const void * GGML_RESTRICT vy, size_t by, int nrc);
+ 
++void ggml_vec_dot_mxfp4_q8_0_batch(int n, float * s, const void * vx, const void * const * vy, int nvec);
++
+ #ifdef __cplusplus
+ }
+ #endif
+diff --git a/src/llama-context.cpp b/src/llama-context.cpp
+index 8e97cd06d..46e9ec825 100644
+--- a/src/llama-context.cpp
++++ b/src/llama-context.cpp
+@@ -2827,6 +2827,14 @@ bool llama_context::sched_copy_experts(ggml_backend_t backend, const ggml_tensor
+         st.ids = ids;
+     }
+ 
++    auto upload = [&](size_t offset, size_t size) {
++        if (lctx->moe_cache) {
++            lctx->moe_cache->upload(backend, src, dst, offset, size);
++        } else {
++            ggml_backend_tensor_set_async(backend, dst, (const uint8_t *) src->data + offset, offset, size);
++        }
++    };
++
+     // group consecutive experts and copy them together
+     for (int64_t first = 0; first < n_expert; ) {
+         if (!st.used[first]) {
+@@ -2847,7 +2855,7 @@ bool llama_context::sched_copy_experts(ggml_backend_t backend, const ggml_tensor
+                 continue;
+             }
+             if (next < e) {
+-                ggml_backend_tensor_set_async(backend, dst, (const uint8_t *) src->data + next*expert_size, next*expert_size, (e - next)*expert_size);
++                upload(next*expert_size, (e - next)*expert_size);
+             }
+             e   += n;
+             next = e;
+@@ -2858,7 +2866,7 @@ bool llama_context::sched_copy_experts(ggml_backend_t backend, const ggml_tensor
+         const size_t padding = last < n_expert - 1 ? std::min<size_t>(expert_size, 512) : 0;
+         const size_t size    = (last + 1 - next)*expert_size + padding;
+         if (size > 0) {
+-            ggml_backend_tensor_set_async(backend, dst, (const uint8_t *) src->data + offset, offset, size);
++            upload(offset, size);
+         }
+ 
+         first = last + 1;
+diff --git a/src/llama-moe-cache-upload.h b/src/llama-moe-cache-upload.h
+new file mode 100644
+index 000000000..ecb33a833
+--- /dev/null
++++ b/src/llama-moe-cache-upload.h
+@@ -0,0 +1,109 @@
++#pragma once
++
++#include "ggml-cpp.h"
++
++#include <algorithm>
++#include <array>
++#include <cstring>
++
++// Bounded pinned staging, following Project Maya's expert-transfer ring.
++class llama_moe_cache_upload {
++    struct slot {
++        ggml_backend_buffer_ptr buffer;
++        ggml_backend_event_ptr event;
++        bool pending = false;
++    };
++
++    ggml_backend_t backend;
++    std::array<slot, 2> slots;
++    size_t capacity = 0;
++    size_t next = 0;
++
++    static void wait(slot & s) {
++        if (s.pending) {
++            ggml_backend_event_synchronize(s.event.get());
++            s.pending = false;
++        }
++    }
++
++public:
++    explicit llama_moe_cache_upload(ggml_backend_t backend, size_t chunk_size = 8*1024*1024) : backend(backend) {
++        const auto dev = ggml_backend_get_device(backend);
++        if (!dev || chunk_size == 0) {
++            return;
++        }
++        ggml_backend_dev_props props;
++        ggml_backend_dev_get_props(dev, &props);
++        // UMA already shares the source memory; an extra host copy is unnecessary.
++        if (props.type != GGML_BACKEND_DEVICE_TYPE_GPU || !props.caps.async || !props.caps.host_buffer || !props.caps.events) {
++            return;
++        }
++        const auto buft = ggml_backend_dev_host_buffer_type(dev);
++        if (!buft || chunk_size > ggml_backend_buft_get_max_size(buft)) {
++            return;
++        }
++        for (auto & s : slots) {
++            s.buffer.reset(ggml_backend_buft_alloc_buffer(buft, chunk_size));
++            // Some backends silently fall back to pageable allocations.
++            if (!s.buffer || ggml_backend_buffer_get_type(s.buffer.get()) != buft) {
++                for (auto & allocated : slots) {
++                    allocated.buffer.reset();
++                    allocated.event.reset();
++                }
++                return;
++            }
++            s.event.reset(ggml_backend_event_new(dev));
++            if (!s.event) {
++                for (auto & allocated : slots) {
++                    allocated.buffer.reset();
++                    allocated.event.reset();
++                }
++                return;
++            }
++        }
++        capacity = chunk_size;
++    }
++
++    ~llama_moe_cache_upload() {
++        for (auto & s : slots) {
++            wait(s);
++        }
++    }
++
++    void set(ggml_tensor * dst, const void * data, size_t offset, size_t size) {
++        GGML_ASSERT(offset <= ggml_nbytes(dst) && size <= ggml_nbytes(dst) - offset);
++        if (!capacity) {
++            ggml_backend_tensor_set_async(backend, dst, data, offset, size);
++            return;
++        }
++        const auto * src = static_cast<const unsigned char *>(data);
++        while (size) {
++            auto & s = slots[next];
++            wait(s);
++            const size_t n = std::min(size, capacity);
++            void * staging = ggml_backend_buffer_get_base(s.buffer.get());
++            std::memcpy(staging, src, n);
++            ggml_backend_tensor_set_async(backend, dst, staging, offset, n);
++            ggml_backend_event_record(s.event.get(), backend);
++            s.pending = true;
++            next = (next + 1) % slots.size();
++            src += n;
++            offset += n;
++            size -= n;
++        }
++    }
++
++    size_t size() const {
++        size_t total = 0;
++        for (const auto & s : slots) {
++            if (s.buffer) {
++                total += ggml_backend_buffer_get_size(s.buffer.get());
++            }
++        }
++        return total;
++    }
++
++    ggml_backend_buffer_type_t buffer_type() const {
++        return capacity ? ggml_backend_buffer_get_type(slots[0].buffer.get()) : nullptr;
++    }
++};
+diff --git a/src/llama-moe-cache.cpp b/src/llama-moe-cache.cpp
+index 4d3596b24..9ec655e4d 100644
+--- a/src/llama-moe-cache.cpp
++++ b/src/llama-moe-cache.cpp
+@@ -1,4 +1,5 @@
+ #include "llama-moe-cache.h"
++#include "llama-moe-cache-upload.h"
+ 
+ #include "llama-impl.h"
+ #include "llama-model.h"
+@@ -6,6 +7,7 @@
+ #include "ggml-cpp.h"
+ 
+ #include <algorithm>
++#include <cstdlib>
+ #include <stdexcept>
+ #include <unordered_map>
+ #include <vector>
+@@ -196,6 +198,7 @@ struct llama_moe_cache::impl {
+         ggml_context_ptr ctx;
+         ggml_backend_buffer_ptr buf;
+         size_t buf_size = 0;
++        std::unique_ptr<llama_moe_cache_upload> upload;
+     };
+ 
+     // layers of the same device with the same expert tensor layout share the banks and the LRU of a group
+@@ -461,6 +464,18 @@ struct llama_moe_cache::impl {
+             }
+         }
+ 
++        const char * staging_env = std::getenv("LLAMA_MOE_CACHE_STAGING");
++        const bool staging = !staging_env || std::atoi(staging_env) != 0;
++        for (device & d : devices) {
++            if (d.buf_size) {
++                d.upload = std::make_unique<llama_moe_cache_upload>(d.backend, staging ? 8*1024*1024 : 0);
++                if (d.upload->size()) {
++                    LLAMA_LOG_INFO("%s: %s MoE upload staging = %.2f MiB of pinned host memory\n", __func__,
++                        ggml_backend_name(d.backend), d.upload->size()/1024.0/1024.0);
++                }
++            }
++        }
++
+         // as weights, the ops that read the banks run on the device and the slot maps are copied with the copy callback
+         for (device & d : devices) {
+             if (d.buf) {
+@@ -599,7 +614,7 @@ struct llama_moe_cache::impl {
+                 while (i + n < fills.size() && fills[i + n].expert == fills[i].expert + (int32_t) n && fills[i + n].slot == fills[i].slot + (int32_t) n) {
+                     n++;
+                 }
+-                ggml_backend_tensor_set_async(backend, bank, (const uint8_t *) w->data + fills[i].expert*expert_size, fills[i].slot*expert_size, n*expert_size);
++                upload(backend, w, bank, fills[i].expert*expert_size, fills[i].slot*expert_size, n*expert_size);
+                 bytes += n*expert_size;
+                 i += n;
+             }
+@@ -616,6 +631,22 @@ struct llama_moe_cache::impl {
+         return true;
+     }
+ 
++    void upload(ggml_backend_t backend, const ggml_tensor * src, ggml_tensor * dst,
++                size_t src_offset, size_t dst_offset, size_t size) {
++        GGML_ASSERT(src_offset <= ggml_nbytes(src) && size <= ggml_nbytes(src) - src_offset);
++        const void * data = (const uint8_t *) src->data + src_offset;
++        for (const auto & d : devices) {
++            if (d.backend == backend && d.upload) {
++                if (ggml_backend_buffer_get_type(src->buffer) != d.upload->buffer_type()) {
++                    d.upload->set(dst, data, dst_offset, size);
++                    return;
++                }
++                break;
++            }
++        }
++        ggml_backend_tensor_set_async(backend, dst, data, dst_offset, size);
++    }
++
+     void log_stats() const {
+         auto log = [](const char * name, const stats & st) {
+             const size_t n = st.hits + st.misses;
+@@ -659,6 +690,10 @@ int64_t llama_moe_cache::copy_experts(ggml_backend_t backend, const ggml_tensor
+     return pimpl->copy_experts(backend, w, dst, e, last);
+ }
+ 
++void llama_moe_cache::upload(ggml_backend_t backend, const ggml_tensor * src, ggml_tensor * dst, size_t offset, size_t size) {
++    pimpl->upload(backend, src, dst, offset, offset, size);
++}
++
+ std::map<ggml_backend_buffer_type_t, size_t> llama_moe_cache::memory_breakdown() const {
+     std::map<ggml_backend_buffer_type_t, size_t> res;
+     for (const auto & d : pimpl->devices) {
+@@ -666,6 +701,11 @@ std::map<ggml_backend_buffer_type_t, size_t> llama_moe_cache::memory_breakdown()
+             res[ggml_backend_buffer_get_type(d.buf.get())] += d.buf_size;
+         }
+     }
++    for (const auto & d : pimpl->devices) {
++        if (d.upload && d.upload->size()) {
++            res[d.upload->buffer_type()] += d.upload->size();
++        }
++    }
+     if (pimpl->buf_host) {
+         res[ggml_backend_buffer_get_type(pimpl->buf_host.get())] += pimpl->buf_host_size;
+     }
+diff --git a/src/llama-moe-cache.h b/src/llama-moe-cache.h
+index 9baf06390..0ea4f1bd2 100644
+--- a/src/llama-moe-cache.h
++++ b/src/llama-moe-cache.h
+@@ -32,6 +32,9 @@ public:
+     // returns the number of experts copied, 0 if expert e is not in the cache
+     int64_t copy_experts(ggml_backend_t backend, const ggml_tensor * w, ggml_tensor * dst, int64_t e, int64_t last);
+ 
++    // upload host experts through the device's staging ring when available
++    void upload(ggml_backend_t backend, const ggml_tensor * src, ggml_tensor * dst, size_t offset, size_t size);
++
+     std::map<ggml_backend_buffer_type_t, size_t> memory_breakdown() const;
+ 
+ private:
+diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
+index 763154972..efe075afa 100644
+--- a/tests/CMakeLists.txt
++++ b/tests/CMakeLists.txt
+@@ -330,6 +330,7 @@ if (NOT GGML_BACKEND_DL AND GGML_CPU)
+     # these tests use the backends directly and cannot be built with dynamic loading
+     llama_build_and_test(test-barrier.cpp  LABEL "main behavior"  LINK ggml)
+     llama_build_and_test(test-quantize-fns.cpp  LABEL "main behavior"  LINK ggml)
++    target_include_directories(test-quantize-fns PRIVATE ${PROJECT_SOURCE_DIR}/ggml/src)
+     llama_build_and_test(test-quantize-perf.cpp  LABEL "main behavior backend"  LINK ggml)
+     llama_build_and_test(test-rope.cpp  LABEL "main behavior backend"  LINK ggml)
+     llama_build_and_test(test-col2im-1d.cpp  LABEL "main behavior backend"  LINK ggml)
+diff --git a/tests/test-alloc.cpp b/tests/test-alloc.cpp
+index 45d9a3eda..1f03544b2 100644
+--- a/tests/test-alloc.cpp
++++ b/tests/test-alloc.cpp
+@@ -3,6 +3,8 @@
+ #include "ggml-cpp.h"
+ #include "../ggml/src/ggml-impl.h"
+ #include "ggml.h"
++#include "ggml-cpu.h"
++#include "../src/llama-moe-cache-upload.h"
+ 
+ #include <algorithm>
+ #include <memory>
+@@ -1099,6 +1101,116 @@ static void test_buft_get_alloc_size_n_does_not_allocate() {
+     GGML_ASSERT(x[1]->data == nullptr);
+ }
+ 
++// Delay copies until an event is waited on, exposing premature staging reuse.
++struct upload_test_backend {
++    struct copy { void * dst; const void * src; size_t size; };
++    struct allocation { upload_test_backend * owner; std::vector<unsigned char> bytes; };
++    ggml_backend backend = {};
++    ggml_backend_device device = {};
++    ggml_backend_buffer_type buft = {};
++    std::vector<copy> copies;
++    size_t completed = 0;
++    int allocations = 0;
++    int live = 0;
++    int fail_allocation = 0;
++    bool fail_event = false;
++    bool pageable = false;
++    bool events = true;
++    bool integrated = false;
++
++    upload_test_backend() {
++        backend.context = this;
++        backend.device = &device;
++        device.context = this;
++        buft.context = this;
++        buft.device = &device;
++        buft.iface.get_alignment = [](ggml_backend_buffer_type_t) { return size_t(32); };
++        buft.iface.alloc_buffer = [](ggml_backend_buffer_type_t bt, size_t size) -> ggml_backend_buffer_t {
++            auto & self = *static_cast<upload_test_backend *>(bt->context);
++            if (++self.allocations == self.fail_allocation) { return nullptr; }
++            if (self.pageable) { return ggml_backend_buft_alloc_buffer(ggml_backend_cpu_buffer_type(), size); }
++            auto * a = new allocation{&self, std::vector<unsigned char>(size)};
++            ++self.live;
++            ggml_backend_buffer_i iface = {};
++            iface.get_base = [](ggml_backend_buffer_t b) -> void * { return static_cast<allocation *>(b->context)->bytes.data(); };
++            iface.free_buffer = [](ggml_backend_buffer_t b) {
++                auto * a = static_cast<allocation *>(b->context);
++                --a->owner->live;
++                delete a;
++            };
++            return ggml_backend_buffer_init(bt, iface, a, size);
++        };
++        device.iface.get_props = [](ggml_backend_dev_t dev, ggml_backend_dev_props * p) {
++            auto & self = *static_cast<upload_test_backend *>(dev->context);
++            *p = {};
++            p->type = self.integrated ? GGML_BACKEND_DEVICE_TYPE_IGPU : GGML_BACKEND_DEVICE_TYPE_GPU;
++            p->caps.async = true;
++            p->caps.host_buffer = true;
++            p->caps.events = self.events;
++        };
++        device.iface.get_host_buffer_type = [](ggml_backend_dev_t dev) {
++            return &static_cast<upload_test_backend *>(dev->context)->buft;
++        };
++        device.iface.event_new = [](ggml_backend_dev_t dev) -> ggml_backend_event_t {
++            if (static_cast<upload_test_backend *>(dev->context)->fail_event) { return nullptr; }
++            return new ggml_backend_event{dev, new size_t(0)};
++        };
++        device.iface.event_free = [](ggml_backend_dev_t, ggml_backend_event_t e) {
++            delete static_cast<size_t *>(e->context);
++            delete e;
++        };
++        device.iface.event_synchronize = [](ggml_backend_dev_t dev, ggml_backend_event_t e) {
++            static_cast<upload_test_backend *>(dev->context)->complete(*static_cast<size_t *>(e->context));
++        };
++        backend.iface.event_record = [](ggml_backend_t b, ggml_backend_event_t e) {
++            *static_cast<size_t *>(e->context) = static_cast<upload_test_backend *>(b->context)->copies.size();
++        };
++        backend.iface.set_tensor_async = [](ggml_backend_t b, ggml_tensor * dst, const void * data, size_t offset, size_t size) {
++            static_cast<upload_test_backend *>(b->context)->copies.push_back({static_cast<char *>(dst->data) + offset, data, size});
++        };
++    }
++
++    void complete(size_t count) {
++        while (completed < count) {
++            const auto & c = copies[completed++];
++            std::memcpy(c.dst, c.src, c.size);
++        }
++    }
++};
++
++static void test_moe_upload_staging() {
++    for (int mode = 0; mode < 7; ++mode) {
++        upload_test_backend backend;
++        backend.fail_allocation = mode == 1 ? 1 : mode == 2 ? 2 : 0;
++        backend.fail_event = mode == 3;
++        backend.pageable = mode == 4;
++        backend.events = mode != 5;
++        backend.integrated = mode == 6;
++        ggml_context_ptr ctx(ggml_init({4096, nullptr, true}));
++        auto * dst = ggml_new_tensor_1d(ctx.get(), GGML_TYPE_I8, 256);
++        ggml_backend_buffer_ptr buffer(ggml_backend_alloc_ctx_tensors_from_buft(ctx.get(), ggml_backend_cpu_buffer_type()));
++        ggml_backend_buffer_clear(buffer.get(), 0xee);
++        std::vector<unsigned char> source(137);
++        for (size_t i = 0; i < source.size(); ++i) { source[i] = (unsigned char) i; }
++        {
++            llama_moe_cache_upload upload(&backend.backend, 16);
++            GGML_ASSERT((upload.size() != 0) == (mode == 0));
++            upload.set(dst, source.data(), 7, source.size());
++            upload.set(dst, source.data() + 3, 160, 19);
++            upload.set(dst, source.data(), 200, 0);
++        }
++        GGML_ASSERT(backend.live == 0);
++        if (mode == 0) { GGML_ASSERT(backend.completed == backend.copies.size()); }
++        backend.complete(backend.copies.size());
++        const auto * got = static_cast<unsigned char *>(dst->data);
++        for (size_t i = 0; i < 256; ++i) {
++            const unsigned char expected = i >= 7 && i < 144 ? source[i - 7] :
++                                           i >= 160 && i < 179 ? source[i - 160 + 3] : 0xee;
++            GGML_ASSERT(got[i] == expected);
++        }
++    }
++}
++
+ static void run(const char * name, void (*f)()) {
+     printf("%s ", name);
+     fflush(stdout);
+@@ -1107,6 +1219,7 @@ static void run(const char * name, void (*f)()) {
+ }
+ 
+ int main() {
++    run("test_moe_upload_staging", test_moe_upload_staging);
+     run("test_max_size_too_many_tensors", test_max_size_too_many_tensors);
+     run("test_max_size_tensor_too_large", test_max_size_tensor_too_large);
+     run("test_tensor_larger_than_max_size", test_tensor_larger_than_max_size);
+diff --git a/tests/test-backend-ops.cpp b/tests/test-backend-ops.cpp
+index e3b6e96a6..8771b048a 100644
+--- a/tests/test-backend-ops.cpp
++++ b/tests/test-backend-ops.cpp
+@@ -11380,6 +11380,15 @@ static std::vector<std::unique_ptr<test_case>> make_test_cases_eval() {
+         }
+     }
+ 
++    // Shared experts, partial token tiles, and odd MXFP4 block counts.
++    for (int n : {1, 2, 3, 4, 5, 9}) {
++        for (int k : {32, 96, 256}) {
++            for (bool broadcast : {false, true}) {
++                test_cases.emplace_back(new test_mul_mat_id(GGML_TYPE_MXFP4, GGML_TYPE_F32, 2, 2, broadcast, 17, n, k));
++            }
++        }
++    }
++
+     // gpt-oss issue with Vulkan mmq_id
+     test_cases.emplace_back(new test_mul_mat_id(GGML_TYPE_MXFP4, GGML_TYPE_F32, 32, 2, false, 2880, 32, 2880));
+     // more than 256 experts (hoisted row-id path): 512 as in Qwen3.8-Flash-Next,
+diff --git a/tests/test-quantize-fns.cpp b/tests/test-quantize-fns.cpp
+index 1930a09b2..d7a4fc44f 100644
+--- a/tests/test-quantize-fns.cpp
++++ b/tests/test-quantize-fns.cpp
+@@ -2,6 +2,9 @@
+ 
+ #include "ggml.h"
+ #include "ggml-cpu.h"
++#include "ggml-cpu/quants.h"
++
++#include <cstring>
+ 
+ #undef NDEBUG
+ #include <assert.h>
+@@ -279,6 +282,37 @@ static int test_quantize_imatrix_degenerate(bool verbose) {
+     return num_failed;
+ }
+ 
++static int test_mxfp4_batch() {
++    int failed = 0;
++    const auto * mx = ggml_get_type_traits_cpu(GGML_TYPE_MXFP4);
++    const auto * q8 = ggml_get_type_traits_cpu(GGML_TYPE_Q8_0);
++    for (int n : {32, 64, 96, 256, 512, 2880}) {
++        std::vector<float> data(n);
++        std::vector<uint8_t> weights(ggml_row_size(GGML_TYPE_MXFP4, n));
++        generate_data(0.7f, n, data.data());
++        mx->from_float(data.data(), weights.data(), n);
++        std::vector<uint8_t> activations[4];
++        const void * inputs[4];
++        float reference[4];
++        for (int j = 0; j < 4; ++j) {
++            generate_data(j + 1.3f, n, data.data());
++            activations[j].resize(ggml_row_size(GGML_TYPE_Q8_0, n));
++            q8->from_float(data.data(), activations[j].data(), n);
++            inputs[j] = activations[j].data();
++            mx->vec_dot(n, reference + j, 0, weights.data(), 0, inputs[j], 0, 1);
++        }
++        for (int nvec = 1; nvec <= 4; ++nvec) {
++            float result[4];
++            ggml_vec_dot_mxfp4_q8_0_batch(n, result, weights.data(), inputs, nvec);
++            if (std::memcmp(reference, result, nvec * sizeof(float)) != 0) {
++                fprintf(stderr, "MXFP4 batch differs from single dots: n=%d, nvec=%d\n", n, nvec);
++                ++failed;
++            }
++        }
++    }
++    return failed;
++}
++
+ int main(int argc, char * argv[]) {
+     bool verbose = false;
+ 
+@@ -298,6 +332,7 @@ int main(int argc, char * argv[]) {
+ 
+     int num_failed = 0;
+ 
++    num_failed += test_mxfp4_batch();
+     num_failed += test_vec_dot_f32(verbose);
+     num_failed += test_vec_dot_q(verbose);
+     num_failed += test_quantize_imatrix_degenerate(verbose);
+-- 
+2.54.0 (Apple Git-157)
+
