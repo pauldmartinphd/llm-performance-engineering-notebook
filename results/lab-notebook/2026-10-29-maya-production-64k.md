@@ -4,6 +4,8 @@
 
 The production configuration completed a **65,568-token prefill at 488.6 tokens/s with zero cache hits**, followed by decode at **24.4 tokens/s**. This extends the earlier successful short-prompt benchmark with stream priority disabled to the retained 64K request. I am carrying this configuration forward as the working baseline, without reopening the completed tuning sweeps or assuming that resuming the investigation requires reconfiguration.
 
+**October 30 follow-up:** The configuration below records the October 29 workaround run. I clarified that `DS4_STREAM_PRIO=0` was a bug workaround and is not used in the current production configuration. The [v1.1.41 benchmark and two uncached 32K/64K passes](2026-10-30-maya-v1141-benchmark.md) use `maya-ds4-production.json`; the historical workaround must not be carried forward as a tuning recommendation.
+
 ## Working production configuration
 
 | Component | Confirmed setting |
