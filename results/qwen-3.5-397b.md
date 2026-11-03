@@ -13,7 +13,7 @@ Qwen MTP does not arm on this export (`failed to create MTP context`; the cause 
 The sections below record earlier runs under their original conditions.
 
 **Model:** Qwen 3.5 397B.A17B, Q6_K_L — `qwen35moe` arch, 396.35 B params (≈17 B active), 319.21 GiB.
-**System:** Galactus (EPYC 7713, DDR4-2933 8-channel, 4 × Radeon Pro V620). Platform: [../hardware/galactus/README.md](../hardware/galactus/README.md); method: [methodology.md](methodology.md).
+**System:** Galactus (EPYC 7713, 8-channel DDR4, 4 × Radeon Pro V620). The memory ran at 2666 MT/s for the build 8671 runs and overclocked to 2933 MT/s for the April 10 re-run. Platform: [../hardware/galactus/README.md](../hardware/galactus/README.md); method: [methodology.md](methodology.md).
 **Builds:** `58190cc84 (8671)` and `0893f50f2 (8746)`. **Dates:** 2026-04-07 and 2026-04-10.
 **Raw log:** [benchmark capture](raw-logs/model-benchmark-logs/qwen-3.5-397b-raw.md).
 

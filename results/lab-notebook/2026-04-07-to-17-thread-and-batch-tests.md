@@ -4,6 +4,8 @@
 
 I tested how CPU thread count affected large MoE models whose routed experts exceeded GPU memory, then tried keeping some Qwen expert layers on the four V620s. The logs distinguish three variables that a single headline rate would conceal: CPU thread count, expert placement, and the amount of context already in the model. I cannot treat the fastest row from each configuration as a common benchmark.
 
+The memory ran at 2666 MT/s until April 10 and was overclocked to 2933 MT/s from the April 10 Qwen re-run, so the April 7–9 rows and the later rows differ in memory speed as well as configuration.
+
 ## Thread sweeps: more threads helped prefill but eventually hurt decode
 
 The captures identify four V620s with 30,704 MiB each. The early build reports `58190cc84 (8671)` and lists both ROCm and Vulkan backends; the later build reports `0893f50f2 (8746)` and ROCm. A backend list does not establish how much work each backend performed. Most of these sweeps use `pp512`, `tg128`, batch and microbatch 4096, Q8_0 attention caches, flash attention, and `nopo=1`. The full rows retain the settings, including expert-placement expressions.

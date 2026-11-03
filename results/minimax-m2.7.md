@@ -11,7 +11,7 @@ MiniMax was retired and removed from the machine on August 16. The April residen
 The sections below record earlier runs under their original conditions.
 
 **Model:** MiniMax M2.7, Unsloth UD-Q5_K_M — `minimax-m2` arch, 228.69 B params (≈10 B active), 157.23 GiB.
-**System:** Galactus (EPYC 7713, DDR4-2933 8-channel, 4 × Radeon Pro V620). Platform: [../hardware/galactus/README.md](../hardware/galactus/README.md); method: [methodology.md](methodology.md).
+**System:** Galactus (EPYC 7713, 8-channel DDR4 overclocked to 2933 MT/s, 4 × Radeon Pro V620). Platform: [../hardware/galactus/README.md](../hardware/galactus/README.md); method: [methodology.md](methodology.md).
 **Build:** `0893f50f2 (8746)`. **Date:** 2026-04-17.
 **Raw log:** [benchmark capture](raw-logs/model-benchmark-logs/minimax-m2.7-raw.md).
 

@@ -11,6 +11,10 @@ The original July transcripts still refer to sessions in their historical sequen
 - **March 23:** [Initial Galactus build](2026-03-23-galactus-build.md).
 - **April 7–17:** [Thread counts, resident experts, and Qwen batch/context tests](2026-04-07-to-17-thread-and-batch-tests.md). I recovered these captures on October 22; the original Qwen file modification time places that capture on April 7.
 
+## May: throughput predictions
+
+- **May 6 analysis, recorded November 2; no new benchmark:** [Throughput predictions for eight MoE models](2026-05-06-moe-throughput-predictions.md). A Claude-written report's speculation and offload model and predictions, separated from the April measurements it used and compared with later results.
+
 ## July: GLM-5.2 prefill and the scheduler patch
 
 - **July 13, evening:** [Background and plan](2026-07-13-background-and-plan.md).
