@@ -1,8 +1,12 @@
 # Results
 
-These notes collect the measurements, the best configuration I found for each model, and what I could conclude. Each note names the machine: Galactus for llama.cpp, llAMDa and Project Maya; Magneto for oMLX. For machine specifications, see [Hardware](../hardware/README.md). For the method behind the numbers, see [methodology.md](methodology.md). For what transfers to other systems, see [../takeaways/](../takeaways/).
+These notes collect the measurements, the best configuration I found for each model, and what I could conclude. Each note names the machine: Galactus for llama.cpp, llAMDa and Project Maya; Magneto for oMLX; SilverSurfer for Gufo. For machine specifications, see [Hardware](../hardware/README.md). For the method behind the numbers, see [methodology.md](methodology.md). For what transfers to other systems, see [../takeaways/](../takeaways/).
 
 For the fork's outcome, see [the llamda retrospective](lab-notebook/2026-10-29-llamda-experimental-fork-retrospective.md). I no longer present it as an established AMD performance improvement. The historical measurements remain part of the record.
+
+## November 2: Gufo on SilverSurfer
+
+[Qwen3.8-Flash-Next](qwen-3.8-flash-next.md) with Gufo 0.28.1 and MTP generated **318 tokens at 29.85 tokens/s on battery**, from a 63-token prompt. The later Jan attachment analysis reports **539–740 tokens/s prefill** through 54,781 tokens of total context; its source attachment is missing, so these rows remain summary-only. The [full notebook entry](lab-notebook/2026-11-02-silversurfer-gufo.md) records both evidence levels, memory-allocation failures and recovery, and prefix reuse. These are different-model, different-hardware observations from the Galactus results, not a controlled Gufo/Maya comparison.
 
 ## October 29: DeepSeek production prefill confirmation
 

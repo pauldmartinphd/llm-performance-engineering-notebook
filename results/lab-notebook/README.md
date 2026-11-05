@@ -67,6 +67,8 @@ The original July transcripts still refer to sessions in their historical sequen
 
 - **October 30:** [Maya v1.1.41 short benchmark and uncached 32K/64K production tests](2026-10-30-maya-v1141-benchmark.md). Two passes at each length, all with zero cache hits and 128 output tokens; 64K prefill 469.6 and 485.6 tokens/s. Retains both passes and clarifies that disabling stream priority was a historical bug workaround, not the current production setting.
 
-## November: model behavior and evaluation
+## November: SilverSurfer, serving, and model evaluation
+
+- **November 1–3; measured November 2, added November 5:** [Gufo on SilverSurfer, memory allocation, and Jan](2026-11-02-silversurfer-gufo.md). Qwen3.8-Flash-Next with MTP at 29.85 generated tokens/s on battery; longer Jan prefill at 539–740 tokens/s remains summary-only. Includes loading failures, gfx1151 confirmation, prefix-cache observations, and the Galactus proxy/tool fix.
 
 - **November 5 planning record; no experiments run:** [DeepSeek style optimization and optional refusal reduction with Heretic](2026-11-05-deepseek-style-and-heretic-plan.md). Four-model comparison, reasoning and factual-accuracy requirements, possible improvements or regressions, and unresolved compatibility work.
