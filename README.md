@@ -1,5 +1,9 @@
 # LLM Performance Engineering Notebook
 
+## November 5: Maya v1.1.54 prefill and peer transport
+
+The ten-variant four-V620 sweep measured **324.8 / 459.4 / 479.4 tokens/s at 8K / 32K / 64K** with defaults. Automatic chunk selection was slower; neither requested P2P path activated. A focused larger-reserve test then failed in the HIP startup probe with zero completed samples. The [experiment record](results/lab-notebook/2026-11-05-maya-v1154-prefill-and-peer-ar.md) retains the complete printed summary, 47 individual observations, the benchmark script, and the distinction between transport fallback and probe failure. No tested switch established a useful prefill improvement.
+
 ## November 2: Gufo on SilverSurfer
 
 SilverSurfer now has a retained inference result: **Qwen3.8-Flash-Next UD-Q4_K_XL with MTP generated 318 tokens at 29.85 tokens/s on battery**, using Gufo 0.28.1 on the Ryzen AI Max+ PRO 395. The [experiment record](results/lab-notebook/2026-11-02-silversurfer-gufo.md) covers the Aeon/Podman setup, loading failures and memory configuration, and a later Jan summary reporting 539–740 tokens/s prefill through 54,781 tokens of context. The direct timing JSON is retained; the Jan figures remain summary-only because the exported conversation omits the original attachment. No matched Gufo/Maya comparison was run.

@@ -1,5 +1,9 @@
 # DeepSeek-V4.1-Flash on Galactus
 
+## November 5: Maya v1.1.54 prefill sweep
+
+On the four-V620 configuration identified as UD-Q8_K_XL, the default measured **324.8 / 459.4 / 479.4 prefill tokens/s at 8K / 32K / 64K**. Ten variants completed two repetitions at each length. No switch established a useful improvement, and auto chunking was slower. Both requested peer transports fell back to host transport; a focused larger-reserve retest failed in the startup probe. The [full record](lab-notebook/2026-11-05-maya-v1154-prefill-and-peer-ar.md) preserves the measurement and activation limits, supplied script, and source evidence. These raw-token engine requests are not a matched comparison with the older saved HTTP requests.
+
 ## November 5: proposed style and refusal experiments
 
 I defined a [Heretic evaluation project](lab-notebook/2026-11-05-deepseek-style-and-heretic-plan.md) comparing the original, style-only, refusal-only, and combined models. The objective is to remove unwanted rhetorical prose while preserving technical depth and testing reasoning and factual accuracy directly. Unnecessary-refusal reduction is optional. No model was modified or benchmarked; compatibility with the exact checkpoint, ROCm workflow, and Maya export remains to be established.

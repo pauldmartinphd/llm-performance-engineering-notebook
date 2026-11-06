@@ -74,3 +74,5 @@ The original July transcripts still refer to sessions in their historical sequen
 - **November 1–3; measured November 2, added November 5:** [Gufo on SilverSurfer, memory allocation, and Jan](2026-11-02-silversurfer-gufo.md). Qwen3.8-Flash-Next with MTP at 29.85 generated tokens/s on battery; longer Jan prefill at 539–740 tokens/s remains summary-only. Includes loading failures, gfx1151 confirmation, prefix-cache observations, and the Galactus proxy/tool fix.
 
 - **November 5 planning record; no experiments run:** [DeepSeek style optimization and optional refusal reduction with Heretic](2026-11-05-deepseek-style-and-heretic-plan.md). Four-model comparison, reasoning and factual-accuracy requirements, possible improvements or regressions, and unresolved compatibility work.
+
+- **November 5; added November 6:** [Maya v1.1.54 prefill sweep and HIP peer all-reduce failure](2026-11-05-maya-v1154-prefill-and-peer-ar.md). Ten variants, 30 printed mean rows, and 47 retained individual measurements. Defaults reached 479.4 tokens/s at 64K; P2P retained host transport, and the larger-reserve retest failed before readiness.

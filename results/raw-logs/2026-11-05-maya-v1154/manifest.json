@@ -1,0 +1,14 @@
+{
+  "recorded": "2026-11-06",
+  "experiment_date": "2026-11-05",
+  "source_conversation": "ChatGPT-Fast Card Prefill Acceleration-20261106-1545.md",
+  "original_conversation_sha256": "b4bad1161caf237ecd0ef397908163e75bf896b36a746f2f3ed204bb531df9e3",
+  "archived_conversation_sha256": "a953d3b910dea110776349ebe8a37154839e7552f0ad4f5d6c4020852814af60",
+  "transformations": [
+    "Replaced 2 signed screenshot download URLs with attachment-omission markers; line numbering preserved."
+  ],
+  "script": "maya_benchmark_1154_fixed.py",
+  "script_sha256": "f3cd24b26cdba21dbe3fb266a5b1874a8b70e5d3dc5f88f6146edf03b2594d3d",
+  "unique_complete_prefill_records": 47,
+  "printed_summary_rows": 30
+}
