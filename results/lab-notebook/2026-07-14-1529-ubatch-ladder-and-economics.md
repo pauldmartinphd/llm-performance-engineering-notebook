@@ -2,27 +2,19 @@
 
 [All lab records](README.md) · [Related investigation: chapter 2](../../investigations/02-following-the-prefill-bottleneck.md)
 
-## Purpose and reasoning
+You increased the microbatch size to give GPU offload more work per weight transfer.
 
-Test whether larger effective microbatches let GPU expert offload repay its transfer cost. Use the result to assess the practical value of the GPUs for prompt processing.
+## Setup
 
-## Experimental design
-
-I kept the prompt at 8192 tokens and compared offload across microbatches from 512 to 8192. I used the CPU-expert path as a control and retained the separate hardware-cost discussion. The ladder runs while the interpretation develops, so interim explanations are preserved below.
+You kept the prompt at 8192 tokens and swept microbatches from 512 to 8192. The CPU-expert path was the control. The hardware-cost discussion is separate from the timing results.
 
 ## Results
 
 The completed ladder reached 25.90 tokens/s with offload at microbatch 512 and 104.97 at 8192. The CPU-expert control changed little, from 31.88 to 33.77. Increasing configured sizes in a different, longer-prompt workload did not produce another comparable gain.
 
-## Conclusions
-
-Large-batch offload was useful for the tested pp8192 workload. The finding does not mean that the largest possible setting always wins. It also does not establish a generation gain or make the hardware-cost discussion a controlled benchmark.
-
-## Detailed record
-
 ### 15:29 — Why these GPUs were bought
 
-While the v4 ladder ran, Paul restated his reasons for buying the GPUs: "entirely for the prefill, KV cache and attention layers/shared experts and to run small models in VRAM (e.g. like tiny vision model, maybe 27B fast coding model etc)" — at 2026 prices he knew he would never fit a large MoE in VRAM. The message cut off mid-thought at "And"; the analysis supported all four reasons for buying them.
+While the v4 ladder ran, you restated his reasons for buying the GPUs: "entirely for the prefill, KV cache and attention layers/shared experts and to run small models in VRAM (e.g. like tiny vision model, maybe 27B fast coding model etc)" — at 2026 prices he knew he would never fit a large MoE in VRAM. The message cut off mid-thought at "And"; the analysis supported all four reasons for buying them.
 
 1. **Prefill.** GPU prefill at 40 t/s vs the CPU's 20. The first ladder row proved the mechanism: 19.8 s per ubatch, 441 GB of experts moved, 22.3 GB/s — essentially line rate for PCIe 4.0 x16. The limit was in how work reached the card.
 2. **Attention + KV cache.** The `-ngl 0` run showed the difference: the CPU needs ~167 ms for the dense path (MLA projections, shared experts, output head); the GPUs do it in ~48 ms of actual reading. MLA compresses the KV cache to ~90 KB/token — 44 MiB at 512 context, well under 12 GiB at 128K — sitting in VRAM at 512 GB/s instead of DDR4 at 152 GB/s.
@@ -37,7 +29,7 @@ While the v4 ladder ran, Paul restated his reasons for buying the GPUs: "entirel
 
 ### 15:30 — The $9,050 build, itemized
 
-Paul supplied the remaining line items: "$600 for CPU, $600 for motherboard, $250 for case, $400 for PSU and $5600 for RAM." With the GPUs at $1,600 after tax and shipping, the build totals $9,050.
+You supplied the remaining line items: "$600 for CPU, $600 for motherboard, $250 for case, $400 for PSU and $5600 for RAM." With the GPUs at $1,600 after tax and shipping, the build totals $9,050.
 
 | component | cost | share |
 |---|---|---|
@@ -119,7 +111,7 @@ grep -E '^\| glm-dsa' "$D/MAIN.log"
 
 ### 15:36 — First two rows: 25.90 and 41.68; fitting a two-term model
 
-At 15:34:56 Paul pasted the log (`cat diag-v4-20260714-150115/MAIN.log | grep pp`). The dump also included earlier context: `=> tg128 = 6.01 t/s  pp512 = 40.11 t/s`; `tg 5.52 vs 5.53. pp 34.64 vs 34.65. The AVX2`; `-sm row` impossible ("device ROCm0 does not support split buffers"); `-sm tensor` not supported for glm-dsa; the annotated `return b; // <-- FIRST supporting backend. Always 0.` at ggml-backend.cpp:919-925; and the CPU_Mapped buffer sizes (46166.88 MiB, then 8× 46303.78 MiB, then 22067.47 MiB).
+At 15:34:56 you pasted the log (`cat diag-v4-20260714-150115/MAIN.log | grep pp`). The dump also included earlier context: `=> tg128 = 6.01 t/s  pp512 = 40.11 t/s`; `tg 5.52 vs 5.53. pp 34.64 vs 34.65. The AVX2`; `-sm row` impossible ("device ROCm0 does not support split buffers"); `-sm tensor` not supported for glm-dsa; the annotated `return b; // <-- FIRST supporting backend. Always 0.` at ggml-backend.cpp:919-925; and the CPU_Mapped buffer sizes (46166.88 MiB, then 8× 46303.78 MiB, then 22067.47 MiB).
 
 ```
 | glm-dsa ?B Q4_K - Medium       | 435.19 GiB |   753.86 B | ROCm       |  99 |    8192 |      512 |   1 | exps=CPU              |    0 |          pp8192 |         25.90 ± 0.36 |
@@ -163,7 +155,7 @@ Revised curve with asymptote:
 
 ### 15:38 — Row three: 62.64; marginal cost per token is falling
 
-Paul pasted the third row at 15:37:01.
+You pasted the third row at 15:37:01.
 
 ```
 | glm-dsa ?B Q4_K - Medium       | 435.19 GiB |   753.86 B | ROCm       |  99 |    8192 |     2048 |   1 | exps=CPU              |    0 |          pp8192 |         62.64 ± 0.13 |
@@ -217,7 +209,7 @@ pp @ ub 8192           ~105                    ~400
 
 ### 15:42 — "So how can I get all four cards to do this together" — the offending code and three options
 
-Paul asked the direct question at 15:41:51. The relevant code and three options followed.
+You asked the direct question at 15:41:51. The relevant code and three options followed.
 
 ```c
 // ggml/src/ggml-backend.cpp:916-929
@@ -277,7 +269,7 @@ Verification plan: `GGML_SCHED_DEBUG=1` — splits should cycle `ROCm0 … ROCm1
 
 ### 15:44 — Rows four and five: 84.62 and 104.97; the fitted model holds
 
-Paul pasted the final two rows at 15:44:33.
+You pasted the final two rows at 15:44:33.
 
 ```
 | glm-dsa ?B Q4_K - Medium       | 435.19 GiB |   753.86 B | ROCm       |  99 |    8192 |     4096 |   1 | exps=CPU              |    0 |          pp8192 |         84.62 ± 3.58 |
@@ -330,7 +322,7 @@ llama-server -m /models/GLM-5.2/UD-Q4_K_XL/GLM-5.2-UD-Q4_K_XL-00001-of-00011.ggu
 
 ### 15:52 — Decode checked again: 6.01 t/s; no further tuning planned
 
-Paul asked "And what is my token gen again?" The answer: 6.01 t/s, from Phase J, the fitter, at `-t 64`.
+You asked "And what is my token gen again?" The answer: 6.01 t/s, from Phase J, the fitter, at `-t 64`.
 
 | config | tg |
 |---|---|
@@ -514,7 +506,7 @@ watch -n1 'rocm-smi --showuse --showmemuse | grep -E "GPU\[|use"'
 
 ### 18:11 — "Before I do this, are you absolutely certain" — the uncertainty
 
-Paul asked for certainty before touching the server. The analysis could not justify that certainty. The diagnosis was supported, but the patch had not been verified.
+You asked for certainty before touching the server. The analysis could not justify that certainty. The diagnosis was supported, but the patch had not been verified.
 
 - **Proven (measured, five points, tight fit):** prefill cost `14.9 s + 7.72 ms × ub`; streaming at 93% of one x16 line rate; something serializes onto one card.
 - **Read from source, high confidence:** the `return b` loop picks backend 0; `MUL_MAT_ID` has `src[0]` = weight, `src[1]` = activations.
@@ -610,3 +602,7 @@ tail -20 /root/ot-placement-test.txt
 - The `-ot` placement test has been issued (tee to `/root/ot-placement-test.txt`); its output has not yet been seen — the file upload failed twice.
 
 ---
+
+## Conclusion
+
+Larger batches helped this prefill workload. That does not mean the largest setting always wins, or that generation became faster.

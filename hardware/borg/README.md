@@ -10,7 +10,7 @@ The CPU is an AMD Threadripper Pro 3995WX (Zen 2, 64C/128T, WRX80, 8-channel).
 
 The memory is 512 GB of DDR4 ECC RDIMM (8 channels, 2400 MT/s, Samsung).
 
-I have not measured the bandwidth. The theoretical 8-channel DDR4-2400 peak is 153.6 GB/s. At Galactus-like efficiency (81% of theoretical), that would give roughly 120 to 125 GB/s, about 20% below Galactus's 152 GB/s, with proportionally lower CPU-MoE decode expectations for the shared models. That estimate depends on a STREAM sweep (spread binding, RFO-corrected, per methodology §1) confirming the bandwidth.
+You have not measured the bandwidth. The theoretical 8-channel DDR4-2400 peak is 153.6 GB/s. At Galactus-like efficiency (81% of theoretical), that would give roughly 120 to 125 GB/s, about 20% below Galactus's 152 GB/s, with proportionally lower CPU-MoE decode expectations for the shared models. That estimate depends on a STREAM sweep (spread binding, RFO-corrected, per methodology §1) confirming the bandwidth.
 
 ## GPUs
 

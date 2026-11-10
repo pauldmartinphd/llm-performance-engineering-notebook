@@ -2,28 +2,19 @@
 
 The [chronological index](README.md) is the complete route through the records. The [investigation chapters](../../investigations/README.md) explain how the tests connect. The [project overview](../../README.md) describes the purpose and present setup.
 
-## What an experiment entry contains
+## Reading an experiment
 
-Each experimental account makes four parts explicit:
+Each entry describes what you tried, how you tested it, what happened, and what you learned. The setup names the settings, comparison, workload, and repeat count. The results keep successful runs, failures, and incomplete tests separate. The conclusion says what you kept or changed, and what remains unknown.
 
-1. **Purpose and reasoning:** what I was trying to establish, why it mattered, and the mechanism that made the test worth doing.
-2. **Experimental design:** the configuration, variable changed, comparator, workload, measurements, and repetitions. Missing controls are stated here or with their consequence.
-3. **Results:** what completed, what failed, and what was measured. A requested setting that did not activate is recorded as such.
-4. **Conclusions:** what the result supports, what it does not settle, and what decision followed.
+Commands and full tables stay with the experiment. Several settings can belong to one sweep; repeated samples do not become separate experiments. Later logs and measurements are included in the same account.
 
-These are statements about the work, not a questionnaire. I do not invent an expectation after seeing the result. Where the source records an expectation, the account can state it; where the work was an exploratory sweep or a descriptive benchmark, it is described that way.
-
-The full commands, tables, observations, and sources follow in the detailed record. A sweep can contain several related comparisons. Its account identifies those comparisons and keeps their outcomes separate; a repetition is a sample within the test, not automatically another experiment.
-
-Plans, source reviews, and deployment reports are identified by their actual type. They do not acquire invented methods or results just to look like experiments. A later source file is merged into the experiment it documents. Old filenames may remain as redirects, but they are not additional entries in the chronological index.
-
-Older July records preserve the original session sequence in their detailed bodies. An automated run could continue while I discussed partial output. The concise experimental account explains the whole test; the session sequence shows how the reasoning developed.
+Plans state what has not been tested. Old filenames sometimes redirect to a combined entry so earlier links still work. The older July entries also preserve the session sequence and quoted discussion, which show how your interpretation changed during the work.
 
 ## Dates and later corrections
 
-I organize experiments by when they ran, where that date is known. An entry may also give the date on which I recovered the log or wrote the account. Those are different events.
+You organize experiments by when they ran, where that date is known. An entry may also give the date on which you recovered the log or wrote the account. Those are different events.
 
-Some captures have only file-modification times. Some have no reliable run date. I label those limits rather than assign an invented time. Later evidence can complete a record without creating another experiment. If a later finding changes the interpretation, the entry and chapter explain that change.
+Some captures have only file-modification times. Some have no reliable run date. You label those limits rather than assign an invented time. Later evidence can complete a record without creating another experiment. If a later finding changes the interpretation, the entry and chapter explain that change.
 
 The [historical background and source ledger](../reference-notes/2026-07-notebook-background.md) preserve the original July hardware, model details, and compilation history. That hardware table describes the 1 TB system used in July. [Current hardware notes](../../hardware/README.md) also cover the later 2 TB population and other machines.
 
@@ -41,6 +32,6 @@ Weight quantization, KV-cache precision, and computation precision are also sepa
 
 A chapter links to the relevant lab records. A record links to its data, log, screenshot, or source note. Original captures keep their original wording and formatting. Their commands describe historical work; they are not instructions to rerun it now.
 
-I distinguish direct measurements from my reports of an operating state, summaries of missing attachments, external benchmark claims, and estimates. The important limit is stated with the result it affects. The raw evidence then supplies the detail needed to check that result.
+You distinguish direct measurements from your reports of an operating state, summaries of missing attachments, external benchmark claims, and estimates. The important limit is stated with the result it affects. The raw evidence then supplies the detail needed to check that result.
 
 For reproduction, use the [recorded methods and commands](../../REPRODUCE.md) together with the dated entry. A command from an older build may need different options on another release.

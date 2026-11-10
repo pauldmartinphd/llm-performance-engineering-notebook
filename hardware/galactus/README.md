@@ -1,6 +1,6 @@
 # Galactus — hardware
 
-Galactus is my lab server. It runs one Proxmox host, with all inference in a single LXC container.
+Galactus is your lab server. It runs one Proxmox host, with all inference in a single LXC container.
 
 | Component | Detail |
 |---|---|
@@ -61,7 +61,7 @@ This curve is a proposal to test, not a verified deployed configuration or a man
 
 ## Cost (July 2026)
 
-The original 1 TB build cost $9,050 in total (RAM $5,600 at $5.47/GB). The RAM is now 2 TB (8 × 256 GB DDR4-2933 3DS RDIMM) at $7,800 (about $3.81/GB), upgraded in August 2026. The four V620s cost $1,600 in total. At July 2026 street prices, DDR4 was about $5.15/GB and DDR5 about $30.94/GB. A DDR5 or Genoa machine would cost $16–21k for an estimated +46% decode. I evaluated that option and decided against it. The DDR5 evaluation is in the lab notebook: [Session 6](../../results/lab-notebook/2026-07-14-1529-ubatch-ladder-and-economics.md).
+The original 1 TB build cost $9,050 in total (RAM $5,600 at $5.47/GB). The RAM is now 2 TB (8 × 256 GB DDR4-2933 3DS RDIMM) at $7,800 (about $3.81/GB), upgraded in August 2026. The four V620s cost $1,600 in total. At July 2026 street prices, DDR4 was about $5.15/GB and DDR5 about $30.94/GB. A DDR5 or Genoa machine would cost $16–21k for an estimated +46% decode. You evaluated that option and decided against it. The DDR5 evaluation is in the lab notebook: [Session 6](../../results/lab-notebook/2026-07-14-1529-ubatch-ladder-and-economics.md).
 
 ## Models tested
 
@@ -73,6 +73,6 @@ The original 1 TB build cost $9,050 in total (RAM $5,600 at $5.47/GB). The RAM i
 
 ## Hardware monitoring during the July inference tests
 
-I retained the original vmstat, ROCm, memory, and CPU-frequency captures from the July 14 diagnostic runs. The v3 and v4 vmstat logs contain 1,175 and 1,758 samples respectively, with zero reported swap usage, swap traffic, I/O wait, and CPU steal in those samples. The v3 average CPU-frequency readings range from 2038 to 3100 MHz. These observations describe the sampled intervals on the 1 TB configuration; they do not establish a thermal limit or sustained per-core frequency.
+You kept the original vmstat, ROCm, memory, and CPU-frequency captures from the July 14 diagnostic runs. The v3 and v4 vmstat logs contain 1,175 and 1,758 samples respectively, with zero reported swap usage, swap traffic, you/O wait, and CPU steal in those samples. The v3 average CPU-frequency readings range from 2038 to 3100 MHz. These observations describe the sampled intervals on the 1 TB configuration; they do not show a thermal limit or sustained per-core frequency.
 
 [The July diagnostic reconstruction](../../results/lab-notebook/2026-07-14-diagnostic-reconstruction.md) connects those monitors to the microbatch and placement experiments, and the [archive inventory](../../results/raw-logs/2026-10-22-galactus-archive/README.md) links the complete original captures.

@@ -2,29 +2,21 @@
 
 [All lab records](README.md) · [Related investigation: chapter 4](../../investigations/04-from-the-fork-to-maya.md)
 
-## Purpose and reasoning
+You recorded GLM-Flash performance with an 80 GiB cache request.
 
-Document GLM-Flash performance with an 80 GiB requested expert cache and determine what evidence would establish whether that cache helps.
+## Setup
 
-## Experimental design
-
-I used the retained llamda-bench output for build 754aa4151: forced CPU expert placement, 32 threads, flash attention, batch/microbatch 8192, pp8192/tg256, two repetitions, and requested cache 81920 MiB. I kept that completed benchmark separate from proposed diagnostics and the untested larger-cache patch.
+The benchmark used build 754aa4151, CPU experts, 32 threads, pp8192/tg256, and two repetitions. No matched cache-off run or cache-hit breakdown was saved. The larger-cache patch was a proposal, not a tested change.
 
 ## Results
 
 The benchmark reports 279.51 ± 15.37 prefill and 8.63 ± 2.84 generation tokens/s. There is no matched cache-disabled control or captured cache-hit breakdown. The later access attempt did not produce another benchmark or validated patch.
 
-## Conclusions
-
-The configuration has a measured rate, but this record does not establish a cache benefit or a cause for its variable generation timing. Different earlier builds are not a substitute for the missing control. The proposed patch remains untested.
-
-## Detailed record
-
 **Added:** October 29, 2026. **Run dates:** not printed in the supplied benchmark captures. **Hardware:** four AMD Radeon Pro V620 GPUs, consistent with the Galactus configuration. **Source:** [Original benchmark captures](../raw-logs/2026-10-29-glm53-expert-cache/benchmark-captures.md), followed by the October 29 continuation in Work mode. The original conversation is `6adace95-5744-83e9-8348-9e84b6b03966`.
 
 ## Recorded measurement
 
-The completed run requested an 81,920 MiB (80 GiB) MoE expert cache and reported **279.51 ± 15.37 tokens/s for pp8192** and **8.63 ± 2.84 tokens/s for tg256**. It used two repetitions. I retain the ± values as printed; they are not confidence intervals. The reported generation dispersion is about 32.9% of the mean, so these two repetitions provide little evidence about sustained cache performance.
+The completed run requested an 81,920 MiB (80 GiB) MoE expert cache and reported **279.51 ± 15.37 tokens/s for pp8192** and **8.63 ± 2.84 tokens/s for tg256**. It used two repetitions. You retain the ± values as printed; they are not confidence intervals. The reported generation dispersion is about 32.9% of the mean, so these two repetitions provide little evidence about sustained cache performance.
 
 ```sh
 llamda-bench -m /models/GLM-5.3-Flash/UD-Q4_K_XL/GLM-5.3-Flash-UD-Q4_K_XL-00001-of-00006.gguf -ngl 99 -ot "exps=CPU" --moe-cache-mib 81920 -fa on -t 32 -b 8192 -ub 8192 -p 8192 -n 256 -r 2 -o md
@@ -48,7 +40,7 @@ llamda-bench -m /models/GLM-5.3-Flash/UD-Q4_K_XL/GLM-5.3-Flash-UD-Q4_K_XL-00001-
 
 An earlier command used the same arguments except `-n 128`. Its capture ended after device discovery and the table header. It contains no throughput measurement and cannot establish a regression. The initial question, “Why is this so much slower?”, therefore left open whether the observed problem was startup delay, prompt processing, generation, or some combination.
 
-The [October 22 build comparison](2026-10-22-glm53-build-comparison.md) supplies related results, but its revisions differ. It is not a cache-disabled control for `754aa4151`. Likewise, the [earlier placement and MTP tests](undated-glm53-flash-placement.md) and [Maya speculation tests](2026-10-23-maya-glm53-speculation.md) use different execution conditions. This record does not establish that the cache improved or degraded throughput.
+The [October 22 build comparison](2026-10-22-glm53-build-comparison.md) supplies related results, but its revisions differ. It is not a cache-disabled control for `754aa4151`. Likewise, the [earlier placement and MTP tests](undated-glm53-flash-placement.md) and [Maya speculation tests](2026-10-23-maya-glm53-speculation.md) use different execution conditions. This record does not show that the cache improved or degraded throughput.
 
 ## Prior implementation discussion: claims awaiting verification
 
@@ -63,7 +55,7 @@ if (n_tokens == 0 || n_tokens > max_batch ||
 
 One reply described this as bypassing the cached-expert execution path above 32 tokens; another said large batches bypass insertion but may still read cached experts. These descriptions may refer to different paths, but the source checkout was not inspected in the continuation, so their relationship remains unresolved. Neither description is a verified finding for build `754aa4151`.
 
-Other prior claims were that initialization allocates and clears GPU cache buffers, generation starts with a cold cache, and the implementation records hits, misses, and upload bytes. The suggested 20 GiB per GPU was an even-division estimate, not a measured allocation. The printed 80 GiB request does not establish actual occupancy, distribution, or hit rate. The earlier assistant also referred to regressions in other caching experiments; the retrieved citation markers do not provide usable URLs, so the assertion remains unverified and is not evidence for a regression in this run.
+Other prior claims were that initialization allocates and clears GPU cache buffers, generation starts with a cold cache, and the implementation records hits, misses, and upload bytes. The suggested 20 GiB per GPU was an even-division estimate, not a measured allocation. The printed 80 GiB request does not show actual occupancy, distribution, or hit rate. The earlier assistant also referred to regressions in other caching experiments; the retrieved citation markers do not provide usable URLs, so the assertion remains unverified and is not evidence for a regression in this run.
 
 Candidate explanations remain cache misses and PCIe transfers, ROCm synchronization or GPU execution overhead, cache initialization, and pressure on memory needed for compute buffers. None has been isolated. A hit rate by itself would not distinguish these costs; transfer and execution timing are also needed.
 
@@ -130,6 +122,10 @@ These are proposed checks, not completed experiments or confirmed defects.
 
 The original conversation included requests to switch to Codex and Work mode; the continuation explicitly carried forward the model, four V620s, 80 GiB cache, results, and `/root/llama.cpp` investigation. The assistant retrieved all five available prior turns, including the patch proposal and both benchmark captures. No attachments or older page were returned.
 
-The continuation ran locally on macOS in `/Users/pmartin/Documents/Codex/2026-10-29/referenced-chatgpt-conversation-this-is-an`. `/root/llama.cpp` did not exist there, and the app returned no saved projects. An SSH configuration query for `atlas.pauldmartin.net` resolved the configured user to `pmartin` and port to 22, but the subsequent connection attempt failed with `Could not resolve hostname atlas.pauldmartin.net: nodename nor servname provided, or not known`. This does not establish that Atlas hosts the intended checkout or GPUs, or that the remote machine itself is unavailable.
+The continuation ran locally on macOS in `/Users/pmartin/Documents/Codex/2026-10-29/referenced-chatgpt-conversation-this-is-an`. `/root/llama.cpp` did not exist there, and the app returned no saved projects. An SSH configuration query for `atlas.pauldmartin.net` resolved the configured user to `pmartin` and port to 22, but the subsequent connection attempt failed with `Could not resolve hostname atlas.pauldmartin.net: nodename nor servname provided, or not known`. This does not show that Atlas hosts the intended checkout or GPUs, or that the remote machine itself is unavailable.
 
 The investigation was interrupted before further access checks, source inspection, compilation, cache-statistics collection, or new benchmarks. No code was changed and no fix was validated. The next request was to preserve the conversation in this notebook; this entry records that handoff without treating earlier assistant recommendations as instructions to execute.
+
+## Conclusion
+
+The run gives you a rate for that configuration, but no measured cache benefit. The variable generation timing remains unexplained. Earlier builds cannot replace the missing control.

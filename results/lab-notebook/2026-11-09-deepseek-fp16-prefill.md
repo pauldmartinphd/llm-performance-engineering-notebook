@@ -2,27 +2,20 @@
 
 [All lab records](README.md) · [Related investigation: chapter 5](../../investigations/05-tuning-long-prompts.md)
 
-## Purpose and reasoning
+**Experiments: November 9, 2026.**
 
-Measure whether the RDNA 2 FP16-output path speeds DeepSeek dense prefill operations. Keeping those outputs in FP16 before widening to FP32 can change both kernel speed and rounding.
+You tested the faster RDNA 2 FP16-output path for DeepSeek prefill.
 
-## Experimental design
+## Setup
 
-I enabled MAYA_DS4_PROMPT_F16 and its nonfinite check on the two-GPU v1.1.57 setup. I used TP2, 32K chunks, an 800 MiB ring, 1024 MiB reserve, and 128 output tokens. Two starts provide four observations per length. I compared the earlier v1.1.54 baseline separately from the intervening same-version run that requested TP4 but actually used TP2.
+You enabled MAYA_DS4_PROMPT_F16 and its nonfinite check on two GPUs. Two starts gave four samples per length, with TP2, 32K chunks, an 800 MiB ring, and 128 output tokens. The same-version control came from the TP4-request run that actually used TP2.
 
 ## Results
 
 Optimized prefill medians were 389.55, 501.95, and 589.70 tokens/s at 8K, 16K, and 32K. They were about 23.4%, 26.9%, and 29.6% above the same-version TP2 fallback observations. Logs identify the FP16-output path and zero nonfinite outputs.
 
-## Conclusions
 
-The observed timing gain supports the faster path, with an imperfect control and no interleaved requested-TP2 A/B. Zero nonfinite outputs checks overflow, not answer quality. The test does not establish numerical equivalence, optimized 64K performance, or a million-token result. Q8 model weights were unchanged.
-
-## Detailed record
-
-**Experiments: November 9, 2026.**
-
-I enabled `MAYA_DS4_PROMPT_F16=1` with `MAYA_DS4_PROMPT_F16_CHECK=1` on DeepSeek TP2. The dense prompt projections produce FP16 output and widen it to FP32, taking a faster RDNA 2 path while changing rounding. This is a prefill computation setting, separate from DeepSeek's Q8 model weights and its attention-cache representation.
+You enabled `MAYA_DS4_PROMPT_F16=1` with `MAYA_DS4_PROMPT_F16_CHECK=1` on DeepSeek TP2. The dense prompt projections produce FP16 output and widen it to FP32, taking a faster RDNA 2 path while changing rounding. This is a prefill computation setting, separate from DeepSeek's Q8 model weights and its attention-cache representation.
 
 ## Configuration and comparison limits
 
@@ -48,12 +41,16 @@ The improvement is substantial within the captured workloads. It is not a twofol
 
 The conversation quotes community PR #869's different-host evidence: approximately 18% faster 2K and 29% faster 8K prefill, mean KL 0.0257, 91.2% top-1 agreement, and perplexity 16.773 versus 16.874 on its specified short corpus. These are the contributor's measurements, not local Galactus quality results. The copied PR text is retained in the terminal-evidence file; its assertions are historical source claims.
 
-Zero nonfinite outputs checks overflow, not semantic accuracy, perplexity, or equality with the baseline. The FP16-output route changes rounding, so the timing gain does not establish quality equivalence. Both local logs also report prompt skipping; the [baseline entry](2026-11-09-deepseek-tp2-and-tp4.md#prompt-skip-diagnostics) explains why that message alone does not establish use of the excluded aggressive mode. No local held-out quality comparison was supplied.
+Zero nonfinite outputs checks overflow, not semantic accuracy, perplexity, or equality with the baseline. The FP16-output route changes rounding, so the timing gain does not show quality equivalence. Both local logs also report prompt skipping; the [baseline entry](2026-11-09-deepseek-tp2-and-tp4.md#prompt-skip-diagnostics) explains why that message alone does not show use of the excluded aggressive mode. No local held-out quality comparison was supplied.
 
 ## Configuration decision
 
-I requested two production profiles, one with this prefill route and one without, keeping TP2 on GPUs 0 and 1. The archive retains `maya-ds4-tp2-fp16.json` and `maya-ds4-tp2-baseline.json`; the final production-named copies are requested in the conversation but absent from the collection. The [deployment record](2026-11-10-maya-dual-model-production.md) distinguishes those retained settings from the later reported operating state.
+You requested two production profiles, one with this prefill route and one without, keeping TP2 on GPUs 0 and 1. The archive retains `maya-ds4-tp2-fp16.json` and `maya-ds4-tp2-baseline.json`; the final production-named copies are requested in the conversation but absent from the collection. The [deployment record](2026-11-10-maya-dual-model-production.md) distinguishes those recorded settings from the later reported operating state.
 
-## Sources and recording dates
+## Sources
 
-**Added:** November 10, 2026 (America/New_York). **Sources:** the supplied November 10 Maya archive and conversation exports; [source ledger and retained evidence](../raw-logs/2026-11-10-maya-collection/README.md). Historical commands describe the experiments; this documentation update ran no inference tests.
+**Added:** November 10, 2026 (America/New_York). **Sources:** the supplied November 10 Maya archive and conversation exports; [source ledger and retained evidence](../raw-logs/2026-11-10-maya-collection/README.md).
+
+## Conclusion
+
+The path was faster in these samples, but the control was imperfect. Zero nonfinite outputs checks overflow, not answer quality. There was no local quality comparison or optimized 64K test. The weights stayed Q8.

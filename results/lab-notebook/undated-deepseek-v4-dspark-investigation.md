@@ -2,23 +2,15 @@
 
 [All lab records](README.md) · [Related investigation: chapter 3](../../investigations/03-making-speculation-useful.md)
 
-## Purpose and reasoning
+You tried DSpark draft lengths and confidence settings after the July patch work.
 
-Investigate DSpark settings and preserve the interval between the July patch work and the August common benchmark. Drafting was intended to reduce the cost of sequential target-model generation.
+## Setup
 
-## Experimental design
-
-I compared the hand-collected DeepSeek-V4-Flash-0731 draft-length and confidence-threshold results, and recorded the attempted terminal-capture method. I kept hardware changes, uncompleted plans, and the later common-build checks separate. Exact run times and some acceptance counters were not retained.
+The notes combine hand-collected timings, capture attempts, and configuration changes. Some run times and acceptance counts are missing. Later tests repeated speculation on a common build.
 
 ## Results
 
 The compiled record reports useful DSpark generation results, including an initial 14.7 tokens/s observation, but also contains a conflicting confidence-threshold row and failed timing capture. The later common-build tests record 14.1 ± 0.7 tokens/s for DeepSeek speculation.
-
-## Conclusions
-
-The early observations justified a cleaner repeated test; they did not establish every setting comparison. The unresolved row stays unresolved. The later common-build result is the stronger reference, while the original measurements and capture failure remain part of this record.
-
-## Detailed record
 
 *Later results: [the 2 TB STREAM rebaseline](2026-08-15-stream-rebaseline-2tb.md) completed the memory rebaseline, and [the August common baseline](2026-08-15-to-16-common-baseline-2tb.md) repeated speculative decode on a common build. The table below remains provisional, with the p-min conflict unresolved. The description of 14.7 t/s as the fastest result on any model overlooks the April MiniMax resident-offload result of 17.37 t/s.*
 
@@ -147,3 +139,7 @@ The baseline without speculation was measured twice during the session: **10.3**
 ## Original logs added October 22, 2026
 
 The October archive supplies four V4-Flash-0731 server logs with explicit draft acceptance counts, including n-max 5 runs at 11.35 and 12.22 t/s. [the speculation and rebenchmark records](2026-08-15-to-16-common-baseline-2tb.md#individual-runs-and-benchmark-file-checks) records all four and separates them from the August CLI runs and later V4.1 tests.
+
+## Conclusion
+
+The early runs made a cleaner test worthwhile. One conflicting row remains unresolved. Use the later common-build result as the stronger reference, without discarding the earlier observations.

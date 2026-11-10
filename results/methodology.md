@@ -1,6 +1,6 @@
-# How I measure local inference
+# How you measure local inference
 
-A useful benchmark answers a specific question. I separate the work of reading a prompt from the work of generating an answer, record what the engine actually ran, and keep the conditions beside the result. This lets a later reader tell whether two numbers describe a real comparison.
+A useful benchmark answers a specific question. You separate the work of reading a prompt from the work of generating an answer, record what the engine actually ran, and keep the conditions beside the result. This lets a later reader tell whether two numbers describe a real comparison.
 
 The [lab notebook](lab-notebook/README.md) contains the experiments. The [chapters](../investigations/README.md) explain the decisions. This page defines the terms and checks used to interpret them.
 
@@ -15,7 +15,7 @@ The [lab notebook](lab-notebook/README.md) contains the experiments. The [chapte
 | Aggregate rate | Total output across requests | Does not establish each user's latency |
 | Configured context | The maximum history the setup permits | Is not evidence that a prompt of that length ran |
 
-For bespoke short CLI prompts, I report generation throughput only. Prefill comparisons use dedicated tests with an explicit prompt length.
+For bespoke short CLI prompts, you report generation throughput only. Prefill comparisons use dedicated tests with an explicit prompt length.
 
 A token is a piece of text, often a word fragment, word, or punctuation. `pp8192` labels an 8192-token prefill test; `tg128` labels a 128-token generation test. Chat wrappers and model tokenizers can change the actual count, so target lengths and observed counts are recorded separately.
 
@@ -27,33 +27,31 @@ A **weight quantization** such as Q4 or Q8 changes how model weights are stored.
 
 A **batch** groups work so the engine can reuse weights and run larger matrix operations. A **microbatch** is a smaller execution group within it. A Maya prompt **chunk** is another engine-specific grouping and is not interchangeable with every llama.cpp batch control. **Workspace** is temporary memory used during computation.
 
-**Tensor parallelism**, or TP, divides calculations across devices. Layer partitioning assigns different parts of the model to different devices. Both can use several GPUs, but they do not create the same execution schedule. I record the observed layout rather than infer it from a requested flag.
+**Tensor parallelism**, or TP, divides calculations across devices. Layer partitioning assigns different parts of the model to different devices. Both can use several GPUs, but they do not create the same execution schedule. You record the observed layout rather than infer it from a requested flag.
 
 ## The comparison loop
 
-I start with a question and a baseline, then change the setting intended to answer it. Before interpreting the rate, I check that the requested path activated. If the engine silently changes a batch, chunk, or parallel layout, the row describes the effective setting.
+You start with a question and a baseline, then change the setting intended to answer it. Before interpreting the rate, you check that the requested path activated. If the engine silently changes a batch, chunk, or parallel layout, the row describes the effective setting.
 
-I keep individual repetitions and any closing baseline. A small difference is less persuasive when the same setup varies by more than that difference. Where a test changes several things at once, I describe the combined result and leave their separate effects unresolved.
+You keep individual repetitions and any closing baseline. A small difference is less persuasive when the same setup varies by more than that difference. Where a test changes several things at once, you describe the combined result and leave their separate effects unresolved.
 
-I also keep distinct outcomes distinct. Loading successfully is not a throughput result. A failed startup is not a slow completed run. An inactive option is not a benchmark of that feature. A speed test without an accuracy evaluation does not establish quality equivalence.
+You also keep distinct outcomes distinct. Loading successfully is not a throughput result. A failed startup is not a slow completed run. An inactive option is not a benchmark of that feature. A speed test without an accuracy evaluation does not show quality equivalence.
 
 ## Fresh prompts and reused state
 
-A repeated long request may reuse nearly its whole prompt. The engine then processes only a small suffix. I do not compare that suffix rate with a fresh full-prompt rate. The November 2 Maya matrix illustrates this directly: repeated long requests sometimes processed only one new token.
+A repeated long request may reuse nearly its whole prompt. The engine then processes only a small suffix. You do not compare that suffix rate with a fresh full-prompt rate. The November 2 Maya matrix illustrates this directly: repeated long requests sometimes processed only one new token.
 
 Some historical runners excluded any cached row; others allowed a small amount of reuse. Each entry states its rule. A printed `ok` status means the runner's checks passed, not that an independent audit proved zero reuse or numerical accuracy.
 
-## Make the experimental account explicit
+## Write down the test clearly
 
-Each experiment entry states its purpose and reasoning, experimental design, results, and conclusions before the detailed record. This is the scientific method expressed as an account of the work, rather than a set of literal questions.
+State what you tried and why. Describe the setup and the comparison, then give the results and conclusion. Keep the observation separate from its explanation: a faster run is a result; the reason it was faster may still be unknown.
 
-The purpose explains the tested mechanism where it is documented. The design identifies what changed and what serves as the control. The results report observations without turning them into explanations. The conclusions then connect those observations to the original purpose and state the remaining uncertainty.
-
-Exploratory sweeps and baseline measurements need not have a directional prediction. If the source does not preserve one, I do not create one retrospectively. Several measurements can answer one experimental purpose, while a failed startup may leave that purpose unresolved.
+For a baseline or an exploratory sweep, say what you measured. There is no need to invent an earlier prediction. A failed startup may leave the intended comparison unfinished.
 
 ## What belongs with a result
 
-A useful record identifies the model/export, machine, engine revision, effective configuration, workload, cache state, repetitions, metric, and source. Where the source lacks one of these, I state the resulting limit on the comparison rather than fill the gap from a filename or a later configuration.
+A useful record identifies the model/export, machine, engine revision, effective configuration, workload, cache state, repetitions, metric, and source. Where the source lacks one of these, you state the resulting limit on the comparison rather than fill the gap from a filename or a later configuration.
 
 Reported spreads retain their original meaning. Printed llama-bench deviations and spreads from two CLI runs are not automatically confidence intervals. Different prompts, versions, quantizations, and memory populations remain separate comparisons.
 
@@ -119,7 +117,7 @@ Record these dependencies with the configuration, especially when a requested va
 
 ## 5. Measurement hygiene
 
-I encountered several tool behaviors that complicated the measurements:
+You encountered several tool behaviors that complicated the measurements:
 
 - The `-p N` option clamps `n_ubatch` to N. Set `-ub` explicitly, use a sufficiently large `-p`, and verify the effective micro-batch size.
 - In the tested builds, llama-cli required terminal-aware capture: piping it through `tee` breaks its terminal display, and `--log-file` drops the timing lines. Capture with `script -q`, or read the JSON timings from `llama-server`.
@@ -141,6 +139,6 @@ Record the failures as well. The [negative-results table](../takeaways/refuted-h
 
 ## Worked example: the scheduler patch
 
-The baseline was GLM-5.2 prefill at 104.97 t/s (ub 8192). The split histogram exposed the placement problem: it showed 731 of 1,186 GPU splits on one card (ROCm0), concentrating the expert offload there. I tested distributing the offload across all four GPUs. Before the run, the prediction was a null result: distribution alone would not help, because the expert copies were already asynchronous, and only a per-split synchronize, needed to read the routing ids, serialized them. The run confirmed that prediction: 105.71 versus 104.97 t/s, no change. The combined patch also skipped the ids read at prefill-sized batches. It treated all experts as used and copied their weights without waiting for the routing ids, removing that synchronization. The result was 119.36 t/s, a gain of 13.7%, and the histogram equalized to 285/300/294/292. See [the patch note](../patches/prefill/README.md).
+The baseline was GLM-5.2 prefill at 104.97 t/s (ub 8192). The split histogram exposed the placement problem: it showed 731 of 1,186 GPU splits on one card (ROCm0), concentrating the expert offload there. You tested distributing the offload across all four GPUs. Before the run, the prediction was a null result: distribution alone would not help, because the expert copies were already asynchronous, and only a per-split synchronize, needed to read the routing ids, serialized them. The run confirmed that prediction: 105.71 versus 104.97 t/s, no change. The combined patch also skipped the ids read at prefill-sized batches. It treated all experts as used and copied their weights without waiting for the routing ids, removing that synchronization. The result was 119.36 t/s, a gain of 13.7%, and the histogram equalized to 285/300/294/292. See [the patch note](../patches/prefill/README.md).
 
 The distribution-only result mattered because it separated a placement change from a throughput change. The combined patch provided the measured improvement; its behavior on the later common build and other models remains to be tested.

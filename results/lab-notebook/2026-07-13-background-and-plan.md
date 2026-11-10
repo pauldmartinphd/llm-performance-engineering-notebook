@@ -2,14 +2,12 @@
 
 [All lab records](README.md) · [Related investigation: chapter 2](../../investigations/02-following-the-prefill-bottleneck.md)
 
-**Record type:** Background and experimental plan; no local tests in this entry.
 
-
-*Conversation "Applying concepts to Galactus with GLM5.2", opened 7/13/2026 22:43. This session covers background, architecture, sizing, and the initial plan. I had not run any commands on Galactus yet. The figures come from the pasted source material or from estimates, labeled below.*
+*Conversation "Applying concepts to Galactus with GLM5.2", opened 7/13/2026 22:43. This session covers background, architecture, sizing, and the initial plan. You had not run any commands on Galactus yet. The figures come from the pasted source material or from estimates, labeled below.*
 
 ### 22:43 — Opening question and source material: the tensor-offload post
 
-I started with an approximately one-year-old r/LocalLLaMA post — "Don't Offload GGUF Layers, Offload Tensors! 200%+ Gen Speed? Yes Please!!!" by skatardude10 — and asked: "Explain to me what this is talking about and how I can apply it to Galactus for a model like GLM5.2 (us the unsloth Q4_XL version of this model as your example)". The results in this section come from that post. I had not measured them on Galactus.
+You started with an approximately one-year-old r/LocalLLaMA post — "Don't Offload GGUF Layers, Offload Tensors! 200%+ Gen Speed? Yes Please!!!" by skatardude10 — and asked: "Explain to me what this is talking about and how I can apply it to Galactus for a model like GLM5.2 (us the unsloth Q4_XL version of this model as your example)". The results in this section come from that post. You had not measured them on Galactus.
 
 **The post's central claim.** A QwQ merge at IQ4_M went from 3.95 t/s (59 of 65 layers on GPU) to 10.61 t/s (all 65/65 layers on GPU) by restricting selected FFN tensors to CPU — at the same VRAM use; the OP was inspired by a post running Qwen3 235B on a single 3060 12GB at 6 t/s. The technique is only relevant when VRAM forces some layers onto CPU; if the model already fits on GPU there is nothing to gain. Mechanism claimed: a layer contains attention tensors (small, GPU-heavy, benefit from parallelization) and FFN tensors (very large, basic matmuls that a CPU can handle); `--overridetensors` (koboldcpp) / `-ot` (llama.cpp) pins individual tensors to CPU by regex.
 
@@ -120,7 +118,7 @@ thkitchenscientist (T5810, 14-core, 96GB RAM, RTX2060 12GB; ~10.5GB VRAM occupie
 
 - `-ngl` places whole blocks, but the tensors within a block do not all benefit equally from VRAM. Regex placement can keep every layer's attention on GPU while moving only the large FFN weights to CPU.
 - The claimed gains span 0% (thkitchenscientist) to ~170% (the OP's dense-model case). The counter-examples and PCIe cost suggest that the starting configuration matters a lot.
-- I wanted to know how much of this applies to Galactus running GLM-5.2 under `--cpu-moe`.
+- you wanted to know how much of this applies to Galactus running GLM-5.2 under `--cpu-moe`.
 
 ### 22:54 — Research pass: GLM-5.2 architecture, llama.cpp offload semantics, sizing, and the plan
 
@@ -238,7 +236,7 @@ Re-sweep threads as well. The 64-thread optimum came from Qwen3.5-397B-A17B; GLM
 - **Correction (of the post's framing):** the 200%+ headline came from a dense model with whole blocks evicted to CPU; that regime does not exist on Galactus, which already runs `--cpu-moe`. "Not 200%. Anyone promising that number is describing a different starting point than yours."
 - The post's insight is a year old and already absorbed into llama.cpp (`--cpu-moe`/`-cmoe`, `--n-cpu-moe`, the default-on `--fit` auto-fitter). The remaining opportunity is the ~90 GB of Galactus's 122 GB VRAM left idle by `--cpu-moe`.
 - Two structural consequences: blk.78 costs nothing (TENSOR_SKIP; expect `model has unused tensor ... -- ignoring` in the load log); the shared expert stays on GPU automatically (`ffn_*_shexp` does not match `_exps` regexes). A broad `-ot "ffn_.*=CPU"` would sweep the shared expert and router onto CPU and cost real throughput, since those fire on every token.
-- **Hypothesis:** My measured DeepSeek-V4-Flash tg (7.16 t/s) sits below the ~14.7 t/s bandwidth ceiling computed for this class of workload, so something besides expert-weight traffic is also limiting throughput.
+- **Hypothesis:** your measured DeepSeek-V4-Flash tg (7.16 t/s) sits below the ~14.7 t/s bandwidth ceiling computed for this class of workload, so something besides expert-weight traffic is also limiting throughput.
 - **Prediction:** prefill ~57 tokens/s for a 2048-token batch on CPU ("aligns with the DeepSeek-V4-Flash numbers"); decode CPU-side ceiling ~14.7 tokens/s at the assumed ~160 GB/s.
 - **Prediction:** ~14–16 of 75 MoE layers fit in VRAM; moving 16 layers cuts per-token CPU expert bytes ~21% → ~1.27× on the CPU-bound portion; realistically a 15–25% uplift, i.e. ~1.2–1.3× on tg, similar or slightly better on pp.
 - **Decision:** `-ncmoe` by itself is not usable on this 4-GPU box (would OOM GPU3 at ~85 GiB). Plan: (1) fitter first via `llama-fit-params`; (2) manual per-device `-ot` placement as fallback, starting at 3 expert layers per card and walking up; (3) `llama-bench` sweeps of `-ncmoe`/`-ot`/threads.

@@ -2,29 +2,21 @@
 
 [All lab records](README.md) · [Related investigation: chapter 1](../../investigations/01-establishing-a-baseline.md)
 
-## Purpose and reasoning
+You measured GLM-5.2 and memory bandwidth before changing the runtime.
 
-Establish a GLM-5.2 baseline and compare it with the memory system's sustained bandwidth. This separates a hardware traffic limit from extra time spent in routing, arithmetic, transfers, and synchronization.
+## Setup
 
-## Experimental design
-
-I ran the recorded five-repetition llama-bench baseline in the container, with CPU-resident experts, pp512/tg128, and the stated build. I inspected placement and topology, then measured STREAM on the host and compared host/container behavior. I checked the effective workload rather than relying only on requested batch flags.
+You ran five baseline repetitions with CPU-resident experts, pp512/tg128, and the stated build. You checked topology and placement, then ran STREAM on the host and compared host and container behavior.
 
 ## Results
 
 The initial benchmark measured 37.63 ± 3.69 prefill and 5.15 ± 0.40 generation tokens/s. Corrected STREAM measurements established a July reference near 152 GB/s. The requested 4096 microbatch did not make the 512-token prompt a large-batch test.
 
-## Conclusions
-
-The measured memory reference was useful, but bandwidth divided by estimated weight traffic did not account for all token time. The short prompt also left the intended large-batch offload regime untested. Later tests needed to check both execution costs and effective batch size.
-
-## Detailed record
-
 *Executed 07:00–08:46. Work begins at the `root@openwebui` container prompt (where llama.cpp and the model live) and moves to the bare-metal host `root@galactus` at 08:04. llama.cpp build f84a51940 (9942), backends ROCm,ZenDNN; model at `/models/GLM-5.2/UD-Q4_K_XL/GLM-5.2-UD-Q4_K_XL-00001-of-00011.gguf` (11 shards).*
 
 ### 07:00 — First llama-bench baseline from the openwebui container
 
-I ran the first GLM-5.2 benchmark and asked for three things: (1) explain what each flag does, (2) propose flag changes to improve performance, (3) list new flags in llama.cpp master that could further improve performance. Command as run (including the failed `nice`):
+You ran the first GLM-5.2 benchmark and asked for three things: (1) explain what each flag does, (2) propose flag changes to improve performance, (3) list new flags in llama.cpp master that could further improve performance. Command as run (including the failed `nice`):
 
 ```bash
 root@openwebui:~# nice -n -15 numactl --physcpubind=0-63 llama-bench   -m /models/GLM-5.2/UD-Q4_K_XL/GLM-5.2-UD-Q4_K_XL-00001-of-00011.gguf   -ngl 99   -nopo 1   -mmp 0   -t 64   -b 4096   -ub 4096   -fa 1   -ot "exps=CPU"   -p 512   -n 128   -r 5
@@ -137,7 +129,7 @@ Run each with `-v` once; confirm from `load_tensors:` whether experts landed in 
 
 ### 07:44 — Config B is flat; enabling op_offload crashes with a ROCm abort
 
-I ran two of the proposed configurations. Run 1 (Config B — repack attempt):
+You ran two of the proposed configurations. Run 1 (Config B — repack attempt):
 
 ```bash
 root@openwebui:~# numactl --physcpubind=0-63 llama-bench   -m /models/GLM-5.2/UD-Q4_K_XL/GLM-5.2-UD-Q4_K_XL-00001-of-00011.gguf   -ngl 99   -mmp 0   -t 64   -b 4096   -ub 4096   -fa 1   -ot "exps=CPU" -nopo 1 --no-host 1
@@ -183,7 +175,7 @@ Uptime: 1041.934304 s
 Aborted
 ```
 
-I also asked: "Can we track progress too by the way".
+You also asked: "Can we track progress too by the way".
 
 **Observations**
 
@@ -270,7 +262,7 @@ Storage: 435 GiB in ~1000 s ≈ 430 MB/s. "If that is babel over the network, co
 
 ### 07:53 — NUMA topology check: a single node
 
-I ran the first check:
+You ran the first check:
 
 ```bash
 root@openwebui:~# numactl --hardware
@@ -298,7 +290,7 @@ node     0
 
 The single-node topology ruled out NUMA misplacement. That hypothesis was wrong, and this ended the NUMA investigation.
 
-**Correction (explicit):** "I said 140–160 GB/s was 'achievable' on this platform. That figure is a STREAM extrapolation, not a measurement of llama.cpp's quantized MoE kernel, and I presented it with more confidence than it deserved." Cross-check: my DeepSeek-V4-Flash baseline (13B active, MXFP4 experts, 7.16 t/s → roughly 38–42 GB/s expert-weight traffic) versus GLM-5.2's 63–70 GB/s — both far below STREAM on the same box. "A gather-heavy quantized GEMV with 75 CPU fork/join cycles per token does not behave like a triad benchmark." Open question: is decode limited by DRAM bandwidth or by the kernel? The next step depends on which limit applies.
+**Correction (explicit):** "I said 140–160 GB/s was 'achievable' on this platform. That figure is a STREAM extrapolation, not a measurement of llama.cpp's quantized MoE kernel, and I presented it with more confidence than it deserved." Cross-check: your DeepSeek-V4-Flash baseline (13B active, MXFP4 experts, 7.16 t/s → roughly 38–42 GB/s expert-weight traffic) versus GLM-5.2's 63–70 GB/s — both far below STREAM on the same box. "A gather-heavy quantized GEMV with 75 CPU fork/join cycles per token does not behave like a triad benchmark." Open question: is decode limited by DRAM bandwidth or by the kernel? The next step depends on which limit applies.
 
 "The decisive experiment, and it is free" (`-t` does not force a reload):
 
@@ -359,7 +351,7 @@ Storage advice repeated: 435 GiB in ~1000 s ≈ 430 MB/s — "If /models is on b
 
 ### 07:57 — lscpu: Zen3 confirmed — AVX2 and FMA, no AVX-512
 
-I ran the topology check:
+You ran the topology check:
 
 ```bash
 root@openwebui:~# lscpu | grep -iE 'numa|thread|core|socket'
@@ -460,11 +452,11 @@ lspci -vv -s <bdf> | grep -E 'LnkCap|LnkSta'
 
 ### 08:00 — Decision: VRAM filling deferred; hugepages question raised
 
-I changed the priorities: "Check other things like hugepages or something? And let's not optimize for the idle VRAM until we figure out the throughput issue."
+You changed the priorities: "Check other things like hugepages or something? And let's not optimize for the idle VRAM until we figure out the throughput issue."
 
 **Observations**
 
-- **Decision:** I postponed VRAM filling until decode throughput was understood.
+- **Decision:** you postponed VRAM filling until decode throughput was understood.
 - The next question was whether transparent hugepages could help.
 
 ### 08:03 — THP finding, STREAM recipe, and the firmware/power checklist
@@ -561,7 +553,7 @@ Order of operations: (1) dmidecode + STREAM ("Do not skip this" — it decides w
 
 ### 08:04 — STREAM thread sweep on the bare-metal host: first results
 
-The prompt changed from `root@openwebui:~#` to `root@galactus:~/STREAM#` — I was now on the host, with the binary built as `./stream_c`. I launched a full thread sweep:
+The prompt changed from `root@openwebui:~#` to `root@galactus:~/STREAM#` — you were now on the host, with the binary built as `./stream_c`. You launched a full thread sweep:
 
 ```bash
 for t in 16 24 32 40 48 56 64 80 96 112 128; do   echo "===== THREADS=$t =====";   OMP_NUM_THREADS=$t OMP_PROC_BIND=spread OMP_PLACES=cores ./stream_c |     awk -v t="$t" '/Copy:|Scale:|Add:|Triad:/{print "Threads=" t, $0}';   echo; done | tee stream_sweep.log
@@ -590,7 +582,7 @@ Results pasted so far (t=16 and t=24 only):
 
 ### 08:05 — DIMM population captured with dmidecode
 
-While discussing STREAM, I saved the DIMM inventory from the 08:03 checklist on the host:
+While discussing STREAM, you saved the DIMM inventory from the 08:03 checklist on the host:
 
 ```bash
 dmidecode -t memory | grep -E 'Locator|^\s+Size|Configured Memory Speed|^\s+Speed|Rank' | grep -v 'No Module'
@@ -705,7 +697,7 @@ The purpose of the `-t`/`--poll` grid and turbostat readings was stated as follo
 
 ### 08:07 — Full STREAM thread sweep, 16–128 threads
 
-I pasted the completed sweep from `root@galactus:~/STREAM#` (same command as at 08:04):
+You pasted the completed sweep from `root@galactus:~/STREAM#` (same command as at 08:04):
 
 ```bash
 for t in 16 24 32 40 48 56 64 80 96 112 128; do   echo "===== THREADS=$t =====";   OMP_NUM_THREADS=$t OMP_PROC_BIND=spread OMP_PLACES=cores ./stream_c |     awk -v t="$t" '/Copy:|Scale:|Add:|Triad:/{print "Threads=" t, $0}';   echo; done | tee stream_sweep.log
@@ -827,7 +819,7 @@ Row split noted: under `-sm layer` only one card is live at a time → the dense
 
 ### 08:10 — SMT topology check: sibling pair 0,64
 
-I ran the remaining CPU enumeration check on the host:
+You ran the remaining CPU enumeration check on the host:
 
 ```bash
 cat /sys/devices/system/cpu/cpu0/topology/thread_siblings_list   # want "0,64"
@@ -893,7 +885,7 @@ Supporting overhead arithmetic from the analysis: a spin barrier costs 1–3 µs
 
 ### 08:13 — Kernel tuning applied on the host; request for an all-day diagnostic script
 
-I had just applied these settings on the host:
+You had just applied these settings on the host:
 
 ```bash
 echo always      > /sys/kernel/mm/transparent_hugepage/enabled
@@ -903,7 +895,7 @@ cpupower idle-set -D 0        # disable C-states deeper than C0
 
 *File artifact:* `galactus_kernel_tuning.txt` (saved 08:11:58 ET) — the THP and C-state commands.
 
-I was leaving the house for the day and wanted one script to save the system context and benchmark results for later analysis. The output might be fed to a different LLM ("like a newer version of you"), so the script must log all system context (NUMA info and the like) and contain all context itself; it can run many llama-bench commands testing different flags; "This will run all day."
+You were leaving the house for the day and wanted one script to save the system context and benchmark results for later analysis. The output might be fed to a different LLM ("like a newer version of you"), so the script must log all system context (NUMA info and the like) and contain all context itself; it can run many llama-bench commands testing different flags; "This will run all day."
 
 **Observations**
 
@@ -918,7 +910,7 @@ The mask/thread cartesian-product problem: masks need at least as many set bits 
 
 Phase structure derives from `equal_mparams` in the source (reload forced only by `-m`, `-ngl`, `-ncmoe`, `-sm`, `-ot`, `-mmp`, …); noted that `-fitt` (fit_params_target) is missing from the `equal_mparams` list — a possible upstream bug/oversight.
 
-The v1 phase plan: Phase 0 inventory (no model load), then B-phases of exactly one load each — CPU-only baseline sweep, CCD masks CPU-only, hybrid sweep, hybrid CCD masks, op_offload ubatch ladder (risky, isolated), `--no-host` variant, mmap comparison, `-sm row`, THP A/B (two loads, madvise versus always, run last, restore setting), VRAM fitter, depth test — ~11–13 loads ≈ 3 h of loads + ~2.5 h of bench ≈ 5.5–6 h. Prewarming the page cache via `cat`/`dd` was rejected (takes as long as a load); instead Phase 0 logs memory stats and measures raw read speed with direct I/O. `-v` runs only on the first invocation of each distinct model configuration; background monitors sample GPU memory, clocks, and resources every few seconds to CSVs. A bad parameter expansion in the `cap()` helper was fixed. The script was syntax-checked and made executable.
+The v1 phase plan: Phase 0 inventory (no model load), then B-phases of exactly one load each — CPU-only baseline sweep, CCD masks CPU-only, hybrid sweep, hybrid CCD masks, op_offload ubatch ladder (risky, isolated), `--no-host` variant, mmap comparison, `-sm row`, THP A/B (two loads, madvise versus always, run last, restore setting), VRAM fitter, depth test — ~11–13 loads ≈ 3 h of loads + ~2.5 h of bench ≈ 5.5–6 h. Prewarming the page cache via `cat`/`dd` was rejected (takes as long as a load); instead Phase 0 logs memory stats and measures raw read speed with direct you/O. `-v` runs only on the first invocation of each distinct model configuration; background monitors sample GPU memory, clocks, and resources every few seconds to CSVs. A bad parameter expansion in the `cap()` helper was fixed. The script was syntax-checked and made executable.
 
 Run instructions:
 
@@ -944,7 +936,7 @@ Failure handling: `set -uo pipefail` but deliberately not `-e`; every phase wrap
 
 ### 08:27 — Deadline removal requested
 
-I asked: "Can you remove the deadline entirely. I am going to let it run overnight if need be"
+You asked: "Can you remove the deadline entirely. I am going to let it run overnight if need be"
 
 **Observations**
 
@@ -970,7 +962,7 @@ The log's briefing is self-contained: the machine, the GLM-5.2 architecture with
 
 ### 08:40 — STREAM missing inside the container
 
-I asked: "Oh, I don't have STREAM inside the container. Give me instructions to download and build it"
+You asked: "Oh, I don't have STREAM inside the container. Give me instructions to download and build it"
 
 **Observations**
 
@@ -994,7 +986,7 @@ gcc -O3 -march=native -fopenmp -mcmodel=medium \
     stream.c -o stream_c
 ```
 
-Non-optional flags: `-mcmodel=medium` — the STREAM arrays are `static`; at 1e9 doubles that is 8 GB each, 24 GB total, past the 2 GB small-code-model limit; without it the link fails with `relocation truncated to fit: R_X86_64_PC32`. `-DSTREAM_ARRAY_SIZE=1000000000` — derived from my output: Copy reported 151831.4 MB/s at 0.105380 s best time = 16,000 MB moved; Copy touches 2 arrays × 8 B × N → N = 1e9; the same value keeps the container run comparable to the host. `-O3` — makes GCC turn the Copy loop into memcpy with NT stores (the source of the RFO artifact); keep applying the ×1.5 / ×1.333 corrections. Verify:
+Non-optional flags: `-mcmodel=medium` — the STREAM arrays are `static`; at 1e9 doubles that is 8 GB each, 24 GB total, past the 2 GB small-code-model limit; without it the link fails with `relocation truncated to fit: R_X86_64_PC32`. `-DSTREAM_ARRAY_SIZE=1000000000` — derived from your output: Copy reported 151831.4 MB/s at 0.105380 s best time = 16,000 MB moved; Copy touches 2 arrays × 8 B × N → N = 1e9; the same value keeps the container run comparable to the host. `-O3` — makes GCC turn the Copy loop into memcpy with NT stores (the source of the RFO artifact); keep applying the ×1.5 / ×1.333 corrections. Verify:
 
 ```bash
 OMP_NUM_THREADS=16 OMP_PROC_BIND=spread OMP_PLACES=cores ./stream_c
@@ -1050,7 +1042,7 @@ then concatenate the two MAIN.log files (host run: dmidecode, dmesg, turbostat, 
 
 ### 08:44 — Container STREAM run and cgroup checks
 
-I built and ran STREAM inside the container:
+You built and ran STREAM inside the container:
 
 ```bash
 gcc -O3 -march=native -fopenmp -mcmodel=medium \
@@ -1126,7 +1118,7 @@ nohup ./galactus-diag.sh > /root/container-console.txt 2>&1 &
 
 ### 08:46 — Output locations and live monitoring
 
-I launched the script and asked: "I'm running the script. Where will the output go?" Answer — two locations, one per run, both timestamped:
+You launched the script and asked: "I'm running the script. Where will the output go?" Answer — two locations, one per run, both timestamped:
 
 ```
 /root/diag-YYYYMMDD-HHMMSS/
@@ -1177,7 +1169,7 @@ Either MAIN.log stands alone (self-contained briefing), but both are wanted: the
 **Observations**
 
 - The v2 battery is now running: `MODE=all` (default) in the container, with the `MODE=host SKIP_STREAM=1` companion prescribed on the host.
-- Session 2 ends with the diagnostic script running unattended while I was out for the day.
+- Session 2 ends with the diagnostic script running unattended while you were out for the day.
 
 **State of knowledge at end of session**
 
@@ -1185,7 +1177,11 @@ Either MAIN.log stands alone (self-contained briefing), but both are wanted: the
 - Platform characterized: EPYC 7713 Zen3, 64C/128T, single socket, NPS1 (node 0: 1019408 MB), SMT pairs (i, i+64) confirmed; AVX2+FMA only (no AVX-512/VNNI); 8 CCDs at ~50 GB/s GMI2 read each, so ≥3–4 CCDs are needed to saturate DRAM.
 - Memory ceiling measured, not assumed: STREAM with RFO correction converges on ~150 GB/s on the host and 152 GB/s in the container (73% of the 187.7 GB/s theoretical); bandwidth saturates at 16 spread threads (16→64 −4%, 16→128 −6%); container throttling is ruled out (cgroups: `cpu.max = max 100000`, `cpuset.cpus.effective = 0-127`, `memory.max = max`).
 - The decode budget: 201 ms/token actual versus ~126–128 ms ideal (CPU experts 13.9 GB @ 152 GB/s ≈ 91–93 ms; GPU dense ~13.3 GB ≈ 33–35 ms) → ~73–75 ms/token unaccounted (~36%); prefill is separately CPU-compute-bound at 1.69 TFLOP/s.
-- Corrected sizing: experts ≈ 4.92 bpw → 5.53 GiB per MoE layer, ~415 GiB resident; non-expert only ~13 GiB; ~107 GiB VRAM idle (17–18 expert layers would fit) — I deferred filling VRAM until throughput was understood.
+- Corrected sizing: experts ≈ 4.92 bpw → 5.53 GiB per MoE layer, ~415 GiB resident; non-expert only ~13 GiB; ~107 GiB VRAM idle (17–18 expert layers would fit) — you deferred filling VRAM until throughput was understood.
 - Ruled out this session: NUMA misplacement, container throttling, HIP-graphs-off, ZenDNN as a factor (inert for 256-expert Q4_K), `GGML_CUDA_REGISTER_HOST` (dead code), `-sm tensor` (unsupported for glm-dsa), and MTP self-speculation (blk.78 TENSOR_SKIP).
 - Leading open hypotheses, mapped to experiments: hybrid-split overhead (75 fork/joins, ~150 device boundaries, ~375 barriers, ~2,000 kernel launches per token) → the `-ngl 0` versus hybrid comparison, predicted ~5.5 t/s pure-CPU; CCD/fabric placement → the 16-spread versus 16-packed `-C` mask pair; clock throttling → turbostat on the host; op_offload OOM → the ascending ubatch ladder plus unified-memory escape hatch.
 - Host kernel state: THP `always` + `defer+madvise`, C-states below C0 disabled (08:11–08:13); galactus-diag.sh v2 (Phase 0 inventory + fourteen benchmark phases B0–B12, one 17-minute model load each, no deadline, 6-hour per-phase hang guard, MODE=all|host|bench) launched in the container at ~08:46, with the host companion run prescribed.
+
+## Conclusion
+
+The memory measurement gave you a reference, but it did not explain all generation time. The 512-token prompt also left the intended large-batch offload path untested.

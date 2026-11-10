@@ -2,27 +2,19 @@
 
 [All lab records](README.md) · [Related investigation: chapter 2](../../investigations/02-following-the-prefill-bottleneck.md)
 
-## Purpose and reasoning
+You traced expert offload across the four GPUs and tried to spread the work.
 
-Test whether the expert-offload work is concentrated on one GPU and whether distributing it changes throughput. A more even split is an intermediate observation; the useful outcome is a faster completed prompt.
+## Setup
 
-## Experimental design
-
-I inspected scheduler traces and effective allocations, then tried the recorded tensor/device placements and distribution change. I retained loading and context-allocation failures separately. I compared split counts with measured throughput; the trace capture times are file-write times, not independently logged run starts.
+You inspected scheduler traces and allocations, tested placements, and compared split counts with throughput. Some placements failed before inference. The trace timestamps are file-write times.
 
 ## Results
 
 The original trace placed 731 of 1186 splits on ROCm0. Distribution spread the work more evenly, but distribution alone later measured 105.71 versus 104.97 tokens/s, with little practical gain. Some manual placements did not reach inference.
 
-## Conclusions
-
-The placement problem was real, but balancing the trace did not remove the main delay. The next test had to examine the routing-index synchronization as well. The incorporated split-count table is evidence for this placement experiment, not a separate test.
-
-## Detailed record
-
 ### 18:13 — newtest.txt named; first read of an incomplete log
 
-Paul pointed at the log by name ("Okay, its newtest.txt") before the file itself arrived. The available capture showed the run had not finished — the log stopped mid-load at `blk.78` skip messages, with no result row, no `load_tensors:` buffer summary, no error, no exit marker. Two findings from the partial capture:
+You pointed at the log by name ("Okay, its newtest.txt") before the file itself arrived. The available capture showed the run had not finished — the log stopped mid-load at `blk.78` skip messages, with no result row, no `load_tensors:` buffer summary, no error, no exit marker. Two findings from the partial capture:
 
 1. The `-ot` rules were accepted verbatim:
 
@@ -359,7 +351,7 @@ The earlier `--showtopo` output showed `Link Type: PCIE, Hops: 2` for the pairs;
 
 ### 18:27 — P2P capability: all twelve directions YES
 
-Paul reported "2 warnings generated when compiling for host," then:
+You reported "2 warnings generated when compiling for host," then:
 
 ```
 GPU0->GPU1: YES
@@ -622,7 +614,7 @@ grep '## SPLIT' /root/sched_full.txt | grep -oE 'ROCm[0-9]|CPU' | sort | uniq -c
 
 ### 19:09 — Partial grep results: name fragments, and the ROCm_Host finding
 
-After a stray keystroke ("v"), Paul pasted partial results. The first grep showed tensor lines:
+After a stray keystroke ("v"), you pasted partial results. The first grep showed tensor lines:
 
 ```
 tensor blk.3.ffn_gate_exps.weight (1728 MiB q4_K) buffer type overridden to ROCm_Host
@@ -757,7 +749,7 @@ llama-bench \
 
 ### 19:23 — A counter-analysis arrives
 
-Paul pasted a detailed technical review from a separate analysis session (referred to below as the pasted review). Its claims, condensed:
+You pasted a detailed technical review from a separate analysis session (referred to below as the pasted review). Its claims, condensed:
 
 - The patch is aimed at the right place, will compile, and should equalize the split histogram — but will not deliver 15 s → 4–5 s streaming, because that assumes four links transfer in parallel and the confirmed blocking copy path prevents it. `cpy_tensor_async` in the CUDA/HIP backend returns false unless both backends are GPU, so every expert-weight transfer goes through the synchronous fallback in `ggml_backend_sched_compute_splits`, blocking the single scheduler thread. The loop is sequential: copies to ROCm1 and ROCm2 cannot overlap regardless of destination. Round-robin alternates the destination link; it does not aggregate them. Streaming stays ~22 GB/s and ~15 s total.
 - What the patch does buy: the fallback synchronizes the destination backend before copying — today each weight copy waits for ROCm0 to finish the previous expert GEMM. With targets spread, the destination is idle, so copy l+1 overlaps GEMM l. The GEMMs remain a sequential chain across layers (layer l+1 depends on layer l through attention), so four cards do not parallelize compute for a single ubatch either.
@@ -860,7 +852,7 @@ The two scheduler captures make the placement change visible:
 | ROCm2 | 175 | 294 |
 | ROCm3 | 147 | 292 |
 
-The GPU split totals differ slightly because the scheduler partitions the graphs differently. These counts describe graph splits, not bytes transferred or time spent on each GPU. They establish that I spread the offloaded work much more evenly.
+The GPU split totals differ slightly because the scheduler partitions the graphs differently. These counts describe graph splits, not bytes transferred or time spent on each GPU. They establish that you spread the offloaded work much more evenly.
 
 The pp512 rows, however, report **28.59 ± 0.00 t/s before and 28.50 ± 0.00 after**. Redistributing this workload did not improve its throughput. The allocation records show the cost: the original trace reserves roughly 4260 MiB on ROCm0 but only 205, 205, and 339 MiB on the other GPUs; the distributed trace reserves roughly 4260, 4260, 3852, and 3852 MiB. Using more GPUs required more scratch space without producing a gain in this small-prompt test.
 
@@ -869,4 +861,8 @@ These traces complement the later [pp8192 patch experiment](2026-07-21-prefill-p
 
 ### Source dates
 
-**Capture date:** July 14, 2026, inferred from the original files' modification times. **Added:** October 22, 2026. I recovered the timestamps on October 23: `sched_full.txt` was last written at 19:07:54 EDT and `sched_patched.txt` at 19:58:26 EDT. These are file-write times, not run-start times. [Timestamp evidence](../raw-logs/2026-10-22-galactus-archive/source-timestamps.md).
+**Capture date:** July 14, 2026, inferred from the original files' modification times. **Added:** October 22, 2026. You recovered the timestamps on October 23: `sched_full.txt` was last written at 19:07:54 EDT and `sched_patched.txt` at 19:58:26 EDT. These are file-write times, not run-start times. [Timestamp evidence](../raw-logs/2026-10-22-galactus-archive/source-timestamps.md).
+
+## Conclusion
+
+Spreading the work changed placement but barely changed speed. The next step was to test the routing-index wait. The split counts below belong to this same investigation.

@@ -2,27 +2,19 @@
 
 [All lab records](README.md) · [Related investigation: chapter 7](../../investigations/07-other-local-machines.md)
 
-## Purpose and reasoning
+You brought Flash-Next up on SilverSurfer and measured a successful request on battery.
 
-Bring Qwen3.8-Flash-Next up on SilverSurfer and test whether the shared-memory laptop can serve it usefully on battery. Diagnose file access and memory allocation as separate obstacles.
+## Setup
 
-## Experimental design
-
-I launched Gufo 0.28.1 in the recorded Podman setup, with Q4 weights, the MTP predictor, one session, and a 262144-token configured ceiling. I checked memory readbacks through the failed and successful starts, then retained the direct API timing event. I kept the later Jan attachment-summary figures separate from the direct result.
+Gufo 0.28.1 ran in Podman with Q4 weights, MTP, one session, and a 262144-token ceiling. You checked memory through failed and successful loads. The direct API timing and later Jan summaries have different source support.
 
 ## Results
 
 The first attempts failed at file access and then allocation. A later launch loaded in about 25 seconds. The retained on-battery event generated 318 tokens at 29.85 tokens/s after a 63-token prompt. Later reported Jan prefill rates of 539–740 tokens/s lack their original attachment.
 
-## Conclusions
-
-The laptop successfully hosted the tested model and request beyond the initial firmware-reserved GPU slice. Several memory settings changed and the final BIOS value was not recorded, so one change cannot be credited alone. The short request did not test the context ceiling or establish a matched comparison with Maya.
-
-## Detailed record
-
 **Experiments:** November 2, 2026, with setup on November 1 and follow-up on November 3. **Added:** November 5. **Machine:** SilverSurfer, HP ZBook Ultra G1a, Ryzen AI Max+ PRO 395, 128 GB unified memory, openSUSE Aeon. **Source:** [source ledger and selected technical evidence](../raw-logs/2026-11-02-silversurfer-gufo/README.md).
 
-I brought Gufo 0.28.1 up on SilverSurfer with Qwen3.8-Flash-Next UD-Q4_K_XL and its shared Q8_0 MTP predictor. The first retained completion generated **318 tokens at 29.85 tokens/s on battery**. The later conversation summary records **539–740 tokens/s for newly processed prompt tokens** as Jan's conversation grew to 54,781 tokens. The first result has its original timing JSON; the longer-request results survive only in the assistant's analysis of an attachment whose contents are absent from the export. I keep those evidence levels separate throughout this entry.
+You brought Gufo 0.28.1 up on SilverSurfer with Qwen3.8-Flash-Next UD-Q4_K_XL and its shared Q8_0 MTP predictor. The first retained completion generated **318 tokens at 29.85 tokens/s on battery**. The later conversation summary records **539–740 tokens/s for newly processed prompt tokens** as Jan's conversation grew to 54,781 tokens. The first result has its original timing JSON; the longer-request results survive only in the assistant's analysis of an attachment whose contents are absent from the export. You keep those evidence levels separate throughout this entry.
 
 The exported messages place the successful run on November 2 in the evening. Container logs print November 3 around 02:35, consistent with a five-hour offset from America/New_York, though the log timezone is not explicitly stated. The selected terminal evidence preserves both clocks.
 
@@ -50,7 +42,7 @@ podman run --rm -it \
     --sessions 1 --context 262144
 ```
 
-This is the historical command, including disabled SELinux container labeling; it is not a new host configuration change. The container tag was `latest`, but the banner pins the observed runtime to 0.28.1. No image digest or Gufo source revision was captured. The proposed Hugging Face download pinned `unsloth/Qwen3.8-Flash-Next-GGUF` to `38bb39ee97821de2c9009abb7e93950eec396e66`; the export has no completed download verification or model hashes, so that remains intended provenance rather than verified file identity.
+This is the historical command, including disabled SELinux container labeling; it is not a new host configuration change. The container tag was `latest`, but the banner pins the observed runtime to 0.28.1. No image digest or Gufo source revision was captured. The proposed Hugging Face download pinned `unsloth/Qwen3.8-Flash-Next-GGUF` to `38bb39ee97821de2c9009abb7e93950eec396e66`; the export has no completed download verification or model hashes, so that remains intended source details rather than verified file identity.
 
 The server reported one session, 262,144 configured context tokens, MTP with a draft limit of seven, and disk cache off. Sampling defaults were thinking on, temperature 1, top-k 20, top-p 0.95, min-p 0, seed -1, repeat penalty 1, and zero frequency/presence penalties. The model-list response advertised `Qwen3.8 Flash Next`, with spaces, and text input only. Sending the literal placeholder `MODEL_ID` failed with `model_not_found`; using the advertised ID resolved that mismatch.
 
@@ -66,15 +58,15 @@ The first launch failed to open the GGUF with `Permission denied`. Adding `--sec
 
 Initially `amdgpu.gttsize` read `-1` and `ttm.pages_limit` read `12327636`. The later boot command line contained `ttm.pages_limit=33554432 ttm.page_pool_size=33554432 amdgpu.gttsize=131072`; both TTM values were confirmed in sysfs. Reading `amdgpu.gttsize` without elevated privileges failed, so its effective value was not confirmed in that capture.
 
-Increasing those limits alone did not resolve the failure while the 32 GiB firmware reservation remained. The next recommendation was to reduce that reservation to 512 MiB, or 1–2 GiB if necessary. The subsequent launch succeeded with substantially more host memory available. This sequence supports the memory-allocation explanation, but the final BIOS value was not recorded and no failing-allocation trace isolates the cause. I cannot claim that a particular BIOS setting was read back or that the kernel change alone fixed loading.
+Increasing those limits alone did not resolve the failure while the 32 GiB firmware reservation remained. The next recommendation was to reduce that reservation to 512 MiB, or 1–2 GiB if necessary. The subsequent launch succeeded with substantially more host memory available. This sequence supports the memory-allocation explanation, but the final BIOS value was not recorded and no failing-allocation trace isolates the cause. You cannot claim that a particular BIOS setting was read back or that the kernel change alone fixed loading.
 
 At load completion Gufo reported `gpu_device_used_mib=99994`, `gpu_device_total_mib=131072`, and `rss_mib=2704`. The GPU usage is about **97.65 GiB**, with **24.40 GiB** host memory available. These are runtime counters on a unified-memory machine, not independent physical pools to add together, and the load snapshot is not a measured session peak. The configured component-cache capacity was 14,246,539,264 bytes, with 128 snapshot entries, RAM cache on, and no disk backing.
 
-The earlier claim that SilverSurfer could only serve models fitting the firmware-reserved GPU slice was too restrictive. This run demonstrates GPU access beyond that slice through the shared-memory allocation path; it does not establish unlimited usable capacity or successful operation at the full context ceiling.
+The earlier claim that SilverSurfer could only serve models fitting the firmware-reserved GPU slice was too restrictive. This run demonstrates GPU access beyond that slice through the shared-memory allocation path; it does not show unlimited usable capacity or successful operation at the full context ceiling.
 
 ## Direct API result on battery
 
-The user explicitly identified this run as being on battery. The preceding suggested prompt was “Explain the difference between a process and a thread.” The actual successful request body was not pasted, but its final streaming timing event was.
+You explicitly identified this run as being on battery. The preceding suggested prompt was “Explain the difference between a process and a thread.” The actual successful request body was not pasted, but its final streaming timing event was.
 
 | Field | Retained value |
 |---|---:|
@@ -106,21 +98,21 @@ The November 2, 22:07 message references `Pasted text(20261103-030733).txt`. The
 | 51,362 | 3,025 | 562 |
 | 54,781 | 3,419 | 710 |
 
-The same analysis quotes a request with `prompt_tokens=48337`, `prefill_tokens=9191`, `cached_tokens=39146`, `cache=memory`, and `cache_restore_ms=21.6`. The token counts reconcile: 39,146 reused plus 9,191 new equals 48,337. A later response describes a 23,385-token prefix restored in about 12 ms, generation at roughly 30–45 tokens/s, and some reported first-token timings near 14 ms. Without the attachment I cannot verify those timing definitions or treat them as end-to-end latency measurements.
+The same analysis quotes a request with `prompt_tokens=48337`, `prefill_tokens=9191`, `cached_tokens=39146`, `cache=memory`, and `cache_restore_ms=21.6`. The token counts reconcile: 39,146 reused plus 9,191 new equals 48,337. A later response describes a 23,385-token prefix restored in about 12 ms, generation at roughly 30–45 tokens/s, and some reported first-token timings near 14 ms. Without the attachment you cannot verify those timing definitions or treat them as end-to-end latency measurements.
 
 The analysis also reports repeated 477-token requests alongside the main conversation, occasional seconds of queue delay, a cache ledger growing from about 2.5 to 10.6 GB, and available host memory falling toward 10 GiB. These observations remain summary-only; the background requests were not conclusively attributed to Jan, and battery operation was explicitly confirmed only for the earlier short API test.
 
-On November 3 I reported that Qwen through Gufo felt enormously faster than DeepSeek V4.1 even though prompt processing was not much better. That is a useful user observation, not a matched engine benchmark. Different models, hardware, prompts, reasoning lengths, cache reuse, and queueing can all affect time to a useful answer. The notebook's existing Galactus Maya measurements remain valid for their own workloads; this session does not establish a Gufo/Maya speedup ratio.
+On November 3 you reported that Qwen through Gufo felt enormously faster than DeepSeek V4.1 even though prompt processing was not much better. That is a useful user observation, not a matched engine benchmark. Different models, hardware, prompts, reasoning lengths, cache reuse, and queueing can all affect time to a useful answer. The notebook's existing Galactus Maya measurements remain valid for their own workloads; this session does not show a Gufo/Maya speedup ratio.
 
 ## Jan, Galactus, and prompt reuse
 
 The local Jan provider was configured around `http://127.0.0.1:8080/v1`, provider name `Gufo`, and model ID `Qwen3.8 Flash Next`. The server logged `auth=off`; the suggested `gufo` key was only a non-secret placeholder for a required client field. Host port publication was restricted to loopback.
 
-For Galactus, I supplied the server address and corrected the assistant's assumed port 3000 to **8080**, giving Jan the base URL **`http://<GALACTUS_HOST>:8080/api`** (host address omitted from this public note) with the existing Open WebUI API key. No actual key is in the retained record. Jan displayed its custom-provider capability warning. I subsequently reported that Jan's tools were not being used through the proxy; after advice to enable the model's Tools capability and compare structured tool calls directly and through the proxy, I reported “Fixed.” The exact change and API test outputs were not captured, so the outcome is confirmed but its root cause is not.
+For Galactus, you supplied the server address and corrected the assistant's assumed port 3000 to **8080**, giving Jan the base URL **`http://<GALACTUS_HOST>:8080/api`** (host address omitted from this public note) with the existing Open WebUI API key. No actual key is in the saved output. Jan displayed its custom-provider capability warning. You subsequently reported that Jan's tools were not being used through the proxy; after advice to enable the model's Tools capability and compare structured tool calls directly and through the proxy, you reported “Fixed.” The exact change and API test outputs were not captured, so the outcome is confirmed but its root cause is not.
 
 The caching discussion proposed `MAYA_DS4_SLOT_KEEP=1` and a separate test of `MAYA_DS4_KEEP_THINKING=1`, along with stable system prompts and tool definitions, native function calling, and less automatic citation, file-context, and memory injection in Open WebUI. These are historical investigation proposals, not settings verified or applied in this session. Retaining previous reasoning changes subsequent model inputs and should be evaluated separately from retaining computed state. The proposed direct-Maya provider had an unknown port and no captured test result.
 
-Vision setup for Gufo was proposed using `mmproj-BF16.gguf`, but no projector-enabled launch or image test was recorded. The captured model list advertised text only. Audio/video deployments and the later DeepSeek modality discussion likewise supplied no local test results; assistant capability assertions do not establish functionality on either machine.
+Vision setup for Gufo was proposed using `mmproj-BF16.gguf`, but no projector-enabled launch or image test was recorded. The captured model list advertised text only. Audio/video deployments and the later DeepSeek modality discussion likewise supplied no local test results; assistant capability assertions do not show functionality on either machine.
 
 ## Published comparisons discussed, not local measurements
 
@@ -131,3 +123,7 @@ The Hipfire discussion cited 0.4.4 prefill at 2,073 tokens/s for 8K and 2,473 fo
 ## Remaining measurements
 
 Recover the missing Jan log before promoting its summary rows to primary measurements. Record the final firmware reservation, effective memory limits, image digest, model hashes, power profile, and AC/battery state. Then measure cold prompts and cached appends separately at fixed lengths, recording new tokens, reused tokens, prefill time, first-token latency, time to a useful answer, and peak memory. A controlled MTP on/off comparison and output-quality checks are still needed. STREAM bandwidth, VMM behavior, and llama.cpp split-mode behavior remain unmeasured on SilverSurfer.
+
+## Conclusion
+
+The laptop hosted the model and completed the request. Several memory settings changed, so no single fix was isolated. The short request did not test the context ceiling or compare Gufo with Maya.

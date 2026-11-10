@@ -2,13 +2,13 @@
 
 ## Current place in the project
 
-I host GLM-5.3-Flash UD-Q4_K_XL on Galactus's GPUs 2 and 3, alongside DeepSeek on the other pair. The selected Maya configuration uses native MTP, INT8 streaming KV, and 8K effective prefill chunks. This is Flash; the much larger full GLM-5.3 model has a [separate experiment](lab-notebook/2026-11-09-full-glm53-placement.md).
+You host GLM-5.3-Flash UD-Q4_K_XL on Galactus's GPUs 2 and 3, alongside DeepSeek on the other pair. The selected Maya configuration uses native MTP, INT8 streaming KV, and 8K effective prefill chunks. This is Flash; the much larger full GLM-5.3 model has a [separate experiment](lab-notebook/2026-11-09-full-glm53-placement.md).
 
-The path to this setup was a sequence of tradeoffs. Reducing reserved VRAM improved the observed generation rate. Larger effective prefill chunks made long prompts slower. INT8 KV then gave higher average generation in its paired samples, with a small long-prefill cost. The [two-model chapter](../investigations/06-sharing-galactus.md) explains why I kept these choices.
+The path to this setup was a sequence of tradeoffs. Reducing reserved VRAM improved the observed generation rate. Larger effective prefill chunks made long prompts slower. INT8 KV then gave higher average generation in its paired samples, with a small long-prefill cost. The [two-model chapter](../investigations/06-sharing-galactus.md) explains why you kept these choices.
 
 ## November 9–10: two GPUs and INT8 KV
 
-I selected GPUs 2–3, a 1024 MB reserve, native MTP, 8K effective prefill chunks and INT8 streaming KV with 32K resident positions. The [reserve test](lab-notebook/2026-11-09-glm-flash-reserve-and-speculation.md) measured 21.5 tokens/s built-in mean decode with FP16 KV; speculative cancellation was slower.
+You selected GPUs 2–3, a 1024 MB reserve, native MTP, 8K effective prefill chunks and INT8 streaming KV with 32K resident positions. The [reserve test](lab-notebook/2026-11-09-glm-flash-reserve-and-speculation.md) measured 21.5 tokens/s built-in mean decode with FP16 KV; speculative cancellation was slower.
 
 [Larger chunks](lab-notebook/2026-11-09-glm-flash-prefill-chunks.md) lost about 21% long-prefill throughput. The [separate KV comparison](lab-notebook/2026-11-09-to-10-glm-flash-kv-cache.md) showed about 11–13% higher average decode with INT8 and approximately 292 tokens/s long prefill.
 
@@ -36,7 +36,7 @@ The [revision-identified benchmarks](lab-notebook/2026-10-22-glm53-build-compari
 
 ### Earlier V620 tests
 
-I tested the six-shard Unsloth UD-Q4_K_XL export on Galactus with 2 TB of eight-channel DDR4 and four V620 GPUs. My V620 build combined the V620 patches, older DeepSeek support, GLM-5.3 MTP support, and my round-robin prefill patch. It reports `b0-unknown`; I clarified the patch combination on October 22, 2026, but the captures do not establish the exact source revision or run dates.
+You tested the six-shard Unsloth UD-Q4_K_XL export on Galactus with 2 TB of eight-channel DDR4 and four V620 GPUs. Your V620 build combined the V620 patches, older DeepSeek support, GLM-5.3 MTP support, and your round-robin prefill patch. It reports `b0-unknown`; you clarified the patch combination on October 22, 2026, but the captures do not show the exact source revision or run dates.
 
 ### Measured configurations
 
@@ -52,8 +52,8 @@ All rows below use the V620 binary, the ZFS explanation prompt, 32 threads, cont
 | Forced RAM | 98304 | 2 | 16.0 |
 | Forced RAM | 98304 | 3 | 15.1 |
 
-Automatic placement gave the highest generation rates in these tests. I did not record actual tensor placement, so I cannot assign the difference to a specific kernel or transfer mechanism. The cache results did not improve consistently as I increased the requested budget. Every successful GLM run enabled MTP, and I did not disable the round-robin patch for a control, so these tests do not isolate either feature's contribution.
+Automatic placement gave the highest generation rates in these tests. You did not record actual tensor placement, so you cannot assign the difference to a specific kernel or transfer mechanism. The cache results did not improve consistently as you increased the requested budget. Every successful GLM run enabled MTP, and you did not disable the round-robin patch for a control, so these tests do not isolate either feature's contribution.
 
-I also tested a separate PATH binary reporting `b11580-b3b711e4f`, and the larger GLM-5.3 non-Flash model. The [complete experiment record](lab-notebook/undated-glm53-flash-placement.md) includes all 15 launches, including a cache-related allocation failure. I keep these short-prompt CLI results separate from the August pp8192/tg128 baseline and from the newer Unsloth integration.
+You also tested a separate PATH binary reporting `b11580-b3b711e4f`, and the larger GLM-5.3 non-Flash model. The [complete experiment record](lab-notebook/undated-glm53-flash-placement.md) includes all 15 launches, including a cache-related allocation failure. You keep these short-prompt CLI results separate from the August pp8192/tg128 baseline and from the newer Unsloth integration.
 
 [Original log](raw-logs/2026-10-21-flash-experiments/GLM-Flash%20Experiments.txt) · [All launch records](data/glm53-flash-historical.csv) · [Chronological notebook](lab-notebook/README.md)

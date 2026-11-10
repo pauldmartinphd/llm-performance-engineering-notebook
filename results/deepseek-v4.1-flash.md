@@ -2,7 +2,7 @@
 
 ## Current place in the project
 
-I host DeepSeek-V4.1-Flash-1017 UD-Q8_K_XL on Galactus's GPUs 0 and 1, leaving the other pair for GLM-Flash. The selected Maya configuration uses TP2, DSpark, 32K prefill chunks, an 800 MiB ring, and FP16-output prefill. That last setting changes a computation path; the stored weights remain Q8.
+You host DeepSeek-V4.1-Flash-1017 UD-Q8_K_XL on Galactus's GPUs 0 and 1, leaving the other pair for GLM-Flash. The selected Maya configuration uses TP2, DSpark, 32K prefill chunks, an 800 MiB ring, and FP16-output prefill. That last setting changes a computation path; the stored weights remain Q8.
 
 The [two-model chapter](../investigations/06-sharing-galactus.md) explains the GPU-allocation decision. The [long-prompt chapter](../investigations/05-tuning-long-prompts.md) explains the chunk/ring sweep and later precision test. Older records below use other builds, model exports, and GPU counts, so they should not be read as a single benchmark progression.
 
@@ -22,11 +22,11 @@ On the four-V620 configuration identified as UD-Q8_K_XL, the default measured **
 
 ### November 5: proposed style and refusal experiments
 
-I defined a [Heretic evaluation project](lab-notebook/2026-11-05-deepseek-style-and-heretic-plan.md) comparing the original, style-only, refusal-only, and combined models. The objective is to remove unwanted rhetorical prose while preserving technical depth and testing reasoning and factual accuracy directly. Unnecessary-refusal reduction is optional. No model was modified or benchmarked; compatibility with the exact checkpoint, ROCm workflow, and Maya export remains to be established.
+You defined a [Heretic evaluation project](lab-notebook/2026-11-05-deepseek-style-and-heretic-plan.md) comparing the original, style-only, refusal-only, and combined models. The objective is to remove unwanted rhetorical prose while preserving technical depth and testing reasoning and factual accuracy directly. Unnecessary-refusal reduction is optional. No model was modified or benchmarked; compatibility with the exact checkpoint, ROCm workflow, and Maya export remains to be established.
 
 ### October 29: production v1.1.36 at 488.6 tokens/s prefill
 
-The confirmed production configuration, `maya-ds4-production-no-stream-prio.json`, completed a 65,568-token prompt with zero cache hits at **488.6 tokens/s prefill** and **24.4 tokens/s decode**. It uses four V620s, ROCm 7.2, TP2, a 32,768-token chunk, an 800 MiB ring, `DS4_STREAM_PRIO=0`, and port 8081 with DeepSeek-V4.1-Flash-1017 UD-Q8_K_XL. Disabling stream priority was a historical workaround; it was no longer in use by October 30. The prefill rate is about 1.8% above the prior ~480 baseline; one request does not establish a meaningful release improvement. The [dated record](lab-notebook/2026-10-29-maya-production-64k.md) preserves the pasted output, request provenance, working configuration, and historical comparison limits. This documents the existing run without repeating tests or changing production.
+The confirmed production configuration, `maya-ds4-production-no-stream-prio.json`, completed a 65,568-token prompt with zero cache hits at **488.6 tokens/s prefill** and **24.4 tokens/s decode**. It uses four V620s, ROCm 7.2, TP2, a 32,768-token chunk, an 800 MiB ring, `DS4_STREAM_PRIO=0`, and port 8081 with DeepSeek-V4.1-Flash-1017 UD-Q8_K_XL. Disabling stream priority was a historical workaround; it was no longer in use by October 30. The prefill rate is about 1.8% above the prior ~480 baseline; one request does not show a meaningful release improvement. The [dated record](lab-notebook/2026-10-29-maya-production-64k.md) preserves the pasted output, request source details, working configuration, and historical comparison limits. This documents the existing run without repeating tests or changing production.
 
 ### October 24: dashboard from ongoing use
 
@@ -36,7 +36,7 @@ The screenshot captured at 08:52 shows Project Maya v1.1.24 serving DeepSeek-V4.
 
 The expert panel shows **3,587 experts in VRAM**, **11,773 in pinned RAM**, and **zero SSD-only experts**. GPU memory use is **101.1 / 120 GB**, and system RAM use is **410.0 / 2,004 GB**, as displayed. The dashboard is idle at capture time, so its power and GPU-load readings do not describe active inference.
 
-The configured context is **1024K**, with **2.2k** in use for the last request. This is evidence of the configured capacity, not a million-token performance test. The screenshot does not print the quantization or draft settings. The earlier investigation identifies UD-Q8_K_XL as the intended export and records a successful DSpark calibration; the screenshot does not establish that this session retained either setting. It does show DeepSeek’s endpoint on port 8081. These are dashboard observations from mixed requests, kept separate from the controlled DSpark calibration below.
+The configured context is **1024K**, with **2.2k** in use for the last request. This is evidence of the configured capacity, not a million-token performance test. The screenshot does not print the quantization or draft settings. The earlier investigation identifies UD-Q8_K_XL as the intended export and records a successful DSpark calibration; the screenshot does not show that this session retained either setting. It does show DeepSeek’s endpoint on port 8081. These are dashboard observations from mixed requests, kept separate from the controlled DSpark calibration below.
 
 ### October 23: 29.3 tokens/s with Maya and DSpark
 
@@ -52,16 +52,16 @@ The [cache and Maya comparison record](lab-notebook/2026-10-23-deepseek41-cache-
 
 ### Earlier Q4_K_M and DSpark tests
 
-I tested the eleven-shard Q4_K_M export from `vcruz305/DeepSeek-V4.1-Flash-GGUF` with the DSpark export from `JigSawPT/DeepSeek-V4.1-Flash-DSpark-GGUF`. My V620 build combined the V620 patches, older DeepSeek implementation, GLM-5.3 MTP support, and my round-robin prefill patch. It reports `b0-unknown`; the captures do not establish the exact commit or run dates.
+You tested the eleven-shard Q4_K_M export from `vcruz305/DeepSeek-V4.1-Flash-GGUF` with the DSpark export from `JigSawPT/DeepSeek-V4.1-Flash-DSpark-GGUF`. Your V620 build combined the V620 patches, older DeepSeek implementation, GLM-5.3 MTP support, and your round-robin prefill patch. It reports `b0-unknown`; the captures do not show the exact commit or run dates.
 
 | Configuration | Generation t/s | Outcome |
 | --- | ---: | --- |
 | Target only | 11.2 | Completed the 256-token generation test |
 | DSpark, n-max 2, draft GPU offload | — | Failed to allocate 2464.20 MiB on ROCm0 while loading the draft |
 
-I used 32 threads, context 8192, flash attention, `--load-mode none`, and greedy decoding for the ZFS explanation prompt. The target-only command did not explicitly specify CPU-MoE placement or tensor splitting. The output contained unfinished reasoning at the token limit; I did not score answer quality.
+You used 32 threads, context 8192, flash attention, `--load-mode none`, and greedy decoding for the ZFS explanation prompt. The target-only command did not explicitly specify CPU-MoE placement or tensor splitting. The output contained unfinished reasoning at the token limit; you did not score answer quality.
 
-The log ends with commands for a four-way comparison of DSpark off/on and automatic/forced-RAM placement, but it contains no output from those commands. I therefore have no successful V4.1 DSpark timing in this capture and no round-robin-off comparison.
+The log ends with commands for a four-way comparison of DSpark off/on and automatic/forced-RAM placement, but it contains no output from those commands. You therefore have no successful V4.1 DSpark timing in this capture and no round-robin-off comparison.
 
 These results precede the replacement with Unsloth's V4.1-Flash-1017 implementation. They also differ from the earlier [DeepSeek-V4-Flash-0731 results](deepseek-v4-flash.md); those successful DSpark runs cannot substitute for a V4.1 measurement.
 
