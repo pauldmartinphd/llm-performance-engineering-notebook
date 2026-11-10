@@ -4,6 +4,14 @@ These experiments use a large MoE model with routed experts in system RAM and th
 
 For the initial March installation, the [earlier build record](results/lab-notebook/2026-03-23-galactus-build.md) links the retained compiler, device-access, and server commands. It is a historical configuration on a different build and storage setup, rather than the recipe for the August common baseline. The [source-note index](results/reference-notes/README.md) records the evidence status of the later model-selection and residency plans.
 
+## Choose the record before choosing the command
+
+For the current two-model service, start with the [November 10 deployment record](results/lab-notebook/2026-11-10-maya-dual-model-production.md). It identifies the retained experimental configs and the production filenames requested later. Those are not all present as ready-to-run files, so the notebook does not claim a verified one-command reconstruction of the final service.
+
+The [November 10 evidence ledger](results/raw-logs/2026-11-10-maya-collection/README.md) maps the archived scripts, configs, request payloads, and responses. The [long-prompt chapter](investigations/05-tuning-long-prompts.md) explains which control each sweep used. Preserve those distinctions when repeating a test: a newer binary, another model pack, or a cached prompt changes the comparison.
+
+The procedures below retain the older recorded workflows. Their dates matter. Use the [measurement guide](results/methodology.md) to interpret the rates and the dated entry to identify the original conditions.
+
 ## October 23 Maya measurements
 
 The [GLM experiment record](results/lab-notebook/2026-10-23-maya-glm53-speculation.md) preserves the actual v1.1.24 HIP arguments, environment, and configuration names used for the 31.6/19.9 tokens/s A/B test. Run the two configurations separately with other inference engines stopped:

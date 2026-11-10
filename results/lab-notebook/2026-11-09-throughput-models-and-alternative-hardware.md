@@ -1,6 +1,8 @@
 # Throughput bounds and alternative Qwen deployments
 
-**Discussion: November 9, 2026; no Galactus Qwen experiment in this entry.** **Added:** November 10, 2026 (America/New_York). **Sources:** the supplied November 10 Maya archive and conversation exports; [source ledger and retained evidence](../raw-logs/2026-11-10-maya-collection/README.md). Historical commands describe the experiments; this documentation update ran no inference tests.
+[All lab records](README.md) · [Related investigation: chapter 6](../../investigations/06-sharing-galactus.md)
+
+**Discussion: November 9, 2026; no Galactus Qwen experiment in this entry.**
 
 I began with a bandwidth estimate for Qwen3.6-35B-A3B, then considered full GLM-5.3 and Qwen3.8-Flash-Next as possible uses of the available hardware. The practical question was whether four GPUs should serve one large model or several services. The subsequent DeepSeek and GLM tests answered parts of that question; the calculations and external reports remained candidate-selection material.
 
@@ -25,3 +27,7 @@ I considered a fast 35B model on one card, Flash-Next on an R9700, and separate 
 The exported assistant response reported GLM-Flash Q4/Q6 sizes of 199.71 / 291.83 GB, mean KLD versus BF16 of 0.049294 / 0.019007, and top-token agreement of 92.22% / 95.23%. It attributed these to external quantization reports, not my tests. It also reported Q4 perplexity 3.3038 ± 0.042 without a matched Q6 value. No underlying evaluation data is supplied here, so these remain source claims and cannot establish a local quality difference. The suggested 15–35% Q6 decode penalty was an estimate; no Q6 deployment or speed test followed.
 
 EXL3 Q4 was discussed as a separate weight format, not an alias for the GGUF UD-Q4_K_XL pack tested here. Neither this discussion nor the external quality figures measures FP16-versus-INT8 KV behavior. I kept the existing Q4 weights during the local cache experiment.
+
+## Sources and recording dates
+
+**Added:** November 10, 2026 (America/New_York). **Sources:** the supplied November 10 Maya archive and conversation exports; [source ledger and retained evidence](../raw-logs/2026-11-10-maya-collection/README.md). Historical commands describe the experiments; this documentation update ran no inference tests.

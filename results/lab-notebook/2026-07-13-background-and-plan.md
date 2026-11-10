@@ -1,6 +1,8 @@
 # July 13, 2026 (evening) — Background and plan
 
-[Notebook index](overview.md) · [Model summaries](../README.md)
+[All lab records](README.md) · [Related investigation: chapter 2](../../investigations/02-following-the-prefill-bottleneck.md)
+
+**Question:** Which parts of GLM should run on the CPU and GPUs? **Outcome:** Defined the offload question and initial estimates; external claims stay separate.
 
 *Conversation "Applying concepts to Galactus with GLM5.2", opened 7/13/2026 22:43. This session covers background, architecture, sizing, and the initial plan. I had not run any commands on Galactus yet. The figures come from the pasted source material or from estimates, labeled below.*
 

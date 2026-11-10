@@ -1,5 +1,9 @@
 # Qwen3.8-27B — oMLX on Magneto
 
+These are oMLX measurements on Magneto, the 14-inch M2 Max laptop. Requested acceleration, actual execution, and thermal state need to be read together. The runs do not form a matched comparison with Galactus.
+
+[Related investigation: chapter 7](../investigations/07-other-local-machines.md) · [All model results](README.md)
+
 I ran the first Apple Silicon benchmarks in this notebook with `Qwen3.8-27B-oQ4e-fp16-mtp` on [Magneto](../hardware/magneto/README.md), a **14-inch MacBook Pro, M2 Max, 38 GPU cores, 64 GB unified memory**. The September 30 session covered Lightning MTP, ANE tuning, DFlash, and the gap between my results and the oMLX leaderboard. The Galactus common baseline uses llama-bench; these are oMLX single-request measurements.
 
 ## Results and evidence

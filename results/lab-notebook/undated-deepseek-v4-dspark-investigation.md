@@ -1,6 +1,6 @@
 # DeepSeek-V4 DSpark investigation and interval notes
 
-[Notebook index](overview.md) · [Model summaries](../README.md)
+[All lab records](README.md) · [Related investigation: chapter 3](../../investigations/03-making-speculation-useful.md)
 
 *Later results: [the 2 TB STREAM rebaseline](2026-08-15-stream-rebaseline-2tb.md) completed the memory rebaseline, and [the August common baseline](2026-08-15-to-16-common-baseline-2tb.md) repeated speculative decode on a common build. The table below remains provisional, with the p-min conflict unresolved. The description of 14.7 t/s as the fastest result on any model overlooks the April MiniMax resident-offload result of 17.37 t/s.*
 

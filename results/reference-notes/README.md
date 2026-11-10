@@ -36,3 +36,7 @@ Model agreement also does not supply independent confirmation. A primary source,
 The [August common baseline](../lab-notebook/2026-08-15-to-16-common-baseline-2tb.md) remains the latest normalized Galactus model comparison. [the Magneto measurements](../lab-notebook/undated-magneto-omlx-qwen38.md) remains the latest measurement entry, with the final Magneto settings recorded in its model summary. None of the imported surveys supplies a later common baseline, a measured multi-model residency configuration, or a controlled replacement test.
 
 The build record supports reproducing an earlier configuration. The surveys support understanding why a candidate was considered. The architecture proposal supports examining a design before implementation. Retaining all three kinds of material makes the notebook more complete without turning a shortlist or plan into a measured result.
+
+## Historical notebook background
+
+The [July background and source ledger](2026-07-notebook-background.md) preserve the original notebook introduction, hardware/model detail, and compilation history. The current [reading guide](../lab-notebook/overview.md) explains how to navigate the full March–November record.

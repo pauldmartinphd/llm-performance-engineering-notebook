@@ -1,6 +1,8 @@
 # July 14, 2026, 11:08–14:25 — The v3 diagnostic run (machine log)
 
-[Notebook index](overview.md) · [Model summaries](../README.md)
+[All lab records](README.md) · [Related investigation: chapter 2](../../investigations/02-following-the-prefill-bottleneck.md)
+
+**Question:** Which settings and execution paths explain the slow rate? **Outcome:** Retains the full diagnostic sequence; later work found the batch-size trap.
 
 This entry follows the machine log from the 16-phase `galactus-diag.sh` run. It ran unattended on Galactus from 11:08:13 to 14:25:10 ET (total runtime 3h16m), while the conversation in Sessions 3 and 5 continued in parallel. Run directory `/root/diag-20260714-110813`; MAIN.log (uploaded as results.txt, 175,463 lines) is the source for everything below. Build under test: `657e01125 (10001)`. Hang guard: 10800 s per invocation; deadline: none. Wall-clock times below are mapped from the log's elapsed markers against the 11:08 start.
 

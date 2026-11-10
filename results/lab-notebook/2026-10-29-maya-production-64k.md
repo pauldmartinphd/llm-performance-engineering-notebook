@@ -1,5 +1,7 @@
 # Maya v1.1.36: production configuration and uncached 64K confirmation
 
+[All lab records](README.md) · [Related investigation: chapter 5](../../investigations/05-tuning-long-prompts.md)
+
 **Recorded:** October 29, 2026 (America/New_York). **Machine:** Galactus. **Source:** my pasted benchmark output in [Analyze GPU temperatures](https://chatgpt.com/c/6ae2e072-8b64-83ea-b98f-89d8e13af59f), followed by my explicit confirmation of the working production configuration when continuing that discussion. This entry records an existing run; no benchmark was repeated and no server configuration was changed to prepare it.
 
 The production configuration completed a **65,568-token prefill at 488.6 tokens/s with zero cache hits**, followed by decode at **24.4 tokens/s**. This extends the earlier successful short-prompt benchmark with stream priority disabled to the retained 64K request. I am carrying this configuration forward as the working baseline, without reopening the completed tuning sweeps or assuming that resuming the investigation requires reconfiguration.

@@ -1,5 +1,9 @@
 # MiniMax M2.7 — Galactus results
 
+These are historical MiniMax measurements, including its final August baseline before removal. Earlier resident-expert tests use different conditions.
+
+[Related investigation: chapter 1](../investigations/01-establishing-a-baseline.md) · [All model results](README.md)
+
 ## Final measurement — 2 TB common baseline (2026-08-15/16, build 3653e6d6d, stock scheduler)
 
 This is the final measurement, on the identical file to April (UD-Q5_K_M, 157.23 GiB): pp8192 418.83 ± 24.11, the machine record and 4.1× the April baseline-class 101.71, and tg128 15.18 ± 0.18 (t=64), which is +2.8% over the April baseline-class 14.76. MiniMax is the only model to beat its April decode baseline, using the same model file. The build, memory population, and benchmark conditions changed, so this is not an isolated test of the build alone.

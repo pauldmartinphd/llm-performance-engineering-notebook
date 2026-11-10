@@ -1,5 +1,7 @@
 # Two large MoE models at roughly 30 tokens/s on four V620s
 
+[All lab records](README.md) · [Related investigation: chapter 4](../../investigations/04-from-the-fork-to-maya.md)
+
 **Measured:** October 23, 2026. **Machine:** Galactus, EPYC 7713, 2 TiB RAM, four Radeon Pro V620 GPUs in Proxmox LXC. **Engine:** Project Maya v1.1.24, HIP. [GLM source record](../raw-logs/2026-10-23-maya-glm-and-builds/README.md) · [DeepSeek benchmark and calibration](2026-10-23-deepseek41-cache-and-maya.md).
 
 This is a substantial milestone for Galactus. I now have **GLM-5.3-Flash UD-Q4_K_XL at 31.6 generated tokens/s** and **DeepSeek-V4.1-Flash-1017 UD-Q8_K_XL at 29.3 tokens/s with DSpark** on the same four V620s. Both models exceed the available GPU memory, yet the recorded configurations reach approximately 30 tokens/s using the server's GPU and system memory together. I am using Maya for this stage of the investigation.

@@ -1,5 +1,7 @@
 # GLM-5.3-Flash: 80 GiB expert-cache benchmark and investigation
 
+[All lab records](README.md) · [Related investigation: chapter 4](../../investigations/04-from-the-fork-to-maya.md)
+
 **Added:** October 29, 2026. **Run dates:** not printed in the supplied benchmark captures. **Hardware:** four AMD Radeon Pro V620 GPUs, consistent with the Galactus configuration. **Source:** [Original benchmark captures](../raw-logs/2026-10-29-glm53-expert-cache/benchmark-captures.md), followed by the October 29 continuation in Work mode. The original conversation is `6adace95-5744-83e9-8348-9e84b6b03966`.
 
 ## Recorded measurement

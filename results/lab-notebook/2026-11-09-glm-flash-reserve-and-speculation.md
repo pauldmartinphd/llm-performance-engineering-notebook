@@ -1,6 +1,8 @@
 # GLM-5.3-Flash on two V620s: MTP, reserve reduction, and cancellation
 
-**Experiments: November 9, 2026.** **Added:** November 10, 2026 (America/New_York). **Sources:** the supplied November 10 Maya archive and conversation exports; [source ledger and retained evidence](../raw-logs/2026-11-10-maya-collection/README.md). Historical commands describe the experiments; this documentation update ran no inference tests.
+[All lab records](README.md) · [Related investigation: chapter 6](../../investigations/06-sharing-galactus.md)
+
+**Experiments: November 9, 2026.**
 
 I configured GLM-5.3-Flash UD-Q4_K_XL on physical GPUs 2 and 3, leaving GPUs 0 and 1 for DeepSeek. The Flash engine used `build-hip/maya`, 1,048,576 configured context, FP16 KV with streaming on, 32,768 resident KV positions, automatic expert caching and layer splitting, and native MTP. That context setting establishes capacity configuration; the built-in benchmark measured only 2K and 8K prompts.
 
@@ -27,3 +29,7 @@ The cancellation configuration is retained with `MAYA_GLM_SPEC_CANCEL=1`. It red
 ## What carries forward
 
 I retained the 1024 MB reserve, native MTP and automatic expert placement, then investigated [larger prefill chunks](2026-11-09-glm-flash-prefill-chunks.md). The benchmark comparison itself ran one model at a time. My contemporaneous correction was that I was optimizing residency and model switching, not asking for requests to execute on both models at once. This matters when describing the later cohosted service: two resident endpoints do not imply a measured aggregate concurrent-load throughput.
+
+## Sources and recording dates
+
+**Added:** November 10, 2026 (America/New_York). **Sources:** the supplied November 10 Maya archive and conversation exports; [source ledger and retained evidence](../raw-logs/2026-11-10-maya-collection/README.md). Historical commands describe the experiments; this documentation update ran no inference tests.

@@ -1,5 +1,7 @@
 # llamda: what the experimental fork established, and what it did not fix
 
+[All lab records](README.md) · [Related investigation: chapter 4](../../investigations/04-from-the-fork-to-maya.md)
+
 **Written:** October 29, 2026. **Scope:** the V620 integration, expansion into an AMD fork, model and cache experiments, and October 24 performance-patch investigation. This is a retrospective, not a new benchmark. I have retained the [experimental patches and source ledger](../raw-logs/2026-10-29-llamda-thread-archive/README.md) so the implementation history does not depend on the original conversation.
 
 I am removing the llamda announcement. I built an experimental llama.cpp fork, but I did not establish a consistently faster AMD inference engine. Its practical generation performance was poor relative to what I subsequently obtained with Maya, and it did not deliver the execution strategy that made Maya, Strata, and other specialized engines worth investigating. That distinction matters: the notebook contains measured Maya results on Galactus, but no matched Galactus benchmark for Strata or Gufo. I cannot turn an architectural comparison or another developer's result into a measurement I made.

@@ -1,6 +1,8 @@
 # GLM-Flash FP16 versus INT8 KV: repeated prefill and decode observations
 
-**Run directory dated November 9; results supplied November 10, 2026.** **Added:** November 10, 2026 (America/New_York). **Sources:** the supplied November 10 Maya archive and conversation exports; [source ledger and retained evidence](../raw-logs/2026-11-10-maya-collection/README.md). Historical commands describe the experiments; this documentation update ran no inference tests.
+[All lab records](README.md) · [Related investigation: chapter 6](../../investigations/06-sharing-galactus.md)
+
+**Run directory dated November 9; results supplied November 10, 2026.**
 
 I compared GLM-5.3-Flash with FP16 and INT8 attention KV caches after selecting 8K effective prefill chunks. Both configurations kept the same Q4 model weights, two GPUs, 1M configured context, streaming KV with 32K resident positions, 1024 MB reserve, native MTP and 4096 MB prefill budget. This changes cached attention state, not the GGUF weight quantization.
 
@@ -33,3 +35,7 @@ Likewise, 1,048,576 is the configured capacity, not a tested prompt length. The 
 ## Production selection
 
 On November 10 I requested two production-named GLM profiles on port 8082, one FP16 and one INT8. They are alternatives sharing GPUs 2 and 3, so they are not launched together. My later task statement confirms INT8 as the hosted choice alongside DeepSeek on the other pair. The [deployment entry](2026-11-10-maya-dual-model-production.md) preserves the FP16 fallback and the limits of the captured cohosting evidence.
+
+## Sources and recording dates
+
+**Added:** November 10, 2026 (America/New_York). **Sources:** the supplied November 10 Maya archive and conversation exports; [source ledger and retained evidence](../raw-logs/2026-11-10-maya-collection/README.md). Historical commands describe the experiments; this documentation update ran no inference tests.

@@ -1,5 +1,9 @@
 # GLM-5.2 — Galactus results
 
+These are the GLM-5.2 measurements that led to the July scheduler investigation. The stock August baseline and July patched result use different conditions. Later GLM-5.3 and GLM-5.3-Flash tests concern different models.
+
+[Related investigation: chapter 2](../investigations/02-following-the-prefill-bottleneck.md) · [All model results](README.md)
+
 ## August baseline and MTP (2 TB, build 3653e6d6d, stock scheduler)
 
 [The August common baseline](lab-notebook/2026-08-15-to-16-common-baseline-2tb.md) normalized all five models on one build. GLM-5.2 stock measured pp8192 95.99 ± 3.36 and tg128 5.30 ± 0.00 (t=32, no prefill patch; 119.36 remains the July patched-build figure).

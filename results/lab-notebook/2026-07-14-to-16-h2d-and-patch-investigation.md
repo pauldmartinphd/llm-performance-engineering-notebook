@@ -1,6 +1,8 @@
 # evening, July 14 – July 16, 2026 — The H2D result and the patch, interrupted
 
-[Notebook index](overview.md) · [Model summaries](../README.md)
+[All lab records](README.md) · [Related investigation: chapter 2](../../investigations/02-following-the-prefill-bottleneck.md)
+
+**Question:** Are transfers or synchronization the remaining limit? **Outcome:** Measured 65.7 GB/s across four host-to-device streams and developed the patch hypothesis.
 
 ### 19:25 — Four-stream H2D: 65.7 GB/s; the copy-mechanism diagnosis changes again
 

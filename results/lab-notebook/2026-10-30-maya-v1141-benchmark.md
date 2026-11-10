@@ -1,5 +1,7 @@
 # Maya v1.1.41: short benchmark and uncached 32K/64K production tests
 
+[All lab records](README.md) · [Related investigation: chapter 5](../../investigations/05-tuning-long-prompts.md)
+
 **Recorded:** October 30, 2026 (America/New_York). **Source:** my pasted terminal output in the update and benchmark discussion. The benchmark prints `2026-10-30 11:34` without a timezone. No benchmark was executed by the notebook editor, and no live server settings were changed.
 
 I ran the built-in benchmark after updating from v1.1.36, then made two passes replaying the original saved 32K and 64K requests against the production server. All tests completed. All four long requests reported zero cached tokens and generated 128 tokens. The 64K prefill measured 469.6 and 485.6 tokens/s; the second pass is approximately 0.6% below the October 29 result of 488.6. The two-pass median is 477.6 tokens/s, approximately 2.3% below that single historical result. The historical stream-priority workaround is no longer in use, and the measurements do not isolate a release regression.

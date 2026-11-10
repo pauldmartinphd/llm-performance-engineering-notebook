@@ -1,10 +1,12 @@
 # DeepSeek RDNA 2 FP16-output prefill: measured speedup and fidelity limits
 
-**Experiments: November 9, 2026.** **Added:** November 10, 2026 (America/New_York). **Sources:** the supplied November 10 Maya archive and conversation exports; [source ledger and retained evidence](../raw-logs/2026-11-10-maya-collection/README.md). Historical commands describe the experiments; this documentation update ran no inference tests.
+[All lab records](README.md) · [Related investigation: chapter 5](../../investigations/05-tuning-long-prompts.md)
+
+**Experiments: November 9, 2026.**
 
 I enabled `MAYA_DS4_PROMPT_F16=1` with `MAYA_DS4_PROMPT_F16_CHECK=1` on DeepSeek TP2. The dense prompt projections produce FP16 output and widen it to FP32, taking a faster RDNA 2 path while changing rounding. This is a prefill computation setting, separate from DeepSeek's Q8 model weights and its attention-cache representation.
 
-## Matched configuration and provenance
+## Configuration and comparison limits
 
 The [optimized run](../raw-logs/2026-11-10-maya-collection/extracted/20261109-184435/) completed two starts with two repetitions per length: **12 valid zero-cache measurements**, effective TP2, 32K chunks and an 800 MiB ring. It used GPUs 0 and 1, 1024 MiB reserve, DSpark, and 128 output tokens. The source pack is DeepSeek-V4.1-Flash-1017 UD-Q8_K_XL. The optimized run records v1.1.57 commit `00655481ce2b0689ab1c2e8d67034dc5701d6511` and binary SHA256 `548558f8bf789a022002495dc4fb45506b31ac753076145ed97817f7870c4ed2`. The original TP2 baseline is v1.1.54 with a different binary and corpus; the intervening TP4-request run uses the optimized run's binary and corpus but actually executes TP2 with FP16 output disabled.
 
@@ -28,8 +30,12 @@ The improvement is substantial within the captured workloads. It is not a twofol
 
 The conversation quotes community PR #869's different-host evidence: approximately 18% faster 2K and 29% faster 8K prefill, mean KL 0.0257, 91.2% top-1 agreement, and perplexity 16.773 versus 16.874 on its specified short corpus. These are the contributor's measurements, not local Galactus quality results. The copied PR text is retained in the terminal-evidence file; its assertions are historical source claims.
 
-Zero nonfinite outputs checks overflow, not semantic accuracy, perplexity or equality with the baseline. Both local logs also report early-row prompt skipping, as described in the [baseline entry](2026-11-09-deepseek-tp2-and-tp4.md). Because that behavior is shared, it does not by itself erase the observed relative timing difference; it does prevent presenting these measurements as proof of an exact, full-computation optimization. No local held-out quality comparison was supplied.
+Zero nonfinite outputs checks overflow, not semantic accuracy, perplexity, or equality with the baseline. The FP16-output route changes rounding, so the timing gain does not establish quality equivalence. Both local logs also report prompt skipping; the [baseline entry](2026-11-09-deepseek-tp2-and-tp4.md#prompt-skip-diagnostics) explains why that message alone does not establish use of the excluded aggressive mode. No local held-out quality comparison was supplied.
 
 ## Configuration decision
 
 I requested two production profiles, one with this prefill route and one without, keeping TP2 on GPUs 0 and 1. The archive retains `maya-ds4-tp2-fp16.json` and `maya-ds4-tp2-baseline.json`; the final production-named copies are requested in the conversation but absent from the collection. The [deployment record](2026-11-10-maya-dual-model-production.md) distinguishes those retained settings from the later reported operating state.
+
+## Sources and recording dates
+
+**Added:** November 10, 2026 (America/New_York). **Sources:** the supplied November 10 Maya archive and conversation exports; [source ledger and retained evidence](../raw-logs/2026-11-10-maya-collection/README.md). Historical commands describe the experiments; this documentation update ran no inference tests.

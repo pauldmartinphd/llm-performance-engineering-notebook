@@ -1,5 +1,7 @@
 # GLM-5.3-Flash: revision-identified builds and placement tests
 
+[All lab records](README.md) · [Related investigation: chapter 4](../../investigations/04-from-the-fork-to-maya.md)
+
 **Record:** October 22, 2026, from the supplied filename; individual launches have no printed timestamps. **Machine:** Galactus, four V620s. [Source and checksums](../raw-logs/2026-10-23-maya-glm-and-builds/README.md).
 
 I built llAMDa and llama.cpp for gfx1030 with HIP, GCC 14.2.0, and Zen 3 CPU flags (`-O3 -march=znver3 -mtune=znver3`, `GGML_NATIVE=OFF`). The configuration identifies HIP Clang 22.0.0. The build records name `ca3b1fc30` for llAMDa and `184f65360` for llama.cpp, and both installations used `/usr/local`.

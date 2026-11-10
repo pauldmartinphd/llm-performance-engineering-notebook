@@ -1,6 +1,8 @@
 # Maya v1.1.54: recovered decode measurements and complete sweep evidence
 
-**Experiments: November 5, 2026; archive recovered November 10.** **Added:** November 10, 2026 (America/New_York). **Sources:** the supplied November 10 Maya archive and conversation exports; [source ledger and retained evidence](../raw-logs/2026-11-10-maya-collection/README.md). Historical commands describe the experiments; this documentation update ran no inference tests.
+[All lab records](README.md) · [Related investigation: chapter 5](../../investigations/05-tuning-long-prompts.md)
+
+**Experiments: November 5, 2026; archive recovered November 10.**
 
 The new archive fills gaps in the [original November 5 record](2026-11-05-maya-v1154-prefill-and-peer-ar.md). Its full CSV contains 80 rows: 60 prefill measurements and 20 decode measurements. Earlier, only 47 individual prefill rows and the 30 printed prefill means were available. The full CSV supports the original prefill conclusion and adds the decode observations below.
 
@@ -31,3 +33,7 @@ All ten config copies, engine logs, the experiment plan, skipped-case notes, sum
 The original [P2P runner](../raw-logs/2026-11-10-maya-collection/extracted/maya_benchmark_p2p_test.py) is also recovered. The retest CSV has a header and no completed measurements; its startup probe ended without a ready engine. The earlier distinction between successful host fallback in the main sweep and failure before readiness in the retest still holds.
 
 This recovery closes missing-artifact work. It does not constitute another experiment, a numerical-quality test, or a successful HIP peer-transport result.
+
+## Sources and recording dates
+
+**Added:** November 10, 2026 (America/New_York). **Sources:** the supplied November 10 Maya archive and conversation exports; [source ledger and retained evidence](../raw-logs/2026-11-10-maya-collection/README.md). Historical commands describe the experiments; this documentation update ran no inference tests.

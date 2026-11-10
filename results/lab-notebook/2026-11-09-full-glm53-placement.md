@@ -1,6 +1,8 @@
 # Full GLM-5.3 Q4: allocation failures, legal layer boundaries, and a slow working split
 
-**Experiments: November 9, 2026.** **Added:** November 10, 2026 (America/New_York). **Sources:** the supplied November 10 Maya archive and conversation exports; [source ledger and retained evidence](../raw-logs/2026-11-10-maya-collection/README.md). Historical commands describe the experiments; this documentation update ran no inference tests.
+[All lab records](README.md) · [Related investigation: chapter 6](../../investigations/06-sharing-galactus.md)
+
+**Experiments: November 9, 2026.**
 
 I tested the full GLM-5.3 UD-Q4_K_XL already stored as eleven GGUF shards, separately from GLM-5.3-Flash. The first configuration failed to load; automatic four-card placement then loaded but generated only 3.6–4.3 tokens/s and stalled before completing prefill. A legal manual split completed at **6.7 tokens/s mean decode**, with **60 tokens/s at 2K prefill and 47 at 8K**. I stopped the full-model investigation and returned to Flash for the two-model service.
 
@@ -37,3 +39,7 @@ The benchmark prints 19:51; the paste is timestamped 20:51. Both identify Novemb
 The conversation compared the result with earlier approximately 6.1–6.3 tokens/s MTP results. Without matched model hashes, prompts, contexts and builds, that is historical context rather than a measured Maya-versus-llama.cpp improvement. Likewise, short prompts may fail to amortize setup, but the supplied evidence does not prove that shortness explains the 47 tokens/s 8K prefill result.
 
 I judged this full-model setup unsuitable for my intended interactive use and ended its remaining KV/MTP matrix. That decision applies to this configuration, not every possible implementation of full GLM. I then moved to [GLM-Flash on GPUs 2 and 3](2026-11-09-glm-flash-reserve-and-speculation.md).
+
+## Sources and recording dates
+
+**Added:** November 10, 2026 (America/New_York). **Sources:** the supplied November 10 Maya archive and conversation exports; [source ledger and retained evidence](../raw-logs/2026-11-10-maya-collection/README.md). Historical commands describe the experiments; this documentation update ran no inference tests.

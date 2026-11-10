@@ -1,6 +1,8 @@
 # July 21, 2026 — Building and benchmarking the patch
 
-[Notebook index](overview.md) · [Model summaries](../README.md)
+[All lab records](README.md) · [Related investigation: chapter 2](../../investigations/02-following-the-prefill-bottleneck.md)
+
+**Question:** Does removing the routing-index wait improve prefill? **Outcome:** Distribution alone barely helped; the combined patch reached 119.36 tokens/s, a 13.7% gain.
 
 This session is the separate thread in which the scheduler patch was built and benchmarked. The transcript (`llamacpp_patch.md`, exported 07:37 ET) has no timestamps; entries below follow sequence order. A second analysis stream, whose output Paul pasted in, appears at several points. Context artifact: "Claude State Export.zip" (saved 7/21 06:53 ET) contains the openwebui system prompt and knowledge files Paul prepared for local-model use — the workload the patched machine was being tuned to serve.
 

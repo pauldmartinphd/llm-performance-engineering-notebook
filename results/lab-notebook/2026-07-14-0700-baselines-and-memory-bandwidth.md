@@ -1,6 +1,8 @@
 # July 14, 2026 (morning) — Baselines, memory bandwidth, and the first diagnostic script
 
-[Notebook index](overview.md) · [Model summaries](../README.md)
+[All lab records](README.md) · [Related investigation: chapter 1](../../investigations/01-establishing-a-baseline.md)
+
+**Question:** Is the memory system limiting generation? **Outcome:** Established a July baseline and measured memory bandwidth near 152 GB/s.
 
 *Executed 07:00–08:46. Work begins at the `root@openwebui` container prompt (where llama.cpp and the model live) and moves to the bare-metal host `root@galactus` at 08:04. llama.cpp build f84a51940 (9942), backends ROCm,ZenDNN; model at `/models/GLM-5.2/UD-Q4_K_XL/GLM-5.2-UD-Q4_K_XL-00001-of-00011.gguf` (11 shards).*
 

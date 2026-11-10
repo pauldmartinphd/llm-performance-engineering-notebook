@@ -1,5 +1,7 @@
 # April: thread counts, resident experts, and long-context Qwen tests
 
+[All lab records](README.md) · [Related investigation: chapter 1](../../investigations/01-establishing-a-baseline.md)
+
 **Experiments:** April 7–17, 2026, where the captures include timestamps. **Added:** October 22, 2026. I recovered these logs from `tests.tar.gz`; they predate the July scheduler patch and the later V620/model integration. [Original files and provenance](../raw-logs/2026-10-22-galactus-archive/README.md) · [Complete benchmark ledger](../data/galactus-archive-benchmarks.md).
 
 I tested how CPU thread count affected large MoE models whose routed experts exceeded GPU memory, then tried keeping some Qwen expert layers on the four V620s. The logs distinguish three variables that a single headline rate would conceal: CPU thread count, expert placement, and the amount of context already in the model. I cannot treat the fastest row from each configuration as a common benchmark.

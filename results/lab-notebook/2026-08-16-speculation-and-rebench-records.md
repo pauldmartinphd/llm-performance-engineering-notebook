@@ -1,5 +1,7 @@
 # August 16: speculation and rebenchmark captures
 
+[All lab records](README.md) · [Related investigation: chapter 3](../../investigations/03-making-speculation-useful.md)
+
 **Experiments:** August 16, 2026 for the CLI transcripts; original file modification times place the adjacent benchmark captures on August 15–16. **Added:** October 22, 2026. [Original files](../raw-logs/2026-10-22-galactus-archive/README.md) · [Extracted CLI results](../data/galactus-archive-cli.jsonl).
 
 The archive supplies direct evidence for much of the speculation work already summarized in the notebook. It also contains additional results and filename traps. I used the commands, loaded model paths, and final timing lines to identify each run instead of assuming that a filename described everything inside it.

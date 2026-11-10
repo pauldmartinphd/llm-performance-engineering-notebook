@@ -1,5 +1,9 @@
 # GLM-5.2 scheduler traces: distribution without a throughput gain
 
+[All lab records](README.md) · [Related investigation: chapter 2](../../investigations/02-following-the-prefill-bottleneck.md)
+
+**Question:** Did work spread across the cards? **Outcome:** The traces show distribution; they do not by themselves show a speedup.
+
 **Capture date:** July 14, 2026, inferred from the original files' modification times. **Added:** October 22, 2026. I recovered the timestamps on October 23: `sched_full.txt` was last written at 19:07:54 EDT and `sched_patched.txt` at 19:58:26 EDT. These are file-write times, not run-start times. [Timestamp evidence](../raw-logs/2026-10-22-galactus-archive/source-timestamps.md).
 
 ## The scheduler traces show distribution, not a speedup

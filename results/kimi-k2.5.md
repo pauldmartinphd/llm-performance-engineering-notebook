@@ -1,5 +1,9 @@
 # Kimi K2.5/K2.6 — Galactus results
 
+This page preserves the Kimi history, including the model/export distinctions in the dated records. The August common baseline reports K2.6; the filename is retained for existing links.
+
+[Related investigation: chapter 1](../investigations/01-establishing-a-baseline.md) · [All model results](README.md)
+
 ## K2.6 — 2 TB common baseline (2026-08-15/16, build 3653e6d6d, stock scheduler)
 
 This is the first fully documented Kimi row, measured on K2.6 (Unsloth UD-Q8_K_XL, 553.71 GiB, native-INT4 MoE weights with BF16 for the rest; the llama-bench `deepseek2 671B BF16` label is cosmetic): pp8192 94.23 ± 4.45 and tg128 5.79 ± 0.01 (t=64). The April tables below are K2.5 under April conditions and cannot serve as a controlled comparison with K2.6. For planning, I treated the models as roughly equivalent, but that was an assumption rather than a controlled comparison.

@@ -1,5 +1,7 @@
 # Galactus build record — March 23, 2026
 
+[All lab records](README.md) · [Related investigation: chapter 1](../../investigations/01-establishing-a-baseline.md)
+
 **Source period:** March 2026. **Added to this repository:** September 30, 2026.
 
 This entry recovers the early Galactus configuration from my [build notebook](../reference-notes/2026-03-23-galactus-build.md). The retained source is the September 30 edited version of that dated note, rather than a pristine March export or a raw benchmark capture. Its commands and trial tables are useful reproducibility material, but its displayed rates have no repetition counts or statistical spreads. I therefore keep them separate from the later [August common baseline](2026-08-15-to-16-common-baseline-2tb.md).

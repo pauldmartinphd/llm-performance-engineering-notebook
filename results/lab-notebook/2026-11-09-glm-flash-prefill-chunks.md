@@ -1,6 +1,8 @@
 # GLM-Flash prefill: requested versus effective chunks and the failed first harness
 
-**Experiments: November 9, 2026.** **Added:** November 10, 2026 (America/New_York). **Sources:** the supplied November 10 Maya archive and conversation exports; [source ledger and retained evidence](../raw-logs/2026-11-10-maya-collection/README.md). Historical commands describe the experiments; this documentation update ran no inference tests.
+[All lab records](README.md) · [Related investigation: chapter 5](../../investigations/05-tuning-long-prompts.md)
+
+**Experiments: November 9, 2026.**
 
 I tried to transfer the successful DeepSeek large-chunk approach to GLM-Flash, but the effective allocation and long-prompt measurements favored different settings. Asking for 16K or 32K with a 4096 MB workspace still produced 8K chunks. Increasing the workspace to 8192 MB produced a common 16K chunk, but that setting was substantially slower on long prompts.
 
@@ -33,3 +35,7 @@ The replacement [GLM prefill runner](../raw-logs/2026-11-10-maya-collection/extr
 The larger chunk does not improve the small prompt and loses about one fifth of sustained prefill at 32K/64K. The transcript does not identify whether workspace, expert borrowing, staging or another kernel effect accounts for the loss, so I do not assign a measured cause. The result is sufficient to retain **8K effective chunks with the 4096 MB budget** for the next experiment. DeepSeek's 32K chunk choice does not transfer to this engine.
 
 I explicitly limited the sweep to 64K; no 128K or 1M request was tested. The [KV comparison](2026-11-09-to-10-glm-flash-kv-cache.md) follows with that 8K chunk baseline.
+
+## Sources and recording dates
+
+**Added:** November 10, 2026 (America/New_York). **Sources:** the supplied November 10 Maya archive and conversation exports; [source ledger and retained evidence](../raw-logs/2026-11-10-maya-collection/README.md). Historical commands describe the experiments; this documentation update ran no inference tests.

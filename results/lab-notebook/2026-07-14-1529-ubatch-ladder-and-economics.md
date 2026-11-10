@@ -1,6 +1,8 @@
 # July 14, 2026 (late afternoon) — The ubatch ladder and the economics of the build
 
-[Notebook index](overview.md) · [Model summaries](../README.md)
+[All lab records](README.md) · [Related investigation: chapter 2](../../investigations/02-following-the-prefill-bottleneck.md)
+
+**Question:** Does larger-batch offload justify the GPUs? **Outcome:** Prompt throughput rose with effective microbatch size; examined hardware costs.
 
 ### 15:29 — Why these GPUs were bought
 

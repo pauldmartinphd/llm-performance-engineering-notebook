@@ -1,5 +1,9 @@
 # July: reconstructing the prefill investigation from the diagnostic logs
 
+[All lab records](README.md) · [Related investigation: chapter 2](../../investigations/02-following-the-prefill-bottleneck.md)
+
+**Question:** What do the full v3/v4 logs establish? **Outcome:** Reconstructs the ladder, monitors, completed rows, and interrupted tests; no extra repetitions.
+
 **Experiments:** July 14, 2026. The supplementary placement captures lack independent run timestamps. **Added:** October 22, 2026. [Archive inventory](../raw-logs/2026-10-22-galactus-archive/README.md) · [All printed benchmark rows](../data/galactus-archive-benchmarks.md).
 
 The archive contains the full v3 and v4 diagnostic logs, their hardware monitors, and related placement captures. I can now follow the investigation from thread and placement tests to the larger microbatch experiment, then compare the completed placement and fitter tests. These captures concern GLM-5.2 on the 1 TB Galactus configuration, not the later Flash models or the 2 TB rebaseline.

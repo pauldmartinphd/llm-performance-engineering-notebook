@@ -1,14 +1,59 @@
-# A performance-testing methodology for LLM inference
+# How I measure local inference
 
-For CLI tests using bespoke prompts, I report generation throughput only. Prefill comparisons use dedicated benchmarks with an explicit prompt length, such as pp8192. The original logs retain their printed timings, but short-prompt CLI processing rates are omitted from the result tables and analysis.
+A useful benchmark answers a specific question. I separate the work of reading a prompt from the work of generating an answer, record what the engine actually ran, and keep the conditions beside the result. This lets a later reader tell whether two numbers describe a real comparison.
 
-This is the procedure I used to find the system's inference limits and test changes. It was developed for hybrid Mixture-of-Experts (MoE) inference, in which the routed experts sit in system RAM and the dense path runs on the GPUs, but the test loop also applies to other systems. Every step below uses numbers from **Galactus** (EPYC 7713, DDR4-2933, 4 × Radeon Pro V620); see the [per-model results](README.md) and the [hardware note](../hardware/galactus/README.md).
+The [lab notebook](lab-notebook/README.md) contains the experiments. The [chapters](../investigations/README.md) explain the decisions. This page defines the terms and checks used to interpret them.
 
-The investigation starts with memory bandwidth and an estimate of time per token. Controlled sweeps test that estimate and identify the settings or code paths to inspect. This page uses the July GLM-5.2 investigation as its worked example; the [August common baseline](lab-notebook/2026-08-15-to-16-common-baseline-2tb.md) records the later build and memory population.
+## What the measurements mean
 
-> A companion article on the Technicomp Labs blog presents this method as a narrative, with the full patch investigation: [A Scientific Method for Measuring the Limits of Local LLM Inference Speed](https://technicomplabs.io/posts/2026/08/measuring-local-llm-inference-limits/).
+| Term | Meaning | What to check |
+|---|---|---|
+| Prefill, or prompt processing | Reading input and building the state needed to answer | Prompt length, new versus cached tokens, chunk size, and effective batch |
+| Decode, or generation | Producing output tokens after the prompt | Prompt content, context already present, output length, sampling, and speculation |
+| Time to first token | The wait before output begins | Includes work beyond the engine's prefill time; do not substitute total request time |
+| Single-request rate | Speed for one request | Does not establish aggregate throughput across simultaneous requests |
+| Aggregate rate | Total output across requests | Does not establish each user's latency |
+| Configured context | The maximum history the setup permits | Is not evidence that a prompt of that length ran |
 
----
+For bespoke short CLI prompts, I report generation throughput only. Prefill comparisons use dedicated tests with an explicit prompt length.
+
+A token is a piece of text, often a word fragment, word, or punctuation. `pp8192` labels an 8192-token prefill test; `tg128` labels a 128-token generation test. Chat wrappers and model tokenizers can change the actual count, so target lengths and observed counts are recorded separately.
+
+## Memory and precision are separate controls
+
+**System RAM** holds model data on the CPU side. **VRAM** is memory on a discrete GPU. **Unified memory** is shared by CPU and GPU, so the reported pools cannot automatically be added together.
+
+A **weight quantization** such as Q4 or Q8 changes how model weights are stored. A **KV cache** holds attention state from previous tokens; changing its precision is a different experiment. A **computation precision** setting can change intermediate rounding without changing either the weights or the cache format.
+
+A **batch** groups work so the engine can reuse weights and run larger matrix operations. A **microbatch** is a smaller execution group within it. A Maya prompt **chunk** is another engine-specific grouping and is not interchangeable with every llama.cpp batch control. **Workspace** is temporary memory used during computation.
+
+**Tensor parallelism**, or TP, divides calculations across devices. Layer partitioning assigns different parts of the model to different devices. Both can use several GPUs, but they do not create the same execution schedule. I record the observed layout rather than infer it from a requested flag.
+
+## The comparison loop
+
+I start with a question and a baseline, then change the setting intended to answer it. Before interpreting the rate, I check that the requested path activated. If the engine silently changes a batch, chunk, or parallel layout, the row describes the effective setting.
+
+I keep individual repetitions and any closing baseline. A small difference is less persuasive when the same setup varies by more than that difference. Where a test changes several things at once, I describe the combined result and leave their separate effects unresolved.
+
+I also keep distinct outcomes distinct. Loading successfully is not a throughput result. A failed startup is not a slow completed run. An inactive option is not a benchmark of that feature. A speed test without an accuracy evaluation does not establish quality equivalence.
+
+## Fresh prompts and reused state
+
+A repeated long request may reuse nearly its whole prompt. The engine then processes only a small suffix. I do not compare that suffix rate with a fresh full-prompt rate. The November 2 Maya matrix illustrates this directly: repeated long requests sometimes processed only one new token.
+
+Some historical runners excluded any cached row; others allowed a small amount of reuse. Each entry states its rule. A printed `ok` status means the runner's checks passed, not that an independent audit proved zero reuse or numerical accuracy.
+
+## What belongs with a result
+
+A useful record identifies the model/export, machine, engine revision, effective configuration, workload, cache state, repetitions, metric, and source. Where the source lacks one of these, I state the resulting limit on the comparison rather than fill the gap from a filename or a later configuration.
+
+Reported spreads retain their original meaning. Printed llama-bench deviations and spreads from two CLI runs are not automatically confidence intervals. Different prompts, versions, quantizations, and memory populations remain separate comparisons.
+
+## Worked method: July GLM-5.2
+
+The following sections preserve the detailed method developed during the July Galactus investigation. The [August common baseline](lab-notebook/2026-08-15-to-16-common-baseline-2tb.md) uses the later build and 2 TB memory population. These historical commands and fitted constants are examples to check, not universal settings.
+
+A companion article presents the patch investigation as a narrative: [A Scientific Method for Measuring the Limits of Local LLM Inference Speed](https://technicomplabs.io/posts/2026/08/measuring-local-llm-inference-limits/).
 
 ## 1. Establish the memory-bandwidth limit (STREAM and the RFO correction)
 

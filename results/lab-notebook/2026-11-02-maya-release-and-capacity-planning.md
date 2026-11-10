@@ -1,6 +1,8 @@
 # Maya releases, memory budgets, and alternative deployment plans
 
-**Discussion: November 2–8, 2026; no new benchmark in this entry.** **Added:** November 10, 2026 (America/New_York). **Sources:** the supplied November 10 Maya archive and conversation exports; [source ledger and retained evidence](../raw-logs/2026-11-10-maya-collection/README.md). Historical commands describe the experiments; this documentation update ran no inference tests.
+[All lab records](README.md) · [Related investigation: chapter 6](../../investigations/06-sharing-galactus.md)
+
+**Discussion: November 2–8, 2026; no new benchmark in this entry.**
 
 The matrix changed the deployment question from maximizing one model's rate to deciding how much capacity each service should retain. I considered putting DeepSeek on a separate eight-channel DDR4 server with 512 GB RAM, one V620 and an R9700, while leaving GLM on Galactus. I also considered Qwen and speech, OCR, translation and TTS services. These were deployment proposals; the supplied material contains no matched R9700 run or simultaneous multi-service benchmark.
 
@@ -17,3 +19,7 @@ The GPU peer-bandwidth discussion recalled about 67 GB/s. The earlier notebook c
 GLM calibration on November 2 explicitly declined to tune HIP: it measures the CUDA CPU lane and retained the HIP engine settings. Copying DeepSeek's calibration fields into GLM would not establish a tuned GLM profile, since the engines have different execution paths and controls. The November 9 attempt produced the same limitation.
 
 On November 8 I asked how to bind the service to `0.0.0.0`. The conversation supplied a host override and a persistent config edit; no readback establishes that either was applied. The November 10 discussion about missing tags shows a non-shallow checkout at v1.1.57, not an absent release history. `git fetch --unshallow` failed because the repository was already complete. The later build and tmux instructions are operational guidance without captured execution results. I preserve these states separately from measured engine changes.
+
+## Sources and recording dates
+
+**Added:** November 10, 2026 (America/New_York). **Sources:** the supplied November 10 Maya archive and conversation exports; [source ledger and retained evidence](../raw-logs/2026-11-10-maya-collection/README.md). Historical commands describe the experiments; this documentation update ran no inference tests.

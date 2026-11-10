@@ -1,5 +1,7 @@
 # DeepSeek-V4.1: target inference worked; DSpark ran out of VRAM
 
+[All lab records](README.md) · [Related investigation: chapter 3](../../investigations/03-making-speculation-useful.md)
+
 **Recorded:** October 21, 2026, from an undated historical capture. [Raw record](../raw-logs/2026-10-21-flash-experiments/DeepSeekV4Flash%20Experiments.txt).
 
 **Build clarification, October 22, 2026:** I ran the V620 tests with the V620 patches, the older DeepSeek implementation, GLM-5.3 MTP support, and my round-robin prefill patch merged together. These results describe that combined build, before I replaced the DeepSeek implementation with Unsloth's newer port. The executable reports `b0-unknown`, so the log does not identify the exact commit.

@@ -1,5 +1,7 @@
 # llamda: the experimental AMD integration
 
+[All lab records](README.md) · [Related investigation: chapter 4](../../investigations/04-from-the-fork-to-maya.md)
+
 **Retrospective, October 29:** I have withdrawn the fork announcement. The later tests did not establish a consistent advantage over upstream, and Maya gave substantially better generation performance. The [full retrospective](2026-10-29-llamda-experimental-fork-retrospective.md) preserves the outcome, pipeline analysis, and experimental code. The entry below describes the October 21 integration, not a current performance recommendation.
 
 **Recorded:** October 21, 2026. **Project:** [pauldmartinphd/llAMDa.cpp](https://github.com/pauldmartinphd/llAMDa.cpp). I have not benchmarked this revision on Galactus. The results below come from the earlier V620 build.

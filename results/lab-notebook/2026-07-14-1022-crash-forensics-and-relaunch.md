@@ -1,6 +1,8 @@
 # July 14, 2026 (mid-day) — v2 crash forensics and the v3 relaunch
 
-[Notebook index](overview.md) · [Model summaries](../README.md)
+[All lab records](README.md) · [Related investigation: chapter 2](../../investigations/02-following-the-prefill-bottleneck.md)
+
+**Question:** Why did the second diagnostic attempt crash? **Outcome:** Recorded failed phases, loading issues, and the revised diagnostic launch.
 
 ### 10:22 — v2 battery output arrives: B0 alone survived
 

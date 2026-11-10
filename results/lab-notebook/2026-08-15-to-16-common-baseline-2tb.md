@@ -1,6 +1,6 @@
 # the 2 TB common baseline (stock build)
 
-[Notebook index](overview.md) · [Model summaries](../README.md)
+[All lab records](README.md) · [Related investigation: chapter 1](../../investigations/01-establishing-a-baseline.md)
 
 *Comparison limits: the common baseline below covers August 15–16, not a single day. Historical comparisons also change memory population, benchmark settings, and in some cases the model file; they do not isolate upstream code changes alone. References below to the earlier “July” DSpark sweep correspond to Session 10, compiled August 8. The quoted speculative ± values summarize two repetitions and are not confidence intervals.*
 

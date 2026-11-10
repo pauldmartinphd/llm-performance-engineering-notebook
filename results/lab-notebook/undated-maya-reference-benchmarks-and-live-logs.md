@@ -1,6 +1,8 @@
 # Maya archive: upstream reference tests and unassigned live logs
 
-**Source dates: October 5–6 and November 1–2, 2026; live log dates unverified.** **Added:** November 10, 2026 (America/New_York). **Sources:** the supplied November 10 Maya archive and conversation exports; [source ledger and retained evidence](../raw-logs/2026-11-10-maya-collection/README.md). Historical commands describe the experiments; this documentation update ran no inference tests.
+[All lab records](README.md) · [Related investigation: chapter 4](../../investigations/04-from-the-fork-to-maya.md)
+
+**Source dates: October 5–6 and November 1–2, 2026; live log dates unverified.**
 
 The supplied archive mixes Galactus artifacts with benchmark notes from other machines. I retain all of them, but their hardware and authorship do not justify treating them as my local measurements. The three README captures identify their own hosts and protocols; their dates are source-record dates, not newly inferred Galactus test days.
 
@@ -21,3 +23,7 @@ The [complete original notes](../raw-logs/2026-11-10-maya-collection/extracted/)
 `maya-ds4-hip.log`, `maya-ud-q4_k_xl-hip.log`, `maya-bench.log`, `maya-bench.txt` and `maya-benchmark-run.log` are also retained in full. Shared filenames may contain the latest run rather than every run that used that name. I use dated directories, effective layouts and conversation captures to associate results, instead of attaching a loose log to a test solely because its filename matches.
 
 The root `maya.py`, `setup.py`, `chat.py` and benchmark scripts are source snapshots supplied with the results. Their bytes and hashes are retained; they do not independently establish that every historical test executed those exact bytes. The dated metadata's script and binary hashes take precedence for that purpose.
+
+## Sources and recording dates
+
+**Added:** November 10, 2026 (America/New_York). **Sources:** the supplied November 10 Maya archive and conversation exports; [source ledger and retained evidence](../raw-logs/2026-11-10-maya-collection/README.md). Historical commands describe the experiments; this documentation update ran no inference tests.

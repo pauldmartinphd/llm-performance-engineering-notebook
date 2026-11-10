@@ -1,5 +1,9 @@
 # Qwen 3.5 397B.A17B — Galactus results
 
+These are historical Qwen 3.5 397B measurements. The August common baseline provides the shared reference; earlier placement and batch tests answer separate questions.
+
+[Related investigation: chapter 1](../investigations/01-establishing-a-baseline.md) · [All model results](README.md)
+
 ## 2 TB common baseline (2026-08-15/16, build 3653e6d6d, stock scheduler)
 
 The file changed from April: Unsloth UD-Q6_K_XL (337.43 GiB) replaces bartowski Q6_K_L (319.21 GiB). The stock results are pp8192 249.61 ± 19.78, the second-fastest prefill on the machine, behind MiniMax's final measurement, and tg128 9.37 ± 0.16 (t=64), which is −2.0% relative to the April baseline of 9.56 t/s. The model export, bandwidth, and build changed, so the similar result does not isolate any one effect.

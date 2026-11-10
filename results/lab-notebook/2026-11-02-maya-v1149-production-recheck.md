@@ -1,6 +1,8 @@
 # Maya v1.1.49: production replay and the two-pair utilization question
 
-**Experiments: November 2, 2026.** **Added:** November 10, 2026 (America/New_York). **Sources:** the supplied November 10 Maya archive and conversation exports; [source ledger and retained evidence](../raw-logs/2026-11-10-maya-collection/README.md). Historical commands describe the experiments; this documentation update ran no inference tests.
+[All lab records](README.md) · [Related investigation: chapter 5](../../investigations/05-tuning-long-prompts.md)
+
+**Experiments: November 2, 2026.**
 
 I updated the detached Maya checkout to v1.1.49 and replayed the original long requests against DeepSeek on Galactus. Both requests completed with zero cached tokens. The 64K result remained near the approximately 480 tokens/s range established in the October tuning, so the observation that only one pair of V620s appeared active at a time did not identify a new regression.
 
@@ -20,3 +22,7 @@ I asked why prefill appeared to use two cards instead of all four. The conversat
 The subsequent question was whether keeping DeepSeek and GLM-Flash resident could avoid model-switching delays. I considered two instances with bounded expert pools, hot-swapping GPU caches, and assigning fewer GPUs to each model. No cache-suspend/resume implementation was demonstrated. This motivated the [GPU and cache matrix](2026-11-02-maya-gpu-cache-matrix.md), rather than establishing that simultaneous residency was already working.
 
 The [October 30 entry](2026-10-30-maya-v1141-benchmark.md) now also has its original four long-response files in this collection. Today's replay is another production observation, not a controlled v1.1.41/v1.1.49 A/B test.
+
+## Sources and recording dates
+
+**Added:** November 10, 2026 (America/New_York). **Sources:** the supplied November 10 Maya archive and conversation exports; [source ledger and retained evidence](../raw-logs/2026-11-10-maya-collection/README.md). Historical commands describe the experiments; this documentation update ran no inference tests.

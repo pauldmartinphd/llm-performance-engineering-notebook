@@ -1,5 +1,7 @@
 # Maya v1.1.54: prefill sweep and HIP peer all-reduce failure
 
+[All lab records](README.md) · [Related investigation: chapter 5](../../investigations/05-tuning-long-prompts.md)
+
 **Experiments:** November 5, 2026. **Added:** November 6, 2026 (America/New_York). **Sources:** the supplied *Fast Card Prefill Acceleration* conversation export and `maya_benchmark_1154_fixed.py`. Conversation timestamps and result-directory names establish the run date; the host timezone is not independently captured. [Retained evidence and hashes](../raw-logs/2026-11-05-maya-v1154/README.md).
 
 I tested ten Maya v1.1.54 configurations at 8K, 32K, and 64K prompt lengths, with two repetitions per length. The default measured **324.8, 459.4, and 479.4 tokens/s**. None of the switches established a useful prefill improvement in this sweep. Automatic chunk selection reduced throughput at all three lengths, while both requested peer transports retained host transport. A separate test requesting 3072 MiB of reserve reached the HIP transport probe but failed before the engine became ready, so it produced no throughput result.
@@ -8,7 +10,7 @@ This continues the [October 28 prefill investigation](2026-10-28-maya-prefill-an
 
 ## Workload and provenance
 
-The conversation identifies the system as Galactus with four Radeon Pro V620s, HIP, and DeepSeek-V4.1-Flash-1017 UD-Q8_K_XL. The later pasted engine log independently identifies four `gfx1030` devices and 32768-token prompt chunks. TP2 and an 800 MiB ring are established configuration context; the source does not include the effective JSON from this run, a model-pack hash, a binary hash, or the resolved release commit. The transport summary identifies groups GPU0/GPU1 and GPU2/GPU3.
+The conversation identifies the system as Galactus with four Radeon Pro V620s, HIP, and DeepSeek-V4.1-Flash-1017 UD-Q8_K_XL. The later pasted engine log independently identifies four `gfx1030` devices and 32768-token prompt chunks. TP2 and an 800 MiB ring are established configuration context; the initial conversation did not include the effective JSON, a model-pack hash, a binary hash, or the resolved release commit. The later [collection](../raw-logs/2026-11-10-maya-collection/README.md) now retains the per-variant configs and update logs; it does not supply a model-pack hash. The transport summary identifies groups GPU0/GPU1 and GPU2/GPU3.
 
 The completed command used the production configuration as its input:
 
@@ -24,7 +26,7 @@ It reported `/opt/maya-bench-1154-20261105-142331`. The [supplied runner](../../
 
 The runner builds prompts from the checked-out README, documentation, and benchmark-result Markdown. It tokenizes this corpus, rotates the token sequence by prompt length and repetition, and repeats/truncates it to exactly 8192, 32768, or 65536 tokens. Each process performs a short decode warm-up, two 256-token decode cases, and an 8K prefill warm-up before the six measured prefill requests. Prefill requests generate one token; the recorded rate is the requested token count divided by the engine's reported prompt time. Rotated leading tokens are intended to avoid prefix reuse, but these printed records contain no cache-hit counter. I therefore do not label the sweep independently verified zero-cache prefill.
 
-The export retains 47 unique complete individual prefill records and the full 30-row printed summary, which reports 60 measurements. The other 13 individual records are not supplied. The runner records decode rows in its server-side CSV but does not print them individually or include them in the final summary; no controlled decode comparison can be recovered here. The [individual CSV](../data/maya-v1154-prefill-observations.csv) and [summary CSV](../data/maya-v1154-prefill-summary.csv) preserve this distinction and cite source line numbers. Repeated pasted output is counted once.
+The original export retained 47 unique complete individual prefill records and the full 30-row summary. The November 10 collection now supplies all 60 individual prefill measurements. The runner records decode rows in its server-side CSV but does not print them individually or include them in the final summary; the original export alone did not support a decode comparison. The [recovered-decode entry](2026-11-05-maya-v1154-recovered-decode.md) now reports all 20 saved decode cases. The [individual CSV](../data/maya-v1154-prefill-observations.csv) and [summary CSV](../data/maya-v1154-prefill-summary.csv) preserve this distinction and cite source line numbers. Repeated pasted output is counted once.
 
 ## Completed prefill comparison
 
@@ -70,7 +72,7 @@ The available workspace was below the probe's stated requirement. This explains 
 
 ## Focused 3072 MiB reserve retest
 
-The conversation then proposed a copy of the production JSON named `maya-ds4-p2p-test.json`, changing only the engine argument `--reserve-mib` to `3072`, and a derived `maya_benchmark_p2p_test.py` restricted to `p2p_hip_auto`. The pasted output confirms a one-variant run under `/opt/maya-bench-1154-20261105-201458`; neither derived file was supplied independently. The requested reserve is established by the preparation command, not a captured effective-config readback.
+The conversation then proposed a copy of the production JSON named `maya-ds4-p2p-test.json`, changing only the engine argument `--reserve-mib` to `3072`, and a derived `maya_benchmark_p2p_test.py` restricted to `p2p_hip_auto`. The pasted output confirms a one-variant run under `/opt/maya-bench-1154-20261105-201458`; the initial export did not include either derived file. Both are now retained in the November 10 collection, including the config requesting 3072 MiB reserve.
 
 The process exited before `READY`. Its log ends with:
 
@@ -106,7 +108,7 @@ A quoted September 24 W4A8 report motivated the kernel investigation. It reports
 
 Two screenshot attachments are absent from the export. The assistant's reading reports an interactive request with 48,794 total prompt tokens, 47,087 cached tokens, 1,707 new tokens in 10,020.1 ms (170.4 tokens/s), and 4,602 generated tokens at 31.2 tokens/s with 71.9% draft acceptance. It also reports 3,102 experts in VRAM, 12,258 in RAM, and an 82.3% VRAM hit rate. These remain screenshot-summary-only observations, not recovered timing JSON. The reported usage total of 27,517 conflicts with the 53,396 sum of prompt and completion counts. Neither the accounting nor the cache metric can be resolved without the original response or image. This cached-suffix workload is not comparable to fresh 32K/64K prefill.
 
-The remaining work is to collect the original result directories and effective configs, instrument or isolate the HIP peer probe, and verify kernel dispatch before attributing performance to MMQ or flow flags. Any future larger-reserve comparison needs a matched host-transport control at that reserve, because changing reserve also changes expert residency. Quality checks and decode results are needed before adopting approximate settings or trading residency for faster prefill. None of that follow-up was completed by the supplied evidence.
+The original result directories and configs have now been collected. The remaining experimental work is to instrument or isolate the HIP peer probe and verify kernel dispatch before attributing performance to MMQ or flow flags. Any future larger-reserve comparison needs a matched host-transport control at that reserve, because changing reserve also changes expert residency. Quality checks and decode results are needed before adopting approximate settings or trading residency for faster prefill. None of that follow-up was completed by the supplied evidence.
 
 ## November 10 evidence recovery
 

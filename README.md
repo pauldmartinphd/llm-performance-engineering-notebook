@@ -1,133 +1,55 @@
 # LLM Performance Engineering Notebook
 
-## November 10: two resident models on Galactus
+*Experiments in hosting large language models on local hardware.*
 
-I now host **GLM-5.3-Flash UD-Q4_K_XL with INT8 KV on GPUs 2–3** alongside **DeepSeek-V4.1-Flash-1017 UD-Q8_K_XL on GPUs 0–1**, using separate Maya services. DeepSeek's selected configuration enables FP16-output prefill; this does not make its Q8 weights a 16-bit model. The [deployment record](results/lab-notebook/2026-11-10-maya-dual-model-production.md) connects thirteen new entries covering the November 2 GPU/cache matrix, November 5 evidence recovery, and November 9–10 model and cache tests.
+I want to run the largest language models my local machines can support, and understand what makes them fast enough to use. That means testing the whole system: memory capacity and bandwidth, CPU work, GPU placement, transfers, computation kernels, caching, speculative decoding, storage, power, and the software that serves requests.
 
-DeepSeek's optimized run reached **389.55 / 501.95 / 589.70 tokens/s median prefill at 8K / 16K / 32K targets**. GLM-Flash's INT8 KV comparison retained roughly **292 tokens/s at 32K–64K targets**, with higher average decode than its paired FP16 KV control. The [complete evidence ledger](results/raw-logs/2026-11-10-maya-collection/README.md) retains all 343 archive files and individual observations. These are individual-model measurements; simultaneous request throughput and local numerical-quality equivalence remain unmeasured. DeepSeek's logs also report early-row prompt skipping, which the detailed record keeps visible.
+This is a lab notebook of that work. It keeps the experiments and results, including failed attempts. The investigation chapters explain why I ran the tests and how the results changed my decisions.
 
-## November 5: Maya v1.1.54 prefill and peer transport
+## Read the notebook
 
-The ten-variant four-V620 sweep measured **324.8 / 459.4 / 479.4 tokens/s at 8K / 32K / 64K** with defaults. Automatic chunk selection was slower; neither requested P2P path activated. A focused larger-reserve test then failed in the HIP startup probe with zero completed samples. The [experiment record](results/lab-notebook/2026-11-05-maya-v1154-prefill-and-peer-ar.md) retains the complete printed summary, the original 47-observation transcription, the benchmark script, and the distinction between transport fallback and probe failure. No tested switch established a useful prefill improvement. The November 10 collection now adds all 60 prefill observations, 20 decode cases, and the effective configs.
-
-## November 2: Gufo on SilverSurfer
-
-SilverSurfer now has a retained inference result: **Qwen3.8-Flash-Next UD-Q4_K_XL with MTP generated 318 tokens at 29.85 tokens/s on battery**, using Gufo 0.28.1 on the Ryzen AI Max+ PRO 395. The [experiment record](results/lab-notebook/2026-11-02-silversurfer-gufo.md) covers the Aeon/Podman setup, loading failures and memory configuration, and a later Jan summary reporting 539–740 tokens/s prefill through 54,781 tokens of context. The direct timing JSON is retained; the Jan figures remain summary-only because the exported conversation omits the original attachment. No matched Gufo/Maya comparison was run.
-
-## October 28: Maya prefill tuning
-
-On v1.1.30, the four-V620 DeepSeek UD-Q8_K_XL sweep completed 60 valid measurements. **32K chunks with an 800 MiB ring reached about 439 tokens/s at 32K and 480 at 64K**, approximately 8% and 11% above the initial baseline. I selected that combination for subsequent tuning. The [full record](results/lab-notebook/2026-10-28-maya-prefill-and-regression.md) covers recovery from the later-release hang, all nine combinations, the next TP/workspace sweep, and the decision to exclude quality-reducing optimizations. The server archive is now retained. The second sweep was intentionally stopped after 15 completed cases: TP=1 was slower, TP=4 requests fell back to TP=2, and workspace changes gave no clear improvement. A v1.1.36 benchmark completes with `DS4_STREAM_PRIO=0`; priority enabled reproduces a deadlock on this setup.
-
-## October 24: DeepSeek in use
-
-The next morning, Maya's DeepSeek-V4.1-Flash dashboard shows **90 requests and 86,075 output tokens at a reported aggregate 28.0 tokens/s**. The last request generated 422 tokens at **31.6 tokens/s**. This adds a view of ongoing use on Galactus to the previous day's controlled calibration.
-
-![Project Maya v1.1.24 dashboard showing DeepSeek-V4.1-Flash at 31.6 tokens/s on four Radeon Pro V620 GPUs](results/images/2026-10-24-maya-deepseek-dashboard.png)
-
-*October 24 dashboard capture. The large rate is for the last request; the session aggregate appears at the bottom. [Snapshot details and measurement limits](results/deepseek-v4.1-flash.md#october-24-dashboard-from-ongoing-use).*
-
-## October 23: two large MoE models at roughly 30 tokens/s
-
-In separate October 23 Maya tests, Galactus recorded **GLM-5.3-Flash UD-Q4_K_XL at 31.6 generated tokens/s** and **DeepSeek-V4.1-Flash-1017 UD-Q8_K_XL at 29.3 tokens/s with DSpark**, using Project Maya v1.1.24 on four Radeon Pro V620 GPUs and 2 TiB of system RAM. This is a substantial step forward for the notebook: both models exceed GPU memory, yet their recorded configurations reach approximately 30 tokens/s on this server.
-
-| Model | Speculative generation | Without speculation | Within-test improvement |
-|---|---:|---:|---:|
-| GLM-5.3-Flash UD-Q4_K_XL | **31.6 tokens/s** | 19.9 tokens/s | **58.8%** |
-| DeepSeek-V4.1-Flash-1017 UD-Q8_K_XL | **29.3 tokens/s** | 21.2 tokens/s | **38%**, with 69% draft acceptance |
-
-These are separate model runs. GLM uses Maya's three-answer benchmark; DeepSeek uses its DSpark calibration workload. GLM's initial default run measured 29.4 tokens/s, and manual speculative-head and MTP-expert sweeps retained the defaults as the highest observed configuration. Dedicated 8192-token prefill measured 240–242 tokens/s for GLM and 282 for DeepSeek in its earlier undrafted benchmark. The DeepSeek conversation identifies the intended export as UD-Q8_K_XL; its actual Maya model path and effective configuration were not captured.
-
-**[The milestone, A/B test, and tuning results](results/lab-notebook/2026-10-23-maya-glm53-speculation.md)** · [October 22 llama.cpp and llAMDa comparison](results/lab-notebook/2026-10-22-glm53-build-comparison.md) · [DeepSeek calibration and memory setup](results/lab-notebook/2026-10-23-deepseek41-cache-and-maya.md)
-
-## llamda: an experimental fork, not an established performance improvement
-
-I am withdrawing the llamda announcement. The fork brought model support, AMD patches, and my prefill scheduler work together, but the revision-identified GLM tests showed essentially the same throughput as upstream llama.cpp. Maya subsequently gave me substantially better generation performance. Strata and Gufo informed the architectural comparison; I have not retained a matched Galactus benchmark for either.
-
-The [complete retrospective](results/lab-notebook/2026-10-29-llamda-experimental-fork-retrospective.md) preserves the integration history, important tests and failures, source review, pipeline limitations, experimental patches, and uncompleted comparisons. It explains why tuning kernels and adding an expert cache did not reproduce a runtime that overlaps CPU work, GPU work, transfers, and speculative verification. The fork remains an experiment, and its historical results remain below.
-
-## DeepSeek cache sweep and Project Maya (recorded October 23)
-
-With DeepSeek-V4.1-Flash-1017 UD-Q8_K_XL, my retained `llamda-bench` output reports **132.66 ± 0.30 pp8192** and **9.51 ± 0.07 tg1024 tokens/s** at a requested 32 GiB expert cache. The conversation summary reports 10.20 generation tokens/s with the cache disabled and 11.54 at 64 GiB; 80 GiB failed with an OOM. Only the 32 GiB row includes its full command and printed output, so the broader sweep remains provisional.
-
-The additional Maya output records **282 tokens/s at 8192-token prefill** and a DSpark calibration improving sustained generation from **21.2 to 29.3 tokens/s (+38%)**, with **69% draft acceptance**. The LXC shell checks show unlimited memlock after the reported residency changes, but several settings changed together and the engine workloads differ. [The new experiment record](results/lab-notebook/2026-10-23-deepseek41-cache-and-maya.md) preserves the evidence and remaining measurement limits.
-
-## Earlier experiments
-
-I started this notebook to measure local LLM inference with models whose weights exceed GPU memory, placing routed experts in system RAM while GPUs handle the dense computation. Those experiments led me from configuration changes to modifying llama.cpp itself.
-
-In the earlier V620 tests, I measured [GLM-5.3-Flash at 19.1–19.4 t/s under automatic placement](results/lab-notebook/undated-glm53-flash-placement.md). My [DeepSeek-V4.1 DSpark attempt ran out of VRAM while loading the draft model](results/lab-notebook/undated-deepseek41-dspark.md). I kept the raw logs and complete GLM results alongside the analysis, and I discuss the measurements needed to explain the remaining decode bottleneck in [the bandwidth note](results/lab-notebook/2026-10-21-bandwidth-and-placement.md).
-
-I also reconstructed the earlier build and testing history from [46 original experiment files](results/raw-logs/2026-10-22-galactus-archive/README.md): [April thread and batch sweeps](results/lab-notebook/2026-04-07-to-17-thread-and-batch-tests.md), [July diagnostics and hardware monitoring](results/lab-notebook/2026-07-14-diagnostic-reconstruction.md), and [DSpark acceptance and August rebenchmarks](results/lab-notebook/2026-08-16-speculation-and-rebench-records.md).
-
-## The earlier scheduler investigation
-
-The most detailed investigation so far is GLM-5.2 on Galactus, an EPYC 7713 server with eight-channel DDR4 and four Radeon Pro V620 GPUs. Memory bandwidth explains much of its decode time. Prefill exposed a different problem: llama.cpp concentrated offloaded expert computation on one GPU, and a routing-index readback serialized the work. A scheduler patch raised prefill from **104.97 to 119.36 tokens/s (+13.7%)** in the July comparison. Distributing the work alone produced no meaningful gain; removing the synchronization was also necessary.
-
-The repository includes the measurements, unsuccessful experiments, patch instructions, and chronological notes behind these conclusions. The Galactus investigation now sits alongside the first oMLX measurements on Magneto, a 14-inch M2 Max MacBook Pro. Since the two engines were measured separately, each record gives its platform and conditions rather than treating the results as a common benchmark.
-
-## Results
-
-### Earlier DeepSeek-V4.1-Flash and GLM-5.3-Flash CLI results
-
-These CLI tests used my combined V620, older DeepSeek, GLM-5.3 MTP, and round-robin patch build. They predate the newer Unsloth integration. I used a short ZFS prompt and a 256-token generation limit, so I keep these rates separate from the normalized benchmark below.
-
-| Model and configuration | Generation t/s |
-| --- | ---: |
-| [GLM-5.3-Flash, MTP, automatic placement](results/glm-5.3-flash.md) | 19.1–19.4 |
-| [GLM-5.3-Flash, MTP, forced-RAM experts, no explicit cache allocation](results/glm-5.3-flash.md) | 13.7–14.4 |
-| [DeepSeek-V4.1-Flash Q4_K_M, target only](results/deepseek-v4.1-flash.md) | 11.2 |
-| [DeepSeek-V4.1-Flash with DSpark](results/deepseek-v4.1-flash.md) | Draft loading failed: insufficient VRAM |
-
-### August common baseline
-
-The latest common baseline in this notebook was measured on **August 15–16, 2026**, after Galactus's upgrade from 1 TB to 2 TB of RAM. All five models used llama.cpp build `3653e6d6d`, the stock scheduler, CPU-resident routed experts, and `-b 8192 -ub 8192 -p 8192 -n 128 -r 2`. GLM used 32 threads; the other models used 64. `pp8192` measures processing an 8,192-token prompt; `tg128` measures generating 128 tokens. Rates are tokens per second.
-
-| Model | pp8192 | tg128 | Speculative decode on the same build |
-|---|---|---|---|
-| [MiniMax M2.7](results/minimax-m2.7.md) | 418.83 ± 24.11 | 15.18 ± 0.18 | — |
-| [Qwen 3.5 397B](results/qwen-3.5-397b.md) | 249.61 ± 19.78 | 9.37 ± 0.16 | MTP failed to initialize on this export |
-| [DeepSeek-V4-Flash-0731](results/deepseek-v4-flash.md) | 143.54 ± 1.64 | 10.34 ± 0.10 | 14.1 ± 0.7 (DSpark, n=3) |
-| [GLM-5.2](results/glm-5.2.md) | 95.99 ± 3.36 | 5.30 ± 0.00 | 6.6 ± 0.3 (MTP, n=2) |
-| [Kimi K2.6](results/kimi-k2.5.md) | 94.23 ± 4.45 | 5.79 ± 0.01 | — |
-
-The speculative runs used a ZFS explanation prompt, greedy decoding, and llama-cli rather than llama-bench. Their repeated timings varied by about 9%; the reported spreads are not confidence intervals. MiniMax was retired after this measurement. [The August common baseline](results/lab-notebook/2026-08-15-to-16-common-baseline-2tb.md) records the exact model files, conditions, repetitions, and remaining questions.
-
-The July patch result and April resident-expert results used different builds and configurations. They remain in the [model notes](results/README.md), with their original conditions, and are not included in the stock baseline above.
-
-## Apple Silicon measurements (September 30, 2026)
-
-[Qwen3.8-27B on Magneto](results/qwen-3.8-27b.md) records an initial Lightning MTP baseline of **156.1 PP / 16.4 TG tokens/s at 4K**, with tuned ANE + MTP at **170.1 / 13.9** and a later screenshot at **171.0 / 16.9**. The baseline survives as a conversation transcription; the later results have a retained screenshot. Heavy thermal pressure was observed during the investigation. The oMLX leaderboard label omits chassis, so the higher external M2 Max result cannot establish an equivalent-machine comparison. A larger chassis is a hypothesis, not an identified cause. [The Magneto measurements](results/lab-notebook/undated-magneto-omlx-qwen38.md) record the ANE tuner/benchmark distinction, DFlash regression, incomplete SpecPrefill experiment, and evidence limitations.
-
-## Reading the notebook
-
-The [findings](takeaways/general-principles.md) collect what the experiments established and what remains uncertain. The [methodology](results/methodology.md) explains how I measured performance; the [reproduction guide](REPRODUCE.md) gives the commands and checks.
-
-| Material | Where to find it |
+| What you want to read | Start here |
 |---|---|
-| Model summaries and common baseline | [Results](results/README.md) |
-| Scheduler investigation and exact edits | [Prefill patch](patches/prefill/README.md) |
-| Changes that did not help on Galactus | [Negative results](takeaways/refuted-hypotheses.md) |
-| MTP and DSpark measurements | [Speculative decoding](takeaways/speculative-decoding.md) |
-| Experiments in chronological order | [Lab notebook](results/lab-notebook/overview.md) |
-| Early build record, dated model surveys, and deployment proposals | [Source notes](results/reference-notes/README.md) |
-| Original captures and extracted measurements | [Raw logs](results/raw-logs/) and [CSV data](results/data/) |
-| Machine specifications and memory measurements | [Hardware](hardware/README.md) |
-| Diagnostic scripts and historical rerun protocol | [Experiments](experiments/README.md) |
+| Every experiment and result | [Lab notebook, in chronological order](results/lab-notebook/README.md) |
+| What I did, why I did it, and what followed | [Investigation chapters](investigations/README.md) |
+| The most important demonstrated gains | [Important findings](takeaways/general-principles.md) |
+| The project's purpose and current state | Continue below |
 
-## Earlier build and deployment notes
+## The problem
 
-The [March build entry](results/lab-notebook/2026-03-23-galactus-build.md) preserves the initial ROCm/container setup, DIMM replacement results, and expert-placement command, under conditions that differ from the July and August investigations. The [dated source notes](results/reference-notes/README.md) also retain a July model shortlist, September architecture comparisons, and an unmeasured two-node residency proposal. These records explain the build and candidate selection; they do not add a new common benchmark or establish the proposed routing roles.
+Many large models fit in system RAM but do not fit in GPU memory, or VRAM. Simply loading them is not enough. The engine must read the right weights—the numbers learned during training—move data where it is needed, and keep the CPU and GPUs doing useful work.
 
-## Work remaining
+Most of this notebook concerns mixture-of-experts models. They hold many expert networks but use only a subset for each token. That makes them attractive for local hosting: system RAM can hold the full model while GPUs handle attention, shared work, and cached experts. It also creates many ways for execution to stall or waste bandwidth.
 
-The October 22 GLM benchmarks identify their revisions, while the DeepSeek cache capture still lacks one. The October 23 Maya tests establish a GLM speculation A/B result and record the head and MTP-expert measurements. The KEEP=4 capture lacks its final summary. Longer-context workloads, repeated tuning trials, and a prefill-patch A/B test remain open.
+I measure prompt reading and answer generation separately. A model that writes quickly may still take minutes to read a long input. I also distinguish a model's configured context limit from the prompt lengths I have actually tested.
 
-The October configuration cleanup and renames still lack confirming output for that date. The November collection now directly records GLM-Flash on port 8082 and DeepSeek on 8081 in the two-GPU configs; the final production-named copies remain absent. See the [November 10 deployment record](results/lab-notebook/2026-11-10-maya-dual-model-production.md) for the later operating state.
+## How the investigation developed
 
-As of the August 16 entry, the next comparison was the prefill patch against the stock build on the four retained models. An upstream patch submission, investigation of speculative-run timing variance, a choice between Kimi K2.6 and K2.7-Code, and a Kimi K3 evaluation remain open. The August speculative runs supersede the Session 10 rerun protocol.
+The main machine is **Galactus**, an EPYC 7713 server with eight-channel DDR4 and four Radeon Pro V620 GPUs. It had 1 TB of RAM during the July work and 2 TB from August onward. The [hardware notes](hardware/README.md) give the configurations and changes.
 
-## License and attribution
+I began by testing setup, thread counts, and expert placement. Memory measurements established a useful bandwidth reference. A common five-model benchmark then made comparisons easier to interpret.
 
-Code in `patches/` and `experiments/` is covered by the [MIT license](LICENSE). Text and data are covered by [CC BY 4.0](LICENSE-CC-BY-4.0.txt); [LICENSING.md](LICENSING.md) gives the scope and attribution details.
+The July GLM-5.2 investigation found two prefill problems: tests had used a smaller effective batch than intended, and the scheduler concentrated offloaded work while waiting on routing information. A combined patch improved the tested prefill rate by 13.7%. Spreading the work alone did not produce that gain.
 
-This project is not affiliated with AMD, llama.cpp, or any model vendor. Galactus and the other machine names are the names I use for the lab hardware.
+I later combined AMD and model-support work in an experimental fork called llamda. Its revision-identified benchmarks were nearly the same as upstream llama.cpp. I kept the work as an experiment and withdrew the performance announcement.
+
+Project Maya then gave useful generation rates for GLM-Flash and DeepSeek. The later tests focused on long prompts, expert-cache memory, precision settings, and dividing the four GPUs between two models. Separate notebook branches cover oMLX on an M2 Max laptop and Gufo on a Ryzen AI Max+ laptop.
+
+## Current Galactus setup
+
+As reported on November 10, 2026, I host two Maya services:
+
+| Service | GPUs | Selected configuration |
+|---|---|---|
+| DeepSeek-V4.1-Flash-1017 | 0–1 | UD-Q8_K_XL weights, DSpark, FP16-output prefill |
+| GLM-5.3-Flash | 2–3 | UD-Q4_K_XL weights, native MTP, INT8 streaming KV |
+
+The [deployment record](results/lab-notebook/2026-11-10-maya-dual-model-production.md) gives the retained settings and evidence. The tests measured each model separately. They do not establish throughput while both generate at once, quality equivalence for every precision setting, or performance at the configured one-million-token ceiling.
+
+## Results and supporting material
+
+The [results index](results/README.md) collects the model measurements. The [measurement guide](results/methodology.md) explains the terms and controls; the [reproduction guide](REPRODUCE.md) links the recorded procedures. [Data tables](results/data/), [raw captures](results/raw-logs/), and [source notes](results/reference-notes/README.md) preserve the details behind the accounts.
+
+The [unsuccessful approaches](takeaways/refuted-hypotheses.md) are kept separately. They show what failed, what was slower, and what remained unresolved on the tested configurations. They are useful limits on the findings, not claims that an approach cannot work elsewhere.
+
+Code in `patches/` and `experiments/` is MIT-licensed. Authored text and data are CC BY 4.0; third-party snapshots retain their own licenses. See [LICENSING.md](LICENSING.md). This project is not affiliated with AMD, llama.cpp, or a model vendor.

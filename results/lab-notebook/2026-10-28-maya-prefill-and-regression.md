@@ -1,5 +1,7 @@
 # Maya v1.1.30 recovery, prefill tuning, and the later-release regression
 
+[All lab records](README.md) · [Related investigation: chapter 5](../../investigations/05-tuning-long-prompts.md)
+
 **Experiments:** October 28, 2026; written October 29. **Machine:** Galactus, EPYC 7713, 2 TiB RAM (Maya reports 2004 GB), four Radeon PRO V620 GPUs, HIP/ROCm 7.2.0. **Model:** DeepSeek-V4.1-Flash-1017 UD-Q8_K_XL. **Evidence:** commands, engine excerpts, dashboard screenshots, and sweep output supplied in the conversation. The [October 29 archive](../raw-logs/2026-10-29-maya-collection/README.md) now retains the original CSVs, configs, metadata, and logs. The first-sweep table was initially transcribed from the conversation and has now been checked against the collected summary. Exact unrounded medians remain in that CSV.
 
 ## Restoring a usable installation

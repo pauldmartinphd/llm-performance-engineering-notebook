@@ -1,6 +1,6 @@
 # Qwen3.8-27B, oMLX, and chassis comparisons
 
-[Notebook index](overview.md) · [Model summary](../qwen-3.8-27b.md)
+[All lab records](README.md) · [Related investigation: chapter 7](../../investigations/07-other-local-machines.md)
 
 **Date:** September 30, 2026 (record compiled; exact timestamps for the earlier baseline are unavailable). **Machine:** Magneto, 14-inch M2 Max MacBook Pro, 38 GPU cores, 64 GB.
 **Object:** Record local oMLX results and determine what can explain their difference from a high M2 Max leaderboard submission.

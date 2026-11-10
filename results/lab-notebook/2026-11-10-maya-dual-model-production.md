@@ -1,6 +1,8 @@
 # Galactus: GLM-Flash INT8 KV and DeepSeek on separate GPU pairs
 
-**Deployment status reported November 10, 2026.** **Added:** November 10, 2026 (America/New_York). **Sources:** the supplied November 10 Maya archive and conversation exports; [source ledger and retained evidence](../raw-logs/2026-11-10-maya-collection/README.md). Historical commands describe the experiments; this documentation update ran no inference tests.
+[All lab records](README.md) · [Related investigation: chapter 6](../../investigations/06-sharing-galactus.md)
+
+**Deployment status reported November 10, 2026.**
 
 The testing led me to host **GLM-5.3-Flash UD-Q4_K_XL with INT8 KV on GPUs 2 and 3**, alongside **DeepSeek-V4.1-Flash-1017 UD-Q8_K_XL on GPUs 0 and 1**, using separate Project Maya services on Galactus. This operating state is confirmed by my November 10 notebook-update request. The supplied files establish each pair's configuration and individual performance; they do not contain a synchronized two-process readback or an overlapping-request benchmark.
 
@@ -43,4 +45,8 @@ These are requested production names from the discussion, not newly fabricated c
 
 ## What remains unmeasured
 
-Hosting both services does not establish throughput while both generate at once. My November 9 instruction prioritized switching between resident models; shared CPU and DDR4 contention under overlapping requests remains unmeasured. Neither model was tested at its configured 1M ceiling in these experiments. Local numerical-quality checks for INT8 KV and FP16-output prefill are absent, and the November 9 DeepSeek logs' early-row prompt skipping prevents treating those timings as verified full-computation quality results. I retain the operating choice and those measurement limits together.
+Hosting both services does not establish throughput while both generate at once. My November 9 instruction prioritized switching between resident models; shared CPU and DDR4 contention under overlapping requests remains unmeasured. Neither model was tested at its configured 1M ceiling in these experiments. Local numerical-quality checks for INT8 KV and FP16-output prefill are absent. The DeepSeek prompt-skip log message alone does not identify the excluded aggressive mode; the [layout entry](2026-11-09-deepseek-tp2-and-tp4.md#prompt-skip-diagnostics) explains that separate issue. I retain the operating choice and those measurement limits together.
+
+## Sources and recording dates
+
+**Added:** November 10, 2026 (America/New_York). **Sources:** the supplied November 10 Maya archive and conversation exports; [source ledger and retained evidence](../raw-logs/2026-11-10-maya-collection/README.md). Historical commands describe the experiments; this documentation update ran no inference tests.

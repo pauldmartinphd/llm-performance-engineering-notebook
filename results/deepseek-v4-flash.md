@@ -1,5 +1,9 @@
 # DeepSeek-V4-Flash-0731 — Galactus results
 
+These records concern DeepSeek-V4-Flash-0731, including the August DSpark tests. They do not substitute for the later V4.1-Flash-1017 measurements.
+
+[Related investigation: chapter 3](../investigations/03-making-speculation-useful.md) · [All model results](README.md)
+
 ## August baseline and DSpark (2 TB, build 3653e6d6d, stock scheduler)
 
 [The August common baseline](lab-notebook/2026-08-15-to-16-common-baseline-2tb.md) normalized all five models on one build. V4-Flash stock measured pp8192 143.54 ± 1.64, the first recorded V4-Flash prefill at the standing configuration, and tg128 10.34 ± 0.10, 44% higher than the July result of 7.16 t/s. This historical comparison includes changes beyond the llama.cpp build.

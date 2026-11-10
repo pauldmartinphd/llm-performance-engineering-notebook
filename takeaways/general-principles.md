@@ -1,57 +1,64 @@
-# Findings and limits
+# Important findings
 
-This page covers the Galactus investigation (see [../hardware/galactus/README.md](../hardware/galactus/README.md)). The other machines are documented under [../hardware/](../hardware/). It brings together the benchmark pitfalls, explanatory models, and limits of the evidence. Although the method applies to other machines, these numerical results remain specific to Galactus.
+The experiments established useful gains on specific local configurations. This page gives the result, the reason it matters, and the boundary of the evidence. The [investigation chapters](../investigations/README.md) explain the full sequence. The [lab notebook](../results/lab-notebook/README.md) retains every test.
 
-The main workload is a large MoE model with the routed experts in system RAM (`-ot exps=CPU` or `--cpu-moe`) and the dense path — attention, shared experts, and the KV cache — on the GPUs. Resident-expert and CPU-only runs provide additional comparisons. Most of the method below applies to any system with this workload. The CPU, RAM, and GPUs do not have to match mine.
+## 1. Large models can be useful without fitting in GPU memory
 
----
+Galactus has about 120 GB of usable GPU memory across four V620s, far less than the weight size of several tested models. With system RAM holding the remaining data, Maya's October 23 tests nevertheless reached **31.6 generated tokens/s for GLM-5.3-Flash** and **29.3 for DeepSeek-V4.1-Flash** in separate runs.
 
-## Benchmark faults
+This matters because model capacity is not set by VRAM alone. The engine's placement, caching, CPU work, and speculative path determine whether the larger model is practical to use. The tests do not show those rates under simultaneous load, and the two model workloads were different.
 
-These behaviors were observed in the llama.cpp builds used for the experiments. Check them when reproducing the work on a different build.
+[Experiment and controls](../results/lab-notebook/2026-10-23-maya-glm53-speculation.md) · [Why the work moved to Maya](../investigations/04-from-the-fork-to-maya.md)
 
-- The `-p N` option limits `n_ubatch` to N. This was the largest error in the project: every op_offload test before I found it had run at ub 512, not the ub 8192 I intended. Set `-ub` directly, keep `-p` large enough, and confirm the effective micro-batch size.
-- `llama-bench` separates `-ot` rules with semicolons, and commas create separate benchmark configurations — the opposite of `llama-server`. A comma-separated rule set drops the `exps=CPU` catch-all from every configuration after the first, so the GPU tries to allocate the full expert tensor and runs out of memory. The failure is recorded in [../results/raw-logs/llama-bench-ot-oom-failure.txt](../results/raw-logs/llama-bench-ot-oom-failure.txt).
-- `llama-bench` installs a null log callback, so `GGML_SCHED_DEBUG` output appears only with `-v`.
-- `llama-fit-params` turns off if you pass any of `-ngl`, `-ts`, `-ot`, or `-ncmoe`.
-- On a 1M-context model, `llama-cli` takes the context length from the model unless you pass `-c`. It then fills VRAM with the KV cache and runs out of memory. `llama-bench` hides this, because it sizes the context per test.
-- Capture llama-cli through a pseudo-terminal or the server interface: piping it through `tee` breaks its terminal display, and `--log-file` clamps the log to error level and drops the timing lines. Capture with `script -q`, or read the JSON timings from `llama-server`.
+## 2. Verifying the effective batch revealed a large prefill opportunity
 
-## Diagnosing placement and bandwidth
+In the July GLM-5.2 ladder, GPU operation offload processed an 8192-token prompt at **25.90 tokens/s with microbatch 512** and **104.97 with microbatch 8192**. At the smaller batch, offload was slower than the CPU-expert control. At the larger batch, it was about three times as fast as that control.
 
-- Run STREAM with the RFO correction to find your true memory bandwidth: multiply Scale by 1.5 and Add and Triad by 4/3, and apply no correction to Copy if it compiled to non-temporal stores. Check the generated stores before applying the correction; an adjusted result above the theoretical limit indicates a problem with the assumed traffic model. See [../experiments/galactus-diag.sh](../experiments/galactus-diag.sh) and [../hardware/galactus/galactus_triad.txt](../hardware/galactus/galactus_triad.txt).
-- Run `GGML_SCHED_DEBUG=2 ... -v` and count the split histogram (`grep '## SPLIT' | sort | uniq -c`). This shows whether the scheduler concentrates the offload on one card, and whether the placement behavior addressed by the [prefill patch](../patches/prefill/README.md) is present. It does not establish a throughput gain.
-- Check the histogram and throughput separately. Equal placement establishes that the scheduler changed; it does not establish that prefill became faster.
+Larger batches let the engine reuse transferred weights for more work. The important finding was not simply “use the largest batch.” It was that the original tests had exercised a smaller effective batch than intended. Correcting that measurement changed which optimization was worth pursuing.
 
-## Speculative decode
+[Complete ladder](../results/lab-notebook/2026-07-14-diagnostic-reconstruction.md) · [Scheduler investigation](../investigations/02-following-the-prefill-bottleneck.md)
 
-GLM-5.2 used `--spec-type draft-mtp --spec-draft-n-max 2`; its blk.78 NextN head loaded from the existing Unsloth quant without a re-download. The first successful measurement was 7.1 t/s (+31%). On the August common build, the repeated result was **6.6 ± 0.3 t/s**, about +25% over the stock baseline.
+## 3. Removing a wait helped where distribution alone did not
 
-DeepSeek-V4-Flash-0731 used `--spec-type draft-dspark --spec-draft-n-max 3`, with p-min off and am17an's block-5 drafter in VRAM. The initial 14.7 t/s result was about +45%; the August common-build result was **14.1 ± 0.7 t/s**, about +36%. These gains come from separate speculative runs, not the prefill patch.
+The July scheduler experiment improved GLM-5.2 prefill from **104.97 to 119.36 tokens/s**, a **13.7% gain**, by combining distributed offload with removal of a routing-index readback wait. Distributing the work alone reached 105.71, with little practical gain.
 
-Confidence truncation with `--spec-draft-p-min` did not establish an improvement on the tested technical prose. One early row has conflicting reports, and Session 10 lacks acceptance-rate captures. Whether truncation helps a low-acceptance domain remains untested. See [speculative decoding](speculative-decoding.md) for the cost model and measurement limits.
+The result separated a visible placement change from a useful speed change. It supports examining dependencies across the whole execution path. It establishes this patch's benefit on the tested July build, not on every later model or engine. Decode did not show a measured gain from the prefill patch.
 
----
+[Patch experiment](../results/lab-notebook/2026-07-21-prefill-patch.md) · [Exact edits](../patches/prefill/README.md)
 
-## Models to test on another system
+## 4. Speculative decoding gave useful generation gains
 
-- The decode two-term model is `time_per_token ≈ C + (bytes_read_per_token ÷ your_bandwidth)`. `C` is a GPU-side constant, about 90 ms on Galactus. `bytes_read_per_token` is your active-expert size at your quantization. On Galactus the model predicted 5.5 / 6.2 / 3.9 t/s against measured values of 5.53 / 6.01 / 3.87. Measure your own bandwidth with STREAM and your own bytes per token. Treat the two-term form as an approximation to check against measurements.
-- The prefill ubatch ladder is `t_ubatch ≈ (fixed streaming term) + (linear GEMM term × ub)`. On Galactus both terms came from the single card that the unpatched scheduler used. Test whether those two terms explain your measured ladder.
-- Prompt-length scaling is a quadratic attention term plus the linear expert terms. Attention was 72% of a 32k prefill pass here. Your split depends on your attention implementation and your context depth.
-- For cost, the $/GB and $/decode-token method in [the hardware note's cost section](../hardware/galactus/README.md) is a template. Your prices and your parts will differ.
+Maya's GLM-Flash comparison measured **19.9 tokens/s without speculation and 31.6 with it**, a **58.8% gain**. DeepSeek's separate DSpark calibration measured **21.2 and 29.3**, a **38% gain**. Earlier common-build tests also recorded useful MTP and DSpark generation results.
 
----
+Drafting can reduce the number of expensive target steps per output token. It also adds work. The draft-length tests showed why acceptance percentage alone does not identify the fastest setting. The gains above are within each test; they are not a ranking between models.
 
-## Hardware and build limits
+[Speculation chapter](../investigations/03-making-speculation-useful.md) · [October A/B and calibration](../results/lab-notebook/2026-10-23-maya-glm53-speculation.md)
 
-The historical results—119.36 t/s patched prefill and 7.1 and 14.7 t/s speculative decode—belong to their recorded configurations. So do the measured 152 GB/s DRAM bandwidth, 65.7 GB/s four-stream host-to-device bandwidth, and split counts of 731 on ROCm0 before the patch and 285/300/294/292 afterward. Component costs and the DDR5 comparison reflect the purchase and pricing dates in the [hardware note](../hardware/galactus/README.md).
+## 5. DeepSeek long-prefill tuning reduced a real waiting cost
 
-The notebook also records pinned-buffer and ZenDNN crashes during v2 testing, and a `llama-bench -d` KV-restore crash at 16,384 cells. Those reports concern the tested builds; they do not establish the behavior of later versions.
+The October 28 sweep selected **32K chunks and an 800 MiB transfer ring**. At a 64K prompt target, it reached about **480 tokens/s**, compared with **434** for the opening baseline. The roughly 11% improvement corresponds to about 14 seconds less prefill time for that input length, using the rounded rates.
 
----
+The repeated closing baseline stayed close to the opening one. Later fresh production requests remained near the selected range. The benefit depended on the combination of chunk and ring size; it was not a general result for every larger buffer.
 
-## Limits of the evidence
+[Full sweep](../results/lab-notebook/2026-10-28-maya-prefill-and-regression.md) · [Long-prompt chapter](../investigations/05-tuning-long-prompts.md)
 
-- These Galactus numbers come from one machine and mostly one prompt (a technical-prose ZFS explainer for the decode and speculation tests), with greedy decoding. An instrumentation failure prevented me from capturing acceptance rates for the Session 10 DSpark runs, as recorded in the notebook.
-- The record spans April through August and includes different llama.cpp builds, model exports, memory populations, and benchmark settings. [the August common baseline](../results/lab-notebook/2026-08-15-to-16-common-baseline-2tb.md) provides a common August baseline; earlier results are historical comparisons.
-- I label estimates from a model separately from measurements in the source documents.
+## Later operating choices with more limited evidence
+
+These results informed the current service, but need more testing before they support strong claims about repeatability or answer quality.
+
+| Choice | What the tests showed | What remains unresolved |
+|---|---|---|
+| DeepSeek FP16-output prefill on two V620s | Median 389.55 / 501.95 / 589.70 tokens/s at 8K / 16K / 32K; about 23–30% above the same-version TP2 fallback observations | No interleaved requested-TP2 control; local answer-quality equivalence unmeasured |
+| GLM-Flash reserve reduced from 3072 to 1024 MB per GPU | Built-in mean generation rose from 18.7 to 21.5 tokens/s in successive runs | One run per setting; placement and warm-up may contribute |
+| GLM-Flash INT8 KV | About 11–13% higher average generation than its paired FP16 control; long prefill near 292 tokens/s | Short samples varied; local quality and full-context behavior unmeasured |
+| Two resident Maya services | Reported operating setup uses two V620s for each model; individual-model tests support the allocation | No controlled overlapping-request benchmark of the final pair |
+
+The [two-model chapter](../investigations/06-sharing-galactus.md) connects these choices to the experiments. The [other-machines chapter](../investigations/07-other-local-machines.md) records the separate M2 Max and Ryzen AI Max+ results.
+
+## Findings about the platform and the method
+
+The August upgrade doubled Galactus's RAM capacity while measured bandwidth remained near 150 GB/s. That expanded the set of models that could stay in memory without doubling the rate at which the CPU could read their weights. [Memory remeasurement](../results/lab-notebook/2026-08-15-stream-rebaseline-2tb.md).
+
+Across the investigations, requested settings and actual execution often differed. Examples include clamped microbatches, TP4 requests that ran as TP2, GLM chunks reduced to fit workspace, and an ANE toggle that did not produce ANE work. These observations make runtime verification part of the result, rather than a setup detail to assume.
+
+The [measurement guide](../results/methodology.md) explains the checks. The [earlier detailed method lessons](measurement-lessons.md) retain the original benchmark pitfalls and cost models. [Unsuccessful approaches](refuted-hypotheses.md) remain a separate reference.

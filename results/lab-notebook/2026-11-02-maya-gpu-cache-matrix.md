@@ -1,6 +1,8 @@
 # Maya v1.1.49: one versus four GPUs and reduced expert-cache budgets
 
-**Experiments: November 2, 2026.** **Added:** November 10, 2026 (America/New_York). **Sources:** the supplied November 10 Maya archive and conversation exports; [source ledger and retained evidence](../raw-logs/2026-11-10-maya-collection/README.md). Historical commands describe the experiments; this documentation update ran no inference tests.
+[All lab records](README.md) · [Related investigation: chapter 6](../../investigations/06-sharing-galactus.md)
+
+**Experiments: November 2, 2026.**
 
 I ran DeepSeek-V4.1-Flash-1017 UD-Q8_K_XL and GLM-5.3-Flash UD-Q4_K_XL through the same orchestration, first with four GPUs and then one, while varying expert-cache controls. The retained CSV contains **54 measurements: 18 uncached rows and 36 cached repetitions**. GLM's single-GPU reduced-budget case failed during loading and ended the run. The single-GPU zero-cache case was therefore never reached.
 
@@ -58,3 +60,7 @@ Decode varied with prompt content, speculation and cache history. In particular,
 ## Decision
 
 Reduced reserve budgets barely changed uncached prefill in these runs, but they did not establish cache-size independence. I kept the single-GPU tradeoff visible and moved toward testing two GPUs per model. The planned separate decode experiment was not completed by this matrix. [November 9](2026-11-09-deepseek-tp2-and-tp4.md) supplies the later two-GPU evidence.
+
+## Sources and recording dates
+
+**Added:** November 10, 2026 (America/New_York). **Sources:** the supplied November 10 Maya archive and conversation exports; [source ledger and retained evidence](../raw-logs/2026-11-10-maya-collection/README.md). Historical commands describe the experiments; this documentation update ran no inference tests.

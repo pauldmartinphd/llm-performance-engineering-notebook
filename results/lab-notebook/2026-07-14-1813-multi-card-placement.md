@@ -1,6 +1,8 @@
 # July 14, 2026 (evening) — Multi-card placement experiments and the split histogram
 
-[Notebook index](overview.md) · [Model summaries](../README.md)
+[All lab records](README.md) · [Related investigation: chapter 2](../../investigations/02-following-the-prefill-bottleneck.md)
+
+**Question:** Where does the scheduler send the work? **Outcome:** Found concentrated offload and tested device placement; some attempts failed.
 
 ### 18:13 — newtest.txt named; first read of an incomplete log
 

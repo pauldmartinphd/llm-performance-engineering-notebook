@@ -1,5 +1,7 @@
 # DeepSeek-V4.1-Flash: style optimization and optional refusal reduction
 
+[All lab records](README.md) · [Related investigation: chapter 6](../../investigations/06-sharing-galactus.md)
+
 **Recorded:** November 5, 2026 (America/New_York). **Status:** project definition and proposed evaluation; no model-modification experiments run. **Sources:** [Fix Writing Style](https://chatgpt.com/c/6ae4fb2e-8f04-83ea-a57d-d4acb0c41ff2), its notebook continuation, and the Heretic documentation inspected during this session.
 
 I want to reduce DeepSeek's persistent rhetorical writing habits while preserving the technical reasoning that makes the model useful. The earlier discussion reports that repeated prompt changes did not resolve the problem. This entry preserves that motivation and defines a controlled experiment; it does not establish that modifying the model will succeed.
