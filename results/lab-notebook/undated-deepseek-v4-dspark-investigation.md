@@ -14,7 +14,7 @@ The compiled record reports useful DSpark generation results, including an initi
 
 *Later results: [the 2 TB STREAM rebaseline](2026-08-15-stream-rebaseline-2tb.md) completed the memory rebaseline, and [the August common baseline](2026-08-15-to-16-common-baseline-2tb.md) repeated speculative decode on a common build. The table below remains provisional, with the p-min conflict unresolved. The description of 14.7 t/s as the fastest result on any model overlooks the April MiniMax resident-offload result of 17.37 t/s.*
 
-*Continuation of the Galactus Lab Notebook (Sessions 1–9, July 13–21, 2026). Compiled August 8, 2026 from the working dialogue; benchmark figures in Session 10 were hand-collected from the terminal by Paul — the log-capture instrumentation failed (recorded below as its own finding). Times of day were not recorded, so the entries follow the order of the conversation, as in Session 9.*
+*Continuation of the Galactus Lab Notebook (Sessions 1–9, July 13–21, 2026). Run dates are unknown. Benchmark figures in Session 10 were hand-collected from your terminal — the log-capture instrumentation failed (recorded below as its own finding). Times of day were not recorded, so the entries follow the order of the conversation, as in Session 9.*
 
 ---
 

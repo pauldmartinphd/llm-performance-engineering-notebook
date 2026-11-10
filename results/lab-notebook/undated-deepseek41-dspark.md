@@ -12,7 +12,7 @@ The target used Q4_K_M, the ZFS prompt, 32 threads, 8192 context, greedy decodin
 
 Target-only generation completed at 11.2 tokens/s. The DSpark attempt failed while allocating 2464.20 MiB on ROCm0 during draft loading. The captured answer ended at the token limit and was not scored for correctness.
 
-**Recorded:** October 21, 2026, from an undated historical capture. [Raw record](../raw-logs/2026-10-21-flash-experiments/DeepSeekV4Flash%20Experiments.txt).
+**Date:** Unknown. [Raw record](../raw-logs/2026-10-21-flash-experiments/DeepSeekV4Flash%20Experiments.txt).
 
 **Build clarification, October 22, 2026:** you ran the V620 tests with the V620 patches, the older DeepSeek implementation, GLM-5.3 MTP support, and your round-robin prefill patch merged together. These results describe that combined build, before you replaced the DeepSeek implementation with Unsloth's newer port. The executable reports `b0-unknown`, so the log does not identify the exact commit.
 

@@ -72,7 +72,7 @@ Reduced reserve budgets barely changed uncached prefill in these runs, but they 
 
 ## Sources
 
-**Added:** November 10, 2026 (America/New_York). **Sources:** the supplied November 10 Maya archive and conversation exports; [source ledger and retained evidence](../raw-logs/2026-11-10-maya-collection/README.md).
+**Sources:** the supplied November 10 Maya archive and conversation exports; [source ledger and retained evidence](../raw-logs/2026-11-10-maya-collection/README.md).
 
 ## Conclusion
 

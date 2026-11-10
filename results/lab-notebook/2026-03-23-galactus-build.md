@@ -12,9 +12,7 @@ You built the ROCm runtime in LXC, compared CPU and GPU expert placement, and re
 
 The March note reports Qwen Q6 generation at 4.4 tokens/s with CPU experts and 5.5 with 16 expert layers on GPUs. The recorded Q4 configuration rose from 8.5 to 12.4–12.7 tokens/s after the DIMM change. Some larger placements and software paths failed.
 
-**Source period:** March 2026. **Added to this repository:** September 30, 2026.
-
-This entry recovers the early Galactus configuration from your [build notebook](../reference-notes/2026-03-23-galactus-build.md). The saved source is the September 30 edited version of that dated note, rather than a pristine March export or a raw benchmark capture. Its commands and trial tables are useful reproducibility material, but its displayed rates have no repetition counts or statistical spreads. You therefore keep them separate from the later [August common baseline](2026-08-15-to-16-common-baseline-2tb.md).
+**Source period:** March 2026. This entry recovers the early Galactus configuration from your [build notebook](../reference-notes/2026-03-23-galactus-build.md). The saved source is the September 30 edited version of that dated note, rather than a pristine March export or a raw benchmark capture. Its commands and trial tables are useful reproducibility material, but its displayed rates have no repetition counts or statistical spreads. You therefore keep them separate from the later [August common baseline](2026-08-15-to-16-common-baseline-2tb.md).
 
 ## The initial installation
 

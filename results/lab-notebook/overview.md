@@ -10,13 +10,11 @@ Commands and full tables stay with the experiment. Several settings can belong t
 
 Plans state what has not been tested. Old filenames sometimes redirect to a combined entry so earlier links still work. The older July entries also preserve the session sequence and quoted discussion, which show how your interpretation changed during the work.
 
-## Dates and later corrections
+## Dates
 
-You organize experiments by when they ran, where that date is known. An entry may also give the date on which you recovered the log or wrote the account. Those are different events.
+Entries use the date of the experiment or work described. When the run date is unknown, it stays marked as undated. File timestamps can help date a capture, but they do not always give a run start time.
 
-Some captures have only file-modification times. Some have no reliable run date. You label those limits rather than assign an invented time. Later evidence can complete a record without creating another experiment. If a later finding changes the interpretation, the entry and chapter explain that change.
-
-The [historical background and source ledger](../reference-notes/2026-07-notebook-background.md) preserve the original July hardware, model details, and compilation history. That hardware table describes the 1 TB system used in July. [Current hardware notes](../../hardware/README.md) also cover the later 2 TB population and other machines.
+The [historical background](../reference-notes/2026-07-notebook-background.md) gives the July hardware and model details. The [hardware notes](../../hardware/README.md) also cover the later 2 TB setup and other machines.
 
 ## Reading the rates
 

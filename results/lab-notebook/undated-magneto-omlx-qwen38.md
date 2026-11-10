@@ -12,7 +12,7 @@ You compared the recorded context sweeps and checked operation counts and therma
 
 The initial 4K result was 156.1 prefill and 16.4 generation tokens/s. Tuned ANE measured 170.1 prefill at 4K and 165.6 at 16K, with slower generation in those trials. The DFlash trial was slower and recorded no ANE MLP/GDN work. A later screenshot retains additional measured rows.
 
-**Date:** September 30, 2026 (record compiled; exact timestamps for the earlier baseline are unavailable). **Machine:** Magneto, 14-inch M2 Max MacBook Pro, 38 GPU cores, 64 GB.
+**Run dates:** Not recorded. **Machine:** Magneto, 14-inch M2 Max MacBook Pro, 38 GPU cores, 64 GB.
 **Object:** Record local oMLX results and determine what can explain their difference from a high M2 Max leaderboard submission.
 
 ## Source ledger

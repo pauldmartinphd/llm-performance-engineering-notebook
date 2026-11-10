@@ -43,7 +43,7 @@ You kept the 1024 MB reserve, native MTP and automatic expert placement, then in
 
 ## Sources
 
-**Added:** November 10, 2026 (America/New_York). **Sources:** the supplied November 10 Maya archive and conversation exports; [source ledger and retained evidence](../raw-logs/2026-11-10-maya-collection/README.md).
+**Sources:** the supplied November 10 Maya archive and conversation exports; [source ledger and retained evidence](../raw-logs/2026-11-10-maya-collection/README.md).
 
 ## Conclusion
 

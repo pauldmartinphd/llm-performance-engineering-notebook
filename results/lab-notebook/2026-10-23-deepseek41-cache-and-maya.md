@@ -161,7 +161,7 @@ For the next run, you will preserve the old checkout, raw results, tuned configu
 
 ## October 24 continuation: live context, cooling, and Hermes
 
-**Added:** October 29, 2026. **Sources:** [Speculative Node Setup](https://chatgpt.com/c/6adb5c97-ef6c-83e9-b985-9d01d55530f8), the October 29 continuation supplied with this notebook update, and the existing records linked below. The retrieved conversation contains the final setup exchange, but no older-page cursor; the live-context figures below are therefore retained as user-reported observations rather than reconstructed benchmark output. This section records the October 23–24 deployment and does not supersede the [October 29 production configuration](2026-10-29-maya-production-64k.md).
+**Sources:** [Speculative Node Setup](https://chatgpt.com/c/6adb5c97-ef6c-83e9-b985-9d01d55530f8), the October 29 continuation supplied with this notebook update, and the existing records linked below. The retrieved conversation contains the final setup exchange, but no older-page cursor; the live-context figures below are therefore retained as user-reported observations rather than reconstructed benchmark output. This section records the October 23–24 deployment and does not supersede the [October 29 production configuration](2026-10-29-maya-production-64k.md).
 
 ### Performance and context in use
 

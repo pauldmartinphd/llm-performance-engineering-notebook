@@ -2,7 +2,7 @@
 
 [All lab records](README.md) · [Related investigation: chapter 6](../../investigations/06-sharing-galactus.md)
 
-**Deployment status reported November 10, 2026.**
+**Deployment: November 10, 2026.**
 
 The testing led you to host **GLM-5.3-Flash UD-Q4_K_XL with INT8 KV on GPUs 2 and 3**, alongside **DeepSeek-V4.1-Flash-1017 UD-Q8_K_XL on GPUs 0 and 1**, using separate Project Maya services on Galactus. This operating state is confirmed by your November 10 notebook-update request. The supplied files establish each pair's configuration and individual performance; they do not contain a synchronized two-process readback or an overlapping-request benchmark.
 
@@ -28,7 +28,7 @@ The testing led you to host **GLM-5.3-Flash UD-Q4_K_XL with INT8 KV on GPUs 2 an
 
 The [November 2 matrix](2026-11-02-maya-gpu-cache-matrix.md) showed the substantial loss from reducing each model to a single GPU. The [DeepSeek TP2 run](2026-11-09-deepseek-tp2-and-tp4.md) then retained 29.0 tokens/s built-in mean decode with two GPUs. Its [FP16-output prefill test](2026-11-09-deepseek-fp16-prefill.md) reached median 389.55 / 501.95 / 589.70 tokens/s at 8K / 16K / 32K targets.
 
-The [full GLM investigation](2026-11-09-full-glm53-placement.md) completed but remained too slow for the intended use. GLM-Flash instead reached 21.5 tokens/s built-in mean decode after reducing reserve, and the [long-prompt comparison](2026-11-09-to-10-glm-flash-kv-cache.md) favored INT8 KV for decode while keeping approximately 292 tokens/s at 32K and 64K targets. Those figures belong to different workload families and are not a combined-system benchmark.
+The [full GLM investigation](2026-11-09-full-glm53-placement.md) completed but remained too slow for the intended use. GLM-Flash instead reached 21.5 tokens/s built-in mean decode after reducing reserve, and the [long-prompt comparison](2026-11-09-glm-flash-kv-cache.md) favored INT8 KV for decode while keeping approximately 292 tokens/s at 32K and 64K targets. Those figures belong to different workload families and are not a combined-system benchmark.
 
 ## Production names and retained evidence
 
@@ -49,4 +49,4 @@ Hosting both services does not show throughput while both generate at once. Your
 
 ## Sources
 
-**Added:** November 10, 2026 (America/New_York). **Sources:** the supplied November 10 Maya archive and conversation exports; [source ledger and retained evidence](../raw-logs/2026-11-10-maya-collection/README.md).
+**Sources:** the supplied November 10 Maya archive and conversation exports; [source ledger and retained evidence](../raw-logs/2026-11-10-maya-collection/README.md).

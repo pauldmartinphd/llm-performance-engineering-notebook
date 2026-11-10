@@ -12,7 +12,7 @@ The short ZFS-prompt runs used 32 threads, 8192 context, greedy decoding, MTP, a
 
 Automatic placement reached 19.1–19.4 generation tokens/s. Forced RAM without an explicit cache allocation measured roughly 13.7–14.4. Requested larger caches did not improve consistently; some configurations failed to allocate memory.
 
-**Recorded:** October 21, 2026, from an undated historical capture. **Machine:** Galactus, EPYC 7713P, 2 TB eight-channel DDR4, four V620 GPUs. [Raw log](../raw-logs/2026-10-21-flash-experiments/GLM-Flash%20Experiments.txt) · [All launch records as CSV](../data/glm53-flash-historical.csv).
+**Date:** Unknown. **Machine:** Galactus, EPYC 7713P, 2 TB eight-channel DDR4, four V620 GPUs. [Raw log](../raw-logs/2026-10-21-flash-experiments/GLM-Flash%20Experiments.txt) · [All launch records as CSV](../data/glm53-flash-historical.csv).
 
 **Build clarification, October 22, 2026:** you ran the V620 tests with the V620 patches, the older DeepSeek implementation, GLM-5.3 MTP support, and your round-robin prefill patch merged together. These results describe that combined build, before you replaced the DeepSeek implementation with Unsloth's newer port. The executable reports `b0-unknown`, so the log does not identify the exact commit.
 

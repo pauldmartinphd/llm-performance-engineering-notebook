@@ -57,7 +57,7 @@ The KV cache stores attention state from earlier tokens. Reducing its precision 
 
 You compared FP16 and INT8 KV with the same Q4 model, two GPUs, native MTP, and 8K effective chunks. Across the two repetitions at each prompt length, INT8 showed about **11–13% higher average generation throughput**. Fresh long-prefill rates stayed near **292 tokens/s** at 32K and 64K targets, slightly below the paired FP16 control.
 
-The [KV comparison](../results/lab-notebook/2026-11-09-to-10-glm-flash-kv-cache.md) also shows large variation between short decode samples. You treated the result as support for the operating choice, not a precise universal speedup. You kept an FP16 fallback. No local quality-equivalence test or full-capacity context test was supplied.
+The [KV comparison](../results/lab-notebook/2026-11-09-glm-flash-kv-cache.md) also shows large variation between short decode samples. You treated the result as support for the operating choice, not a precise universal speedup. You kept an FP16 fallback. No local quality-equivalence test or full-capacity context test was supplied.
 
 ## The resulting service
 

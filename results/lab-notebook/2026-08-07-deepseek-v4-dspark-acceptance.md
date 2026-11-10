@@ -12,7 +12,7 @@ The saved server runs used maximum draft lengths 1, 2, and 5. Each final timing 
 
 The length-one, length-two, and length-five captures measured 12.83, 14.45, and 12.22 tokens/s. Their acceptance fractions were about 78.9%, 67.6%, and 40.0%. A second length-five capture had the same acceptance counts but measured 11.35 tokens/s.
 
-**Capture date:** August 7, 2026, inferred from the original files' modification times. **Added:** October 22, 2026. The logs contain elapsed times only, but the saved source files place nmax1, nmax2, and nmax5 at 19:47:02, 19:47:46, and 19:48:34 EDT; the armed-test file was last written at 19:55:26 EDT. You recovered these timestamps on October 23. They establish a file-write sequence, not necessarily the order in which you ran the tests. [Timestamp evidence](../raw-logs/2026-10-22-galactus-archive/source-timestamps.md).
+**Capture date:** August 7, 2026, inferred from the original files' modification times. The logs contain elapsed times only, but the saved source files place nmax1, nmax2, and nmax5 at 19:47:02, 19:47:46, and 19:48:34 EDT; the armed-test file was last written at 19:55:26 EDT. You recovered these timestamps on October 23. They establish a file-write sequence, not necessarily the order in which you ran the tests. [Timestamp evidence](../raw-logs/2026-10-22-galactus-archive/source-timestamps.md).
 
 ## DeepSeek-V4 DSpark: accepted tokens versus generation speed
 

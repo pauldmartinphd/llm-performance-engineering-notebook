@@ -45,7 +45,6 @@ The two complete conversation exports remain outside this public repository, fol
 - [GLM-Flash prefill: requested versus effective chunks and the failed first harness](../../lab-notebook/2026-11-09-glm-flash-prefill-chunks.md).
 - [GLM-Flash FP16 versus INT8 KV: repeated prefill and decode observations](../../lab-notebook/2026-11-09-to-10-glm-flash-kv-cache.md).
 - [Galactus: GLM-Flash INT8 KV and DeepSeek on separate GPU pairs](../../lab-notebook/2026-11-10-maya-dual-model-production.md).
-- [Maya archive: upstream reference tests and unassigned live logs](../../lab-notebook/undated-maya-reference-benchmarks-and-live-logs.md).
 
 ## Provenance details
 

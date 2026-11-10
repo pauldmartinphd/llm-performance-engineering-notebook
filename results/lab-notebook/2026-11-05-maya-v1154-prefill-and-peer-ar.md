@@ -12,7 +12,7 @@ Each variant ran two requests at 8K/32K/64K plus two different 256-token decode 
 
 The completed sweep contains 60 prefill rows and 20 decode cases. Default prefill means were 324.8, 459.4, and 479.4 tokens/s. Automatic chunk selection was slower; neither requested peer path activated. The focused retest completed no startup-probe samples and never reached a ready engine.
 
-**Experiments:** November 5, 2026. **Added:** November 6, 2026 (America/New_York). **Sources:** the supplied *Fast Card Prefill Acceleration* conversation export and `maya_benchmark_1154_fixed.py`. Conversation timestamps and result-directory names establish the run date; the host timezone is not independently captured. [Retained evidence and hashes](../raw-logs/2026-11-05-maya-v1154/README.md).
+**Experiments:** November 5, 2026. **Sources:** the supplied *Fast Card Prefill Acceleration* conversation export and `maya_benchmark_1154_fixed.py`. Conversation timestamps and result-directory names establish the run date; the host timezone is not independently captured. [Retained evidence and hashes](../raw-logs/2026-11-05-maya-v1154/README.md).
 
 This continues the [October 28 prefill investigation](2026-10-28-maya-prefill-and-regression.md), [October 29 production confirmation](2026-10-29-maya-production-64k.md), and [October 30 v1.1.41 tests](2026-10-30-maya-v1141-benchmark.md).
 
@@ -149,7 +149,7 @@ The decode cases are part of the same ten-variant sweep. They do not add a numer
 
 ### Sources
 
-**Added:** November 10, 2026 (America/New_York). **Sources:** the supplied November 10 Maya archive and conversation exports; [source ledger and retained evidence](../raw-logs/2026-11-10-maya-collection/README.md).
+**Sources:** the supplied November 10 Maya archive and conversation exports; [source ledger and retained evidence](../raw-logs/2026-11-10-maya-collection/README.md).
 
 ## Conclusion
 

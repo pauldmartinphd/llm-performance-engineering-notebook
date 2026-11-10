@@ -675,7 +675,7 @@ You discuss the undated [scheduler traces](2026-07-14-1813-multi-card-placement.
 
 ### Source dates
 
-**Experiments:** July 14, 2026. The supplementary placement captures lack independent run timestamps. **Added:** October 22, 2026. [Archive inventory](../raw-logs/2026-10-22-galactus-archive/README.md) · [All printed benchmark rows](../data/galactus-archive-benchmarks.md).
+**Experiments:** July 14, 2026. The supplementary placement captures lack independent run timestamps. [Archive inventory](../raw-logs/2026-10-22-galactus-archive/README.md) · [All printed benchmark rows](../data/galactus-archive-benchmarks.md).
 
 ## Conclusion
 

@@ -2,7 +2,7 @@
 
 [All lab records](README.md) · [Related investigation: chapter 1](../../investigations/01-establishing-a-baseline.md)
 
-**Recorded:** November 2, 2026 (America/New_York). **Source:** *Speculative Decoding and Layer Offload on Galactus: Throughput Analysis Across Eight MoE Models*, a report written by Claude; its document metadata gives the creation date as May 6, 2026. **Status:** AI-summarized analysis and predictions; no new benchmark. The original document is kept outside this repository.
+**Date:** May 6, 2026. **Source:** *Speculative Decoding and Layer Offload on Galactus: Throughput Analysis Across Eight MoE Models*, a report written by Claude; its document metadata gives the creation date as May 6, 2026. **Status:** AI-summarized analysis and predictions; no new benchmark. The original document is kept outside this repository.
 
 The report combined your April measurements with a structural model of speculative decoding and expert-layer offload, and predicted decode throughput for eight MoE models on Galactus with 1 TB of DDR4, before the August 2 TB upgrade. This entry keeps its measured inputs, model, predictions, and proposed test order, and compares them with what you measured later. The report's predictions are not measurements. Its literature and engine-status claims (the GLM-5 paper's QAT description, arXiv 2602.15763; the Qwen 3.6-35B-A3B speculation benchmarks; llama.cpp issue #22319; the antirez DeepSeek V4 fork; SGLang and vLLM support for MiMo V2.5) are leads you have not verified here.
 

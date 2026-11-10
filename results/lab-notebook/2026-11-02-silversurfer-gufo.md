@@ -12,7 +12,7 @@ Gufo 0.28.1 ran in Podman with Q4 weights, MTP, one session, and a 262144-token 
 
 The first attempts failed at file access and then allocation. A later launch loaded in about 25 seconds. The retained on-battery event generated 318 tokens at 29.85 tokens/s after a 63-token prompt. Later reported Jan prefill rates of 539–740 tokens/s lack their original attachment.
 
-**Experiments:** November 2, 2026, with setup on November 1 and follow-up on November 3. **Added:** November 5. **Machine:** SilverSurfer, HP ZBook Ultra G1a, Ryzen AI Max+ PRO 395, 128 GB unified memory, openSUSE Aeon. **Source:** [source ledger and selected technical evidence](../raw-logs/2026-11-02-silversurfer-gufo/README.md).
+**Experiments:** November 2, 2026, with setup on November 1 and follow-up on November 3. **Machine:** SilverSurfer, HP ZBook Ultra G1a, Ryzen AI Max+ PRO 395, 128 GB unified memory, openSUSE Aeon. **Source:** [source ledger and selected technical evidence](../raw-logs/2026-11-02-silversurfer-gufo/README.md).
 
 You brought Gufo 0.28.1 up on SilverSurfer with Qwen3.8-Flash-Next UD-Q4_K_XL and its shared Q8_0 MTP predictor. The first retained completion generated **318 tokens at 29.85 tokens/s on battery**. The later conversation summary records **539–740 tokens/s for newly processed prompt tokens** as Jan's conversation grew to 54,781 tokens. The first result has its original timing JSON; the longer-request results survive only in the assistant's analysis of an attachment whose contents are absent from the export. You keep those evidence levels separate throughout this entry.
 

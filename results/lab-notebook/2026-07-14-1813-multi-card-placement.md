@@ -861,7 +861,7 @@ These traces complement the later [pp8192 patch experiment](2026-07-21-prefill-p
 
 ### Source dates
 
-**Capture date:** July 14, 2026, inferred from the original files' modification times. **Added:** October 22, 2026. You recovered the timestamps on October 23: `sched_full.txt` was last written at 19:07:54 EDT and `sched_patched.txt` at 19:58:26 EDT. These are file-write times, not run-start times. [Timestamp evidence](../raw-logs/2026-10-22-galactus-archive/source-timestamps.md).
+**Capture date:** July 14, 2026, inferred from the original files' modification times. You recovered the timestamps on October 23: `sched_full.txt` was last written at 19:07:54 EDT and `sched_patched.txt` at 19:58:26 EDT. These are file-write times, not run-start times. [Timestamp evidence](../raw-logs/2026-10-22-galactus-archive/source-timestamps.md).
 
 ## Conclusion
 

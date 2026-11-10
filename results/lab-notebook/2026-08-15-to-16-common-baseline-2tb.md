@@ -160,7 +160,7 @@ The benchmark files were last written August 15 at 13:07:13 EDT (`glm-5.2.md`) a
 
 ### Source dates
 
-**Experiments:** August 16, 2026 for the CLI transcripts; original file modification times place the adjacent benchmark captures on August 15–16. **Added:** October 22, 2026. [Original files](../raw-logs/2026-10-22-galactus-archive/README.md) · [Extracted CLI results](../data/galactus-archive-cli.jsonl).
+**Experiments:** August 16, 2026 for the CLI transcripts; original file modification times place the adjacent benchmark captures on August 15–16. [Original files](../raw-logs/2026-10-22-galactus-archive/README.md) · [Extracted CLI results](../data/galactus-archive-cli.jsonl).
 
 ## Conclusion
 

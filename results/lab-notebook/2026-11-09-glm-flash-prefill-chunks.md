@@ -43,7 +43,7 @@ The saved result is the twelve-row terminal output. The named directory, `glm-pr
 
 The 16K chunks did not help the short prompt and lost about one fifth of prefill throughput at 32K and 64K. The tests did not identify which internal cost caused the loss.
 
-You stopped at 64K; there was no 128K or 1M test. The [KV comparison](2026-11-09-to-10-glm-flash-kv-cache.md) follows with that 8K chunk baseline.
+You stopped at 64K; there was no 128K or 1M test. The [KV comparison](2026-11-09-glm-flash-kv-cache.md) follows with that 8K chunk baseline.
 
 ## Sources
 

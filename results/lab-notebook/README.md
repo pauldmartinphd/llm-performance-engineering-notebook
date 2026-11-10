@@ -2,7 +2,7 @@
 
 The entries below cover the tests, failed attempts, results, and plans. Each experiment keeps its setup and measurements together. Plans state what has not been tested.
 
-Dates refer to the work when known. Source and recording dates remain with the entry. Undated captures stay labeled as undated; you place them near the related work without inventing a run date. Source files and individual measurements are incorporated into the relevant experiment. Collecting a log does not create another run.
+Dates refer to the work when known. Undated captures stay labeled as undated; you place them near the related work without inventing a run date. Source files and individual measurements are incorporated into the relevant experiment. Collecting a log does not create another run.
 
 For a connected account, read the [investigation chapters](../../investigations/README.md). For the shorter conclusions, read the [important findings](../../takeaways/general-principles.md). [How to read a record](overview.md) explains the terms, evidence, and navigation.
 
@@ -33,7 +33,7 @@ For a connected account, read the [investigation chapters](../../investigations/
 | Date or period | Record | Summary |
 |---|---|---|
 | Aug 7 | [DeepSeek-V4-Flash-0731: DSpark acceptance and generation speed](2026-08-07-deepseek-v4-dspark-acceptance.md) | Compare draft length, accepted tokens, and actual generation time for DeepSeek-V4-Flash-0731. Length two beat length one and five in these captures; acceptance alone did not rank speed. |
-| Compiled Aug 8; runs undated | [DeepSeek-V4 DSpark investigation and interval notes](undated-deepseek-v4-dspark-investigation.md) | Investigate DSpark settings and preserve the interval between the July patch work and the August common benchmark. Retains early results, unresolved timing conflicts, and later-superseded plans; compiled August 8. |
+| Undated | [DeepSeek-V4 DSpark investigation and interval notes](undated-deepseek-v4-dspark-investigation.md) | Investigate DSpark settings and preserve the interval between the July patch work and the August common benchmark. Retains early results, unresolved timing conflicts, and later-superseded plans. |
 | Aug 15 | [STREAM re-baseline on the 2 TB population](2026-08-15-stream-rebaseline-2tb.md) | Check whether expanding Galactus from 1 TB to 2 TB changed the sustained memory bandwidth used in inference estimates. After DIMM replacement, bandwidth was about 148–151 GB/s; capacity rose with little bandwidth change. |
 | Aug 15–16 | [the 2 TB common baseline (stock build)](2026-08-15-to-16-common-baseline-2tb.md) | Establish a comparable five-model reference after the RAM upgrade, then check speculative generation on the same build. One stock build and command structure; also records separate MTP/DSpark tests. |
 
@@ -41,14 +41,14 @@ For a connected account, read the [investigation chapters](../../investigations/
 
 | Date or period | Record | Summary |
 |---|---|---|
-| Compiled Sep 30 | [Qwen3.8-27B, oMLX, and chassis comparisons](undated-magneto-omlx-qwen38.md) | Test Qwen3.8-27B on the M2 Max and examine ANE prefill, MTP, DFlash, and the difference from an external leaderboard. ANE, MTP, DFlash, and thermal observations; compiled September 30, with some run dates unknown. |
+| Undated | [Qwen3.8-27B, oMLX, and chassis comparisons](undated-magneto-omlx-qwen38.md) | Test Qwen3.8-27B on the M2 Max and examine ANE prefill, MTP, DFlash, and the difference from an external leaderboard. ANE, MTP, DFlash, and thermal observations; run dates unknown. |
 
 ## October 2026
 
 | Date or period | Record | Summary |
 |---|---|---|
-| Undated; recorded Oct 21 | [GLM-5.3-Flash: placement mattered more than the build label](undated-glm53-flash-placement.md) | Compare GLM-5.3-Flash expert placement, cache budgets, and draft settings on Galactus. Automatic placement reached 19.1–19.4 tokens/s; effective tensor placement was not captured. |
-| Undated; recorded Oct 21 | [DeepSeek-V4.1: target inference worked; DSpark ran out of VRAM](undated-deepseek41-dspark.md) | Establish target-only DeepSeek-V4.1 inference and then test whether its DSpark drafter can load and improve generation. Target-only generation completed at 11.2 tokens/s; draft loading ran out of VRAM. |
+| Undated | [GLM-5.3-Flash: placement mattered more than the build label](undated-glm53-flash-placement.md) | Compare GLM-5.3-Flash expert placement, cache budgets, and draft settings on Galactus. Automatic placement reached 19.1–19.4 tokens/s; effective tensor placement was not captured. |
+| Undated | [DeepSeek-V4.1: target inference worked; DSpark ran out of VRAM](undated-deepseek41-dspark.md) | Establish target-only DeepSeek-V4.1 inference and then test whether its DSpark drafter can load and improve generation. Target-only generation completed at 11.2 tokens/s; draft loading ran out of VRAM. |
 | Oct 21 | [llamda: the experimental AMD integration](2026-10-21-llamda-amd-fork.md) | Records combined model support and patches; separates integration from proven performance. |
 | Oct 21 | [Why STREAM bandwidth is not a decode prediction](2026-10-21-bandwidth-and-placement.md) | Explains missing execution costs and the measurements needed to test the model. |
 | Oct 22 | [GLM-5.3-Flash: revision-identified builds and placement tests](2026-10-22-glm53-build-comparison.md) | Compare the integrated AMD fork with upstream on the same named GLM-Flash export, then test CLI placement and draft length. Dedicated benchmarks were nearly identical; CLI banners exposed build ambiguity. |
@@ -56,7 +56,7 @@ For a connected account, read the [investigation chapters](../../investigations/
 | Oct 23 | [Two large MoE models at roughly 30 tokens/s on four V620s](2026-10-23-maya-glm53-speculation.md) | Test Maya with the existing GLM-Flash export, measure the effect of its speculative path, and check whether head grouping or draft-expert settings improve on the defaults. Separate runs reached roughly 30 tokens/s; GLM speculation A/B and head/expert sweeps retained. |
 | Oct 28–29 | [Maya v1.1.30 recovery, prefill tuning, and the later-release regression](2026-10-28-maya-prefill-and-regression.md) | Restore a working Maya service, tune DeepSeek long-prefill throughput, and investigate the later-release stall. Selected 32K chunks and an 800 MiB ring; partial layout sweep and stream-priority trigger retained. |
 | Oct 28 | [Galactus: prioritizing Maya and reassessing upstream performance work](2026-10-28-maya-priority-and-upstream-status.md) | Prioritized Maya; records dated upstream status and model choices without claiming new tests. |
-| Undated run; recorded Oct 29 | [GLM-5.3-Flash: 80 GiB expert-cache benchmark and investigation](2026-10-29-glm53-expert-cache.md) | Document GLM-Flash performance with an 80 GiB requested expert cache and determine what evidence would establish whether that cache helps. The benchmark is retained, but no matching cache-off control establishes its effect; run date unknown. |
+| Undated | [GLM-5.3-Flash: 80 GiB expert-cache benchmark and investigation](2026-10-29-glm53-expert-cache.md) | Document GLM-Flash performance with an 80 GiB requested expert cache and determine what evidence would establish whether that cache helps. The benchmark is retained, but no matching cache-off control establishes its effect; run date unknown. |
 | Oct 29 | [Maya v1.1.36: production configuration and uncached 64K confirmation](2026-10-29-maya-production-64k.md) | Confirm that the selected DeepSeek production settings complete a fresh long request at the expected prefill rate. 65,568 prompt tokens, zero cache hits, 488.6 tokens/s prefill. |
 | Oct 29 | [Open WebUI: working configuration, Code Interpreter regression, and remaining work](2026-10-29-openwebui-settings-and-next-steps.md) | Records restored responses and pending integration work; not an inference benchmark. |
 | Oct 29 | [Research questions: learned memory, sparse attention sharing, and active experts](2026-10-29-sparse-architecture-research.md) | Four proposed experiments; none run in this record. |
@@ -79,14 +79,12 @@ For a connected account, read the [investigation chapters](../../investigations/
 | Nov 9 | [Full GLM-5.3 Q4: allocation failures, legal layer boundaries, and a slow working split](2026-11-09-full-glm53-placement.md) | Test the full GLM-5.3 Q4 model on Galactus and determine whether correcting the layer split makes it practical for the intended interactive use. A corrected four-card split completed at 6.7 generation tokens/s; returned to Flash for daily use. |
 | Nov 9 | [GLM-5.3-Flash on two V620s: MTP, reserve reduction, and cancellation](2026-11-09-glm-flash-reserve-and-speculation.md) | Establish GLM-Flash on the second GPU pair, reclaim reserve memory for experts, and test speculative cancellation. Lower reserve raised observed mean generation to 21.5 tokens/s; cancellation was slower. |
 | Nov 9 | [GLM-Flash prefill: requested versus effective chunks and the failed first harness](2026-11-09-glm-flash-prefill-chunks.md) | Test whether larger effective chunks improve GLM-Flash long-prefill throughput, as they had for DeepSeek. Verified 16K chunks were about 21% slower on long prompts; kept 8K effective chunks. |
-| Nov 9 run; reported Nov 10 | [GLM-Flash FP16 versus INT8 KV: repeated prefill and decode observations](2026-11-09-to-10-glm-flash-kv-cache.md) | Compare FP16 and INT8 attention KV caches for GLM-Flash after selecting 8K effective chunks. INT8 had 11–13% higher mean generation across paired samples; no local quality-equivalence test. |
+| Nov 9 | [GLM-Flash FP16 versus INT8 KV: repeated prefill and decode observations](2026-11-09-glm-flash-kv-cache.md) | Compare FP16 and INT8 attention KV caches for GLM-Flash after selecting 8K effective chunks. INT8 had 11–13% higher mean generation across paired samples; no local quality-equivalence test. |
 | Nov 10 | [Galactus: GLM-Flash INT8 KV and DeepSeek on separate GPU pairs](2026-11-10-maya-dual-model-production.md) | DeepSeek on GPUs 0–1 and GLM-Flash INT8 KV on 2–3; overlapping-load throughput unmeasured. |
 
-## Reference captures with mixed or unknown dates
 
 | Date or period | Record | Summary |
 |---|---|---|
-| Mixed and unknown dates | [Maya archive: upstream reference tests and unassigned live logs](undated-maya-reference-benchmarks-and-live-logs.md) | Separates upstream V100 tests and loose logs from dated Galactus measurements. |
 
 ## Supporting material
 

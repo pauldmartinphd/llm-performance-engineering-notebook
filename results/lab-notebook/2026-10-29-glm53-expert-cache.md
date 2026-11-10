@@ -12,7 +12,7 @@ The benchmark used build 754aa4151, CPU experts, 32 threads, pp8192/tg256, and t
 
 The benchmark reports 279.51 ± 15.37 prefill and 8.63 ± 2.84 generation tokens/s. There is no matched cache-disabled control or captured cache-hit breakdown. The later access attempt did not produce another benchmark or validated patch.
 
-**Added:** October 29, 2026. **Run dates:** not printed in the supplied benchmark captures. **Hardware:** four AMD Radeon Pro V620 GPUs, consistent with the Galactus configuration. **Source:** [Original benchmark captures](../raw-logs/2026-10-29-glm53-expert-cache/benchmark-captures.md), followed by the October 29 continuation in Work mode. The original conversation is `6adace95-5744-83e9-8348-9e84b6b03966`.
+**Run dates:** not printed in the supplied benchmark captures. **Hardware:** four AMD Radeon Pro V620 GPUs, consistent with the Galactus configuration. **Source:** [Original benchmark captures](../raw-logs/2026-10-29-glm53-expert-cache/benchmark-captures.md), followed by the October 29 continuation in Work mode. The original conversation is `6adace95-5744-83e9-8348-9e84b6b03966`.
 
 ## Recorded measurement
 

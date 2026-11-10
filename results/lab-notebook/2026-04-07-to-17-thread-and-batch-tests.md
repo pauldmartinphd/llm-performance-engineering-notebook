@@ -12,7 +12,7 @@ Most short tests used pp512/tg128. You then tested GPU-resident Qwen experts and
 
 The listed thread sweeps had their best generation result at 32 threads, while prefill generally peaked at 96. Higher thread counts often reduced generation sharply. The Qwen Q6 resident-expert run reached 11.67 tokens/s at 32 threads. Several long-context attempts failed; the completed deep-context rows generated near 6.5 tokens/s.
 
-**Experiments:** April 7–17, 2026, where the captures include timestamps. **Added:** October 22, 2026. You recovered these logs from `tests.tar.gz`; they predate the July scheduler patch and the later V620/model integration. [Original files and source details](../raw-logs/2026-10-22-galactus-archive/README.md) · [Complete benchmark ledger](../data/galactus-archive-benchmarks.md).
+**Experiments:** April 7–17, 2026, where the captures include timestamps. You recovered these logs from `tests.tar.gz`; they predate the July scheduler patch and the later V620/model integration. [Original files and source details](../raw-logs/2026-10-22-galactus-archive/README.md) · [Complete benchmark ledger](../data/galactus-archive-benchmarks.md).
 
 You tested how CPU thread count affected large MoE models whose routed experts exceeded GPU memory, then tried keeping some Qwen expert layers on the four V620s. The logs distinguish three variables that a single headline rate would conceal: CPU thread count, expert placement, and the amount of context already in the model. You cannot treat the fastest row from each configuration as a common benchmark.
 
