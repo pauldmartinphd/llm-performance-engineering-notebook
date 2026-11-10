@@ -1,0 +1,226 @@
+[maya] sampling defaults from the config: temperature=1.0, top_p=1.0
+loading the model (the first start takes a minute or two) ...
+[maya] layer split across GPUs [0, 1, 2, 3] (auto)
+[maya] starting the engine: reading the model's weights ...
+ds4: CUDA0 (gfx1030): layer streams at the default priority (RDNA 2; DS4_STREAM_PRIO=1 to raise them)
+ds4: CUDA1 (gfx1030): layer streams at the default priority (RDNA 2; DS4_STREAM_PRIO=1 to raise them)
+ds4: CUDA2 (gfx1030): layer streams at the default priority (RDNA 2; DS4_STREAM_PRIO=1 to raise them)
+ds4: CUDA3 (gfx1030): layer streams at the default priority (RDNA 2; DS4_STREAM_PRIO=1 to raise them)
+ds4: the one-GPU decode path (in-place pulls, windows streamed, landings): off (v1.1.27's path: not NVIDIA + one GPU)
+ds4: Engram RAM file 7 locked 0.27 / 101.38 GB
+ds4: Engram RAM file 7 locked 8.86 / 101.38 GB
+ds4: Engram RAM file 7 locked 17.45 / 101.38 GB
+[maya] still starting (20 s) - please wait ...
+ds4: Engram RAM file 7 locked 26.04 / 101.38 GB
+ds4: Engram RAM file 7 locked 34.63 / 101.38 GB
+ds4: Engram RAM file 7 locked 43.22 / 101.38 GB
+ds4: Engram RAM file 7 locked 51.81 / 101.38 GB
+ds4: Engram RAM file 7 locked 60.40 / 101.38 GB
+ds4: Engram RAM file 7 locked 68.99 / 101.38 GB
+ds4: Engram RAM file 7 locked 77.58 / 101.38 GB
+ds4: Engram RAM file 7 locked 86.17 / 101.38 GB
+ds4: Engram RAM file 7 locked 94.76 / 101.38 GB
+ds4: Engram RAM file 7 locked 101.38 / 101.38 GB
+ds4: Engram RAM file 7 locked 0.27 / 101.38 GB
+ds4: Engram RAM file 7 locked 8.86 / 101.38 GB
+ds4: Engram RAM file 7 locked 17.45 / 101.38 GB
+ds4: Engram RAM file 7 locked 26.04 / 101.38 GB
+ds4: Engram RAM file 7 locked 34.63 / 101.38 GB
+ds4: Engram RAM file 7 locked 43.22 / 101.38 GB
+ds4: Engram RAM file 7 locked 51.81 / 101.38 GB
+ds4: Engram RAM file 7 locked 60.40 / 101.38 GB
+ds4: Engram RAM file 7 locked 68.99 / 101.38 GB
+ds4: Engram RAM file 7 locked 77.58 / 101.38 GB
+ds4: Engram RAM file 7 locked 86.17 / 101.38 GB
+ds4: Engram RAM file 7 locked 94.76 / 101.38 GB
+ds4: Engram RAM file 7 locked 101.38 / 101.38 GB
+ds4: Engram RAM ONLY: 2 complete tables (Q6_K/Q5_K/IQ4_NL/FP8), 202.758 GB locked; reads use memcpy
+[maya] still starting (40 s) - please wait ...
+ds4: the experts VRAM leaves over (~263.8 GB) are read in place from the model's files (copied into RAM after the GPUs' share when the RAM holds them all; --mmap-experts on keeps them in place) (2131.2 GB of RAM free to keep them: the most-routed 263.8 GB read ahead; prompts in chunks of 32768)
+[maya] still starting (60 s) - please wait ...
+ds4: strict RAM: all 14410 CPU experts selected, no disk fallback
+[maya] still starting (80 s) - please wait ...
+[maya] still starting (100 s) - please wait ...
+[maya] still starting (120 s) - please wait ...
+[maya] still starting (140 s) - please wait ...
+[maya] still starting (160 s) - please wait ...
+[maya] still starting (180 s) - please wait ...
+[maya] still starting (200 s) - please wait ...
+[maya] still starting (220 s) - please wait ...
+[maya] still starting (240 s) - please wait ...
+[maya] still starting (260 s) - please wait ...
+[maya] still starting (280 s) - please wait ...
+ds4: copied expert cache: DONTNEED hints accepted for 270.740 GB of whole source pages (eviction is advisory)
+[maya] still starting (300 s) - please wait ...
+ds4: the copied experts pinned (271.7 GB in 22.4 s): the prompt path DMAs them in place
+ds4: 14410 of the CPU lane's 14410 experts copied into RAM (270.9 GB, 1 NUMA part) in 246.7 s
+[maya] still starting (320 s) - please wait ...
+ds4: CUDA0 layers [0, 42] (tensor parallel 2, part 0): weights 4.97 GB, experts 7.19 GB (451 of 8064 in VRAM), caches 0.58 GB, 9198 MiB free
+ds4: CUDA1 layers [0, 19] (tensor parallel 2, part 1): weights 4.35 GB, experts 1.72 GB (163 of 7680 in VRAM), caches 0.58 GB, 15106 MiB free
+ds4: CUDA2 layers [20, 39] (tensor parallel 2, part 0) + head: weights 4.55 GB, experts 8.49 GB (883 of 7680 in VRAM), caches 0.39 GB, 9200 MiB free
+ds4: CUDA3 layers [20, 39] (tensor parallel 2, part 1): weights 4.42 GB, experts 8.49 GB (883 of 7680 in VRAM), caches 0.39 GB, 9336 MiB free
+ds4: 14410 routed experts on the CPU lane (270.9 GB): 14410 copied into RAM (1 NUMA parts), the rest in place in the model's files; 64 threads
+maya ds4 serve: GEN <max_new> [keys] <ids>; GENI <max_new> [keys] <pictures> <ids>; STOP, QUIT
+[maya] images: the model's vision tower runs in the engine (GPU 0: none between pictures, ~318 MiB while one is read, lent by the prompt buffers), up to 1024 tokens a picture
+[maya] thinking level when a request names none: high
+[maya] thinking budget: 32768 tokens (then the answer)
+[maya] model management: on (/models/load, /models/unload, /models/sse)
+ready: http://127.0.0.1:18081/v1  (OpenAI: /v1/chat/completions, /v1/responses, Anthropic: /v1/messages, context 1048576 tokens, images on)
+       open http://127.0.0.1:18081/ in a browser to chat; close this window to stop the model
+maya ds4 serve: restore points a request asks for: up to 4 a conversation, 2.9 MB of RAM each (MAYA_DS4_RESTORE_POINTS)
+
+rocblaslt error: Cannot read "/opt/rocm-7.2.0/lib/hipblaslt/library/TensileLibrary_lazy_gfx1030.dat": No such file or directory
+
+rocblaslt error: Could not load "/opt/rocm-7.2.0/lib/hipblaslt/library/TensileLibrary_lazy_gfx1030.dat"
+[maya] reading the prompt: 32,800 tokens, 10 s so far
+[maya] reading the prompt: 32,800 tokens, 20 s so far
+[maya] reading the prompt: 32,800 tokens, 30 s so far
+[maya] reading the prompt: 32,800 tokens, 40 s so far
+[maya] reading the prompt: 32,800 tokens, 50 s so far
+[maya] reading the prompt: 29,620 of 32,800 tokens, 56 s so far
+[maya] reading the prompt: 29,620 of 32,800 tokens, 57 s so far
+[maya] reading the prompt: 29,620 of 32,800 tokens, 58 s so far
+[maya] reading the prompt: 29,620 of 32,800 tokens, 59 s so far
+[maya] reading the prompt: 29,620 of 32,800 tokens, 60 s so far
+[maya] reading the prompt: 29,620 of 32,800 tokens, 61 s so far
+[maya] reading the prompt: 29,620 of 32,800 tokens, 62 s so far
+[maya] reading the prompt: 29,620 of 32,800 tokens, 63 s so far
+[maya] reading the prompt: 29,620 of 32,800 tokens, 64 s so far
+[maya] reading the prompt: 29,620 of 32,800 tokens, 65 s so far
+[maya] reading the prompt: 29,620 of 32,800 tokens, 66 s so far
+[maya] reading the prompt: 29,620 of 32,800 tokens, 67 s so far
+[maya] reading the prompt: 29,620 of 32,800 tokens, 68 s so far
+[maya] reading the prompt: 29,620 of 32,800 tokens, 69 s so far
+[maya] reading the prompt: 29,620 of 32,800 tokens, 70 s so far
+maya ds4 serve: prompt read: 32800 tokens in 70.8 s; VRAM free CUDA0 9.0 of 30.0, CUDA1 14.7 of 30.0, CUDA2 9.0 of 30.0, CUDA3 9.1 of 30.0 GB before, 8.8, 14.6, 8.8, 9.0 after
+[maya] answering: 7 of max 128 tokens, 14.9 tok/s, 71 s
+[maya] answering: 32 of max 128 tokens, 20.3 tok/s, 72 s
+[maya] answering: 62 of max 128 tokens, 23.4 tok/s, 74 s
+[maya] answering: 88 of max 128 tokens, 24.0 tok/s, 75 s
+[maya] answering: 110 of max 128 tokens, 23.4 tok/s, 76 s
+maya ds4 serve: prompt 32800 tokens = 0 reused + 32800 read in 70834 ms (463.1 tok/s), 128 generated in 5296 ms (24.17 tok/s); CPU lane 0.5% of the experts
+maya ds4 serve: drafts 79 of 110 kept; per position (kept / reached): 1: 40/45 89% 2: 18/23 78% 3: 10/12 83% 4: 6/9 67% 5: 4/4 100% 6: 1/1 100% 7: 0/1 0%
+maya ds4 serve: prompt lookup: 5 rounds, 14 of its 29 drafts kept (in the above)
+[maya] done: 128 tokens in 76 s (24.2 tok/s) (length, cancel=False), expert cache 46.6% hit
+maya ds4 serve: prompt read: 1 tokens in 0.1 s; VRAM free CUDA0 8.8 of 30.0, CUDA1 14.6 of 30.0, CUDA2 8.8 of 30.0, CUDA3 9.0 of 30.0 GB before, 8.8, 14.6, 8.8, 9.0 after
+[maya] answering: 21 of max 128 tokens, 22.9 tok/s, 1 s
+[maya] answering: 59 of max 128 tokens, 29.4 tok/s, 2 s
+[maya] answering: 79 of max 128 tokens, 25.9 tok/s, 3 s
+[maya] answering: 108 of max 128 tokens, 26.2 tok/s, 4 s
+maya ds4 serve: prompt 32800 tokens = 32799 reused + 1 read in 70 ms (14.2 tok/s), 128 generated in 5106 ms (25.07 tok/s); CPU lane 44.0% of the experts
+maya ds4 serve: drafts 71 of 98 kept; per position (kept / reached): 1: 33/44 75% 2: 15/19 79% 3: 11/13 85% 4: 10/11 91% 5: 2/4 50%
+maya ds4 serve: prompt lookup: 2 rounds, 5 of its 8 drafts kept (in the above)
+[maya] done: 128 tokens in 5 s (25.1 tok/s) (length, cancel=False), expert cache 56.1% hit
+maya ds4 serve: prompt read: 1 tokens in 0.1 s; VRAM free CUDA0 8.8 of 30.0, CUDA1 14.6 of 30.0, CUDA2 8.8 of 30.0, CUDA3 9.0 of 30.0 GB before, 8.8, 14.6, 8.8, 9.0 after
+[maya] answering: 25 of max 128 tokens, 25.6 tok/s, 1 s
+[maya] answering: 60 of max 128 tokens, 29.6 tok/s, 2 s
+[maya] answering: 90 of max 128 tokens, 29.0 tok/s, 3 s
+[maya] answering: 111 of max 128 tokens, 26.9 tok/s, 4 s
+maya ds4 serve: prompt 32800 tokens = 32799 reused + 1 read in 69 ms (14.5 tok/s), 128 generated in 4779 ms (26.78 tok/s); CPU lane 43.4% of the experts
+maya ds4 serve: drafts 76 of 102 kept; per position (kept / reached): 1: 39/45 87% 2: 18/23 78% 3: 10/13 77% 4: 5/8 62% 5: 4/4 100%
+maya ds4 serve: prompt lookup: 2 rounds, 2 of its 8 drafts kept (in the above)
+[maya] done: 128 tokens in 5 s (26.8 tok/s) (length, cancel=False), expert cache 56.8% hit
+[maya] reading the prompt: 65,568 tokens, 10 s so far
+[maya] reading the prompt: 65,568 tokens, 20 s so far
+[maya] reading the prompt: 65,568 tokens, 30 s so far
+[maya] reading the prompt: 65,568 tokens, 40 s so far
+[maya] reading the prompt: 65,568 tokens, 50 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 59 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 60 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 61 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 62 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 63 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 64 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 65 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 66 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 67 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 68 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 69 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 70 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 71 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 72 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 73 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 74 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 75 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 76 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 77 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 78 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 79 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 80 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 81 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 82 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 83 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 84 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 85 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 86 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 87 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 88 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 89 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 90 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 91 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 92 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 93 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 94 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 95 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 96 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 97 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 98 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 99 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 100 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 101 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 102 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 103 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 104 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 105 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 106 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 107 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 108 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 109 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 110 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 111 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 112 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 113 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 114 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 115 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 116 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 117 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 118 s so far
+[maya] reading the prompt: 31,194 of 65,568 tokens, 119 s so far
+[maya] reading the prompt: 62,388 of 65,568 tokens, 120 s so far
+[maya] reading the prompt: 62,388 of 65,568 tokens, 121 s so far
+[maya] reading the prompt: 62,388 of 65,568 tokens, 122 s so far
+[maya] reading the prompt: 62,388 of 65,568 tokens, 123 s so far
+[maya] reading the prompt: 62,388 of 65,568 tokens, 124 s so far
+[maya] reading the prompt: 62,388 of 65,568 tokens, 125 s so far
+[maya] reading the prompt: 62,388 of 65,568 tokens, 126 s so far
+[maya] reading the prompt: 62,388 of 65,568 tokens, 127 s so far
+[maya] reading the prompt: 62,388 of 65,568 tokens, 128 s so far
+[maya] reading the prompt: 62,388 of 65,568 tokens, 129 s so far
+[maya] reading the prompt: 62,388 of 65,568 tokens, 130 s so far
+[maya] reading the prompt: 62,388 of 65,568 tokens, 131 s so far
+[maya] reading the prompt: 62,388 of 65,568 tokens, 132 s so far
+[maya] reading the prompt: 62,388 of 65,568 tokens, 133 s so far
+[maya] reading the prompt: 62,388 of 65,568 tokens, 134 s so far
+maya ds4 serve: prompt read: 65568 tokens in 136.1 s; VRAM free CUDA0 8.8 of 30.0, CUDA1 14.6 of 30.0, CUDA2 8.8 of 30.0, CUDA3 9.0 of 30.0 GB before, 8.8, 14.6, 8.8, 9.0 after
+[maya] reading the prompt: 65,568 of 65,568 tokens, 136 s so far
+[maya] answering: 26 of max 128 tokens, 25.6 tok/s, 137 s
+[maya] answering: 66 of max 128 tokens, 32.3 tok/s, 138 s
+[maya] answering: 101 of max 128 tokens, 32.2 tok/s, 139 s
+maya ds4 serve: prompt 65568 tokens = 0 reused + 65568 read in 136121 ms (481.7 tok/s), 128 generated in 3923 ms (32.63 tok/s); CPU lane 0.2% of the experts
+maya ds4 serve: drafts 86 of 90 kept; per position (kept / reached): 1: 36/37 97% 2: 23/24 96% 3: 13/14 93% 4: 7/8 88% 5: 7/7 100%
+[maya] done: 128 tokens in 140 s (32.6 tok/s) (length, cancel=False), expert cache 58.9% hit
+maya ds4 serve: prompt read: 1 tokens in 0.1 s; VRAM free CUDA0 8.8 of 30.0, CUDA1 14.6 of 30.0, CUDA2 8.8 of 30.0, CUDA3 9.0 of 30.0 GB before, 8.8, 14.6, 8.8, 9.0 after
+[maya] answering: 26 of max 128 tokens, 25.8 tok/s, 1 s
+[maya] answering: 69 of max 128 tokens, 33.2 tok/s, 2 s
+[maya] answering: 102 of max 128 tokens, 33.1 tok/s, 3 s
+maya ds4 serve: prompt 65568 tokens = 65567 reused + 1 read in 74 ms (13.4 tok/s), 128 generated in 3856 ms (33.20 tok/s); CPU lane 41.0% of the experts
+maya ds4 serve: drafts 87 of 90 kept; per position (kept / reached): 1: 35/36 97% 2: 23/23 100% 3: 14/14 100% 4: 8/10 80% 5: 7/7 100%
+[maya] done: 128 tokens in 4 s (33.2 tok/s) (length, cancel=False), expert cache 59.2% hit
+maya ds4 serve: prompt read: 1 tokens in 0.1 s; VRAM free CUDA0 8.8 of 30.0, CUDA1 14.6 of 30.0, CUDA2 8.8 of 30.0, CUDA3 9.0 of 30.0 GB before, 8.8, 14.6, 8.8, 9.0 after
+[maya] answering: 25 of max 128 tokens, 26.7 tok/s, 1 s
+[maya] answering: 66 of max 128 tokens, 33.0 tok/s, 2 s
+[maya] answering: 103 of max 128 tokens, 34.0 tok/s, 3 s
+maya ds4 serve: prompt 65568 tokens = 65567 reused + 1 read in 74 ms (13.6 tok/s), 128 generated in 3918 ms (32.67 tok/s); CPU lane 41.6% of the experts
+maya ds4 serve: drafts 87 of 93 kept; per position (kept / reached): 1: 35/39 90% 2: 24/25 96% 3: 13/13 100% 4: 8/9 89% 5: 7/7 100%
+[maya] done: 128 tokens in 4 s (32.7 tok/s) (length, cancel=False), expert cache 58.6% hit
+[maya] stopping (SIGTERM): the engine ends

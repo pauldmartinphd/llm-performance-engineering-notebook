@@ -1,0 +1,37 @@
+{
+  "id": "chatcmpl-6660e594aa1d4d1cbfbb6ae7",
+  "object": "chat.completion",
+  "created": 1794267042,
+  "model": "deepseek-v4.1-flash",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "This document is a technical README and set of engineering notes for **Project Maya**, a local inference engine for running large open models (GLM-5.3-Flash, DeepSeek-V4.1-Flash-1017, MiniMax-M3.1-Flash) on consumer and workstation hardware. Key technical points:\n\n**Models and quantization**\n- Maya quants are tiered by expert bit-width (XS/S/M/L) and named by setup id (e.g. `glm-maya-s24`). Sizes range ~73 GB (GLM XS) to ~340 GB (DeepSeek"
+      },
+      "finish_reason": "length"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 32800,
+    "completion_tokens": 128,
+    "total_tokens": 32928,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 32800,
+    "prompt_ms": 72196.5,
+    "prompt_per_token_ms": 2.201,
+    "prompt_per_second": 454.3,
+    "predicted_n": 128,
+    "predicted_ms": 4539.0,
+    "predicted_per_token_ms": 35.461,
+    "predicted_per_second": 28.2,
+    "draft_n": 86,
+    "draft_n_accepted": 74
+  }
+}

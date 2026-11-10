@@ -1,0 +1,92 @@
+Project Maya v1.1.49 - GLM-5.3-Flash, DeepSeek-V4.1-Flash-1017 or MiniMax-M3.1-Flash on your own GPU(s).
+
+  ----------------------------------------------------------------------------------------------------
+  Starting GLM-5.3 · UD-Q4_K_XL (config.json).
+  Dashboard:        http://127.0.0.1:18081/
+  API (OpenAI):     http://127.0.0.1:18081/v1        (any model name; the API key: any)
+  API (Anthropic):  http://127.0.0.1:18081/v1/messages
+  Loading takes a few minutes: the engine pins up to all but about 6 GB of the free RAM for its expert tier
+  (MAYA_GLM_RAM_HEADROOM_GB changes the 6) and warms its caches - the first answers are the slowest.
+  Ctrl+C (or closing this terminal) stops it. Engine log: /opt/maya-test-results/20261102-124651-maya-matrix/glm-4gpu-reduced/maya-engine.log
+  ----------------------------------------------------------------------------------------------------
+[maya] this server's lines go to /opt/maya-test-results/20261102-124651-maya-matrix/glm-4gpu-reduced/maya-engine.log too
+[maya] sampling defaults from the config: temperature=1.0, top_p=0.95
+[maya] images: measuring the vision encoder on this GPU (4096 image tokens) ...
+[maya] images: the vision encoder needs 2.75 GB on this GPU at up to 4096 image tokens
+loading the model (the first start takes a minute or two) ...
+[maya] layer split across GPUs [0, 1, 2, 3] (auto)
+[maya] starting the engine: reading the model's weights ...
+[maya] still starting (20 s) - please wait ...
+[maya] still starting (40 s) - please wait ...
+[maya] still starting (60 s) - please wait ...
+[maya] still starting (80 s) - please wait ...
+[maya] images: the vision encoder starts when a picture arrives, in 2.87 GB the model lends it
+[maya] thinking level when a request names none: max
+[maya] thinking budget: 32768 tokens (then the answer)
+[maya] model management: on (/models/load, /models/unload, /models/sse)
+ready: http://127.0.0.1:18081/v1  (OpenAI: /v1/chat/completions, /v1/responses, Anthropic: /v1/messages, context 131072 tokens, images on)
+       open http://127.0.0.1:18081/ in a browser to chat; close this window to stop the model
+[maya] reading the prompt: 32,017 tokens, 10 s so far
+[maya] reading the prompt: 32,017 tokens, 20 s so far
+[maya] reading the prompt: 32,017 tokens, 30 s so far
+[maya] reading the prompt: 8,192 of 32,017 tokens, 36 s so far
+[maya] reading the prompt: 8,192 of 32,017 tokens, 46 s so far
+[maya] reading the prompt: 8,192 of 32,017 tokens, 56 s so far
+[maya] reading the prompt: 8,192 of 32,017 tokens, 66 s so far
+[maya] reading the prompt: 8,192 of 32,017 tokens, 76 s so far
+[maya] reading the prompt: 24,256 of 32,017 tokens, 80 s so far
+[maya] reading the prompt: 32,016 of 32,017 tokens, 90 s so far
+[maya] answering: 14 of max 128 tokens, 21.5 tok/s, 91 s
+[maya] answering: 37 of max 128 tokens, 22.4 tok/s, 92 s
+[maya] answering: 65 of max 128 tokens, 24.2 tok/s, 93 s
+[maya] answering: 92 of max 128 tokens, 24.8 tok/s, 94 s
+[maya] answering: 120 of max 128 tokens, 25.5 tok/s, 95 s
+[maya] done: 128 tokens in 95 s (25.2 tok/s) (length, cancel=False), expert cache 75.7% hit
+[maya] answering: 28 of max 128 tokens, 29.7 tok/s, 1 s
+[maya] answering: 58 of max 128 tokens, 29.5 tok/s, 2 s
+[maya] answering: 93 of max 128 tokens, 31.3 tok/s, 3 s
+[maya] answering: 124 of max 128 tokens, 31.0 tok/s, 4 s
+[maya] done: 128 tokens in 4 s (31.2 tok/s) (length, cancel=False), expert cache 86.5% hit
+[maya] answering: 28 of max 128 tokens, 29.3 tok/s, 1 s
+[maya] answering: 58 of max 128 tokens, 29.5 tok/s, 2 s
+[maya] answering: 94 of max 128 tokens, 31.6 tok/s, 3 s
+[maya] answering: 126 of max 128 tokens, 31.5 tok/s, 4 s
+[maya] done: 128 tokens in 4 s (31.5 tok/s) (length, cancel=False), expert cache 87.2% hit
+[maya] sessions: saved a 32016-token conversation (0.60 GB in 0.3 s); 1 kept, 0.60 GB
+[maya] reading the prompt: 63,733 tokens, 10 s so far
+[maya] reading the prompt: 63,733 tokens, 20 s so far
+[maya] reading the prompt: 63,733 tokens, 30 s so far
+[maya] reading the prompt: 8,192 of 63,733 tokens, 36 s so far
+[maya] reading the prompt: 8,192 of 63,733 tokens, 46 s so far
+[maya] reading the prompt: 8,192 of 63,733 tokens, 56 s so far
+[maya] reading the prompt: 8,192 of 63,733 tokens, 66 s so far
+[maya] reading the prompt: 8,192 of 63,733 tokens, 76 s so far
+[maya] reading the prompt: 24,576 of 63,733 tokens, 81 s so far
+[maya] reading the prompt: 24,576 of 63,733 tokens, 91 s so far
+[maya] reading the prompt: 24,576 of 63,733 tokens, 101 s so far
+[maya] reading the prompt: 24,576 of 63,733 tokens, 111 s so far
+[maya] reading the prompt: 24,576 of 63,733 tokens, 121 s so far
+[maya] reading the prompt: 40,960 of 63,733 tokens, 127 s so far
+[maya] reading the prompt: 40,960 of 63,733 tokens, 137 s so far
+[maya] reading the prompt: 40,960 of 63,733 tokens, 147 s so far
+[maya] reading the prompt: 40,960 of 63,733 tokens, 157 s so far
+[maya] reading the prompt: 40,960 of 63,733 tokens, 167 s so far
+[maya] reading the prompt: 56,448 of 63,733 tokens, 170 s so far
+[maya] reading the prompt: 63,732 of 63,733 tokens, 179 s so far
+[maya] answering: 18 of max 128 tokens, 28.8 tok/s, 180 s
+[maya] answering: 50 of max 128 tokens, 29.9 tok/s, 181 s
+[maya] answering: 77 of max 128 tokens, 28.6 tok/s, 182 s
+[maya] answering: 103 of max 128 tokens, 27.8 tok/s, 183 s
+[maya] answering: 127 of max 128 tokens, 26.9 tok/s, 184 s
+[maya] done: 128 tokens in 184 s (27.0 tok/s) (length, cancel=False), expert cache 81.1% hit
+[maya] answering: 30 of max 128 tokens, 31.5 tok/s, 1 s
+[maya] answering: 62 of max 128 tokens, 31.5 tok/s, 2 s
+[maya] answering: 92 of max 128 tokens, 30.9 tok/s, 3 s
+[maya] answering: 120 of max 128 tokens, 29.9 tok/s, 4 s
+[maya] done: 128 tokens in 4 s (30.5 tok/s) (length, cancel=False), expert cache 85.4% hit
+[maya] answering: 30 of max 128 tokens, 31.6 tok/s, 1 s
+[maya] answering: 61 of max 128 tokens, 31.2 tok/s, 2 s
+[maya] answering: 92 of max 128 tokens, 30.6 tok/s, 3 s
+[maya] answering: 119 of max 128 tokens, 29.6 tok/s, 4 s
+[maya] done: 128 tokens in 4 s (29.9 tok/s) (length, cancel=False), expert cache 84.3% hit
+[maya] stopping (SIGTERM): the engine ends

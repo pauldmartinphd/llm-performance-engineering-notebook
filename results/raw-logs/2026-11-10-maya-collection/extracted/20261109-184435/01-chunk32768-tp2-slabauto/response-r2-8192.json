@@ -1,0 +1,37 @@
+{
+  "id": "chatcmpl-5956a351aad9415daa2f45c3",
+  "object": "chat.completion",
+  "created": 1794268211,
+  "model": "deepseek-v4.1-flash",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "This document is a technical README for \"Project Maya,\" a local LLM inference setup. Key technical points:\n\n**Models & Quantization**\n- Supports three model families: GLM-5.3-Flash, DeepSeek-V4.1-Flash, and MiniMax-M3.1-Flash, each offered in multiple \"Maya\" quant sizes (XS, S, S24, M, L) plus third-party quants (unsloth GGUF, EXL3, abliterated variants).\n- Model sizes range from ~93 GB (MiniMax Maya-XS, fits a 128 GB PC"
+      },
+      "finish_reason": "length"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 8224,
+    "completion_tokens": 128,
+    "total_tokens": 8352,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 8224,
+    "prompt_ms": 21050.0,
+    "prompt_per_token_ms": 2.56,
+    "prompt_per_second": 390.7,
+    "predicted_n": 128,
+    "predicted_ms": 4481.4,
+    "predicted_per_token_ms": 35.011,
+    "predicted_per_second": 28.6,
+    "draft_n": 95,
+    "draft_n_accepted": 78
+  }
+}

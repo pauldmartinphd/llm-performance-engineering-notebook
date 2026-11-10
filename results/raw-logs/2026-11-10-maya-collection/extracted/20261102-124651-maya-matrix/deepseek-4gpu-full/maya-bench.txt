@@ -1,0 +1,51 @@
+Project Maya v1.1.49 benchmark, 2026-11-02 12:53
+GPUs: AMD RADEON PRO V620 Azure 30 GB, AMD RADEON PRO V620 Azure 30 GB, AMD RADEON PRO V620 Azure 30 GB, AMD RADEON PRO V620 Azure 30 GB; RAM 2004 GB; CPU AMD EPYC 7713 64-Core Processor
+setup: config.json, context 1048576, GPUs [0, 1, 2, 3]
+decode (writing the answer): mean 32.1 tokens/s over 3 answers of up to 256 tokens (greedy, thinking off)
+    31.7 tokens/s  Write a Python function that parses a CSV file into a list of dictionaries, with type hints and a docstring.
+    27.2 tokens/s  Explain how photosynthesis works, step by step, for a high-school student.
+    37.5 tokens/s  Write a complete HTML page with a canvas that draws a bouncing ball animation in JavaScript.
+prefill (reading the prompt): 195 tokens/s, 2048 tokens
+prefill (reading the prompt): 335 tokens/s, 8192 tokens
+
+engine lines:
+ds4: Engram RAM file 7 locked 51.81 / 101.38 GB
+ds4: Engram RAM file 7 locked 60.40 / 101.38 GB
+ds4: Engram RAM file 7 locked 68.99 / 101.38 GB
+ds4: Engram RAM file 7 locked 77.58 / 101.38 GB
+ds4: Engram RAM file 7 locked 86.17 / 101.38 GB
+ds4: Engram RAM file 7 locked 94.76 / 101.38 GB
+ds4: Engram RAM file 7 locked 101.38 / 101.38 GB
+ds4: Engram RAM file 7 locked 0.27 / 101.38 GB
+ds4: Engram RAM file 7 locked 8.86 / 101.38 GB
+ds4: Engram RAM file 7 locked 17.45 / 101.38 GB
+ds4: Engram RAM file 7 locked 26.04 / 101.38 GB
+ds4: Engram RAM file 7 locked 34.63 / 101.38 GB
+ds4: Engram RAM file 7 locked 43.22 / 101.38 GB
+ds4: Engram RAM file 7 locked 51.81 / 101.38 GB
+ds4: Engram RAM file 7 locked 60.40 / 101.38 GB
+ds4: Engram RAM file 7 locked 68.99 / 101.38 GB
+ds4: Engram RAM file 7 locked 77.58 / 101.38 GB
+ds4: Engram RAM file 7 locked 86.17 / 101.38 GB
+ds4: Engram RAM file 7 locked 94.76 / 101.38 GB
+ds4: Engram RAM file 7 locked 101.38 / 101.38 GB
+ds4: Engram RAM ONLY: 2 complete tables (Q6_K/Q5_K/IQ4_NL/FP8), 202.758 GB locked; reads use memcpy
+ds4: the experts VRAM leaves over (~229.4 GB) are read in place from the model's files (copied into RAM after the GPUs' share when the RAM holds them all; --mmap-experts on keeps them in place) (2131.3 GB of RAM free to keep them: the most-routed 229.4 GB read ahead; prompts in chunks of 32768)
+ds4: strict RAM: all 12672 CPU experts selected, no disk fallback
+ds4: copied expert cache: DONTNEED hints accepted for 238.086 GB of whole source pages (eviction is advisory)
+ds4: the copied experts pinned (239.0 GB in 19.7 s): the prompt path DMAs them in place
+ds4: 12672 of the CPU lane's 12672 experts copied into RAM (238.2 GB, 1 NUMA part) in 220.3 s
+ds4: CUDA0 layers [0, 42] (tensor parallel 2, part 0): weights 4.97 GB, experts 15.78 GB (1275 of 8064 in VRAM), caches 0.58 GB, 1004 MiB free
+ds4: CUDA1 layers [0, 19] (tensor parallel 2, part 1): weights 4.35 GB, experts 8.56 GB (891 of 7680 in VRAM), caches 0.58 GB, 8580 MiB free
+ds4: CUDA2 layers [20, 39] (tensor parallel 2, part 0) + head: weights 4.55 GB, experts 17.08 GB (1797 of 7680 in VRAM), caches 0.39 GB, 1008 MiB free
+ds4: CUDA3 layers [20, 39] (tensor parallel 2, part 1): weights 4.42 GB, experts 17.08 GB (1797 of 7680 in VRAM), caches 0.39 GB, 1144 MiB free
+ds4: 12672 routed experts on the CPU lane (238.2 GB): 12672 copied into RAM (1 NUMA parts), the rest in place in the model's files; 64 threads
+maya ds4 serve: prompt read: 10 tokens in 0.4 s; VRAM free CUDA0 1.0 of 30.0, CUDA1 8.4 of 30.0, CUDA2 1.0 of 30.0, CUDA3 1.1 of 30.0 GB before, 0.9, 8.3, 0.9, 1.1 after
+maya ds4 serve: prompt read: 28 tokens in 0.5 s; VRAM free CUDA0 0.9 of 30.0, CUDA1 8.3 of 30.0, CUDA2 0.9 of 30.0, CUDA3 1.1 of 30.0 GB before, 0.9, 8.3, 0.9, 1.1 after
+maya ds4 serve: prompt read: 19 tokens in 0.4 s; VRAM free CUDA0 0.9 of 30.0, CUDA1 8.3 of 30.0, CUDA2 0.9 of 30.0, CUDA3 1.1 of 30.0 GB before, 0.9, 8.3, 0.9, 1.1 after
+maya ds4 serve: prompt read: 21 tokens in 0.4 s; VRAM free CUDA0 0.9 of 30.0, CUDA1 8.3 of 30.0, CUDA2 0.9 of 30.0, CUDA3 1.1 of 30.0 GB before, 0.9, 8.3, 0.9, 1.1 after
+rocblaslt error: Cannot read "/opt/rocm-7.2.0/lib/hipblaslt/library/TensileLibrary_lazy_gfx1030.dat": No such file or directory
+rocblaslt error: Could not load "/opt/rocm-7.2.0/lib/hipblaslt/library/TensileLibrary_lazy_gfx1030.dat"
+maya ds4 serve: prompt read: 2048 tokens in 10.4 s; VRAM free CUDA0 0.9 of 30.0, CUDA1 8.3 of 30.0, CUDA2 0.9 of 30.0, CUDA3 1.1 of 30.0 GB before, 0.8, 8.2, 0.8, 1.0 after
+maya ds4 serve: prompt read: 2048 tokens in 10.5 s; VRAM free CUDA0 0.8 of 30.0, CUDA1 8.2 of 30.0, CUDA2 0.8 of 30.0, CUDA3 1.0 of 30.0 GB before, 0.8, 8.2, 0.8, 1.0 after
+maya ds4 serve: prompt read: 8192 tokens in 24.5 s; VRAM free CUDA0 0.8 of 30.0, CUDA1 8.2 of 30.0, CUDA2 0.8 of 30.0, CUDA3 1.0 of 30.0 GB before, 0.8, 8.2, 0.8, 1.0 after

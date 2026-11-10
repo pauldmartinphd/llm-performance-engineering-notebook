@@ -1,0 +1,3 @@
+Lent-RAM variant skipped: DS4_BORROW not explicitly enabled in config/environment.
+MAYA_PROMPT_MEMO is a server-level tokenization optimization and cannot be measured by the engine benchmark protocol.
+MMQ is attempted on Q8_K_XL but may be a no-op: documented only for supported IQ expert shapes. No quality parity is assumed.

@@ -76,3 +76,19 @@ The original July transcripts still refer to sessions in their historical sequen
 - **November 5 planning record; no experiments run:** [DeepSeek style optimization and optional refusal reduction with Heretic](2026-11-05-deepseek-style-and-heretic-plan.md). Four-model comparison, reasoning and factual-accuracy requirements, possible improvements or regressions, and unresolved compatibility work.
 
 - **November 5; added November 6:** [Maya v1.1.54 prefill sweep and HIP peer all-reduce failure](2026-11-05-maya-v1154-prefill-and-peer-ar.md). Ten variants, 30 printed mean rows, and 47 retained individual measurements. Defaults reached 479.4 tokens/s at 64K; P2P retained host transport, and the larger-reserve retest failed before readiness.
+
+## November 2–10: from GPU budgets to two resident Maya services
+
+- [Maya v1.1.49: production replay and the two-pair utilization question](2026-11-02-maya-v1149-production-recheck.md).
+- [Maya v1.1.49: one versus four GPUs and reduced expert-cache budgets](2026-11-02-maya-gpu-cache-matrix.md).
+- [Maya releases, memory budgets, and alternative deployment plans](2026-11-02-maya-release-and-capacity-planning.md).
+- [Maya v1.1.54: recovered decode measurements and complete sweep evidence](2026-11-05-maya-v1154-recovered-decode.md).
+- [Throughput bounds and alternative Qwen deployments](2026-11-09-throughput-models-and-alternative-hardware.md).
+- [DeepSeek on two V620s: baseline and requested TP4 fallback](2026-11-09-deepseek-tp2-and-tp4.md).
+- [DeepSeek RDNA 2 FP16-output prefill: measured speedup and fidelity limits](2026-11-09-deepseek-fp16-prefill.md).
+- [Full GLM-5.3 Q4: allocation failures, legal layer boundaries, and a slow working split](2026-11-09-full-glm53-placement.md).
+- [GLM-5.3-Flash on two V620s: MTP, reserve reduction, and cancellation](2026-11-09-glm-flash-reserve-and-speculation.md).
+- [GLM-Flash prefill: requested versus effective chunks and the failed first harness](2026-11-09-glm-flash-prefill-chunks.md).
+- [GLM-Flash FP16 versus INT8 KV: repeated prefill and decode observations](2026-11-09-to-10-glm-flash-kv-cache.md).
+- [Galactus: GLM-Flash INT8 KV and DeepSeek on separate GPU pairs](2026-11-10-maya-dual-model-production.md).
+- [Maya archive: upstream reference tests and unassigned live logs](undated-maya-reference-benchmarks-and-live-logs.md).

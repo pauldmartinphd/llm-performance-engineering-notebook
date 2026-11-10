@@ -1,0 +1,37 @@
+{
+  "id": "chatcmpl-4c0fcca5cf65483195918fd7",
+  "object": "chat.completion",
+  "created": 1794267149,
+  "model": "deepseek-v4.1-flash",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "This document is a technical README for **Project Maya**, a system for running large open-weight models (GLM-5.3-Flash, DeepSeek-V4.1-Flash, MiniMax-M3.1-Flash) locally on consumer/prosumer hardware. Key technical points:\n\n**Models & Quantization**\n- Three model families with Maya-XS/S/M/L quant tiers (93\u2013122 GB for GLM; DeepSeek ~350 GB; MiniMax ~95\u2013200 GB).\n- Quality measured against originals: GLM quants retain 97.7\u201399.2% zero-shot accuracy"
+      },
+      "finish_reason": "length"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 32800,
+    "completion_tokens": 128,
+    "total_tokens": 32928,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 32800,
+    "prompt_ms": 72070.1,
+    "prompt_per_token_ms": 2.197,
+    "prompt_per_second": 455.1,
+    "predicted_n": 128,
+    "predicted_ms": 4663.7,
+    "predicted_per_token_ms": 36.435,
+    "predicted_per_second": 27.4,
+    "draft_n": 92,
+    "draft_n_accepted": 72
+  }
+}

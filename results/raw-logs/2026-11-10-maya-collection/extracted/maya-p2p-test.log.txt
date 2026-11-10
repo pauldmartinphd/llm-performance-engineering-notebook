@@ -1,0 +1,16 @@
+Results: /opt/maya-bench-1154-20261105-201458
+Starting 1 variants, 8K/32K/64K, two repeats each
+[p2p_hip_auto] {'MAYA_DS4_HIP_PEER_AR': 'auto'}
+[p2p_hip_auto] FAILED: p2p_hip_auto: engine exited before READY (continuing to next variant)
+Project Maya v1.1.54 DeepSeek HIP benchmarks
+Results:
+Transport verification (log-based, not hardware-counter proof):
+  p2p_hip_auto: PEER_AR_AUTO gpu=0,1 floats=167772160 samples=0 host_ms=0.000000 ar2_ms=0.000000 peer_ms=0.000000 selected=host elapsed_ms=10295.2 complete=0
+Approximate variants (flow_chunk, flow_yoco, flow_combined, expert_mmq) require numerical quality validation before deployment.
+The MMQ flag on Q8_K_XL may be a no-op; compare logs/kernels before attributing a speed difference to MMQ.
+No original configuration was modified. Production engine remains stopped after benchmarking.
+Exception ignored in: <_io.TextIOWrapper name=5 encoding='UTF-8'>
+Traceback (most recent call last):
+  File "/opt/project-maya/maya_benchmark_p2p_test.py", line 223, in <module>
+    try: main()
+BrokenPipeError: [Errno 32] Broken pipe

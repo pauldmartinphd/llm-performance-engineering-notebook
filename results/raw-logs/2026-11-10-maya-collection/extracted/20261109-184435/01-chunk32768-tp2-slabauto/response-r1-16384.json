@@ -1,0 +1,37 @@
+{
+  "id": "chatcmpl-0decfeb1d4264f2394bc8d08",
+  "object": "chat.completion",
+  "created": 1794268173,
+  "model": "deepseek-v4.1-flash",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "This document is the README and technical documentation for **Project Maya**, a system for running large open-weight language models locally on consumer and prosumer hardware. Here are its key technical points:\n\n## Models and Quantization\n- Supports **GLM-5.3-Flash**, **DeepSeek-V4.1-Flash**, and **MiniMax-M3.1-Flash**, each offered in multiple Maya quant sizes (XS, S, M, L) plus third-party quants (unsloth GGUF, EXL3, abliterated variants).\n- Sizes range from ~75 GB (GLM Maya"
+      },
+      "finish_reason": "length"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 16416,
+    "completion_tokens": 128,
+    "total_tokens": 16544,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 16416,
+    "prompt_ms": 32630.7,
+    "prompt_per_token_ms": 1.988,
+    "prompt_per_second": 503.1,
+    "predicted_n": 128,
+    "predicted_ms": 5179.7,
+    "predicted_per_token_ms": 40.466,
+    "predicted_per_second": 24.7,
+    "draft_n": 92,
+    "draft_n_accepted": 72
+  }
+}

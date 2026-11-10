@@ -1,0 +1,25 @@
+{
+ "since": 1793647485.4023838,
+ "models": {
+  "config.json": {
+   "since": 1793647485.4024174,
+   "bands": {
+    "base": {
+     "input": 98372,
+     "cached": 196732,
+     "output": 768,
+     "requests": 6
+    },
+    "peak": {
+     "input": 0,
+     "cached": 0,
+     "output": 0,
+     "requests": 0
+    }
+   },
+   "model": "deepseek-v4.1-flash",
+   "quant": "UD-Q8_K_XL"
+  }
+ },
+ "prices": {}
+}

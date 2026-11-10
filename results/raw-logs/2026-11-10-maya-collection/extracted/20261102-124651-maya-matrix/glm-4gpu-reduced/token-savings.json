@@ -1,0 +1,25 @@
+{
+ "since": 1793648764.1602242,
+ "models": {
+  "config.json": {
+   "since": 1793648764.160262,
+   "bands": {
+    "base": {
+     "input": 95754,
+     "cached": 191496,
+     "output": 768,
+     "requests": 6
+    },
+    "peak": {
+     "input": 0,
+     "cached": 0,
+     "output": 0,
+     "requests": 0
+    }
+   },
+   "model": "glm-5.3-flash",
+   "quant": "UD-Q4_K_XL"
+  }
+ },
+ "prices": {}
+}

@@ -1,0 +1,37 @@
+{
+  "id": "chatcmpl-c2d9ca76547c4661bc293547",
+  "object": "chat.completion",
+  "created": 1794267118,
+  "model": "deepseek-v4.1-flash",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "This document is the README for **Project Maya**, a local LLM inference stack. Key technical points:\n\n**Models supported**\n- **GLM-5.3-Flash** (321B, 18B active, up to 1M context, MIT) \u2014 quantized into Maya tiers XS/S/S24/M/M-Derisked/L (73.4\u2013156.3 GB), trading bits-per-expert for size/quality.\n- **GLM-5.3** (744B, 40B active, text-only) \u2014 offered as unsloth UD-IQ2_M (238"
+      },
+      "finish_reason": "length"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 8223,
+    "completion_tokens": 128,
+    "total_tokens": 8351,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 8223,
+    "prompt_ms": 26082.3,
+    "prompt_per_token_ms": 3.172,
+    "prompt_per_second": 315.3,
+    "predicted_n": 128,
+    "predicted_ms": 4116.5,
+    "predicted_per_token_ms": 32.16,
+    "predicted_per_second": 31.1,
+    "draft_n": 94,
+    "draft_n_accepted": 83
+  }
+}

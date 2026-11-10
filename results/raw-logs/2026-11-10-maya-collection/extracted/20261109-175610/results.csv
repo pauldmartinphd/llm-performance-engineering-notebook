@@ -1,0 +1,7 @@
+case,chunk,ring_mib,tp_requested,tp_effective,profile,slab_mb,scratch_mb,layout_status,repeat,target_tokens,status,prompt_n,cache_n,prompt_ms,prefill_tps,output_tokens,decode_tps,wall_s,error
+01-chunk32768-tp2-slabauto,32768,800,2,2,auto,auto,auto,verified,1,16384,ok,16416,0,41536.2,395.2,128,27.2,46.302,
+01-chunk32768-tp2-slabauto,32768,800,2,2,auto,auto,auto,verified,2,8192,ok,8224,0,26224.2,313.6,128,29.3,30.614,
+01-chunk32768-tp2-slabauto,32768,800,2,2,auto,auto,auto,verified,1,32768,ok,32799,0,72279.9,453.8,128,27.4,77.057,
+01-chunk32768-tp2-slabauto,32768,800,2,2,auto,auto,auto,verified,1,8192,ok,8223,0,26100.4,315.1,128,33.6,29.934,
+01-chunk32768-tp2-slabauto,32768,800,2,2,auto,auto,auto,verified,2,32768,ok,32800,0,72513.0,452.3,128,27.4,77.277,
+01-chunk32768-tp2-slabauto,32768,800,2,2,auto,auto,auto,verified,2,16384,ok,16416,0,41847.4,392.3,128,28.3,46.42,

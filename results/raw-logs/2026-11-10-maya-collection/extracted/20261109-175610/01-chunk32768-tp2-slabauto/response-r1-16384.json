@@ -1,0 +1,37 @@
+{
+  "id": "chatcmpl-d2a50d3b5c7541e6b45c6669",
+  "object": "chat.completion",
+  "created": 1794265303,
+  "model": "deepseek-v4.1-flash",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "This document is a technical README for **Project Maya**, a local inference engine for running large open models (GLM-5.3-Flash, DeepSeek-V4.1-Flash, MiniMax-M3.1-Flash) on consumer/prosumer hardware. Key technical points:\n\n**Quantization & Quality**\n- Maya quants (Maya-S/S24/M/L) are made from released weights and benchmarked against originals: GLM-5.3 retains 97.7\u201399.2% zero-shot accuracy and 83\u201390% next-token agreement; DeepSeek V4."
+      },
+      "finish_reason": "length"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 16416,
+    "completion_tokens": 128,
+    "total_tokens": 16544,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 16416,
+    "prompt_ms": 41536.2,
+    "prompt_per_token_ms": 2.53,
+    "prompt_per_second": 395.2,
+    "predicted_n": 128,
+    "predicted_ms": 4707.9,
+    "predicted_per_token_ms": 36.78,
+    "predicted_per_second": 27.2,
+    "draft_n": 112,
+    "draft_n_accepted": 85
+  }
+}

@@ -1,0 +1,1573 @@
+[maya] sampling defaults from the config: temperature=1.0, top_p=0.95
+[maya] images: the vision encoder needs 2.75 GB on this GPU at up to 4096 image tokens
+loading the model (the first start takes a minute or two) ...
+[maya] layer split across GPUs [0, 1, 2, 3] (auto)
+[maya] starting the engine: reading the model's weights ...
+glm settings from the environment: MAYA_GLM_PREFILL_MB=4096, MAYA_GLM_PREFILL_SUB=1024, MAYA_GLM_RAM_HEADROOM_GB=16, MAYA_GLM_RAM_RESIDENT=1, MAYA_GLM_RESERVE_MB=1024, MAYA_GLM_SPLIT=auto
+glm split auto: CUDA0 (AMD Radeon Pro V620) memory 64 GB/s, 29.84 GB free
+glm split auto: CUDA1 (AMD Radeon Pro V620) memory 64 GB/s, 29.84 GB free
+glm split auto: CUDA2 (AMD Radeon Pro V620) memory 64 GB/s, 29.84 GB free
+glm split auto: CUDA3 (AMD Radeon Pro V620) memory 64 GB/s, 29.84 GB free
+glm split auto: the host reads RAM at 199 GB/s (a part's CPU lane: 50); the routes from the default coverage curve (no usage counts); a token costs the parts added
+glm split auto: layers [0, 13) on CUDA0, [13, 24) on CUDA1, [24, 35) on CUDA2, [35, 45) on CUDA3 - a token 226.8 ms predicted (CUDA0 63.0 ms, 173 slots a layer | CUDA1 52.7 ms, 167 slots a layer | CUDA2 52.6 ms, 168 slots a layer | CUDA3 58.5 ms, 179 slots a layer), 93% of the routed experts in VRAM
+glm pack: CUDA2 KV streaming: 32768 of 131072 positions of each of 2 DSA layers in VRAM (0.07 GB), the latent cache in 0.27 GB of pinned RAM
+glm pack: CUDA1 KV streaming: 32768 of 131072 positions of each of 3 DSA layers in VRAM (0.10 GB), the latent cache in 0.40 GB of pinned RAM
+glm mtp: CUDA3 the NextN block (blk.45) loaded: 210 MB dense, experts q4_K/q5_K
+glm spec: CUDA1 the head's recurrent-state backup (34 MB) before the expert pool
+glm pack: CUDA3 KV streaming: 32768 of 131072 positions of each of 4 DSA layers in VRAM (0.13 GB), the latent cache in 0.54 GB of pinned RAM
+glm pack: CUDA0 KV streaming: 32768 of 131072 positions of each of 3 DSA layers in VRAM (0.10 GB), the latent cache in 0.40 GB of pinned RAM
+glm spec: CUDA0 the head's recurrent-state backup (43 MB) before the expert pool
+glm prefill: CUDA0 prompt chunk 32768 -> 16384 tokens so its buffers fit in the expert pool
+glm prefill: CUDA0 cuBLAS warm-up: sgemm 0, gemm f16 0, sync no error
+glm prefill: CUDA0 the chunk stage line is on (STRATA_GLM_PREFILL_STAGES=0 silences it)
+glm prefill: CUDA0 chunks of 16384 tokens (--prefill 32768; mixer sub-batches of 1024), borrowing 3241 MB of the expert pool while a prompt runs (activations 2918, weight scratch 96, expert staging 211, prestage 0: 0 experts); disk landing ring 96 experts (1687 MB pinned)
+glm fast: CUDA0 VRAM before the expert pool: 3.28 of 29.98 GB in use - dense weights 2.57, state/KV (131072 ctx) 0.21, activations 0.14, other (context, MTP, scratch, prompt path) 0.36
+glm fast: the expert profile /opt/project-maya/data/expert-profile-glm.bin ranks 13248 (layer, expert) pairs
+glm fast: CUDA0 the vision encoder borrows the pool's tail (3.20 GB) while it encodes
+glm fast: CUDA0 layers [0,13) expert pool 25.70 GB, 151-203 slots/layer (1771 total)
+glm fast: ZFS's ARC holds 8.0 GB above its floor: counted as free RAM (it gives it back under pressure)
+glm prefill: CUDA1 prompt chunk 32768 -> 16384 tokens so its buffers fit in the expert pool
+glm prefill: CUDA1 cuBLAS warm-up: sgemm 0, gemm f16 0, sync no error
+glm prefill: CUDA1 the chunk stage line is on (STRATA_GLM_PREFILL_STAGES=0 silences it)
+glm prefill: CUDA1 chunks of 16384 tokens (--prefill 32768; mixer sub-batches of 1024), borrowing 3204 MB of the expert pool while a prompt runs (activations 2918, weight scratch 96, expert staging 174, prestage 0: 0 experts); disk landing ring 96 experts (1392 MB pinned)
+glm fast: CUDA1 VRAM before the expert pool: 2.53 of 29.98 GB in use - dense weights 1.87, state/KV (131072 ctx) 0.20, activations 0.12, other (context, MTP, scratch, prompt path) 0.35
+glm fast: CUDA1 layers [13,24) expert pool 26.44 GB, 151-185 slots/layer (1867 total)
+glm prefill: CUDA2 prompt chunk 32768 -> 16384 tokens so its buffers fit in the expert pool
+glm prefill: CUDA2 cuBLAS warm-up: sgemm 0, gemm f16 0, sync no error
+glm prefill: CUDA2 the chunk stage line is on (STRATA_GLM_PREFILL_STAGES=0 silences it)
+glm prefill: CUDA2 chunks of 16384 tokens (--prefill 32768; mixer sub-batches of 1024), borrowing 3204 MB of the expert pool while a prompt runs (activations 2918, weight scratch 96, expert staging 174, prestage 0: 0 experts); disk landing ring 96 experts (1392 MB pinned)
+glm fast: CUDA2 VRAM before the expert pool: 2.44 of 29.98 GB in use - dense weights 1.86, state/KV (131072 ctx) 0.15, activations 0.12, other (context, MTP, scratch, prompt path) 0.32
+glm fast: CUDA2 layers [24,35) expert pool 26.54 GB, 154-192 slots/layer (1874 total)
+glm prefill: CUDA3 prompt chunk 32768 -> 16384 tokens so its buffers fit in the expert pool
+glm prefill: CUDA3 cuBLAS warm-up: sgemm 0, gemm f16 0, sync no error
+glm prefill: CUDA3 the chunk stage line is on (STRATA_GLM_PREFILL_STAGES=0 silences it)
+glm prefill: CUDA3 chunks of 16384 tokens (--prefill 32768; mixer sub-batches of 1024), borrowing 3934 MB of the expert pool while a prompt runs (activations 3636, weight scratch 96, expert staging 187, prestage 0: 0 experts); disk landing ring 96 experts (1494 MB pinned)
+glm fast: CUDA3 VRAM before the expert pool: 3.23 of 29.98 GB in use - dense weights 2.32, state/KV (131072 ctx) 0.25, activations 0.12, other (context, MTP, scratch, prompt path) 0.53
+glm fast: CUDA3 layers [35,45) expert pool 25.75 GB, 129-185 slots/layer, the draft layer 164 (1806 total)
+[maya] still starting (20 s) - please wait ...
+glm fast: CUDA0 RAM tier 23.25 GB pinned, 1587 slots
+glm fast: CUDA0 RAM-resident mode: every non-VRAM expert gets a slot (+16 slack/layer); disk evictions are OFF
+[maya] sampling defaults from the config: temperature=1.0, top_p=0.95
+[maya] images: the vision encoder needs 2.75 GB on this GPU at up to 4096 image tokens
+loading the model (the first start takes a minute or two) ...
+[maya] layer split across GPUs [0, 1, 2, 3] (auto)
+[maya] starting the engine: reading the model's weights ...
+glm settings from the environment: MAYA_GLM_PREFILL_MB=4096, MAYA_GLM_PREFILL_SUB=1024, MAYA_GLM_RAM_HEADROOM_GB=16, MAYA_GLM_RAM_RESIDENT=1, MAYA_GLM_RESERVE_MB=1024, MAYA_GLM_SPLIT=auto
+glm split auto: CUDA0 (AMD Radeon Pro V620) memory 64 GB/s, 1.00 GB free
+glm split auto: CUDA1 (AMD Radeon Pro V620) memory 64 GB/s, 1.01 GB free
+glm split auto: CUDA2 (AMD Radeon Pro V620) memory 64 GB/s, 1.00 GB free
+glm split auto: CUDA3 (AMD Radeon Pro V620) memory 64 GB/s, 1.01 GB free
+glm split auto: the host reads RAM at 203 GB/s (a part's CPU lane: 51); the routes from the default coverage curve (no usage counts); a token costs the parts added
+glm split auto: WARNING no placement leaves every part its pool's floor and a 512-token prompt chunk - the fastest one anyway (a smaller --max-context leaves more room)
+glm split auto: layers [0, 12) on CUDA0, [12, 24) on CUDA1, [24, 36) on CUDA2, [36, 45) on CUDA3 - a token 245.9 ms predicted (CUDA0 62.3 ms, 0 slots a layer | CUDA1 63.0 ms, 0 slots a layer | CUDA2 62.8 ms, 0 slots a layer | CUDA3 57.8 ms, 0 slots a layer), 0% of the routed experts in VRAM
+maya generate: pack: out of memory
+glm fast: CUDA0 warming the expert tiers 10% (4.6 of 45.0 GB, 14 s)
+glm fast: CUDA1 RAM tier 25.19 GB pinned, 1779 slots
+glm fast: CUDA1 RAM-resident mode: every non-VRAM expert gets a slot (+16 slack/layer); disk evictions are OFF
+glm fast: CUDA0 warming the expert tiers 20% (9.1 of 45.0 GB, 14 s)
+glm fast: CUDA1 warming the expert tiers 10% (4.9 of 48.2 GB, 0 s)
+glm fast: CUDA0 warming the expert tiers 30% (13.6 of 45.0 GB, 28 s)
+glm fast: CUDA2 RAM tier 25.09 GB pinned, 1772 slots
+glm fast: CUDA2 RAM-resident mode: every non-VRAM expert gets a slot (+16 slack/layer); disk evictions are OFF
+glm fast: CUDA0 warming the expert tiers 40% (18.1 of 45.0 GB, 29 s)
+glm fast: CUDA1 warming the expert tiers 20% (9.7 of 48.2 GB, 14 s)
+glm fast: CUDA0 warming the expert tiers 50% (22.6 of 45.0 GB, 29 s)
+glm fast: CUDA1 warming the expert tiers 30% (14.5 of 48.2 GB, 15 s)
+glm fast: CUDA0 warming the expert tiers 60% (27.1 of 45.0 GB, 29 s)
+glm fast: CUDA0 warming the expert tiers 70% (31.6 of 45.0 GB, 29 s)
+glm fast: CUDA0 warming the expert tiers 80% (36.1 of 45.0 GB, 41 s)
+glm fast: CUDA0 warming the expert tiers 90% (40.6 of 45.0 GB, 41 s)
+glm fast: CUDA0 warming the expert tiers 100% (45.0 of 45.0 GB, 41 s)
+glm fast: CUDA0 tiers warm: 2880 experts (45.0 GB) in 41 s (1.10 GB/s)
+glm fast: CUDA0 RAM-resident verified: all 2880 experts are in VRAM or pinned RAM
+glm fast: CUDA2 warming the expert tiers 10% (4.9 of 48.2 GB, 13 s)
+glm fast: CUDA1 warming the expert tiers 40% (19.3 of 48.2 GB, 28 s)
+glm fast: CUDA2 warming the expert tiers 20% (9.7 of 48.2 GB, 14 s)
+glm fast: CUDA1 warming the expert tiers 50% (24.1 of 48.2 GB, 28 s)
+glm fast: CUDA2 warming the expert tiers 30% (14.5 of 48.2 GB, 14 s)
+glm fast: CUDA1 warming the expert tiers 60% (28.9 of 48.2 GB, 28 s)
+glm fast: CUDA2 warming the expert tiers 40% (19.3 of 48.2 GB, 14 s)
+glm fast: CUDA2 warming the expert tiers 50% (24.1 of 48.2 GB, 15 s)
+glm fast: CUDA2 warming the expert tiers 60% (28.9 of 48.2 GB, 15 s)
+glm fast: CUDA2 warming the expert tiers 70% (33.8 of 48.2 GB, 15 s)
+glm fast: CUDA1 warming the expert tiers 70% (33.8 of 48.2 GB, 30 s)
+glm fast: CUDA2 warming the expert tiers 80% (38.6 of 48.2 GB, 16 s)
+glm fast: CUDA1 warming the expert tiers 80% (38.6 of 48.2 GB, 30 s)
+glm fast: CUDA2 warming the expert tiers 90% (43.4 of 48.2 GB, 16 s)
+glm fast: CUDA3 RAM tier 27.09 GB pinned, 1900 slots
+glm fast: CUDA3 RAM-resident mode: every non-VRAM expert gets a slot (+16 slack/layer); disk evictions are OFF
+glm fast: CUDA1 warming the expert tiers 90% (43.4 of 48.2 GB, 30 s)
+glm fast: CUDA2 warming the expert tiers 100% (48.2 of 48.2 GB, 16 s)
+glm fast: CUDA2 tiers warm: 3168 experts (48.2 GB) in 16 s (2.96 GB/s)
+glm fast: CUDA2 RAM-resident verified: all 3168 experts are in VRAM or pinned RAM
+glm fast: CUDA3 warming the expert tiers 10% (4.9 of 48.5 GB, 0 s)
+glm fast: CUDA1 warming the expert tiers 100% (48.2 of 48.2 GB, 31 s)
+glm fast: CUDA1 tiers warm: 3168 experts (48.2 GB) in 31 s (1.57 GB/s)
+glm fast: CUDA1 RAM-resident verified: all 3168 experts are in VRAM or pinned RAM
+glm fast: CUDA3 warming the expert tiers 20% (9.7 of 48.5 GB, 1 s)
+glm fast: CUDA3 warming the expert tiers 30% (14.6 of 48.5 GB, 1 s)
+glm fast: CUDA3 warming the expert tiers 40% (19.5 of 48.5 GB, 1 s)
+glm fast: CUDA3 warming the expert tiers 50% (24.3 of 48.5 GB, 1 s)
+glm fast: CUDA3 warming the expert tiers 60% (29.2 of 48.5 GB, 2 s)
+glm fast: CUDA3 warming the expert tiers 70% (34.1 of 48.5 GB, 2 s)
+glm fast: CUDA3 warming the expert tiers 80% (38.8 of 48.5 GB, 2 s)
+glm fast: CUDA3 warming the expert tiers 90% (43.7 of 48.5 GB, 3 s)
+glm fast: CUDA3 warming the expert tiers 100% (48.5 of 48.5 GB, 3 s)
+glm fast: CUDA3 tiers warm: 3168 experts (48.5 GB) in 3 s (17.25 GB/s)
+glm fast: CUDA3 RAM-resident verified: all 3168 experts are in VRAM or pinned RAM
+glm fast: CUDA0 CPU lane: 61 threads (one pool, shared by the split's GPUs), an expert 0.292 ms on the CPU vs 0.591 ms over PCIe -> of 0..8 RAM-tier experts the CPU takes 0 1 1 2 3 3 4 5 5
+glm fast: CUDA1 CPU lane: 61 threads (one pool, shared by the split's GPUs), an expert 0.303 ms on the CPU vs 0.695 ms over PCIe -> of 0..8 RAM-tier experts the CPU takes 0 1 2 2 3 4 4 5 6
+glm fast: CUDA2 CPU lane: 61 threads (one pool, shared by the split's GPUs), an expert 0.299 ms on the CPU vs 0.759 ms over PCIe -> of 0..8 RAM-tier experts the CPU takes 0 1 2 2 3 4 4 5 6
+glm fast: CUDA3 CPU lane: 61 threads (one pool, shared by the split's GPUs), an expert 0.296 ms on the CPU vs 0.701 ms over PCIe -> of 0..8 RAM-tier experts the CPU takes 0 1 2 2 3 4 4 5 6
+glm split: layers [0, 13) on CUDA0, [13, 24) on CUDA1, [24, 35) on CUDA2, [35, 45) on CUDA3 (one 64 KB host hop per boundary per token)
+maya serve: CUDA0: 1024 MiB of VRAM free with everything loaded
+maya serve: CUDA1: 1034 MiB of VRAM free with everything loaded
+maya serve: CUDA2: 1026 MiB of VRAM free with everything loaded
+maya serve: CUDA3: 1028 MiB of VRAM free with everything loaded
+maya generate: glm5-next serve (M3.1): GEN <max_new> [keys] <ids>, GENI <max_new> [keys] <embeddings> <ids>; QUIT to end
+[maya] sampling defaults from the config: temperature=1.0, top_p=0.95
+[maya] images: the vision encoder needs 2.75 GB on this GPU at up to 4096 image tokens
+loading the model (the first start takes a minute or two) ...
+[maya] layer split across GPUs [0, 1, 2, 3] (auto)
+[maya] starting the engine: reading the model's weights ...
+glm settings from the environment: MAYA_GLM_PREFILL_MB=4096, MAYA_GLM_PREFILL_SUB=1024, MAYA_GLM_RAM_HEADROOM_GB=16, MAYA_GLM_RAM_RESIDENT=1, MAYA_GLM_RESERVE_MB=1024, MAYA_GLM_SPLIT=auto
+glm split auto: CUDA0 (AMD Radeon Pro V620) memory 64 GB/s, 29.84 GB free
+glm split auto: CUDA1 (AMD Radeon Pro V620) memory 64 GB/s, 29.84 GB free
+glm split auto: CUDA2 (AMD Radeon Pro V620) memory 64 GB/s, 29.84 GB free
+glm split auto: CUDA3 (AMD Radeon Pro V620) memory 64 GB/s, 29.84 GB free
+glm split auto: the host reads RAM at 200 GB/s (a part's CPU lane: 50); the routes from the default coverage curve (no usage counts); a token costs the parts added
+glm split auto: layers [0, 13) on CUDA0, [13, 24) on CUDA1, [24, 35) on CUDA2, [35, 45) on CUDA3 - a token 226.7 ms predicted (CUDA0 63.0 ms, 173 slots a layer | CUDA1 52.7 ms, 167 slots a layer | CUDA2 52.6 ms, 168 slots a layer | CUDA3 58.5 ms, 179 slots a layer), 93% of the routed experts in VRAM
+glm pack: CUDA2 KV streaming: 32768 of 131072 positions of each of 2 DSA layers in VRAM (0.07 GB), the latent cache in 0.27 GB of pinned RAM
+glm pack: CUDA1 KV streaming: 32768 of 131072 positions of each of 3 DSA layers in VRAM (0.10 GB), the latent cache in 0.40 GB of pinned RAM
+glm mtp: CUDA3 the NextN block (blk.45) loaded: 210 MB dense, experts q4_K/q5_K
+glm pack: CUDA3 KV streaming: 32768 of 131072 positions of each of 4 DSA layers in VRAM (0.13 GB), the latent cache in 0.54 GB of pinned RAM
+glm spec: CUDA1 the head's recurrent-state backup (34 MB) before the expert pool
+glm pack: CUDA0 KV streaming: 32768 of 131072 positions of each of 3 DSA layers in VRAM (0.10 GB), the latent cache in 0.40 GB of pinned RAM
+glm spec: CUDA0 the head's recurrent-state backup (43 MB) before the expert pool
+glm prefill: CUDA0 prompt chunk 32768 -> 16384 tokens so its buffers fit in the expert pool
+glm prefill: CUDA0 cuBLAS warm-up: sgemm 0, gemm f16 0, sync no error
+glm prefill: CUDA0 the chunk stage line is on (STRATA_GLM_PREFILL_STAGES=0 silences it)
+glm prefill: CUDA0 chunks of 16384 tokens (--prefill 32768; mixer sub-batches of 1024), borrowing 3241 MB of the expert pool while a prompt runs (activations 2918, weight scratch 96, expert staging 211, prestage 0: 0 experts); disk landing ring 96 experts (1687 MB pinned)
+glm fast: CUDA0 VRAM before the expert pool: 3.28 of 29.98 GB in use - dense weights 2.57, state/KV (131072 ctx) 0.21, activations 0.14, other (context, MTP, scratch, prompt path) 0.36
+glm fast: the expert profile /opt/project-maya/data/expert-profile-glm.bin ranks 13248 (layer, expert) pairs
+glm fast: CUDA0 the vision encoder borrows the pool's tail (3.20 GB) while it encodes
+glm fast: CUDA0 layers [0,13) expert pool 25.70 GB, 151-203 slots/layer (1771 total)
+glm fast: ZFS's ARC holds 7.2 GB above its floor: counted as free RAM (it gives it back under pressure)
+glm prefill: CUDA1 prompt chunk 32768 -> 16384 tokens so its buffers fit in the expert pool
+glm prefill: CUDA1 cuBLAS warm-up: sgemm 0, gemm f16 0, sync no error
+glm prefill: CUDA1 the chunk stage line is on (STRATA_GLM_PREFILL_STAGES=0 silences it)
+glm prefill: CUDA1 chunks of 16384 tokens (--prefill 32768; mixer sub-batches of 1024), borrowing 3204 MB of the expert pool while a prompt runs (activations 2918, weight scratch 96, expert staging 174, prestage 0: 0 experts); disk landing ring 96 experts (1392 MB pinned)
+glm fast: CUDA1 VRAM before the expert pool: 2.53 of 29.98 GB in use - dense weights 1.87, state/KV (131072 ctx) 0.20, activations 0.12, other (context, MTP, scratch, prompt path) 0.35
+glm fast: CUDA1 layers [13,24) expert pool 26.44 GB, 151-185 slots/layer (1867 total)
+glm prefill: CUDA2 prompt chunk 32768 -> 16384 tokens so its buffers fit in the expert pool
+glm prefill: CUDA2 cuBLAS warm-up: sgemm 0, gemm f16 0, sync no error
+glm prefill: CUDA2 the chunk stage line is on (STRATA_GLM_PREFILL_STAGES=0 silences it)
+glm prefill: CUDA2 chunks of 16384 tokens (--prefill 32768; mixer sub-batches of 1024), borrowing 3204 MB of the expert pool while a prompt runs (activations 2918, weight scratch 96, expert staging 174, prestage 0: 0 experts); disk landing ring 96 experts (1392 MB pinned)
+glm fast: CUDA2 VRAM before the expert pool: 2.44 of 29.98 GB in use - dense weights 1.86, state/KV (131072 ctx) 0.15, activations 0.12, other (context, MTP, scratch, prompt path) 0.32
+glm fast: CUDA2 layers [24,35) expert pool 26.54 GB, 154-192 slots/layer (1874 total)
+glm prefill: CUDA3 prompt chunk 32768 -> 16384 tokens so its buffers fit in the expert pool
+glm prefill: CUDA3 cuBLAS warm-up: sgemm 0, gemm f16 0, sync no error
+glm prefill: CUDA3 the chunk stage line is on (STRATA_GLM_PREFILL_STAGES=0 silences it)
+glm prefill: CUDA3 chunks of 16384 tokens (--prefill 32768; mixer sub-batches of 1024), borrowing 3934 MB of the expert pool while a prompt runs (activations 3636, weight scratch 96, expert staging 187, prestage 0: 0 experts); disk landing ring 96 experts (1494 MB pinned)
+glm fast: CUDA3 VRAM before the expert pool: 3.23 of 29.98 GB in use - dense weights 2.32, state/KV (131072 ctx) 0.25, activations 0.12, other (context, MTP, scratch, prompt path) 0.53
+glm fast: CUDA3 layers [35,45) expert pool 25.75 GB, 129-185 slots/layer, the draft layer 164 (1806 total)
+[maya] still starting (20 s) - please wait ...
+glm fast: CUDA0 RAM tier 23.25 GB pinned, 1587 slots
+glm fast: CUDA0 RAM-resident mode: every non-VRAM expert gets a slot (+16 slack/layer); disk evictions are OFF
+[maya] still starting (40 s) - please wait ...
+glm fast: CUDA0 warming the expert tiers 10% (4.6 of 45.0 GB, 14 s)
+glm fast: CUDA1 RAM tier 25.19 GB pinned, 1779 slots
+glm fast: CUDA1 RAM-resident mode: every non-VRAM expert gets a slot (+16 slack/layer); disk evictions are OFF
+glm fast: CUDA0 warming the expert tiers 20% (9.1 of 45.0 GB, 14 s)
+glm fast: CUDA1 warming the expert tiers 10% (4.9 of 48.2 GB, 0 s)
+glm fast: CUDA0 warming the expert tiers 30% (13.6 of 45.0 GB, 28 s)
+glm fast: CUDA2 RAM tier 25.09 GB pinned, 1772 slots
+glm fast: CUDA2 RAM-resident mode: every non-VRAM expert gets a slot (+16 slack/layer); disk evictions are OFF
+glm fast: CUDA0 warming the expert tiers 40% (18.1 of 45.0 GB, 28 s)
+glm fast: CUDA1 warming the expert tiers 20% (9.7 of 48.2 GB, 14 s)
+glm fast: CUDA0 warming the expert tiers 50% (22.6 of 45.0 GB, 29 s)
+glm fast: CUDA1 warming the expert tiers 30% (14.5 of 48.2 GB, 15 s)
+glm fast: CUDA0 warming the expert tiers 60% (27.1 of 45.0 GB, 29 s)
+glm fast: CUDA0 warming the expert tiers 70% (31.6 of 45.0 GB, 29 s)
+[maya] still starting (60 s) - please wait ...
+glm fast: CUDA0 warming the expert tiers 80% (36.1 of 45.0 GB, 40 s)
+glm fast: CUDA0 warming the expert tiers 90% (40.6 of 45.0 GB, 40 s)
+glm fast: CUDA0 warming the expert tiers 100% (45.0 of 45.0 GB, 41 s)
+glm fast: CUDA0 tiers warm: 2880 experts (45.0 GB) in 41 s (1.11 GB/s)
+glm fast: CUDA0 RAM-resident verified: all 2880 experts are in VRAM or pinned RAM
+glm fast: CUDA2 warming the expert tiers 10% (4.9 of 48.2 GB, 13 s)
+glm fast: CUDA1 warming the expert tiers 40% (19.3 of 48.2 GB, 27 s)
+glm fast: CUDA2 warming the expert tiers 20% (9.7 of 48.2 GB, 14 s)
+glm fast: CUDA1 warming the expert tiers 50% (24.1 of 48.2 GB, 28 s)
+glm fast: CUDA2 warming the expert tiers 30% (14.5 of 48.2 GB, 14 s)
+glm fast: CUDA1 warming the expert tiers 60% (28.9 of 48.2 GB, 28 s)
+glm fast: CUDA2 warming the expert tiers 40% (19.3 of 48.2 GB, 14 s)
+glm fast: CUDA2 warming the expert tiers 50% (24.1 of 48.2 GB, 15 s)
+glm fast: CUDA2 warming the expert tiers 60% (28.9 of 48.2 GB, 15 s)
+glm fast: CUDA2 warming the expert tiers 70% (33.8 of 48.2 GB, 15 s)
+glm fast: CUDA1 warming the expert tiers 70% (33.8 of 48.2 GB, 30 s)
+glm fast: CUDA1 warming the expert tiers 80% (38.6 of 48.2 GB, 30 s)
+glm fast: CUDA3 RAM tier 27.09 GB pinned, 1900 slots
+glm fast: CUDA3 RAM-resident mode: every non-VRAM expert gets a slot (+16 slack/layer); disk evictions are OFF
+glm fast: CUDA2 warming the expert tiers 80% (38.6 of 48.2 GB, 16 s)
+glm fast: CUDA1 warming the expert tiers 90% (43.4 of 48.2 GB, 30 s)
+glm fast: CUDA3 warming the expert tiers 10% (4.9 of 48.5 GB, 0 s)
+glm fast: CUDA2 warming the expert tiers 90% (43.4 of 48.2 GB, 17 s)
+glm fast: CUDA1 warming the expert tiers 100% (48.2 of 48.2 GB, 31 s)
+glm fast: CUDA1 tiers warm: 3168 experts (48.2 GB) in 31 s (1.57 GB/s)
+glm fast: CUDA1 RAM-resident verified: all 3168 experts are in VRAM or pinned RAM
+glm fast: CUDA3 warming the expert tiers 20% (9.7 of 48.5 GB, 1 s)
+glm fast: CUDA2 warming the expert tiers 100% (48.2 of 48.2 GB, 17 s)
+glm fast: CUDA2 tiers warm: 3168 experts (48.2 GB) in 17 s (2.86 GB/s)
+glm fast: CUDA2 RAM-resident verified: all 3168 experts are in VRAM or pinned RAM
+glm fast: CUDA3 warming the expert tiers 30% (14.6 of 48.5 GB, 1 s)
+glm fast: CUDA3 warming the expert tiers 40% (19.5 of 48.5 GB, 1 s)
+glm fast: CUDA3 warming the expert tiers 50% (24.3 of 48.5 GB, 2 s)
+glm fast: CUDA3 warming the expert tiers 60% (29.2 of 48.5 GB, 2 s)
+glm fast: CUDA3 warming the expert tiers 70% (34.1 of 48.5 GB, 2 s)
+glm fast: CUDA3 warming the expert tiers 80% (38.8 of 48.5 GB, 2 s)
+glm fast: CUDA3 warming the expert tiers 90% (43.7 of 48.5 GB, 3 s)
+glm fast: CUDA3 warming the expert tiers 100% (48.5 of 48.5 GB, 3 s)
+glm fast: CUDA3 tiers warm: 3168 experts (48.5 GB) in 3 s (16.86 GB/s)
+glm fast: CUDA3 RAM-resident verified: all 3168 experts are in VRAM or pinned RAM
+glm fast: CUDA0 CPU lane: 61 threads (one pool, shared by the split's GPUs), an expert 0.272 ms on the CPU vs 0.716 ms over PCIe -> of 0..8 RAM-tier experts the CPU takes 0 1 2 2 3 4 5 5 6
+glm fast: CUDA1 CPU lane: 61 threads (one pool, shared by the split's GPUs), an expert 0.302 ms on the CPU vs 0.765 ms over PCIe -> of 0..8 RAM-tier experts the CPU takes 0 1 2 2 3 4 4 5 6
+[maya] still starting (80 s) - please wait ...
+glm fast: CUDA2 CPU lane: 61 threads (one pool, shared by the split's GPUs), an expert 0.300 ms on the CPU vs 0.698 ms over PCIe -> of 0..8 RAM-tier experts the CPU takes 0 1 2 2 3 4 4 5 6
+glm fast: CUDA3 CPU lane: 61 threads (one pool, shared by the split's GPUs), an expert 0.295 ms on the CPU vs 0.742 ms over PCIe -> of 0..8 RAM-tier experts the CPU takes 0 1 2 2 3 4 4 5 6
+glm split: layers [0, 13) on CUDA0, [13, 24) on CUDA1, [24, 35) on CUDA2, [35, 45) on CUDA3 (one 64 KB host hop per boundary per token)
+maya serve: CUDA0: 1024 MiB of VRAM free with everything loaded
+maya serve: CUDA1: 1034 MiB of VRAM free with everything loaded
+maya serve: CUDA2: 1026 MiB of VRAM free with everything loaded
+maya serve: CUDA3: 1028 MiB of VRAM free with everything loaded
+maya generate: glm5-next serve (M3.1): GEN <max_new> [keys] <ids>, GENI <max_new> [keys] <embeddings> <ids>; QUIT to end
+[maya] images: the vision encoder starts when a picture arrives, in 3.20 GB the model lends it
+[maya] thinking level when a request names none: max
+[maya] thinking budget: 32768 tokens (then the answer)
+[maya] model management: on (/models/load, /models/unload, /models/sse)
+ready: http://127.0.0.1:8081/v1  (OpenAI: /v1/chat/completions, /v1/responses, Anthropic: /v1/messages, context 131072 tokens, images on)
+       open http://127.0.0.1:8081/ in a browser to chat; close this window to stop the model
+glm prefill: CUDA0 the MMQ scratch pool has 16.0 MB of the loan (16.0 MB past the layout's need; 132 experts more lent for it)
+glm prefill: CUDA1 the MMQ scratch pool has 16.0 MB of the loan (16.0 MB past the layout's need; 126 experts more lent for it)
+glm prefill: CUDA2 the MMQ scratch pool has 16.0 MB of the loan (16.0 MB past the layout's need; 126 experts more lent for it)
+glm prefill: CUDA3 the MMQ scratch pool has 16.0 MB of the loan (16.0 MB past the layout's need; 132 experts more lent for it)
+[maya] reading the prompt: 19,413 tokens, 10 s so far
+glm prefill: CUDA0 chunk 1/1, 8171 tokens, wall 10312 ms | the copy lane 6888 ms: copies 687 (25.5 GB/s), ring wait 1044, gaps 3, mixer windows 5154 | lead 3418, tail 7 | pcie 17.54 GB (ram 17.54, disk 0.00) + 0.90 GB vram | experts: staged 1259, resident 1551 (394119 rows), prestaged 0, cpu 68 (2217 rows, 1777 ms) | plan 13 ms host, disk wait 0 ms, hop in 0 ms | layer lane 189.0/159.3 ms max/min
+glm prefill: CUDA1 chunk 1/1, 8171 tokens, wall 8351 ms | the copy lane 7755 ms: copies 710 (25.4 GB/s), ring wait 1187, gaps 3, mixer windows 5856 | lead 587, tail 9 | pcie 18.04 GB (ram 18.04, disk 0.00) + 1.02 GB vram | experts: staged 1346, resident 1636 (471716 rows), prestaged 0, cpu 171 (2332 rows, 1945 ms) | plan 13 ms host, disk wait 0 ms, hop in 20 ms | layer lane 181.5/158.6 ms max/min
+[maya] reading the prompt: 19,413 tokens, 20 s so far
+glm prefill: CUDA2 chunk 1/1, 8171 tokens, wall 7995 ms | the copy lane 7403 ms: copies 685 (25.4 GB/s), ring wait 1161, gaps 3, mixer windows 5554 | lead 579, tail 13 | pcie 17.39 GB (ram 17.39, disk 0.00) + 1.02 GB vram | experts: staged 1300, resident 1643 (409942 rows), prestaged 0, cpu 180 (2061 rows, 1891 ms) | plan 11 ms host, disk wait 0 ms, hop in 20 ms | layer lane 175.4/154.2 ms max/min
+[maya] reading the prompt: 19,413 tokens, 30 s so far
+glm prefill: CUDA3 chunk 1/1, 8171 tokens, wall 7547 ms | the copy lane 6605 ms: copies 668 (25.3 GB/s), ring wait 983, gaps 3, mixer windows 4951 | lead 830, tail 111 | pcie 16.94 GB (ram 16.94, disk 0.00) + 1.25 GB vram | experts: staged 1275, resident 1392 (346243 rows), prestaged 0, cpu 190 (1989 rows, 1694 ms) | plan 11 ms host, disk wait 0 ms, hop in 20 ms | layer lane 170.8/155.4 ms max/min
+glm prefill: 8171 tokens in 34349.1 ms (4.20 ms/token, 238 tok/s), 1 chunk of 8192 tokens | CUDA0 10312 ms, CUDA1 8351 ms (hop in 20 ms), CUDA2 7995 ms (hop in 20 ms), CUDA3 7547 ms (hop in 20 ms)
+glm slots: saved a 8171-token conversation (its system prompt, for other chats that start with it) (0.27 GB in 0.1 s); 1 kept, 0.27 GB
+[maya] sessions: saved a 8171-token conversation (its system prompt, for other chats that start with it) (0.27 GB in 0.1 s); 1 kept, 0.27 GB
+[maya] reading the prompt: 19,413 tokens, 46 s so far
+glm prefill: CUDA0 chunk 1/1, 8213 tokens, wall 10552 ms | the copy lane 7073 ms: copies 714 (25.5 GB/s), ring wait 1057, gaps 3, mixer windows 5299 | lead 3469, tail 10 | pcie 18.23 GB (ram 18.23, disk 0.00) + 0.88 GB vram | experts: staged 1307, resident 1551 (404181 rows), prestaged 0, cpu 22 (213 rows, 1432 ms) | plan 1 ms host, disk wait 0 ms, hop in 0 ms | layer lane 190.9/170.3 ms max/min
+glm prefill: CUDA1 chunk 1/1, 8213 tokens, wall 8628 ms | the copy lane 8037 ms: copies 751 (25.4 GB/s), ring wait 1166, gaps 3, mixer windows 6117 | lead 583, tail 8 | pcie 19.09 GB (ram 19.09, disk 0.00) + 1.01 GB vram | experts: staged 1419, resident 1636 (424376 rows), prestaged 0, cpu 89 (367 rows, 1929 ms) | plan 1 ms host, disk wait 0 ms, hop in 20 ms | layer lane 176.5/172.5 ms max/min
+[maya] reading the prompt: 19,413 tokens, 56 s so far
+glm prefill: CUDA2 chunk 1/1, 8213 tokens, wall 8290 ms | the copy lane 7700 ms: copies 758 (25.5 GB/s), ring wait 1152, gaps 3, mixer windows 5787 | lead 579, tail 10 | pcie 19.31 GB (ram 19.31, disk 0.00) + 1.01 GB vram | experts: staged 1435, resident 1643 (416468 rows), prestaged 0, cpu 73 (386 rows, 1922 ms) | plan 1 ms host, disk wait 0 ms, hop in 20 ms | layer lane 178.8/168.5 ms max/min
+[maya] reading the prompt: 19,413 tokens, 66 s so far
+glm prefill: CUDA3 chunk 1/1, 8213 tokens, wall 7927 ms | the copy lane 6880 ms: copies 743 (25.3 GB/s), ring wait 984, gaps 3, mixer windows 5151 | lead 933, tail 113 | pcie 18.82 GB (ram 18.82, disk 0.00) + 1.27 GB vram | experts: staged 1409, resident 1392 (373121 rows), prestaged 0, cpu 72 (374 rows, 1734 ms) | plan 1 ms host, disk wait 0 ms, hop in 20 ms | layer lane 180.9/168.9 ms max/min
+glm prefill: 8213 tokens in 35538.4 ms (4.33 ms/token, 231 tok/s), 1 chunk of 8256 tokens | CUDA0 10552 ms, CUDA1 8628 ms (hop in 20 ms), CUDA2 8290 ms (hop in 20 ms), CUDA3 7927 ms (hop in 20 ms)
+glm prefill: CUDA0 chunk 1/1, 2923 tokens, wall 4234 ms | the copy lane 3014 ms: copies 699 (25.5 GB/s), ring wait 384, gaps 3, mixer windows 1928 | lead 1217, tail 3 | pcie 17.85 GB (ram 17.85, disk 0.00) + 0.88 GB vram | experts: staged 1281, resident 1551 (145614 rows), prestaged 0, cpu 48 (275 rows, 1090 ms) | plan 1 ms host, disk wait 0 ms, hop in 0 ms | layer lane 125.4/95.1 ms max/min
+[maya] reading the prompt: 19,413 tokens, 76 s so far
+glm prefill: CUDA1 chunk 1/1, 2923 tokens, wall 3536 ms | the copy lane 3358 ms: copies 694 (25.4 GB/s), ring wait 411, gaps 3, mixer windows 2250 | lead 174, tail 4 | pcie 17.60 GB (ram 17.60, disk 0.00) + 0.99 GB vram | experts: staged 1313, resident 1636 (157089 rows), prestaged 0, cpu 141 (302 rows, 1120 ms) | plan 1 ms host, disk wait 0 ms, hop in 8 ms | layer lane 109.1/92.6 ms max/min
+glm prefill: CUDA2 chunk 1/1, 2923 tokens, wall 3420 ms | the copy lane 3242 ms: copies 718 (25.5 GB/s), ring wait 398, gaps 3, mixer windows 2122 | lead 175, tail 3 | pcie 18.28 GB (ram 18.28, disk 0.00) + 1.01 GB vram | experts: staged 1362, resident 1643 (151645 rows), prestaged 0, cpu 119 (340 rows, 1128 ms) | plan 1 ms host, disk wait 0 ms, hop in 8 ms | layer lane 106.7/97.5 ms max/min
+[maya] reading the prompt: 19,413 tokens, 86 s so far
+glm prefill: CUDA3 chunk 1/1, 2923 tokens, wall 3284 ms | the copy lane 2941 ms: copies 710 (25.4 GB/s), ring wait 345, gaps 3, mixer windows 1883 | lead 303, tail 40 | pcie 18.05 GB (ram 18.05, disk 0.00) + 1.25 GB vram | experts: staged 1354, resident 1392 (134618 rows), prestaged 0, cpu 112 (356 rows, 1065 ms) | plan 1 ms host, disk wait 0 ms, hop in 8 ms | layer lane 120.1/100.0 ms max/min
+glm prefill: 2923 tokens in 14529.2 ms (4.97 ms/token, 201 tok/s), 1 chunk of 2944 tokens | CUDA0 4234 ms, CUDA1 3536 ms (hop in 8 ms), CUDA2 3420 ms (hop in 8 ms), CUDA3 3284 ms (hop in 8 ms)
+glm prefill: CUDA0 chunk 1/1, 105 tokens, wall 644 ms | the copy lane 577 ms: copies 408 (25.5 GB/s), ring wait 32, gaps 2, mixer windows 136 | lead 66, tail 1 | pcie 10.41 GB (ram 10.41, disk 0.00) + 0.63 GB vram | experts: staged 758, resident 1551 (5406 rows), prestaged 0, cpu 134 (134 rows, 452 ms) | plan 0 ms host, disk wait 0 ms, hop in 0 ms | layer lane 55.3/34.4 ms max/min
+glm prefill: CUDA1 chunk 1/1, 105 tokens, wall 431 ms | the copy lane 417 ms: copies 239 (25.5 GB/s), ring wait 32, gaps 1, mixer windows 146 | lead 13, tail 1 | pcie 6.09 GB (ram 6.09, disk 0.00) + 0.50 GB vram | experts: staged 465, resident 1636 (6435 rows), prestaged 0, cpu 77 (77 rows, 278 ms) | plan 1 ms host, disk wait 0 ms, hop in 0 ms | layer lane 30.7/17.6 ms max/min
+glm prefill: CUDA2 chunk 1/1, 105 tokens, wall 498 ms | the copy lane 484 ms: copies 293 (25.5 GB/s), ring wait 48, gaps 1, mixer windows 142 | lead 13, tail 1 | pcie 7.46 GB (ram 7.46, disk 0.00) + 0.61 GB vram | experts: staged 570, resident 1643 (6322 rows), prestaged 0, cpu 99 (99 rows, 350 ms) | plan 0 ms host, disk wait 0 ms, hop in 0 ms | layer lane 37.0/26.5 ms max/min
+glm prefill: CUDA3 chunk 1/1, 105 tokens, wall 515 ms | the copy lane 493 ms: copies 315 (25.5 GB/s), ring wait 48, gaps 1, mixer windows 128 | lead 18, tail 4 | pcie 8.03 GB (ram 8.03, disk 0.00) + 0.69 GB vram | experts: staged 611, resident 1392 (5442 rows), prestaged 0, cpu 112 (112 rows, 373 ms) | plan 0 ms host, disk wait 0 ms, hop in 0 ms | layer lane 43.1/28.5 ms max/min
+glm prefill: 105 tokens in 2096.8 ms (19.97 ms/token, 50 tok/s), 1 chunk of 128 tokens | CUDA0 644 ms, CUDA1 431 ms, CUDA2 498 ms, CUDA3 515 ms
+[maya] reading the prompt: 19,412 of 19,413 tokens, 88 s so far
+glm mv: CUDA0 dense GEMVs on the original kernels
+glm dsa scores: CUDA0 on the original kernels
+glm mla split attention: CUDA0 on the original kernels
+glm mv: CUDA1 dense GEMVs on the original kernels
+glm dsa scores: CUDA1 on the original kernels
+glm mla split attention: CUDA1 on the original kernels
+glm mv: CUDA2 dense GEMVs on the original kernels
+glm dsa scores: CUDA2 on the original kernels
+glm mla split attention: CUDA2 on the original kernels
+glm mv: CUDA3 dense GEMVs on the original kernels
+glm dsa scores: CUDA3 on the original kernels
+glm mla split attention: CUDA3 on the original kernels
+glm vram: prompt 19413 tokens read in 88.3 s; VRAM free CUDA0 1.0 of 30.0, CUDA1 1.0 of 30.0, CUDA2 1.0 of 30.0, CUDA3 1.0 of 30.0 GB before, 0.9, 0.9, 0.9, 0.9 after
+[maya] thinking: 14 of max 111651 tokens, 22.8 tok/s, 89 s
+[maya] thinking: 40 of max 111651 tokens, 24.6 tok/s, 90 s
+[maya] thinking: 69 of max 111651 tokens, 26.2 tok/s, 91 s
+[maya] thinking: 99 of max 111651 tokens, 26.9 tok/s, 92 s
+[maya] thinking: 127 of max 111651 tokens, 27.0 tok/s, 93 s
+[maya] thinking: 157 of max 111651 tokens, 27.1 tok/s, 94 s
+[maya] thinking: 184 of max 111651 tokens, 27.1 tok/s, 95 s
+[maya] thinking: 212 of max 111651 tokens, 27.2 tok/s, 96 s
+[maya] thinking: 238 of max 111651 tokens, 26.9 tok/s, 97 s
+[maya] thinking: 264 of max 111651 tokens, 26.8 tok/s, 98 s
+[maya] thinking: 292 of max 111651 tokens, 26.6 tok/s, 99 s
+[maya] thinking: 321 of max 111651 tokens, 26.8 tok/s, 100 s
+[maya] thinking: 349 of max 111651 tokens, 26.8 tok/s, 101 s
+[maya] thinking: 376 of max 111651 tokens, 26.8 tok/s, 102 s
+[maya] thinking: 405 of max 111651 tokens, 26.9 tok/s, 103 s
+[maya] thinking: 431 of max 111651 tokens, 26.7 tok/s, 104 s
+[maya] thinking: 459 of max 111651 tokens, 26.7 tok/s, 106 s
+[maya] thinking: 488 of max 111651 tokens, 26.8 tok/s, 107 s
+[maya] thinking: 520 of max 111651 tokens, 27.1 tok/s, 108 s
+[maya] thinking: 545 of max 111651 tokens, 27.0 tok/s, 109 s
+[maya] thinking: 572 of max 111651 tokens, 27.0 tok/s, 110 s
+[maya] thinking: 602 of max 111651 tokens, 27.0 tok/s, 111 s
+[maya] thinking: 629 of max 111651 tokens, 27.0 tok/s, 112 s
+[maya] thinking: 655 of max 111651 tokens, 26.9 tok/s, 113 s
+[maya] thinking: 680 of max 111651 tokens, 26.8 tok/s, 114 s
+[maya] thinking: 707 of max 111651 tokens, 26.8 tok/s, 115 s
+[maya] thinking: 732 of max 111651 tokens, 26.7 tok/s, 116 s
+[maya] thinking: 758 of max 111651 tokens, 26.6 tok/s, 117 s
+[maya] thinking: 780 of max 111651 tokens, 26.5 tok/s, 118 s
+[maya] thinking: 801 of max 111651 tokens, 26.3 tok/s, 119 s
+[maya] thinking: 829 of max 111651 tokens, 26.3 tok/s, 120 s
+[maya] thinking: 856 of max 111651 tokens, 26.3 tok/s, 121 s
+[maya] thinking: 888 of max 111651 tokens, 26.4 tok/s, 122 s
+[maya] thinking: 918 of max 111651 tokens, 26.5 tok/s, 123 s
+[maya] thinking: 944 of max 111651 tokens, 26.5 tok/s, 124 s
+[maya] thinking: 976 of max 111651 tokens, 26.6 tok/s, 125 s
+[maya] thinking: 1004 of max 111651 tokens, 26.6 tok/s, 126 s
+[maya] thinking: 1032 of max 111651 tokens, 26.6 tok/s, 127 s
+[maya] thinking: 1060 of max 111651 tokens, 26.6 tok/s, 128 s
+[maya] thinking: 1086 of max 111651 tokens, 26.6 tok/s, 129 s
+[maya] thinking: 1110 of max 111651 tokens, 26.5 tok/s, 130 s
+[maya] thinking: 1133 of max 111651 tokens, 26.4 tok/s, 131 s
+[maya] thinking: 1143 of max 111651 tokens, 25.9 tok/s, 132 s
+[maya] thinking: 1169 of max 111651 tokens, 25.9 tok/s, 133 s
+[maya] thinking: 1196 of max 111651 tokens, 25.9 tok/s, 135 s
+[maya] thinking: 1224 of max 111651 tokens, 25.9 tok/s, 136 s
+[maya] thinking: 1253 of max 111651 tokens, 26.0 tok/s, 137 s
+[maya] thinking: 1281 of max 111651 tokens, 26.0 tok/s, 138 s
+[maya] thinking: 1306 of max 111651 tokens, 26.0 tok/s, 139 s
+[maya] thinking: 1334 of max 111651 tokens, 26.0 tok/s, 140 s
+[maya] thinking: 1363 of max 111651 tokens, 26.0 tok/s, 141 s
+[maya] thinking: 1390 of max 111651 tokens, 26.0 tok/s, 142 s
+[maya] thinking: 1414 of max 111651 tokens, 26.0 tok/s, 143 s
+[maya] thinking: 1441 of max 111651 tokens, 26.0 tok/s, 144 s
+[maya] thinking: 1467 of max 111651 tokens, 26.0 tok/s, 145 s
+[maya] thinking: 1496 of max 111651 tokens, 26.0 tok/s, 146 s
+[maya] thinking: 1522 of max 111651 tokens, 26.0 tok/s, 147 s
+[maya] thinking: 1554 of max 111651 tokens, 26.1 tok/s, 148 s
+[maya] thinking: 1581 of max 111651 tokens, 26.1 tok/s, 149 s
+[maya] thinking: 1605 of max 111651 tokens, 26.1 tok/s, 150 s
+[maya] thinking: 1634 of max 111651 tokens, 26.1 tok/s, 151 s
+[maya] thinking: 1659 of max 111651 tokens, 26.1 tok/s, 152 s
+[maya] thinking: 1685 of max 111651 tokens, 26.1 tok/s, 153 s
+[maya] thinking: 1707 of max 111651 tokens, 26.0 tok/s, 154 s
+[maya] thinking: 1733 of max 111651 tokens, 26.0 tok/s, 155 s
+[maya] thinking: 1757 of max 111651 tokens, 25.9 tok/s, 156 s
+[maya] thinking: 1784 of max 111651 tokens, 25.9 tok/s, 157 s
+[maya] thinking: 1810 of max 111651 tokens, 25.9 tok/s, 158 s
+[maya] thinking: 1837 of max 111651 tokens, 25.9 tok/s, 159 s
+[maya] thinking: 1862 of max 111651 tokens, 25.9 tok/s, 160 s
+[maya] thinking: 1892 of max 111651 tokens, 25.9 tok/s, 161 s
+[maya] thinking: 1921 of max 111651 tokens, 25.9 tok/s, 162 s
+[maya] thinking: 1953 of max 111651 tokens, 26.0 tok/s, 163 s
+[maya] thinking: 1976 of max 111651 tokens, 25.9 tok/s, 165 s
+[maya] thinking: 2005 of max 111651 tokens, 26.0 tok/s, 166 s
+[maya] thinking: 2030 of max 111651 tokens, 26.0 tok/s, 167 s
+[maya] thinking: 2061 of max 111651 tokens, 26.0 tok/s, 168 s
+[maya] thinking: 2088 of max 111651 tokens, 26.0 tok/s, 169 s
+[maya] thinking: 2111 of max 111651 tokens, 26.0 tok/s, 170 s
+[maya] thinking: 2139 of max 111651 tokens, 26.0 tok/s, 171 s
+[maya] thinking: 2166 of max 111651 tokens, 26.0 tok/s, 172 s
+[maya] thinking: 2197 of max 111651 tokens, 26.0 tok/s, 173 s
+[maya] thinking: 2226 of max 111651 tokens, 26.0 tok/s, 174 s
+[maya] thinking: 2251 of max 111651 tokens, 26.0 tok/s, 175 s
+[maya] thinking: 2275 of max 111651 tokens, 26.0 tok/s, 176 s
+[maya] thinking: 2300 of max 111651 tokens, 26.0 tok/s, 177 s
+[maya] thinking: 2327 of max 111651 tokens, 26.0 tok/s, 178 s
+[maya] thinking: 2353 of max 111651 tokens, 26.0 tok/s, 179 s
+[maya] thinking: 2381 of max 111651 tokens, 26.0 tok/s, 180 s
+[maya] thinking: 2400 of max 111651 tokens, 25.9 tok/s, 181 s
+[maya] thinking: 2431 of max 111651 tokens, 25.9 tok/s, 182 s
+[maya] thinking: 2459 of max 111651 tokens, 25.9 tok/s, 183 s
+[maya] thinking: 2486 of max 111651 tokens, 25.9 tok/s, 184 s
+[maya] thinking: 2515 of max 111651 tokens, 26.0 tok/s, 185 s
+[maya] thinking: 2542 of max 111651 tokens, 26.0 tok/s, 186 s
+[maya] thinking: 2570 of max 111651 tokens, 26.0 tok/s, 187 s
+[maya] thinking: 2598 of max 111651 tokens, 26.0 tok/s, 188 s
+[maya] thinking: 2628 of max 111651 tokens, 26.0 tok/s, 189 s
+[maya] thinking: 2656 of max 111651 tokens, 26.0 tok/s, 190 s
+[maya] thinking: 2681 of max 111651 tokens, 26.0 tok/s, 192 s
+[maya] thinking: 2713 of max 111651 tokens, 26.0 tok/s, 193 s
+[maya] thinking: 2740 of max 111651 tokens, 26.0 tok/s, 194 s
+[maya] thinking: 2745 of max 111651 tokens, 25.8 tok/s, 195 s
+[maya] thinking: 2772 of max 111651 tokens, 25.8 tok/s, 196 s
+[maya] thinking: 2798 of max 111651 tokens, 25.8 tok/s, 197 s
+[maya] thinking: 2825 of max 111651 tokens, 25.8 tok/s, 198 s
+[maya] thinking: 2856 of max 111651 tokens, 25.9 tok/s, 199 s
+[maya] thinking: 2883 of max 111651 tokens, 25.9 tok/s, 200 s
+[maya] thinking: 2912 of max 111651 tokens, 25.9 tok/s, 201 s
+[maya] thinking: 2938 of max 111651 tokens, 25.9 tok/s, 202 s
+[maya] thinking: 2967 of max 111651 tokens, 25.9 tok/s, 203 s
+[maya] thinking: 2995 of max 111651 tokens, 25.9 tok/s, 204 s
+[maya] thinking: 3020 of max 111651 tokens, 25.9 tok/s, 205 s
+[maya] thinking: 3047 of max 111651 tokens, 25.9 tok/s, 206 s
+[maya] thinking: 3076 of max 111651 tokens, 25.9 tok/s, 207 s
+[maya] thinking: 3102 of max 111651 tokens, 25.9 tok/s, 208 s
+[maya] thinking: 3129 of max 111651 tokens, 25.9 tok/s, 209 s
+[maya] thinking: 3157 of max 111651 tokens, 25.9 tok/s, 210 s
+[maya] thinking: 3187 of max 111651 tokens, 25.9 tok/s, 211 s
+[maya] thinking: 3215 of max 111651 tokens, 25.9 tok/s, 212 s
+[maya] thinking: 3244 of max 111651 tokens, 26.0 tok/s, 213 s
+[maya] thinking: 3270 of max 111651 tokens, 26.0 tok/s, 214 s
+[maya] thinking: 3298 of max 111651 tokens, 26.0 tok/s, 215 s
+[maya] thinking: 3326 of max 111651 tokens, 26.0 tok/s, 216 s
+[maya] thinking: 3353 of max 111651 tokens, 26.0 tok/s, 217 s
+[maya] thinking: 3381 of max 111651 tokens, 26.0 tok/s, 218 s
+[maya] thinking: 3409 of max 111651 tokens, 26.0 tok/s, 219 s
+[maya] thinking: 3437 of max 111651 tokens, 26.0 tok/s, 220 s
+[maya] thinking: 3468 of max 111651 tokens, 26.0 tok/s, 222 s
+[maya] thinking: 3498 of max 111651 tokens, 26.0 tok/s, 223 s
+[maya] thinking: 3525 of max 111651 tokens, 26.0 tok/s, 224 s
+[maya] thinking: 3553 of max 111651 tokens, 26.0 tok/s, 225 s
+[maya] thinking: 3586 of max 111651 tokens, 26.1 tok/s, 226 s
+[maya] thinking: 3611 of max 111651 tokens, 26.0 tok/s, 227 s
+[maya] thinking: 3640 of max 111651 tokens, 26.1 tok/s, 228 s
+[maya] thinking: 3667 of max 111651 tokens, 26.1 tok/s, 229 s
+[maya] thinking: 3690 of max 111651 tokens, 26.0 tok/s, 230 s
+[maya] thinking: 3719 of max 111651 tokens, 26.0 tok/s, 231 s
+[maya] thinking: 3746 of max 111651 tokens, 26.0 tok/s, 232 s
+[maya] thinking: 3779 of max 111651 tokens, 26.1 tok/s, 233 s
+[maya] thinking: 3809 of max 111651 tokens, 26.1 tok/s, 234 s
+[maya] thinking: 3838 of max 111651 tokens, 26.1 tok/s, 235 s
+[maya] thinking: 3866 of max 111651 tokens, 26.1 tok/s, 236 s
+[maya] thinking: 3899 of max 111651 tokens, 26.2 tok/s, 237 s
+[maya] thinking: 3929 of max 111651 tokens, 26.2 tok/s, 238 s
+[maya] thinking: 3958 of max 111651 tokens, 26.2 tok/s, 239 s
+[maya] thinking: 3985 of max 111651 tokens, 26.2 tok/s, 240 s
+[maya] thinking: 4010 of max 111651 tokens, 26.2 tok/s, 241 s
+[maya] thinking: 4037 of max 111651 tokens, 26.2 tok/s, 242 s
+[maya] thinking: 4063 of max 111651 tokens, 26.2 tok/s, 243 s
+[maya] thinking: 4093 of max 111651 tokens, 26.2 tok/s, 245 s
+[maya] thinking: 4124 of max 111651 tokens, 26.2 tok/s, 246 s
+[maya] thinking: 4155 of max 111651 tokens, 26.2 tok/s, 247 s
+[maya] thinking: 4182 of max 111651 tokens, 26.2 tok/s, 248 s
+[maya] thinking: 4212 of max 111651 tokens, 26.3 tok/s, 249 s
+[maya] thinking: 4246 of max 111651 tokens, 26.3 tok/s, 250 s
+[maya] thinking: 4275 of max 111651 tokens, 26.3 tok/s, 251 s
+[maya] thinking: 4306 of max 111651 tokens, 26.3 tok/s, 252 s
+[maya] thinking: 4337 of max 111651 tokens, 26.3 tok/s, 253 s
+[maya] thinking: 4362 of max 111651 tokens, 26.3 tok/s, 254 s
+[maya] thinking: 4389 of max 111651 tokens, 26.3 tok/s, 255 s
+[maya] thinking: 4419 of max 111651 tokens, 26.3 tok/s, 256 s
+[maya] thinking: 4430 of max 111651 tokens, 26.2 tok/s, 257 s
+[maya] thinking: 4454 of max 111651 tokens, 26.2 tok/s, 258 s
+[maya] thinking: 4485 of max 111651 tokens, 26.2 tok/s, 259 s
+[maya] thinking: 4515 of max 111651 tokens, 26.3 tok/s, 260 s
+[maya] thinking: 4543 of max 111651 tokens, 26.3 tok/s, 261 s
+[maya] thinking: 4569 of max 111651 tokens, 26.2 tok/s, 263 s
+[maya] thinking: 4603 of max 111651 tokens, 26.3 tok/s, 264 s
+[maya] thinking: 4631 of max 111651 tokens, 26.3 tok/s, 265 s
+[maya] thinking: 4659 of max 111651 tokens, 26.3 tok/s, 266 s
+[maya] thinking: 4686 of max 111651 tokens, 26.3 tok/s, 267 s
+[maya] thinking: 4715 of max 111651 tokens, 26.3 tok/s, 268 s
+[maya] thinking: 4740 of max 111651 tokens, 26.3 tok/s, 269 s
+[maya] thinking: 4768 of max 111651 tokens, 26.3 tok/s, 270 s
+[maya] thinking: 4793 of max 111651 tokens, 26.3 tok/s, 271 s
+[maya] thinking: 4823 of max 111651 tokens, 26.3 tok/s, 272 s
+[maya] thinking: 4852 of max 111651 tokens, 26.3 tok/s, 273 s
+[maya] writing a tool call: search_web: 4883 of max 111651 tokens, 26.3 tok/s, 274 s
+[maya] writing a tool call: search_web: 4911 of max 111651 tokens, 26.3 tok/s, 275 s
+glm stat: decode 37.91 ms/tok (26.38 tok/s) | vram hit 89.69% | ram fetches 3.81/tok | disk 0.00 reads/tok in 0.00 waits/tok, 0.00 ms/tok | promotions 3.80/tok | cpu lane 37.82/tok in 6.96 ms/tok | prompt 4.5 ms/tok | vram 7196/7318 ram 5180/7038
+glm spec: 3177 of 4940 drafts accepted (64.3%)
+[maya] done: 4942 tokens in 276 s (26.4 tok/s) (stop, cancel=False), expert cache 89.7% hit
+glm kv: KV streaming: 99.82% of 35834691 block reads hit VRAM, 253.2 MiB read from RAM
+glm prefill: CUDA0 chunk 1/1, 1774 tokens, wall 2818 ms | the copy lane 2094 ms: copies 654 (25.4 GB/s), ring wait 261, gaps 3, mixer windows 1177 | lead 721, tail 3 | pcie 16.58 GB (ram 16.58, disk 0.00) + 1.97 GB vram | experts: staged 1269, resident 1551 (93348 rows), prestaged 0, cpu 64 (191 rows, 920 ms) | plan 1 ms host, disk wait 0 ms, hop in 0 ms | layer lane 110.6/79.5 ms max/min
+glm prefill: CUDA1 chunk 1/1, 1774 tokens, wall 2416 ms | the copy lane 2310 ms: copies 619 (25.3 GB/s), ring wait 321, gaps 3, mixer windows 1366 | lead 104, tail 3 | pcie 15.69 GB (ram 15.69, disk 0.00) + 2.01 GB vram | experts: staged 1250, resident 1636 (115777 rows), prestaged 0, cpu 137 (182 rows, 952 ms) | plan 1 ms host, disk wait 0 ms, hop in 5 ms | layer lane 97.4/77.5 ms max/min
+glm prefill: CUDA2 chunk 1/1, 1774 tokens, wall 2345 ms | the copy lane 2238 ms: copies 651 (25.3 GB/s), ring wait 298, gaps 3, mixer windows 1286 | lead 103, tail 3 | pcie 16.50 GB (ram 16.50, disk 0.00) + 2.04 GB vram | experts: staged 1309, resident 1643 (105032 rows), prestaged 0, cpu 124 (212 rows, 960 ms) | plan 1 ms host, disk wait 0 ms, hop in 5 ms | layer lane 97.2/77.8 ms max/min
+[maya] reading the prompt: 21,187 tokens, 10 s so far
+glm prefill: CUDA3 chunk 1/1, 1774 tokens, wall 2251 ms | the copy lane 2035 ms: copies 658 (25.3 GB/s), ring wait 229, gaps 3, mixer windows 1145 | lead 187, tail 29 | pcie 16.65 GB (ram 16.65, disk 0.00) + 2.32 GB vram | experts: staged 1330, resident 1392 (81908 rows), prestaged 0, cpu 114 (230 rows, 894 ms) | plan 1 ms host, disk wait 0 ms, hop in 5 ms | layer lane 107.0/78.1 ms max/min
+glm prefill: 1774 tokens in 9867.8 ms (5.56 ms/token, 180 tok/s), 1 chunk of 1792 tokens | CUDA0 2818 ms, CUDA1 2416 ms (hop in 5 ms), CUDA2 2345 ms (hop in 5 ms), CUDA3 2251 ms (hop in 5 ms)
+glm vram: prompt 1775 tokens read in 10.6 s; VRAM free CUDA0 0.9 of 30.0, CUDA1 0.9 of 30.0, CUDA2 0.9 of 30.0, CUDA3 0.9 of 30.0 GB before, 0.9, 0.9, 0.9, 0.9 after
+[maya] thinking: 11 of max 109877 tokens, 26.9 tok/s, 11 s
+[maya] thinking: 40 of max 109877 tokens, 28.2 tok/s, 12 s
+[maya] thinking: 70 of max 109877 tokens, 28.6 tok/s, 13 s
+[maya] thinking: 102 of max 109877 tokens, 28.9 tok/s, 14 s
+[maya] thinking: 128 of max 109877 tokens, 28.2 tok/s, 15 s
+[maya] thinking: 155 of max 109877 tokens, 28.0 tok/s, 16 s
+[maya] thinking: 184 of max 109877 tokens, 28.0 tok/s, 17 s
+[maya] thinking: 210 of max 109877 tokens, 27.7 tok/s, 18 s
+[maya] thinking: 239 of max 109877 tokens, 27.7 tok/s, 19 s
+[maya] thinking: 264 of max 109877 tokens, 27.3 tok/s, 20 s
+[maya] thinking: 289 of max 109877 tokens, 27.0 tok/s, 21 s
+[maya] thinking: 316 of max 109877 tokens, 27.0 tok/s, 22 s
+[maya] thinking: 344 of max 109877 tokens, 26.9 tok/s, 23 s
+[maya] thinking: 371 of max 109877 tokens, 26.9 tok/s, 24 s
+[maya] thinking: 401 of max 109877 tokens, 27.0 tok/s, 25 s
+[maya] thinking: 430 of max 109877 tokens, 27.1 tok/s, 27 s
+[maya] thinking: 459 of max 109877 tokens, 27.2 tok/s, 28 s
+[maya] thinking: 484 of max 109877 tokens, 27.0 tok/s, 29 s
+[maya] thinking: 512 of max 109877 tokens, 27.0 tok/s, 30 s
+[maya] thinking: 538 of max 109877 tokens, 26.9 tok/s, 31 s
+[maya] thinking: 565 of max 109877 tokens, 26.9 tok/s, 32 s
+[maya] thinking: 595 of max 109877 tokens, 27.0 tok/s, 33 s
+[maya] thinking: 621 of max 109877 tokens, 26.9 tok/s, 34 s
+[maya] thinking: 645 of max 109877 tokens, 26.8 tok/s, 35 s
+[maya] thinking: 674 of max 109877 tokens, 26.9 tok/s, 36 s
+[maya] thinking: 702 of max 109877 tokens, 26.9 tok/s, 37 s
+[maya] thinking: 730 of max 109877 tokens, 26.9 tok/s, 38 s
+[maya] thinking: 760 of max 109877 tokens, 26.9 tok/s, 39 s
+[maya] thinking: 787 of max 109877 tokens, 26.8 tok/s, 40 s
+[maya] thinking: 818 of max 109877 tokens, 27.0 tok/s, 41 s
+[maya] thinking: 847 of max 109877 tokens, 27.0 tok/s, 42 s
+[maya] thinking: 874 of max 109877 tokens, 27.0 tok/s, 43 s
+[maya] thinking: 900 of max 109877 tokens, 26.9 tok/s, 44 s
+[maya] thinking: 929 of max 109877 tokens, 26.9 tok/s, 45 s
+[maya] thinking: 956 of max 109877 tokens, 26.9 tok/s, 46 s
+[maya] thinking: 986 of max 109877 tokens, 27.0 tok/s, 47 s
+[maya] thinking: 1014 of max 109877 tokens, 27.0 tok/s, 48 s
+[maya] thinking: 1040 of max 109877 tokens, 26.9 tok/s, 49 s
+[maya] thinking: 1068 of max 109877 tokens, 26.9 tok/s, 50 s
+[maya] thinking: 1096 of max 109877 tokens, 26.9 tok/s, 51 s
+[maya] thinking: 1126 of max 109877 tokens, 27.0 tok/s, 52 s
+[maya] thinking: 1153 of max 109877 tokens, 27.0 tok/s, 53 s
+[maya] thinking: 1179 of max 109877 tokens, 26.9 tok/s, 54 s
+[maya] thinking: 1208 of max 109877 tokens, 27.0 tok/s, 55 s
+[maya] thinking: 1233 of max 109877 tokens, 26.9 tok/s, 56 s
+[maya] thinking: 1260 of max 109877 tokens, 26.9 tok/s, 58 s
+[maya] thinking: 1291 of max 109877 tokens, 26.9 tok/s, 59 s
+[maya] thinking: 1323 of max 109877 tokens, 26.9 tok/s, 60 s
+[maya] thinking: 1353 of max 109877 tokens, 27.0 tok/s, 61 s
+[maya] thinking: 1378 of max 109877 tokens, 26.9 tok/s, 62 s
+[maya] thinking: 1408 of max 109877 tokens, 26.9 tok/s, 63 s
+[maya] thinking: 1436 of max 109877 tokens, 26.9 tok/s, 64 s
+[maya] thinking: 1468 of max 109877 tokens, 27.0 tok/s, 65 s
+[maya] thinking: 1492 of max 109877 tokens, 26.9 tok/s, 66 s
+[maya] thinking: 1521 of max 109877 tokens, 27.0 tok/s, 67 s
+[maya] thinking: 1547 of max 109877 tokens, 26.9 tok/s, 68 s
+[maya] thinking: 1580 of max 109877 tokens, 27.0 tok/s, 69 s
+[maya] thinking: 1610 of max 109877 tokens, 27.0 tok/s, 70 s
+[maya] thinking: 1638 of max 109877 tokens, 27.0 tok/s, 71 s
+[maya] thinking: 1670 of max 109877 tokens, 27.0 tok/s, 72 s
+[maya] thinking: 1701 of max 109877 tokens, 27.1 tok/s, 74 s
+[maya] thinking: 1725 of max 109877 tokens, 27.0 tok/s, 75 s
+[maya] thinking: 1753 of max 109877 tokens, 26.9 tok/s, 76 s
+[maya] thinking: 1786 of max 109877 tokens, 27.0 tok/s, 77 s
+[maya] thinking: 1812 of max 109877 tokens, 27.0 tok/s, 78 s
+[maya] thinking: 1839 of max 109877 tokens, 27.0 tok/s, 79 s
+[maya] thinking: 1868 of max 109877 tokens, 27.0 tok/s, 80 s
+[maya] thinking: 1897 of max 109877 tokens, 27.0 tok/s, 81 s
+[maya] thinking: 1926 of max 109877 tokens, 27.0 tok/s, 82 s
+[maya] thinking: 1954 of max 109877 tokens, 27.0 tok/s, 83 s
+[maya] thinking: 1978 of max 109877 tokens, 27.0 tok/s, 84 s
+[maya] thinking: 2004 of max 109877 tokens, 26.9 tok/s, 85 s
+[maya] thinking: 2029 of max 109877 tokens, 26.9 tok/s, 86 s
+[maya] thinking: 2056 of max 109877 tokens, 26.9 tok/s, 87 s
+[maya] thinking: 2081 of max 109877 tokens, 26.8 tok/s, 88 s
+[maya] thinking: 2108 of max 109877 tokens, 26.8 tok/s, 89 s
+[maya] thinking: 2136 of max 109877 tokens, 26.8 tok/s, 90 s
+[maya] thinking: 2164 of max 109877 tokens, 26.8 tok/s, 91 s
+[maya] thinking: 2194 of max 109877 tokens, 26.9 tok/s, 92 s
+[maya] thinking: 2224 of max 109877 tokens, 26.9 tok/s, 93 s
+[maya] thinking: 2252 of max 109877 tokens, 26.9 tok/s, 94 s
+[maya] thinking: 2280 of max 109877 tokens, 26.9 tok/s, 95 s
+[maya] thinking: 2311 of max 109877 tokens, 26.9 tok/s, 97 s
+[maya] thinking: 2342 of max 109877 tokens, 27.0 tok/s, 98 s
+[maya] thinking: 2370 of max 109877 tokens, 27.0 tok/s, 99 s
+[maya] thinking: 2396 of max 109877 tokens, 26.9 tok/s, 100 s
+[maya] thinking: 2426 of max 109877 tokens, 27.0 tok/s, 101 s
+[maya] thinking: 2452 of max 109877 tokens, 26.9 tok/s, 102 s
+[maya] thinking: 2479 of max 109877 tokens, 26.9 tok/s, 103 s
+[maya] thinking: 2505 of max 109877 tokens, 26.9 tok/s, 104 s
+[maya] thinking: 2538 of max 109877 tokens, 26.9 tok/s, 105 s
+[maya] thinking: 2565 of max 109877 tokens, 26.9 tok/s, 106 s
+[maya] thinking: 2602 of max 109877 tokens, 27.0 tok/s, 107 s
+[maya] thinking: 2627 of max 109877 tokens, 27.0 tok/s, 108 s
+[maya] thinking: 2655 of max 109877 tokens, 27.0 tok/s, 109 s
+[maya] thinking: 2684 of max 109877 tokens, 27.0 tok/s, 110 s
+[maya] thinking: 2712 of max 109877 tokens, 27.0 tok/s, 111 s
+[maya] thinking: 2737 of max 109877 tokens, 26.9 tok/s, 112 s
+[maya] thinking: 2766 of max 109877 tokens, 26.9 tok/s, 113 s
+[maya] thinking: 2794 of max 109877 tokens, 26.9 tok/s, 114 s
+[maya] thinking: 2821 of max 109877 tokens, 26.9 tok/s, 115 s
+[maya] thinking: 2850 of max 109877 tokens, 26.9 tok/s, 116 s
+[maya] thinking: 2889 of max 109877 tokens, 27.0 tok/s, 117 s
+[maya] thinking: 2918 of max 109877 tokens, 27.0 tok/s, 119 s
+[maya] thinking: 2945 of max 109877 tokens, 27.0 tok/s, 120 s
+[maya] thinking: 2971 of max 109877 tokens, 27.0 tok/s, 121 s
+[maya] thinking: 2997 of max 109877 tokens, 27.0 tok/s, 122 s
+[maya] thinking: 3025 of max 109877 tokens, 27.0 tok/s, 123 s
+[maya] thinking: 3053 of max 109877 tokens, 27.0 tok/s, 124 s
+[maya] thinking: 3080 of max 109877 tokens, 27.0 tok/s, 125 s
+[maya] thinking: 3103 of max 109877 tokens, 26.9 tok/s, 126 s
+[maya] thinking: 3127 of max 109877 tokens, 26.9 tok/s, 127 s
+[maya] thinking: 3151 of max 109877 tokens, 26.9 tok/s, 128 s
+[maya] thinking: 3180 of max 109877 tokens, 26.9 tok/s, 129 s
+[maya] thinking: 3204 of max 109877 tokens, 26.8 tok/s, 130 s
+[maya] thinking: 3227 of max 109877 tokens, 26.8 tok/s, 131 s
+[maya] thinking: 3256 of max 109877 tokens, 26.8 tok/s, 132 s
+[maya] thinking: 3283 of max 109877 tokens, 26.8 tok/s, 133 s
+[maya] thinking: 3314 of max 109877 tokens, 26.8 tok/s, 134 s
+[maya] thinking: 3341 of max 109877 tokens, 26.8 tok/s, 135 s
+[maya] thinking: 3363 of max 109877 tokens, 26.8 tok/s, 136 s
+[maya] thinking: 3391 of max 109877 tokens, 26.8 tok/s, 137 s
+[maya] thinking: 3421 of max 109877 tokens, 26.8 tok/s, 138 s
+[maya] thinking: 3446 of max 109877 tokens, 26.8 tok/s, 139 s
+[maya] thinking: 3477 of max 109877 tokens, 26.8 tok/s, 140 s
+[maya] thinking: 3507 of max 109877 tokens, 26.8 tok/s, 141 s
+[maya] thinking: 3534 of max 109877 tokens, 26.8 tok/s, 142 s
+[maya] thinking: 3565 of max 109877 tokens, 26.8 tok/s, 143 s
+[maya] thinking: 3595 of max 109877 tokens, 26.9 tok/s, 145 s
+[maya] thinking: 3622 of max 109877 tokens, 26.9 tok/s, 146 s
+[maya] thinking: 3656 of max 109877 tokens, 26.9 tok/s, 147 s
+[maya] thinking: 3685 of max 109877 tokens, 26.9 tok/s, 148 s
+[maya] thinking: 3717 of max 109877 tokens, 26.9 tok/s, 149 s
+[maya] thinking: 3746 of max 109877 tokens, 26.9 tok/s, 150 s
+[maya] thinking: 3777 of max 109877 tokens, 27.0 tok/s, 151 s
+[maya] thinking: 3809 of max 109877 tokens, 27.0 tok/s, 152 s
+[maya] thinking: 3834 of max 109877 tokens, 27.0 tok/s, 153 s
+[maya] thinking: 3864 of max 109877 tokens, 27.0 tok/s, 154 s
+[maya] thinking: 3890 of max 109877 tokens, 27.0 tok/s, 155 s
+[maya] thinking: 3919 of max 109877 tokens, 27.0 tok/s, 156 s
+[maya] thinking: 3945 of max 109877 tokens, 27.0 tok/s, 157 s
+[maya] thinking: 3972 of max 109877 tokens, 27.0 tok/s, 158 s
+[maya] thinking: 4000 of max 109877 tokens, 26.9 tok/s, 159 s
+[maya] thinking: 4024 of max 109877 tokens, 26.9 tok/s, 160 s
+[maya] thinking: 4061 of max 109877 tokens, 27.0 tok/s, 161 s
+[maya] thinking: 4092 of max 109877 tokens, 27.0 tok/s, 162 s
+[maya] thinking: 4123 of max 109877 tokens, 27.0 tok/s, 163 s
+[maya] thinking: 4154 of max 109877 tokens, 27.0 tok/s, 164 s
+[maya] thinking: 4185 of max 109877 tokens, 27.1 tok/s, 165 s
+[maya] thinking: 4215 of max 109877 tokens, 27.1 tok/s, 166 s
+[maya] thinking: 4245 of max 109877 tokens, 27.1 tok/s, 167 s
+[maya] thinking: 4274 of max 109877 tokens, 27.1 tok/s, 168 s
+[maya] thinking: 4298 of max 109877 tokens, 27.1 tok/s, 169 s
+[maya] thinking: 4325 of max 109877 tokens, 27.1 tok/s, 171 s
+[maya] thinking: 4355 of max 109877 tokens, 27.1 tok/s, 172 s
+[maya] thinking: 4385 of max 109877 tokens, 27.1 tok/s, 173 s
+[maya] answering: 4416 of max 109877 tokens, 27.1 tok/s, 174 s
+[maya] answering: 4448 of max 109877 tokens, 27.1 tok/s, 175 s
+[maya] answering: 4481 of max 109877 tokens, 27.1 tok/s, 176 s
+[maya] answering: 4508 of max 109877 tokens, 27.1 tok/s, 177 s
+[maya] answering: 4547 of max 109877 tokens, 27.1 tok/s, 178 s
+[maya] answering: 4582 of max 109877 tokens, 27.2 tok/s, 179 s
+[maya] answering: 4616 of max 109877 tokens, 27.2 tok/s, 180 s
+[maya] answering: 4630 of max 109877 tokens, 27.1 tok/s, 182 s
+[maya] answering: 4682 of max 109877 tokens, 27.2 tok/s, 183 s
+[maya] answering: 4713 of max 109877 tokens, 27.2 tok/s, 184 s
+[maya] answering: 4750 of max 109877 tokens, 27.3 tok/s, 185 s
+[maya] answering: 4781 of max 109877 tokens, 27.3 tok/s, 186 s
+[maya] answering: 4809 of max 109877 tokens, 27.3 tok/s, 187 s
+[maya] answering: 4839 of max 109877 tokens, 27.3 tok/s, 188 s
+[maya] answering: 4868 of max 109877 tokens, 27.3 tok/s, 189 s
+[maya] answering: 4901 of max 109877 tokens, 27.3 tok/s, 190 s
+[maya] answering: 4931 of max 109877 tokens, 27.3 tok/s, 191 s
+[maya] answering: 4959 of max 109877 tokens, 27.3 tok/s, 192 s
+[maya] answering: 4992 of max 109877 tokens, 27.3 tok/s, 193 s
+[maya] answering: 5031 of max 109877 tokens, 27.4 tok/s, 194 s
+[maya] answering: 5064 of max 109877 tokens, 27.4 tok/s, 195 s
+[maya] answering: 5096 of max 109877 tokens, 27.4 tok/s, 196 s
+[maya] answering: 5124 of max 109877 tokens, 27.4 tok/s, 197 s
+[maya] answering: 5156 of max 109877 tokens, 27.5 tok/s, 198 s
+[maya] answering: 5185 of max 109877 tokens, 27.5 tok/s, 199 s
+[maya] answering: 5223 of max 109877 tokens, 27.5 tok/s, 201 s
+[maya] answering: 5253 of max 109877 tokens, 27.5 tok/s, 202 s
+[maya] answering: 5279 of max 109877 tokens, 27.5 tok/s, 203 s
+[maya] answering: 5313 of max 109877 tokens, 27.5 tok/s, 204 s
+[maya] answering: 5346 of max 109877 tokens, 27.5 tok/s, 205 s
+glm stat: decode 36.34 ms/tok (27.52 tok/s) | vram hit 90.11% | ram fetches 3.58/tok | disk 0.00 reads/tok in 0.00 waits/tok, 0.00 ms/tok | promotions 3.57/tok | cpu lane 35.68/tok in 6.54 ms/tok | prompt 0.5 ms/tok | vram 7211/7318 ram 5170/7038
+glm spec: 3669 of 5357 drafts accepted (68.5%)
+[maya] done: 5359 tokens in 205 s (27.5 tok/s) (stop, cancel=False), expert cache 90.1% hit
+glm kv: KV streaming: 99.90% of 74004402 block reads hit VRAM, 282.2 MiB read from RAM
+glm prefill: CUDA0 chunk 1/1, 974 tokens, wall 1781 ms | the copy lane 1395 ms: copies 605 (25.3 GB/s), ring wait 160, gaps 3, mixer windows 627 | lead 383, tail 3 | pcie 15.33 GB (ram 15.33, disk 0.00) + 2.09 GB vram | experts: staged 1193, resident 1551 (57137 rows), prestaged 0, cpu 91 (171 rows, 770 ms) | plan 1 ms host, disk wait 0 ms, hop in 0 ms | layer lane 95.6/61.4 ms max/min
+glm prefill: CUDA1 chunk 1/1, 974 tokens, wall 1502 ms | the copy lane 1444 ms: copies 490 (25.2 GB/s), ring wait 220, gaps 2, mixer windows 731 | lead 55, tail 2 | pcie 12.36 GB (ram 12.36, disk 0.00) + 2.10 GB vram | experts: staged 1021, resident 1636 (71847 rows), prestaged 0, cpu 118 (121 rows, 719 ms) | plan 1 ms host, disk wait 0 ms, hop in 3 ms | layer lane 75.7/55.3 ms max/min
+glm prefill: CUDA2 chunk 1/1, 974 tokens, wall 1506 ms | the copy lane 1448 ms: copies 531 (25.3 GB/s), ring wait 226, gaps 2, mixer windows 689 | lead 56, tail 2 | pcie 13.42 GB (ram 13.42, disk 0.00) + 2.10 GB vram | experts: staged 1096, resident 1643 (70780 rows), prestaged 0, cpu 135 (142 rows, 766 ms) | plan 1 ms host, disk wait 0 ms, hop in 3 ms | layer lane 74.9/60.0 ms max/min
+glm prefill: CUDA3 chunk 1/1, 974 tokens, wall 1463 ms | the copy lane 1347 ms: copies 549 (25.2 GB/s), ring wait 184, gaps 2, mixer windows 612 | lead 100, tail 16 | pcie 13.82 GB (ram 13.82, disk 0.00) + 2.43 GB vram | experts: staged 1140, resident 1392 (63203 rows), prestaged 0, cpu 147 (149 rows, 742 ms) | plan 1 ms host, disk wait 0 ms, hop in 3 ms | layer lane 87.6/64.3 ms max/min
+glm prefill: 974 tokens in 6276.2 ms (6.44 ms/token, 155 tok/s), 1 chunk of 1024 tokens | CUDA0 1781 ms, CUDA1 1502 ms (hop in 3 ms), CUDA2 1506 ms (hop in 3 ms), CUDA3 1463 ms (hop in 3 ms)
+[maya] reading the prompt: 25,748 tokens, 10 s so far
+glm prefill: CUDA0 chunk 1/1, 3587 tokens, wall 4851 ms | the copy lane 3437 ms: copies 690 (25.3 GB/s), ring wait 473, gaps 3, mixer windows 2271 | lead 1411, tail 4 | pcie 17.48 GB (ram 17.48, disk 0.00) + 1.53 GB vram | experts: staged 1300, resident 1551 (182619 rows), prestaged 0, cpu 44 (173 rows, 1166 ms) | plan 1 ms host, disk wait 0 ms, hop in 0 ms | layer lane 134.0/106.4 ms max/min
+glm prefill: CUDA1 chunk 1/1, 3587 tokens, wall 4136 ms | the copy lane 3928 ms: copies 690 (25.2 GB/s), ring wait 589, gaps 3, mixer windows 2646 | lead 204, tail 4 | pcie 17.42 GB (ram 17.42, disk 0.00) + 1.60 GB vram | experts: staged 1343, resident 1636 (231527 rows), prestaged 0, cpu 114 (160 rows, 1288 ms) | plan 1 ms host, disk wait 0 ms, hop in 9 ms | layer lane 125.6/108.0 ms max/min
+[maya] reading the prompt: 25,748 tokens, 20 s so far
+glm prefill: CUDA2 chunk 1/1, 3587 tokens, wall 3948 ms | the copy lane 3740 ms: copies 716 (25.3 GB/s), ring wait 522, gaps 3, mixer windows 2499 | lead 204, tail 3 | pcie 18.15 GB (ram 18.15, disk 0.00) + 1.61 GB vram | experts: staged 1396, resident 1643 (207451 rows), prestaged 0, cpu 93 (182 rows, 1246 ms) | plan 1 ms host, disk wait 0 ms, hop in 9 ms | layer lane 121.8/103.3 ms max/min
+glm prefill: CUDA3 chunk 1/1, 3587 tokens, wall 3732 ms | the copy lane 3317 ms: copies 699 (25.2 GB/s), ring wait 407, gaps 3, mixer windows 2208 | lead 369, tail 47 | pcie 17.61 GB (ram 17.61, disk 0.00) + 1.88 GB vram | experts: staged 1367, resident 1392 (162434 rows), prestaged 0, cpu 77 (200 rows, 1111 ms) | plan 1 ms host, disk wait 0 ms, hop in 9 ms | layer lane 126.3/102.4 ms max/min
+glm prefill: 3587 tokens in 16734.6 ms (4.67 ms/token, 214 tok/s), 1 chunk of 3648 tokens | CUDA0 4851 ms, CUDA1 4136 ms (hop in 9 ms), CUDA2 3948 ms (hop in 9 ms), CUDA3 3732 ms (hop in 9 ms)
+[maya] reading the prompt: 25,747 of 25,748 tokens, 24 s so far
+glm vram: prompt 4562 tokens read in 24.0 s; VRAM free CUDA0 0.9 of 30.0, CUDA1 0.9 of 30.0, CUDA2 0.9 of 30.0, CUDA3 0.9 of 30.0 GB before, 0.9, 0.9, 0.9, 0.9 after
+[maya] thinking: 28 of max 105316 tokens, 30.2 tok/s, 25 s
+[maya] thinking: 55 of max 105316 tokens, 28.5 tok/s, 26 s
+[maya] thinking: 83 of max 105316 tokens, 28.3 tok/s, 27 s
+[maya] thinking: 116 of max 105316 tokens, 29.4 tok/s, 28 s
+[maya] thinking: 146 of max 105316 tokens, 29.0 tok/s, 29 s
+[maya] thinking: 178 of max 105316 tokens, 29.5 tok/s, 30 s
+[maya] thinking: 207 of max 105316 tokens, 29.4 tok/s, 31 s
+[maya] thinking: 241 of max 105316 tokens, 29.9 tok/s, 32 s
+[maya] thinking: 271 of max 105316 tokens, 29.8 tok/s, 33 s
+[maya] thinking: 300 of max 105316 tokens, 29.7 tok/s, 34 s
+[maya] thinking: 332 of max 105316 tokens, 29.9 tok/s, 35 s
+[maya] thinking: 363 of max 105316 tokens, 29.9 tok/s, 36 s
+[maya] thinking: 393 of max 105316 tokens, 29.8 tok/s, 37 s
+[maya] thinking: 422 of max 105316 tokens, 29.7 tok/s, 38 s
+[maya] thinking: 457 of max 105316 tokens, 30.0 tok/s, 39 s
+[maya] thinking: 489 of max 105316 tokens, 30.1 tok/s, 40 s
+[maya] thinking: 520 of max 105316 tokens, 30.1 tok/s, 41 s
+[maya] thinking: 549 of max 105316 tokens, 30.0 tok/s, 42 s
+[maya] thinking: 580 of max 105316 tokens, 29.9 tok/s, 43 s
+[maya] thinking: 611 of max 105316 tokens, 29.9 tok/s, 44 s
+[maya] thinking: 641 of max 105316 tokens, 29.8 tok/s, 46 s
+[maya] thinking: 676 of max 105316 tokens, 30.0 tok/s, 47 s
+[maya] thinking: 710 of max 105316 tokens, 30.2 tok/s, 48 s
+[maya] thinking: 735 of max 105316 tokens, 29.9 tok/s, 49 s
+[maya] thinking: 769 of max 105316 tokens, 30.0 tok/s, 50 s
+[maya] thinking: 803 of max 105316 tokens, 30.1 tok/s, 51 s
+[maya] thinking: 833 of max 105316 tokens, 30.1 tok/s, 52 s
+[maya] thinking: 866 of max 105316 tokens, 30.2 tok/s, 53 s
+[maya] thinking: 897 of max 105316 tokens, 30.2 tok/s, 54 s
+[maya] thinking: 926 of max 105316 tokens, 30.1 tok/s, 55 s
+[maya] thinking: 957 of max 105316 tokens, 30.0 tok/s, 56 s
+[maya] thinking: 986 of max 105316 tokens, 29.9 tok/s, 57 s
+[maya] thinking: 1024 of max 105316 tokens, 30.2 tok/s, 58 s
+[maya] thinking: 1057 of max 105316 tokens, 30.2 tok/s, 59 s
+[maya] thinking: 1088 of max 105316 tokens, 30.2 tok/s, 60 s
+[maya] thinking: 1124 of max 105316 tokens, 30.3 tok/s, 61 s
+[maya] thinking: 1159 of max 105316 tokens, 30.4 tok/s, 62 s
+[maya] thinking: 1192 of max 105316 tokens, 30.5 tok/s, 63 s
+[maya] thinking: 1225 of max 105316 tokens, 30.5 tok/s, 64 s
+[maya] thinking: 1256 of max 105316 tokens, 30.5 tok/s, 65 s
+[maya] thinking: 1290 of max 105316 tokens, 30.6 tok/s, 66 s
+[maya] thinking: 1323 of max 105316 tokens, 30.6 tok/s, 67 s
+[maya] thinking: 1352 of max 105316 tokens, 30.6 tok/s, 68 s
+[maya] thinking: 1379 of max 105316 tokens, 30.5 tok/s, 69 s
+[maya] thinking: 1407 of max 105316 tokens, 30.3 tok/s, 71 s
+[maya] thinking: 1443 of max 105316 tokens, 30.4 tok/s, 72 s
+[maya] thinking: 1473 of max 105316 tokens, 30.4 tok/s, 73 s
+[maya] thinking: 1499 of max 105316 tokens, 30.2 tok/s, 74 s
+[maya] thinking: 1532 of max 105316 tokens, 30.3 tok/s, 75 s
+[maya] thinking: 1562 of max 105316 tokens, 30.2 tok/s, 76 s
+[maya] thinking: 1589 of max 105316 tokens, 30.2 tok/s, 77 s
+[maya] thinking: 1623 of max 105316 tokens, 30.2 tok/s, 78 s
+[maya] thinking: 1654 of max 105316 tokens, 30.2 tok/s, 79 s
+[maya] thinking: 1679 of max 105316 tokens, 30.1 tok/s, 80 s
+[maya] thinking: 1710 of max 105316 tokens, 30.1 tok/s, 81 s
+[maya] thinking: 1739 of max 105316 tokens, 30.1 tok/s, 82 s
+[maya] thinking: 1769 of max 105316 tokens, 30.0 tok/s, 83 s
+[maya] thinking: 1797 of max 105316 tokens, 30.0 tok/s, 84 s
+[maya] thinking: 1827 of max 105316 tokens, 30.0 tok/s, 85 s
+[maya] thinking: 1856 of max 105316 tokens, 29.9 tok/s, 86 s
+[maya] thinking: 1885 of max 105316 tokens, 29.9 tok/s, 87 s
+[maya] thinking: 1915 of max 105316 tokens, 29.9 tok/s, 88 s
+[maya] thinking: 1941 of max 105316 tokens, 29.8 tok/s, 89 s
+[maya] thinking: 1970 of max 105316 tokens, 29.8 tok/s, 90 s
+[maya] thinking: 1999 of max 105316 tokens, 29.8 tok/s, 91 s
+[maya] thinking: 2031 of max 105316 tokens, 29.8 tok/s, 92 s
+[maya] thinking: 2062 of max 105316 tokens, 29.8 tok/s, 93 s
+[maya] thinking: 2092 of max 105316 tokens, 29.7 tok/s, 94 s
+[maya] thinking: 2124 of max 105316 tokens, 29.8 tok/s, 95 s
+[maya] thinking: 2151 of max 105316 tokens, 29.7 tok/s, 96 s
+[maya] thinking: 2180 of max 105316 tokens, 29.7 tok/s, 97 s
+[maya] thinking: 2210 of max 105316 tokens, 29.7 tok/s, 99 s
+[maya] thinking: 2238 of max 105316 tokens, 29.6 tok/s, 100 s
+[maya] thinking: 2273 of max 105316 tokens, 29.7 tok/s, 101 s
+[maya] thinking: 2304 of max 105316 tokens, 29.7 tok/s, 102 s
+[maya] thinking: 2334 of max 105316 tokens, 29.7 tok/s, 103 s
+[maya] thinking: 2363 of max 105316 tokens, 29.6 tok/s, 104 s
+[maya] thinking: 2386 of max 105316 tokens, 29.5 tok/s, 105 s
+[maya] thinking: 2422 of max 105316 tokens, 29.6 tok/s, 106 s
+[maya] thinking: 2450 of max 105316 tokens, 29.5 tok/s, 107 s
+[maya] thinking: 2484 of max 105316 tokens, 29.6 tok/s, 108 s
+[maya] thinking: 2513 of max 105316 tokens, 29.6 tok/s, 109 s
+[maya] thinking: 2540 of max 105316 tokens, 29.5 tok/s, 110 s
+[maya] thinking: 2569 of max 105316 tokens, 29.5 tok/s, 111 s
+[maya] thinking: 2596 of max 105316 tokens, 29.4 tok/s, 112 s
+[maya] thinking: 2624 of max 105316 tokens, 29.4 tok/s, 113 s
+[maya] thinking: 2657 of max 105316 tokens, 29.4 tok/s, 114 s
+[maya] thinking: 2688 of max 105316 tokens, 29.4 tok/s, 115 s
+[maya] thinking: 2717 of max 105316 tokens, 29.4 tok/s, 117 s
+[maya] thinking: 2745 of max 105316 tokens, 29.4 tok/s, 118 s
+[maya] thinking: 2776 of max 105316 tokens, 29.3 tok/s, 119 s
+[maya] thinking: 2803 of max 105316 tokens, 29.3 tok/s, 120 s
+[maya] thinking: 2830 of max 105316 tokens, 29.3 tok/s, 121 s
+[maya] thinking: 2855 of max 105316 tokens, 29.2 tok/s, 122 s
+[maya] thinking: 2880 of max 105316 tokens, 29.2 tok/s, 123 s
+[maya] thinking: 2912 of max 105316 tokens, 29.2 tok/s, 124 s
+[maya] thinking: 2937 of max 105316 tokens, 29.1 tok/s, 125 s
+[maya] thinking: 2967 of max 105316 tokens, 29.1 tok/s, 126 s
+[maya] thinking: 2994 of max 105316 tokens, 29.1 tok/s, 127 s
+[maya] thinking: 3019 of max 105316 tokens, 29.0 tok/s, 128 s
+[maya] thinking: 3042 of max 105316 tokens, 29.0 tok/s, 129 s
+[maya] thinking: 3072 of max 105316 tokens, 29.0 tok/s, 130 s
+[maya] thinking: 3104 of max 105316 tokens, 29.0 tok/s, 131 s
+[maya] thinking: 3140 of max 105316 tokens, 29.1 tok/s, 132 s
+[maya] thinking: 3167 of max 105316 tokens, 29.0 tok/s, 133 s
+[maya] thinking: 3201 of max 105316 tokens, 29.1 tok/s, 134 s
+[maya] thinking: 3231 of max 105316 tokens, 29.1 tok/s, 135 s
+[maya] thinking: 3258 of max 105316 tokens, 29.1 tok/s, 136 s
+[maya] thinking: 3291 of max 105316 tokens, 29.1 tok/s, 137 s
+[maya] thinking: 3328 of max 105316 tokens, 29.1 tok/s, 138 s
+[maya] thinking: 3355 of max 105316 tokens, 29.1 tok/s, 139 s
+[maya] thinking: 3385 of max 105316 tokens, 29.1 tok/s, 141 s
+[maya] thinking: 3414 of max 105316 tokens, 29.1 tok/s, 142 s
+[maya] thinking: 3449 of max 105316 tokens, 29.1 tok/s, 143 s
+[maya] thinking: 3475 of max 105316 tokens, 29.1 tok/s, 144 s
+[maya] thinking: 3509 of max 105316 tokens, 29.1 tok/s, 145 s
+[maya] thinking: 3541 of max 105316 tokens, 29.1 tok/s, 146 s
+[maya] thinking: 3573 of max 105316 tokens, 29.1 tok/s, 147 s
+[maya] thinking: 3602 of max 105316 tokens, 29.1 tok/s, 148 s
+[maya] thinking: 3631 of max 105316 tokens, 29.1 tok/s, 149 s
+[maya] thinking: 3661 of max 105316 tokens, 29.1 tok/s, 150 s
+[maya] thinking: 3689 of max 105316 tokens, 29.1 tok/s, 151 s
+[maya] thinking: 3723 of max 105316 tokens, 29.1 tok/s, 152 s
+[maya] thinking: 3755 of max 105316 tokens, 29.2 tok/s, 153 s
+[maya] thinking: 3783 of max 105316 tokens, 29.1 tok/s, 154 s
+[maya] thinking: 3816 of max 105316 tokens, 29.2 tok/s, 155 s
+[maya] thinking: 3847 of max 105316 tokens, 29.2 tok/s, 156 s
+[maya] thinking: 3875 of max 105316 tokens, 29.2 tok/s, 157 s
+[maya] thinking: 3905 of max 105316 tokens, 29.2 tok/s, 158 s
+[maya] thinking: 3936 of max 105316 tokens, 29.2 tok/s, 159 s
+[maya] thinking: 3963 of max 105316 tokens, 29.1 tok/s, 160 s
+[maya] thinking: 3995 of max 105316 tokens, 29.1 tok/s, 161 s
+[maya] thinking: 4029 of max 105316 tokens, 29.2 tok/s, 162 s
+[maya] thinking: 4056 of max 105316 tokens, 29.1 tok/s, 163 s
+[maya] thinking: 4085 of max 105316 tokens, 29.1 tok/s, 164 s
+[maya] thinking: 4116 of max 105316 tokens, 29.1 tok/s, 165 s
+[maya] thinking: 4146 of max 105316 tokens, 29.1 tok/s, 166 s
+[maya] thinking: 4175 of max 105316 tokens, 29.1 tok/s, 167 s
+[maya] thinking: 4204 of max 105316 tokens, 29.1 tok/s, 168 s
+[maya] thinking: 4237 of max 105316 tokens, 29.1 tok/s, 170 s
+[maya] thinking: 4264 of max 105316 tokens, 29.1 tok/s, 171 s
+[maya] thinking: 4292 of max 105316 tokens, 29.1 tok/s, 172 s
+[maya] thinking: 4325 of max 105316 tokens, 29.1 tok/s, 173 s
+[maya] thinking: 4352 of max 105316 tokens, 29.1 tok/s, 174 s
+[maya] thinking: 4384 of max 105316 tokens, 29.1 tok/s, 175 s
+[maya] thinking: 4413 of max 105316 tokens, 29.1 tok/s, 176 s
+[maya] thinking: 4443 of max 105316 tokens, 29.1 tok/s, 177 s
+[maya] thinking: 4475 of max 105316 tokens, 29.1 tok/s, 178 s
+[maya] thinking: 4511 of max 105316 tokens, 29.2 tok/s, 179 s
+[maya] thinking: 4546 of max 105316 tokens, 29.2 tok/s, 180 s
+[maya] thinking: 4579 of max 105316 tokens, 29.2 tok/s, 181 s
+[maya] thinking: 4610 of max 105316 tokens, 29.2 tok/s, 182 s
+[maya] thinking: 4639 of max 105316 tokens, 29.2 tok/s, 183 s
+[maya] thinking: 4671 of max 105316 tokens, 29.2 tok/s, 184 s
+[maya] thinking: 4698 of max 105316 tokens, 29.2 tok/s, 185 s
+[maya] thinking: 4731 of max 105316 tokens, 29.2 tok/s, 186 s
+[maya] thinking: 4757 of max 105316 tokens, 29.2 tok/s, 187 s
+[maya] thinking: 4789 of max 105316 tokens, 29.2 tok/s, 188 s
+[maya] thinking: 4818 of max 105316 tokens, 29.2 tok/s, 189 s
+[maya] thinking: 4846 of max 105316 tokens, 29.2 tok/s, 190 s
+[maya] thinking: 4879 of max 105316 tokens, 29.2 tok/s, 191 s
+[maya] thinking: 4912 of max 105316 tokens, 29.2 tok/s, 192 s
+[maya] thinking: 4941 of max 105316 tokens, 29.2 tok/s, 193 s
+[maya] thinking: 4968 of max 105316 tokens, 29.2 tok/s, 194 s
+[maya] thinking: 5003 of max 105316 tokens, 29.2 tok/s, 195 s
+[maya] thinking: 5032 of max 105316 tokens, 29.2 tok/s, 197 s
+[maya] thinking: 5068 of max 105316 tokens, 29.2 tok/s, 198 s
+[maya] thinking: 5096 of max 105316 tokens, 29.2 tok/s, 199 s
+[maya] thinking: 5131 of max 105316 tokens, 29.2 tok/s, 200 s
+[maya] thinking: 5164 of max 105316 tokens, 29.2 tok/s, 201 s
+[maya] thinking: 5195 of max 105316 tokens, 29.2 tok/s, 202 s
+[maya] thinking: 5225 of max 105316 tokens, 29.2 tok/s, 203 s
+[maya] thinking: 5252 of max 105316 tokens, 29.2 tok/s, 204 s
+[maya] thinking: 5285 of max 105316 tokens, 29.2 tok/s, 205 s
+[maya] thinking: 5318 of max 105316 tokens, 29.2 tok/s, 206 s
+[maya] thinking: 5347 of max 105316 tokens, 29.2 tok/s, 207 s
+[maya] thinking: 5386 of max 105316 tokens, 29.3 tok/s, 208 s
+[maya] thinking: 5419 of max 105316 tokens, 29.3 tok/s, 209 s
+[maya] thinking: 5453 of max 105316 tokens, 29.3 tok/s, 210 s
+[maya] thinking: 5477 of max 105316 tokens, 29.3 tok/s, 211 s
+[maya] thinking: 5509 of max 105316 tokens, 29.3 tok/s, 212 s
+[maya] thinking: 5533 of max 105316 tokens, 29.2 tok/s, 214 s
+[maya] thinking: 5583 of max 105316 tokens, 29.3 tok/s, 215 s
+[maya] thinking: 5608 of max 105316 tokens, 29.3 tok/s, 216 s
+[maya] thinking: 5640 of max 105316 tokens, 29.2 tok/s, 217 s
+[maya] thinking: 5673 of max 105316 tokens, 29.3 tok/s, 218 s
+[maya] thinking: 5700 of max 105316 tokens, 29.2 tok/s, 219 s
+[maya] thinking: 5728 of max 105316 tokens, 29.2 tok/s, 220 s
+[maya] thinking: 5758 of max 105316 tokens, 29.2 tok/s, 221 s
+[maya] thinking: 5787 of max 105316 tokens, 29.2 tok/s, 222 s
+[maya] thinking: 5815 of max 105316 tokens, 29.2 tok/s, 223 s
+[maya] thinking: 5845 of max 105316 tokens, 29.2 tok/s, 224 s
+[maya] thinking: 5876 of max 105316 tokens, 29.2 tok/s, 225 s
+[maya] thinking: 5901 of max 105316 tokens, 29.2 tok/s, 226 s
+[maya] thinking: 5930 of max 105316 tokens, 29.2 tok/s, 227 s
+[maya] thinking: 5962 of max 105316 tokens, 29.2 tok/s, 228 s
+[maya] thinking: 5989 of max 105316 tokens, 29.2 tok/s, 229 s
+[maya] thinking: 6022 of max 105316 tokens, 29.2 tok/s, 230 s
+[maya] thinking: 6053 of max 105316 tokens, 29.2 tok/s, 231 s
+[maya] thinking: 6083 of max 105316 tokens, 29.2 tok/s, 233 s
+[maya] thinking: 6111 of max 105316 tokens, 29.2 tok/s, 234 s
+[maya] thinking: 6140 of max 105316 tokens, 29.2 tok/s, 235 s
+[maya] thinking: 6170 of max 105316 tokens, 29.2 tok/s, 236 s
+[maya] thinking: 6199 of max 105316 tokens, 29.1 tok/s, 237 s
+[maya] thinking: 6225 of max 105316 tokens, 29.1 tok/s, 238 s
+[maya] thinking: 6260 of max 105316 tokens, 29.1 tok/s, 239 s
+[maya] thinking: 6289 of max 105316 tokens, 29.1 tok/s, 240 s
+[maya] thinking: 6321 of max 105316 tokens, 29.1 tok/s, 241 s
+[maya] thinking: 6353 of max 105316 tokens, 29.1 tok/s, 242 s
+[maya] thinking: 6384 of max 105316 tokens, 29.2 tok/s, 243 s
+[maya] thinking: 6409 of max 105316 tokens, 29.1 tok/s, 244 s
+[maya] thinking: 6438 of max 105316 tokens, 29.1 tok/s, 245 s
+[maya] thinking: 6463 of max 105316 tokens, 29.1 tok/s, 246 s
+[maya] thinking: 6490 of max 105316 tokens, 29.1 tok/s, 247 s
+[maya] thinking: 6509 of max 105316 tokens, 29.0 tok/s, 249 s
+[maya] thinking: 6538 of max 105316 tokens, 29.0 tok/s, 250 s
+[maya] thinking: 6571 of max 105316 tokens, 29.0 tok/s, 251 s
+[maya] thinking: 6602 of max 105316 tokens, 29.0 tok/s, 252 s
+[maya] thinking: 6632 of max 105316 tokens, 29.0 tok/s, 253 s
+[maya] thinking: 6661 of max 105316 tokens, 29.0 tok/s, 254 s
+[maya] thinking: 6691 of max 105316 tokens, 29.0 tok/s, 255 s
+[maya] thinking: 6723 of max 105316 tokens, 29.0 tok/s, 256 s
+[maya] thinking: 6753 of max 105316 tokens, 29.0 tok/s, 257 s
+[maya] thinking: 6780 of max 105316 tokens, 29.0 tok/s, 258 s
+[maya] thinking: 6806 of max 105316 tokens, 29.0 tok/s, 259 s
+[maya] thinking: 6838 of max 105316 tokens, 29.0 tok/s, 260 s
+[maya] thinking: 6867 of max 105316 tokens, 29.0 tok/s, 261 s
+[maya] thinking: 6894 of max 105316 tokens, 29.0 tok/s, 262 s
+[maya] thinking: 6918 of max 105316 tokens, 29.0 tok/s, 263 s
+[maya] thinking: 6947 of max 105316 tokens, 29.0 tok/s, 264 s
+[maya] thinking: 6976 of max 105316 tokens, 29.0 tok/s, 265 s
+[maya] thinking: 7004 of max 105316 tokens, 28.9 tok/s, 266 s
+[maya] thinking: 7035 of max 105316 tokens, 28.9 tok/s, 267 s
+[maya] thinking: 7072 of max 105316 tokens, 29.0 tok/s, 268 s
+[maya] thinking: 7104 of max 105316 tokens, 29.0 tok/s, 269 s
+[maya] thinking: 7130 of max 105316 tokens, 29.0 tok/s, 270 s
+[maya] thinking: 7169 of max 105316 tokens, 29.0 tok/s, 271 s
+[maya] thinking: 7198 of max 105316 tokens, 29.0 tok/s, 272 s
+[maya] thinking: 7237 of max 105316 tokens, 29.0 tok/s, 274 s
+[maya] thinking: 7265 of max 105316 tokens, 29.0 tok/s, 275 s
+[maya] thinking: 7294 of max 105316 tokens, 29.0 tok/s, 276 s
+[maya] thinking: 7329 of max 105316 tokens, 29.0 tok/s, 277 s
+[maya] thinking: 7359 of max 105316 tokens, 29.0 tok/s, 278 s
+[maya] thinking: 7389 of max 105316 tokens, 29.0 tok/s, 279 s
+[maya] thinking: 7416 of max 105316 tokens, 29.0 tok/s, 280 s
+[maya] thinking: 7446 of max 105316 tokens, 29.0 tok/s, 281 s
+[maya] thinking: 7474 of max 105316 tokens, 29.0 tok/s, 282 s
+[maya] thinking: 7508 of max 105316 tokens, 29.0 tok/s, 283 s
+[maya] thinking: 7537 of max 105316 tokens, 29.0 tok/s, 284 s
+[maya] thinking: 7566 of max 105316 tokens, 29.0 tok/s, 285 s
+[maya] thinking: 7591 of max 105316 tokens, 29.0 tok/s, 286 s
+[maya] thinking: 7629 of max 105316 tokens, 29.0 tok/s, 287 s
+[maya] thinking: 7660 of max 105316 tokens, 29.0 tok/s, 288 s
+[maya] thinking: 7689 of max 105316 tokens, 29.0 tok/s, 289 s
+[maya] thinking: 7716 of max 105316 tokens, 29.0 tok/s, 290 s
+[maya] thinking: 7750 of max 105316 tokens, 29.0 tok/s, 292 s
+[maya] thinking: 7781 of max 105316 tokens, 29.0 tok/s, 293 s
+[maya] thinking: 7821 of max 105316 tokens, 29.0 tok/s, 294 s
+[maya] thinking: 7861 of max 105316 tokens, 29.0 tok/s, 295 s
+[maya] thinking: 7896 of max 105316 tokens, 29.1 tok/s, 296 s
+[maya] thinking: 7922 of max 105316 tokens, 29.0 tok/s, 297 s
+[maya] thinking: 7955 of max 105316 tokens, 29.0 tok/s, 299 s
+[maya] thinking: 8019 of max 105316 tokens, 29.1 tok/s, 300 s
+[maya] thinking: 8054 of max 105316 tokens, 29.1 tok/s, 301 s
+[maya] thinking: 8081 of max 105316 tokens, 29.1 tok/s, 302 s
+[maya] thinking: 8115 of max 105316 tokens, 29.1 tok/s, 303 s
+[maya] thinking: 8145 of max 105316 tokens, 29.1 tok/s, 304 s
+[maya] thinking: 8180 of max 105316 tokens, 29.1 tok/s, 305 s
+[maya] thinking: 8211 of max 105316 tokens, 29.1 tok/s, 306 s
+[maya] thinking: 8240 of max 105316 tokens, 29.1 tok/s, 307 s
+[maya] thinking: 8271 of max 105316 tokens, 29.1 tok/s, 308 s
+[maya] thinking: 8300 of max 105316 tokens, 29.1 tok/s, 309 s
+[maya] thinking: 8327 of max 105316 tokens, 29.1 tok/s, 310 s
+[maya] thinking: 8339 of max 105316 tokens, 29.0 tok/s, 311 s
+[maya] thinking: 8365 of max 105316 tokens, 29.0 tok/s, 312 s
+[maya] thinking: 8392 of max 105316 tokens, 29.0 tok/s, 313 s
+[maya] thinking: 8422 of max 105316 tokens, 29.0 tok/s, 314 s
+[maya] thinking: 8456 of max 105316 tokens, 29.0 tok/s, 316 s
+[maya] thinking: 8485 of max 105316 tokens, 29.0 tok/s, 317 s
+[maya] thinking: 8515 of max 105316 tokens, 29.0 tok/s, 318 s
+[maya] thinking: 8544 of max 105316 tokens, 29.0 tok/s, 319 s
+[maya] thinking: 8574 of max 105316 tokens, 29.0 tok/s, 320 s
+[maya] thinking: 8601 of max 105316 tokens, 29.0 tok/s, 321 s
+[maya] thinking: 8630 of max 105316 tokens, 29.0 tok/s, 322 s
+[maya] thinking: 8657 of max 105316 tokens, 29.0 tok/s, 323 s
+[maya] thinking: 8690 of max 105316 tokens, 29.0 tok/s, 324 s
+[maya] thinking: 8720 of max 105316 tokens, 29.0 tok/s, 325 s
+[maya] thinking: 8746 of max 105316 tokens, 29.0 tok/s, 326 s
+[maya] thinking: 8772 of max 105316 tokens, 29.0 tok/s, 327 s
+[maya] thinking: 8802 of max 105316 tokens, 29.0 tok/s, 328 s
+[maya] thinking: 8831 of max 105316 tokens, 29.0 tok/s, 329 s
+[maya] thinking: 8856 of max 105316 tokens, 28.9 tok/s, 330 s
+[maya] thinking: 8888 of max 105316 tokens, 28.9 tok/s, 331 s
+[maya] thinking: 8918 of max 105316 tokens, 28.9 tok/s, 332 s
+[maya] thinking: 8949 of max 105316 tokens, 28.9 tok/s, 333 s
+[maya] thinking: 8980 of max 105316 tokens, 28.9 tok/s, 334 s
+[maya] thinking: 9008 of max 105316 tokens, 28.9 tok/s, 335 s
+[maya] thinking: 9035 of max 105316 tokens, 28.9 tok/s, 336 s
+[maya] thinking: 9067 of max 105316 tokens, 28.9 tok/s, 337 s
+[maya] thinking: 9098 of max 105316 tokens, 28.9 tok/s, 338 s
+[maya] thinking: 9125 of max 105316 tokens, 28.9 tok/s, 339 s
+[maya] thinking: 9157 of max 105316 tokens, 28.9 tok/s, 340 s
+[maya] thinking: 9186 of max 105316 tokens, 28.9 tok/s, 342 s
+[maya] thinking: 9219 of max 105316 tokens, 28.9 tok/s, 343 s
+[maya] thinking: 9248 of max 105316 tokens, 28.9 tok/s, 344 s
+[maya] thinking: 9279 of max 105316 tokens, 28.9 tok/s, 345 s
+[maya] thinking: 9304 of max 105316 tokens, 28.9 tok/s, 346 s
+[maya] thinking: 9331 of max 105316 tokens, 28.9 tok/s, 347 s
+[maya] thinking: 9359 of max 105316 tokens, 28.9 tok/s, 348 s
+[maya] thinking: 9386 of max 105316 tokens, 28.9 tok/s, 349 s
+[maya] thinking: 9414 of max 105316 tokens, 28.9 tok/s, 350 s
+[maya] thinking: 9444 of max 105316 tokens, 28.9 tok/s, 351 s
+[maya] thinking: 9476 of max 105316 tokens, 28.9 tok/s, 352 s
+[maya] thinking: 9500 of max 105316 tokens, 28.9 tok/s, 353 s
+[maya] thinking: 9530 of max 105316 tokens, 28.9 tok/s, 354 s
+[maya] thinking: 9560 of max 105316 tokens, 28.9 tok/s, 355 s
+[maya] thinking: 9586 of max 105316 tokens, 28.9 tok/s, 356 s
+[maya] thinking: 9615 of max 105316 tokens, 28.9 tok/s, 357 s
+[maya] thinking: 9645 of max 105316 tokens, 28.9 tok/s, 358 s
+[maya] thinking: 9671 of max 105316 tokens, 28.8 tok/s, 359 s
+[maya] thinking: 9708 of max 105316 tokens, 28.9 tok/s, 360 s
+[maya] thinking: 9734 of max 105316 tokens, 28.9 tok/s, 361 s
+[maya] thinking: 9761 of max 105316 tokens, 28.8 tok/s, 362 s
+[maya] thinking: 9790 of max 105316 tokens, 28.8 tok/s, 363 s
+[maya] thinking: 9814 of max 105316 tokens, 28.8 tok/s, 364 s
+[maya] thinking: 9842 of max 105316 tokens, 28.8 tok/s, 366 s
+[maya] thinking: 9873 of max 105316 tokens, 28.8 tok/s, 367 s
+[maya] thinking: 9904 of max 105316 tokens, 28.8 tok/s, 368 s
+[maya] thinking: 9933 of max 105316 tokens, 28.8 tok/s, 369 s
+[maya] thinking: 9963 of max 105316 tokens, 28.8 tok/s, 370 s
+[maya] thinking: 9991 of max 105316 tokens, 28.8 tok/s, 371 s
+[maya] thinking: 10024 of max 105316 tokens, 28.8 tok/s, 372 s
+[maya] thinking: 10040 of max 105316 tokens, 28.8 tok/s, 373 s
+[maya] thinking: 10066 of max 105316 tokens, 28.7 tok/s, 374 s
+[maya] thinking: 10095 of max 105316 tokens, 28.7 tok/s, 375 s
+[maya] thinking: 10124 of max 105316 tokens, 28.7 tok/s, 376 s
+[maya] thinking: 10157 of max 105316 tokens, 28.7 tok/s, 377 s
+[maya] thinking: 10190 of max 105316 tokens, 28.8 tok/s, 378 s
+[maya] thinking: 10223 of max 105316 tokens, 28.8 tok/s, 379 s
+[maya] thinking: 10253 of max 105316 tokens, 28.8 tok/s, 380 s
+[maya] thinking: 10284 of max 105316 tokens, 28.8 tok/s, 381 s
+[maya] thinking: 10309 of max 105316 tokens, 28.8 tok/s, 383 s
+[maya] thinking: 10338 of max 105316 tokens, 28.8 tok/s, 384 s
+[maya] thinking: 10357 of max 105316 tokens, 28.7 tok/s, 385 s
+[maya] thinking: 10403 of max 105316 tokens, 28.8 tok/s, 386 s
+[maya] thinking: 10431 of max 105316 tokens, 28.8 tok/s, 387 s
+[maya] thinking: 10458 of max 105316 tokens, 28.8 tok/s, 388 s
+[maya] thinking: 10485 of max 105316 tokens, 28.8 tok/s, 389 s
+[maya] thinking: 10514 of max 105316 tokens, 28.8 tok/s, 390 s
+[maya] thinking: 10542 of max 105316 tokens, 28.7 tok/s, 391 s
+[maya] thinking: 10571 of max 105316 tokens, 28.7 tok/s, 392 s
+[maya] thinking: 10602 of max 105316 tokens, 28.7 tok/s, 393 s
+[maya] thinking: 10629 of max 105316 tokens, 28.7 tok/s, 394 s
+[maya] thinking: 10655 of max 105316 tokens, 28.7 tok/s, 395 s
+[maya] thinking: 10688 of max 105316 tokens, 28.7 tok/s, 396 s
+[maya] thinking: 10718 of max 105316 tokens, 28.7 tok/s, 397 s
+[maya] thinking: 10750 of max 105316 tokens, 28.7 tok/s, 398 s
+[maya] thinking: 10778 of max 105316 tokens, 28.7 tok/s, 399 s
+[maya] thinking: 10815 of max 105316 tokens, 28.8 tok/s, 400 s
+[maya] thinking: 10847 of max 105316 tokens, 28.8 tok/s, 401 s
+[maya] thinking: 10877 of max 105316 tokens, 28.8 tok/s, 402 s
+[maya] thinking: 10905 of max 105316 tokens, 28.8 tok/s, 403 s
+[maya] thinking: 10931 of max 105316 tokens, 28.7 tok/s, 404 s
+[maya] thinking: 10967 of max 105316 tokens, 28.8 tok/s, 405 s
+[maya] thinking: 11000 of max 105316 tokens, 28.8 tok/s, 406 s
+[maya] thinking: 11026 of max 105316 tokens, 28.8 tok/s, 407 s
+[maya] thinking: 11054 of max 105316 tokens, 28.8 tok/s, 408 s
+[maya] thinking: 11088 of max 105316 tokens, 28.8 tok/s, 409 s
+[maya] thinking: 11115 of max 105316 tokens, 28.8 tok/s, 410 s
+[maya] thinking: 11143 of max 105316 tokens, 28.8 tok/s, 411 s
+[maya] thinking: 11177 of max 105316 tokens, 28.8 tok/s, 413 s
+[maya] thinking: 11207 of max 105316 tokens, 28.8 tok/s, 414 s
+[maya] thinking: 11240 of max 105316 tokens, 28.8 tok/s, 415 s
+[maya] thinking: 11272 of max 105316 tokens, 28.8 tok/s, 416 s
+[maya] thinking: 11298 of max 105316 tokens, 28.8 tok/s, 417 s
+[maya] thinking: 11331 of max 105316 tokens, 28.8 tok/s, 418 s
+[maya] thinking: 11361 of max 105316 tokens, 28.8 tok/s, 419 s
+[maya] thinking: 11390 of max 105316 tokens, 28.8 tok/s, 420 s
+[maya] thinking: 11421 of max 105316 tokens, 28.8 tok/s, 421 s
+[maya] thinking: 11447 of max 105316 tokens, 28.8 tok/s, 422 s
+[maya] thinking: 11483 of max 105316 tokens, 28.8 tok/s, 423 s
+[maya] thinking: 11517 of max 105316 tokens, 28.8 tok/s, 424 s
+[maya] thinking: 11550 of max 105316 tokens, 28.8 tok/s, 425 s
+[maya] thinking: 11583 of max 105316 tokens, 28.8 tok/s, 426 s
+[maya] thinking: 11617 of max 105316 tokens, 28.8 tok/s, 427 s
+[maya] thinking: 11646 of max 105316 tokens, 28.8 tok/s, 428 s
+[maya] thinking: 11682 of max 105316 tokens, 28.8 tok/s, 429 s
+[maya] thinking: 11711 of max 105316 tokens, 28.8 tok/s, 430 s
+[maya] thinking: 11739 of max 105316 tokens, 28.8 tok/s, 431 s
+[maya] thinking: 11769 of max 105316 tokens, 28.8 tok/s, 432 s
+[maya] thinking: 11799 of max 105316 tokens, 28.8 tok/s, 433 s
+[maya] thinking: 11826 of max 105316 tokens, 28.8 tok/s, 434 s
+[maya] thinking: 11851 of max 105316 tokens, 28.8 tok/s, 436 s
+[maya] thinking: 11879 of max 105316 tokens, 28.8 tok/s, 437 s
+[maya] thinking: 11908 of max 105316 tokens, 28.8 tok/s, 438 s
+[maya] thinking: 11938 of max 105316 tokens, 28.8 tok/s, 439 s
+[maya] thinking: 11964 of max 105316 tokens, 28.8 tok/s, 440 s
+[maya] thinking: 11989 of max 105316 tokens, 28.8 tok/s, 441 s
+[maya] thinking: 12015 of max 105316 tokens, 28.7 tok/s, 442 s
+[maya] thinking: 12055 of max 105316 tokens, 28.8 tok/s, 443 s
+[maya] thinking: 12088 of max 105316 tokens, 28.8 tok/s, 444 s
+[maya] thinking: 12121 of max 105316 tokens, 28.8 tok/s, 445 s
+[maya] thinking: 12154 of max 105316 tokens, 28.8 tok/s, 446 s
+[maya] thinking: 12185 of max 105316 tokens, 28.8 tok/s, 447 s
+[maya] thinking: 12216 of max 105316 tokens, 28.8 tok/s, 448 s
+[maya] thinking: 12245 of max 105316 tokens, 28.8 tok/s, 449 s
+[maya] thinking: 12273 of max 105316 tokens, 28.8 tok/s, 450 s
+[maya] thinking: 12302 of max 105316 tokens, 28.8 tok/s, 451 s
+[maya] thinking: 12333 of max 105316 tokens, 28.8 tok/s, 452 s
+[maya] thinking: 12367 of max 105316 tokens, 28.8 tok/s, 453 s
+[maya] thinking: 12393 of max 105316 tokens, 28.8 tok/s, 454 s
+[maya] thinking: 12420 of max 105316 tokens, 28.8 tok/s, 455 s
+[maya] thinking: 12448 of max 105316 tokens, 28.8 tok/s, 456 s
+[maya] thinking: 12481 of max 105316 tokens, 28.8 tok/s, 457 s
+[maya] thinking: 12509 of max 105316 tokens, 28.8 tok/s, 458 s
+[maya] thinking: 12537 of max 105316 tokens, 28.8 tok/s, 460 s
+[maya] thinking: 12568 of max 105316 tokens, 28.8 tok/s, 461 s
+[maya] thinking: 12598 of max 105316 tokens, 28.8 tok/s, 462 s
+[maya] thinking: 12629 of max 105316 tokens, 28.8 tok/s, 463 s
+[maya] thinking: 12657 of max 105316 tokens, 28.8 tok/s, 464 s
+[maya] thinking: 12687 of max 105316 tokens, 28.8 tok/s, 465 s
+[maya] thinking: 12715 of max 105316 tokens, 28.8 tok/s, 466 s
+[maya] thinking: 12740 of max 105316 tokens, 28.8 tok/s, 467 s
+[maya] thinking: 12770 of max 105316 tokens, 28.8 tok/s, 468 s
+[maya] thinking: 12803 of max 105316 tokens, 28.8 tok/s, 469 s
+[maya] thinking: 12832 of max 105316 tokens, 28.8 tok/s, 470 s
+[maya] thinking: 12862 of max 105316 tokens, 28.8 tok/s, 471 s
+[maya] thinking: 12891 of max 105316 tokens, 28.8 tok/s, 472 s
+[maya] thinking: 12919 of max 105316 tokens, 28.8 tok/s, 473 s
+[maya] thinking: 12949 of max 105316 tokens, 28.8 tok/s, 474 s
+[maya] thinking: 12982 of max 105316 tokens, 28.8 tok/s, 475 s
+[maya] thinking: 13011 of max 105316 tokens, 28.8 tok/s, 476 s
+[maya] thinking: 13040 of max 105316 tokens, 28.8 tok/s, 477 s
+[maya] thinking: 13069 of max 105316 tokens, 28.8 tok/s, 478 s
+[maya] thinking: 13096 of max 105316 tokens, 28.8 tok/s, 479 s
+[maya] thinking: 13124 of max 105316 tokens, 28.8 tok/s, 480 s
+[maya] thinking: 13152 of max 105316 tokens, 28.8 tok/s, 481 s
+[maya] thinking: 13180 of max 105316 tokens, 28.8 tok/s, 482 s
+[maya] thinking: 13216 of max 105316 tokens, 28.8 tok/s, 483 s
+[maya] thinking: 13250 of max 105316 tokens, 28.8 tok/s, 484 s
+[maya] thinking: 13282 of max 105316 tokens, 28.8 tok/s, 485 s
+[maya] thinking: 13308 of max 105316 tokens, 28.8 tok/s, 486 s
+[maya] thinking: 13341 of max 105316 tokens, 28.8 tok/s, 487 s
+[maya] thinking: 13370 of max 105316 tokens, 28.8 tok/s, 489 s
+[maya] thinking: 13401 of max 105316 tokens, 28.8 tok/s, 490 s
+[maya] thinking: 13433 of max 105316 tokens, 28.8 tok/s, 491 s
+[maya] thinking: 13458 of max 105316 tokens, 28.8 tok/s, 492 s
+[maya] thinking: 13486 of max 105316 tokens, 28.8 tok/s, 493 s
+[maya] thinking: 13515 of max 105316 tokens, 28.8 tok/s, 494 s
+[maya] thinking: 13550 of max 105316 tokens, 28.8 tok/s, 495 s
+[maya] thinking: 13576 of max 105316 tokens, 28.8 tok/s, 496 s
+[maya] thinking: 13611 of max 105316 tokens, 28.8 tok/s, 497 s
+[maya] thinking: 13630 of max 105316 tokens, 28.8 tok/s, 498 s
+[maya] thinking: 13660 of max 105316 tokens, 28.8 tok/s, 499 s
+[maya] thinking: 13690 of max 105316 tokens, 28.8 tok/s, 500 s
+[maya] thinking: 13719 of max 105316 tokens, 28.8 tok/s, 501 s
+[maya] thinking: 13751 of max 105316 tokens, 28.8 tok/s, 502 s
+[maya] thinking: 13783 of max 105316 tokens, 28.8 tok/s, 503 s
+[maya] thinking: 13818 of max 105316 tokens, 28.8 tok/s, 504 s
+[maya] thinking: 13849 of max 105316 tokens, 28.8 tok/s, 505 s
+[maya] thinking: 13880 of max 105316 tokens, 28.8 tok/s, 506 s
+[maya] thinking: 13911 of max 105316 tokens, 28.8 tok/s, 507 s
+[maya] thinking: 13947 of max 105316 tokens, 28.8 tok/s, 508 s
+[maya] thinking: 13979 of max 105316 tokens, 28.8 tok/s, 509 s
+[maya] thinking: 14009 of max 105316 tokens, 28.8 tok/s, 510 s
+[maya] thinking: 14032 of max 105316 tokens, 28.8 tok/s, 511 s
+[maya] thinking: 14059 of max 105316 tokens, 28.8 tok/s, 512 s
+[maya] thinking: 14086 of max 105316 tokens, 28.8 tok/s, 513 s
+[maya] thinking: 14114 of max 105316 tokens, 28.8 tok/s, 514 s
+[maya] thinking: 14143 of max 105316 tokens, 28.8 tok/s, 515 s
+[maya] thinking: 14173 of max 105316 tokens, 28.8 tok/s, 516 s
+[maya] thinking: 14200 of max 105316 tokens, 28.8 tok/s, 517 s
+[maya] thinking: 14229 of max 105316 tokens, 28.8 tok/s, 518 s
+[maya] thinking: 14256 of max 105316 tokens, 28.8 tok/s, 520 s
+[maya] thinking: 14284 of max 105316 tokens, 28.8 tok/s, 521 s
+[maya] thinking: 14313 of max 105316 tokens, 28.8 tok/s, 522 s
+[maya] thinking: 14341 of max 105316 tokens, 28.8 tok/s, 523 s
+[maya] thinking: 14372 of max 105316 tokens, 28.8 tok/s, 524 s
+[maya] thinking: 14395 of max 105316 tokens, 28.8 tok/s, 525 s
+[maya] thinking: 14423 of max 105316 tokens, 28.8 tok/s, 526 s
+[maya] thinking: 14450 of max 105316 tokens, 28.8 tok/s, 527 s
+[maya] thinking: 14481 of max 105316 tokens, 28.8 tok/s, 528 s
+[maya] thinking: 14516 of max 105316 tokens, 28.8 tok/s, 529 s
+[maya] thinking: 14545 of max 105316 tokens, 28.8 tok/s, 530 s
+[maya] thinking: 14576 of max 105316 tokens, 28.8 tok/s, 531 s
+[maya] thinking: 14601 of max 105316 tokens, 28.7 tok/s, 532 s
+[maya] thinking: 14628 of max 105316 tokens, 28.7 tok/s, 533 s
+[maya] thinking: 14652 of max 105316 tokens, 28.7 tok/s, 534 s
+[maya] thinking: 14690 of max 105316 tokens, 28.7 tok/s, 535 s
+[maya] thinking: 14718 of max 105316 tokens, 28.7 tok/s, 536 s
+[maya] thinking: 14747 of max 105316 tokens, 28.7 tok/s, 537 s
+[maya] thinking: 14780 of max 105316 tokens, 28.7 tok/s, 538 s
+[maya] thinking: 14813 of max 105316 tokens, 28.8 tok/s, 539 s
+[maya] thinking: 14848 of max 105316 tokens, 28.8 tok/s, 540 s
+[maya] thinking: 14875 of max 105316 tokens, 28.8 tok/s, 541 s
+[maya] thinking: 14899 of max 105316 tokens, 28.7 tok/s, 542 s
+[maya] thinking: 14932 of max 105316 tokens, 28.8 tok/s, 543 s
+[maya] thinking: 14969 of max 105316 tokens, 28.8 tok/s, 544 s
+[maya] thinking: 14998 of max 105316 tokens, 28.8 tok/s, 545 s
+[maya] thinking: 15028 of max 105316 tokens, 28.8 tok/s, 547 s
+[maya] thinking: 15059 of max 105316 tokens, 28.8 tok/s, 548 s
+[maya] thinking: 15094 of max 105316 tokens, 28.8 tok/s, 549 s
+[maya] thinking: 15120 of max 105316 tokens, 28.8 tok/s, 550 s
+[maya] thinking: 15148 of max 105316 tokens, 28.8 tok/s, 551 s
+[maya] thinking: 15174 of max 105316 tokens, 28.8 tok/s, 552 s
+[maya] thinking: 15214 of max 105316 tokens, 28.8 tok/s, 553 s
+[maya] thinking: 15243 of max 105316 tokens, 28.8 tok/s, 554 s
+[maya] thinking: 15276 of max 105316 tokens, 28.8 tok/s, 555 s
+[maya] thinking: 15312 of max 105316 tokens, 28.8 tok/s, 556 s
+[maya] thinking: 15348 of max 105316 tokens, 28.8 tok/s, 557 s
+[maya] thinking: 15383 of max 105316 tokens, 28.8 tok/s, 558 s
+[maya] thinking: 15421 of max 105316 tokens, 28.8 tok/s, 559 s
+[maya] thinking: 15446 of max 105316 tokens, 28.8 tok/s, 560 s
+[maya] thinking: 15478 of max 105316 tokens, 28.8 tok/s, 561 s
+[maya] thinking: 15512 of max 105316 tokens, 28.8 tok/s, 562 s
+[maya] thinking: 15538 of max 105316 tokens, 28.8 tok/s, 563 s
+[maya] thinking: 15563 of max 105316 tokens, 28.8 tok/s, 564 s
+[maya] thinking: 15587 of max 105316 tokens, 28.8 tok/s, 565 s
+[maya] thinking: 15615 of max 105316 tokens, 28.8 tok/s, 567 s
+[maya] thinking: 15645 of max 105316 tokens, 28.8 tok/s, 568 s
+[maya] thinking: 15673 of max 105316 tokens, 28.8 tok/s, 569 s
+[maya] thinking: 15701 of max 105316 tokens, 28.8 tok/s, 570 s
+[maya] thinking: 15732 of max 105316 tokens, 28.8 tok/s, 571 s
+[maya] thinking: 15763 of max 105316 tokens, 28.8 tok/s, 572 s
+[maya] thinking: 15795 of max 105316 tokens, 28.8 tok/s, 573 s
+[maya] thinking: 15819 of max 105316 tokens, 28.8 tok/s, 574 s
+[maya] thinking: 15845 of max 105316 tokens, 28.8 tok/s, 575 s
+[maya] thinking: 15869 of max 105316 tokens, 28.8 tok/s, 576 s
+[maya] thinking: 15895 of max 105316 tokens, 28.8 tok/s, 577 s
+[maya] thinking: 15919 of max 105316 tokens, 28.7 tok/s, 578 s
+[maya] thinking: 15947 of max 105316 tokens, 28.7 tok/s, 579 s
+[maya] thinking: 15977 of max 105316 tokens, 28.7 tok/s, 580 s
+[maya] thinking: 16008 of max 105316 tokens, 28.7 tok/s, 581 s
+[maya] thinking: 16035 of max 105316 tokens, 28.7 tok/s, 582 s
+[maya] thinking: 16064 of max 105316 tokens, 28.7 tok/s, 583 s
+[maya] thinking: 16090 of max 105316 tokens, 28.7 tok/s, 584 s
+[maya] thinking: 16120 of max 105316 tokens, 28.7 tok/s, 585 s
+[maya] thinking: 16145 of max 105316 tokens, 28.7 tok/s, 586 s
+[maya] thinking: 16172 of max 105316 tokens, 28.7 tok/s, 587 s
+[maya] thinking: 16204 of max 105316 tokens, 28.7 tok/s, 588 s
+[maya] thinking: 16232 of max 105316 tokens, 28.7 tok/s, 589 s
+[maya] thinking: 16267 of max 105316 tokens, 28.7 tok/s, 590 s
+[maya] thinking: 16296 of max 105316 tokens, 28.7 tok/s, 591 s
+[maya] thinking: 16328 of max 105316 tokens, 28.7 tok/s, 592 s
+[maya] thinking: 16354 of max 105316 tokens, 28.7 tok/s, 593 s
+[maya] thinking: 16381 of max 105316 tokens, 28.7 tok/s, 594 s
+[maya] thinking: 16409 of max 105316 tokens, 28.7 tok/s, 595 s
+[maya] thinking: 16440 of max 105316 tokens, 28.7 tok/s, 597 s
+[maya] thinking: 16472 of max 105316 tokens, 28.7 tok/s, 598 s
+[maya] thinking: 16501 of max 105316 tokens, 28.7 tok/s, 599 s
+[maya] thinking: 16529 of max 105316 tokens, 28.7 tok/s, 600 s
+[maya] thinking: 16558 of max 105316 tokens, 28.7 tok/s, 601 s
+[maya] thinking: 16591 of max 105316 tokens, 28.7 tok/s, 602 s
+[maya] thinking: 16617 of max 105316 tokens, 28.7 tok/s, 603 s
+[maya] thinking: 16642 of max 105316 tokens, 28.7 tok/s, 604 s
+[maya] thinking: 16675 of max 105316 tokens, 28.7 tok/s, 605 s
+[maya] thinking: 16710 of max 105316 tokens, 28.7 tok/s, 606 s
+[maya] thinking: 16742 of max 105316 tokens, 28.7 tok/s, 607 s
+[maya] thinking: 16769 of max 105316 tokens, 28.7 tok/s, 608 s
+[maya] thinking: 16798 of max 105316 tokens, 28.7 tok/s, 609 s
+[maya] thinking: 16829 of max 105316 tokens, 28.7 tok/s, 610 s
+[maya] thinking: 16857 of max 105316 tokens, 28.7 tok/s, 611 s
+[maya] thinking: 16889 of max 105316 tokens, 28.7 tok/s, 612 s
+[maya] thinking: 16918 of max 105316 tokens, 28.7 tok/s, 613 s
+[maya] thinking: 16948 of max 105316 tokens, 28.7 tok/s, 614 s
+[maya] thinking: 16976 of max 105316 tokens, 28.7 tok/s, 615 s
+[maya] thinking: 17004 of max 105316 tokens, 28.7 tok/s, 616 s
+[maya] thinking: 17037 of max 105316 tokens, 28.7 tok/s, 617 s
+[maya] thinking: 17070 of max 105316 tokens, 28.7 tok/s, 618 s
+[maya] thinking: 17100 of max 105316 tokens, 28.7 tok/s, 619 s
+[maya] thinking: 17132 of max 105316 tokens, 28.7 tok/s, 620 s
+[maya] thinking: 17161 of max 105316 tokens, 28.7 tok/s, 621 s
+[maya] thinking: 17182 of max 105316 tokens, 28.7 tok/s, 622 s
+[maya] thinking: 17210 of max 105316 tokens, 28.7 tok/s, 625 s
+[maya] thinking: 17271 of max 105316 tokens, 28.7 tok/s, 626 s
+[maya] thinking: 17293 of max 105316 tokens, 28.7 tok/s, 627 s
+[maya] thinking: 17333 of max 105316 tokens, 28.7 tok/s, 628 s
+[maya] thinking: 17375 of max 105316 tokens, 28.7 tok/s, 629 s
+[maya] thinking: 17410 of max 105316 tokens, 28.7 tok/s, 630 s
+[maya] thinking: 17441 of max 105316 tokens, 28.7 tok/s, 631 s
+[maya] thinking: 17466 of max 105316 tokens, 28.7 tok/s, 633 s
+[maya] thinking: 17515 of max 105316 tokens, 28.7 tok/s, 634 s
+[maya] thinking: 17564 of max 105316 tokens, 28.7 tok/s, 635 s
+[maya] thinking: 17598 of max 105316 tokens, 28.8 tok/s, 636 s
+[maya] thinking: 17630 of max 105316 tokens, 28.8 tok/s, 637 s
+[maya] thinking: 17662 of max 105316 tokens, 28.8 tok/s, 638 s
+[maya] thinking: 17692 of max 105316 tokens, 28.8 tok/s, 639 s
+[maya] thinking: 17725 of max 105316 tokens, 28.8 tok/s, 640 s
+[maya] thinking: 17756 of max 105316 tokens, 28.8 tok/s, 641 s
+[maya] thinking: 17788 of max 105316 tokens, 28.8 tok/s, 642 s
+[maya] thinking: 17818 of max 105316 tokens, 28.8 tok/s, 644 s
+[maya] thinking: 17857 of max 105316 tokens, 28.8 tok/s, 645 s
+[maya] thinking: 17894 of max 105316 tokens, 28.8 tok/s, 646 s
+[maya] thinking: 17922 of max 105316 tokens, 28.8 tok/s, 647 s
+[maya] thinking: 17953 of max 105316 tokens, 28.8 tok/s, 648 s
+[maya] thinking: 17976 of max 105316 tokens, 28.8 tok/s, 649 s
+[maya] thinking: 18007 of max 105316 tokens, 28.8 tok/s, 650 s
+[maya] thinking: 18038 of max 105316 tokens, 28.8 tok/s, 651 s
+[maya] thinking: 18074 of max 105316 tokens, 28.8 tok/s, 652 s
+[maya] thinking: 18108 of max 105316 tokens, 28.8 tok/s, 653 s
+[maya] thinking: 18143 of max 105316 tokens, 28.8 tok/s, 654 s
+[maya] thinking: 18176 of max 105316 tokens, 28.8 tok/s, 655 s
+[maya] thinking: 18205 of max 105316 tokens, 28.8 tok/s, 656 s
+[maya] thinking: 18242 of max 105316 tokens, 28.8 tok/s, 657 s
+[maya] thinking: 18273 of max 105316 tokens, 28.8 tok/s, 658 s
+[maya] thinking: 18305 of max 105316 tokens, 28.8 tok/s, 659 s
+[maya] thinking: 18333 of max 105316 tokens, 28.8 tok/s, 660 s
+[maya] thinking: 18367 of max 105316 tokens, 28.8 tok/s, 661 s
+[maya] thinking: 18398 of max 105316 tokens, 28.8 tok/s, 662 s
+[maya] thinking: 18433 of max 105316 tokens, 28.8 tok/s, 663 s
+[maya] thinking: 18466 of max 105316 tokens, 28.8 tok/s, 664 s
+[maya] thinking: 18500 of max 105316 tokens, 28.8 tok/s, 665 s
+[maya] thinking: 18532 of max 105316 tokens, 28.8 tok/s, 666 s
+[maya] thinking: 18560 of max 105316 tokens, 28.8 tok/s, 668 s
+[maya] thinking: 18594 of max 105316 tokens, 28.8 tok/s, 669 s
+[maya] thinking: 18630 of max 105316 tokens, 28.9 tok/s, 670 s
+[maya] thinking: 18661 of max 105316 tokens, 28.9 tok/s, 671 s
+[maya] thinking: 18696 of max 105316 tokens, 28.9 tok/s, 672 s
+[maya] thinking: 18730 of max 105316 tokens, 28.9 tok/s, 673 s
+[maya] thinking: 18756 of max 105316 tokens, 28.9 tok/s, 674 s
+[maya] thinking: 18787 of max 105316 tokens, 28.9 tok/s, 675 s
+[maya] thinking: 18821 of max 105316 tokens, 28.9 tok/s, 676 s
+[maya] thinking: 18856 of max 105316 tokens, 28.9 tok/s, 677 s
+[maya] thinking: 18891 of max 105316 tokens, 28.9 tok/s, 678 s
+[maya] thinking: 18924 of max 105316 tokens, 28.9 tok/s, 679 s
+[maya] thinking: 18956 of max 105316 tokens, 28.9 tok/s, 680 s
+[maya] thinking: 18990 of max 105316 tokens, 28.9 tok/s, 681 s
+[maya] thinking: 19023 of max 105316 tokens, 28.9 tok/s, 682 s
+[maya] thinking: 19055 of max 105316 tokens, 28.9 tok/s, 683 s
+[maya] thinking: 19088 of max 105316 tokens, 28.9 tok/s, 685 s
+[maya] thinking: 19115 of max 105316 tokens, 28.9 tok/s, 686 s
+[maya] thinking: 19152 of max 105316 tokens, 28.9 tok/s, 687 s
+[maya] thinking: 19187 of max 105316 tokens, 28.9 tok/s, 688 s
+[maya] thinking: 19217 of max 105316 tokens, 28.9 tok/s, 689 s
+[maya] thinking: 19244 of max 105316 tokens, 28.9 tok/s, 690 s
+[maya] thinking: 19276 of max 105316 tokens, 28.9 tok/s, 691 s
+[maya] thinking: 19306 of max 105316 tokens, 28.9 tok/s, 692 s
+[maya] thinking: 19336 of max 105316 tokens, 28.9 tok/s, 693 s
+[maya] thinking: 19369 of max 105316 tokens, 28.9 tok/s, 694 s
+[maya] thinking: 19401 of max 105316 tokens, 28.9 tok/s, 695 s
+[maya] thinking: 19434 of max 105316 tokens, 28.9 tok/s, 696 s
+[maya] thinking: 19463 of max 105316 tokens, 28.9 tok/s, 697 s
+[maya] thinking: 19499 of max 105316 tokens, 28.9 tok/s, 698 s
+[maya] thinking: 19533 of max 105316 tokens, 28.9 tok/s, 699 s
+[maya] thinking: 19568 of max 105316 tokens, 28.9 tok/s, 700 s
+[maya] thinking: 19604 of max 105316 tokens, 29.0 tok/s, 701 s
+[maya] thinking: 19637 of max 105316 tokens, 29.0 tok/s, 702 s
+[maya] thinking: 19670 of max 105316 tokens, 29.0 tok/s, 703 s
+[maya] thinking: 19705 of max 105316 tokens, 29.0 tok/s, 704 s
+[maya] thinking: 19738 of max 105316 tokens, 29.0 tok/s, 705 s
+[maya] thinking: 19774 of max 105316 tokens, 29.0 tok/s, 706 s
+[maya] thinking: 19810 of max 105316 tokens, 29.0 tok/s, 707 s
+[maya] thinking: 19843 of max 105316 tokens, 29.0 tok/s, 708 s
+[maya] thinking: 19880 of max 105316 tokens, 29.0 tok/s, 709 s
+[maya] thinking: 19912 of max 105316 tokens, 29.0 tok/s, 710 s
+[maya] thinking: 19945 of max 105316 tokens, 29.0 tok/s, 711 s
+[maya] thinking: 19982 of max 105316 tokens, 29.0 tok/s, 712 s
+[maya] thinking: 20017 of max 105316 tokens, 29.0 tok/s, 714 s
+[maya] thinking: 20052 of max 105316 tokens, 29.0 tok/s, 715 s
+[maya] thinking: 20089 of max 105316 tokens, 29.0 tok/s, 716 s
+[maya] thinking: 20122 of max 105316 tokens, 29.1 tok/s, 717 s
+[maya] thinking: 20155 of max 105316 tokens, 29.1 tok/s, 718 s
+[maya] thinking: 20189 of max 105316 tokens, 29.1 tok/s, 719 s
+[maya] thinking: 20219 of max 105316 tokens, 29.1 tok/s, 720 s
+[maya] thinking: 20254 of max 105316 tokens, 29.1 tok/s, 721 s
+[maya] thinking: 20286 of max 105316 tokens, 29.1 tok/s, 722 s
+[maya] thinking: 20316 of max 105316 tokens, 29.1 tok/s, 723 s
+[maya] thinking: 20340 of max 105316 tokens, 29.1 tok/s, 724 s
+[maya] thinking: 20366 of max 105316 tokens, 29.1 tok/s, 725 s
+[maya] thinking: 20398 of max 105316 tokens, 29.1 tok/s, 726 s
+[maya] thinking: 20427 of max 105316 tokens, 29.1 tok/s, 727 s
+[maya] thinking: 20462 of max 105316 tokens, 29.1 tok/s, 728 s
+[maya] thinking: 20495 of max 105316 tokens, 29.1 tok/s, 729 s
+[maya] thinking: 20534 of max 105316 tokens, 29.1 tok/s, 730 s
+[maya] thinking: 20569 of max 105316 tokens, 29.1 tok/s, 731 s
+[maya] thinking: 20605 of max 105316 tokens, 29.1 tok/s, 732 s
+[maya] thinking: 20635 of max 105316 tokens, 29.1 tok/s, 733 s
+[maya] thinking: 20662 of max 105316 tokens, 29.1 tok/s, 734 s
+[maya] thinking: 20687 of max 105316 tokens, 29.1 tok/s, 735 s
+[maya] thinking: 20711 of max 105316 tokens, 29.1 tok/s, 736 s
+[maya] thinking: 20737 of max 105316 tokens, 29.1 tok/s, 737 s
+[maya] thinking: 20760 of max 105316 tokens, 29.1 tok/s, 738 s
+[maya] thinking: 20798 of max 105316 tokens, 29.1 tok/s, 739 s
+[maya] thinking: 20825 of max 105316 tokens, 29.1 tok/s, 740 s
+[maya] thinking: 20852 of max 105316 tokens, 29.1 tok/s, 741 s
+[maya] thinking: 20882 of max 105316 tokens, 29.1 tok/s, 742 s
+[maya] thinking: 20908 of max 105316 tokens, 29.1 tok/s, 743 s
+[maya] thinking: 20941 of max 105316 tokens, 29.1 tok/s, 745 s
+[maya] thinking: 20966 of max 105316 tokens, 29.1 tok/s, 746 s
+[maya] thinking: 20982 of max 105316 tokens, 29.0 tok/s, 747 s
+[maya] thinking: 21009 of max 105316 tokens, 29.0 tok/s, 748 s
+[maya] thinking: 21037 of max 105316 tokens, 29.0 tok/s, 749 s
+[maya] thinking: 21063 of max 105316 tokens, 29.0 tok/s, 750 s
+[maya] thinking: 21095 of max 105316 tokens, 29.0 tok/s, 751 s
+[maya] thinking: 21125 of max 105316 tokens, 29.0 tok/s, 752 s
+[maya] thinking: 21167 of max 105316 tokens, 29.0 tok/s, 753 s
+[maya] thinking: 21197 of max 105316 tokens, 29.0 tok/s, 754 s
+[maya] thinking: 21225 of max 105316 tokens, 29.0 tok/s, 755 s
+[maya] thinking: 21253 of max 105316 tokens, 29.0 tok/s, 756 s
+[maya] thinking: 21286 of max 105316 tokens, 29.0 tok/s, 757 s
+[maya] thinking: 21313 of max 105316 tokens, 29.0 tok/s, 759 s
+[maya] thinking: 21345 of max 105316 tokens, 29.0 tok/s, 760 s
+[maya] thinking: 21371 of max 105316 tokens, 29.0 tok/s, 761 s
+[maya] thinking: 21402 of max 105316 tokens, 29.0 tok/s, 762 s
+[maya] thinking: 21435 of max 105316 tokens, 29.0 tok/s, 763 s
+[maya] thinking: 21470 of max 105316 tokens, 29.0 tok/s, 764 s
+[maya] thinking: 21501 of max 105316 tokens, 29.0 tok/s, 765 s
+[maya] thinking: 21533 of max 105316 tokens, 29.0 tok/s, 766 s
+[maya] thinking: 21568 of max 105316 tokens, 29.0 tok/s, 767 s
+[maya] thinking: 21603 of max 105316 tokens, 29.0 tok/s, 768 s
+[maya] thinking: 21628 of max 105316 tokens, 29.0 tok/s, 769 s
+[maya] thinking: 21656 of max 105316 tokens, 29.0 tok/s, 770 s
+[maya] thinking: 21678 of max 105316 tokens, 29.0 tok/s, 771 s
+[maya] thinking: 21724 of max 105316 tokens, 29.0 tok/s, 772 s
+[maya] thinking: 21757 of max 105316 tokens, 29.0 tok/s, 773 s
+[maya] thinking: 21782 of max 105316 tokens, 29.0 tok/s, 774 s
+[maya] thinking: 21811 of max 105316 tokens, 29.0 tok/s, 775 s
+[maya] thinking: 21846 of max 105316 tokens, 29.0 tok/s, 776 s
+[maya] thinking: 21878 of max 105316 tokens, 29.0 tok/s, 777 s
+[maya] thinking: 21906 of max 105316 tokens, 29.0 tok/s, 779 s
+[maya] thinking: 21936 of max 105316 tokens, 29.0 tok/s, 780 s
+[maya] thinking: 21968 of max 105316 tokens, 29.0 tok/s, 781 s
+[maya] thinking: 21998 of max 105316 tokens, 29.0 tok/s, 782 s
+[maya] thinking: 22029 of max 105316 tokens, 29.0 tok/s, 783 s
+[maya] thinking: 22038 of max 105316 tokens, 29.0 tok/s, 784 s
+[maya] thinking: 22092 of max 105316 tokens, 29.0 tok/s, 785 s
+[maya] thinking: 22121 of max 105316 tokens, 29.0 tok/s, 786 s
+[maya] thinking: 22146 of max 105316 tokens, 29.0 tok/s, 787 s
+[maya] thinking: 22172 of max 105316 tokens, 29.0 tok/s, 788 s
+[maya] thinking: 22200 of max 105316 tokens, 29.0 tok/s, 789 s
+[maya] thinking: 22228 of max 105316 tokens, 29.0 tok/s, 790 s
+[maya] thinking: 22257 of max 105316 tokens, 29.0 tok/s, 791 s
+[maya] thinking: 22281 of max 105316 tokens, 29.0 tok/s, 792 s
+[maya] thinking: 22284 of max 105316 tokens, 29.0 tok/s, 794 s
+[maya] thinking: 22369 of max 105316 tokens, 29.0 tok/s, 795 s
+[maya] thinking: 22402 of max 105316 tokens, 29.0 tok/s, 796 s
+[maya] thinking: 22428 of max 105316 tokens, 29.0 tok/s, 797 s
+[maya] thinking: 22454 of max 105316 tokens, 29.0 tok/s, 798 s
+[maya] thinking: 22480 of max 105316 tokens, 29.0 tok/s, 799 s
+[maya] thinking: 22512 of max 105316 tokens, 29.0 tok/s, 800 s
+[maya] thinking: 22544 of max 105316 tokens, 29.0 tok/s, 801 s
+[maya] thinking: 22571 of max 105316 tokens, 29.0 tok/s, 802 s
+[maya] thinking: 22601 of max 105316 tokens, 29.0 tok/s, 803 s
+[maya] thinking: 22629 of max 105316 tokens, 29.0 tok/s, 804 s
+[maya] thinking: 22656 of max 105316 tokens, 29.0 tok/s, 805 s
+[maya] thinking: 22686 of max 105316 tokens, 29.0 tok/s, 806 s
+[maya] thinking: 22716 of max 105316 tokens, 29.0 tok/s, 807 s
+[maya] thinking: 22743 of max 105316 tokens, 29.0 tok/s, 808 s
+[maya] thinking: 22755 of max 105316 tokens, 29.0 tok/s, 809 s
+[maya] thinking: 22783 of max 105316 tokens, 29.0 tok/s, 810 s
+[maya] thinking: 22812 of max 105316 tokens, 29.0 tok/s, 811 s
+[maya] thinking: 22841 of max 105316 tokens, 29.0 tok/s, 812 s
+[maya] thinking: 22868 of max 105316 tokens, 29.0 tok/s, 814 s
+[maya] thinking: 22897 of max 105316 tokens, 29.0 tok/s, 815 s
+[maya] answering: 22923 of max 105316 tokens, 29.0 tok/s, 816 s
+[maya] answering: 22955 of max 105316 tokens, 29.0 tok/s, 817 s
+[maya] answering: 22988 of max 105316 tokens, 29.0 tok/s, 818 s
+[maya] answering: 23017 of max 105316 tokens, 29.0 tok/s, 819 s
+[maya] answering: 23048 of max 105316 tokens, 29.0 tok/s, 820 s
+[maya] answering: 23084 of max 105316 tokens, 29.0 tok/s, 821 s
+[maya] answering: 23120 of max 105316 tokens, 29.0 tok/s, 822 s
+[maya] answering: 23155 of max 105316 tokens, 29.0 tok/s, 823 s
+[maya] answering: 23190 of max 105316 tokens, 29.0 tok/s, 824 s
+[maya] answering: 23222 of max 105316 tokens, 29.0 tok/s, 825 s
+[maya] answering: 23257 of max 105316 tokens, 29.0 tok/s, 826 s
+[maya] answering: 23291 of max 105316 tokens, 29.0 tok/s, 827 s
+[maya] answering: 23326 of max 105316 tokens, 29.0 tok/s, 828 s
+[maya] answering: 23359 of max 105316 tokens, 29.0 tok/s, 829 s
+[maya] answering: 23391 of max 105316 tokens, 29.0 tok/s, 830 s
+[maya] answering: 23428 of max 105316 tokens, 29.0 tok/s, 831 s
+[maya] answering: 23459 of max 105316 tokens, 29.0 tok/s, 832 s
+[maya] answering: 23495 of max 105316 tokens, 29.0 tok/s, 833 s
+[maya] answering: 23531 of max 105316 tokens, 29.0 tok/s, 834 s
+[maya] answering: 23565 of max 105316 tokens, 29.1 tok/s, 835 s
+[maya] answering: 23599 of max 105316 tokens, 29.1 tok/s, 836 s
+[maya] answering: 23635 of max 105316 tokens, 29.1 tok/s, 837 s
+[maya] answering: 23669 of max 105316 tokens, 29.1 tok/s, 838 s
+[maya] answering: 23705 of max 105316 tokens, 29.1 tok/s, 839 s
+[maya] answering: 23739 of max 105316 tokens, 29.1 tok/s, 840 s
+[maya] answering: 23774 of max 105316 tokens, 29.1 tok/s, 841 s
+[maya] answering: 23808 of max 105316 tokens, 29.1 tok/s, 842 s
+[maya] answering: 23843 of max 105316 tokens, 29.1 tok/s, 843 s
+[maya] answering: 23877 of max 105316 tokens, 29.1 tok/s, 844 s
+[maya] answering: 23911 of max 105316 tokens, 29.1 tok/s, 845 s
+[maya] answering: 23947 of max 105316 tokens, 29.1 tok/s, 846 s
+[maya] answering: 23981 of max 105316 tokens, 29.1 tok/s, 847 s
+[maya] answering: 24016 of max 105316 tokens, 29.1 tok/s, 848 s
+[maya] answering: 24050 of max 105316 tokens, 29.1 tok/s, 850 s
+[maya] answering: 24083 of max 105316 tokens, 29.1 tok/s, 851 s
+[maya] answering: 24120 of max 105316 tokens, 29.1 tok/s, 852 s
+[maya] answering: 24155 of max 105316 tokens, 29.2 tok/s, 853 s
+[maya] answering: 24188 of max 105316 tokens, 29.2 tok/s, 854 s
+[maya] answering: 24221 of max 105316 tokens, 29.2 tok/s, 855 s
+[maya] answering: 24256 of max 105316 tokens, 29.2 tok/s, 856 s
+[maya] answering: 24289 of max 105316 tokens, 29.2 tok/s, 857 s
+[maya] answering: 24323 of max 105316 tokens, 29.2 tok/s, 858 s
+[maya] answering: 24359 of max 105316 tokens, 29.2 tok/s, 859 s
+[maya] answering: 24393 of max 105316 tokens, 29.2 tok/s, 860 s
+[maya] answering: 24411 of max 105316 tokens, 29.2 tok/s, 861 s
+[maya] answering: 24466 of max 105316 tokens, 29.2 tok/s, 862 s
+[maya] answering: 24501 of max 105316 tokens, 29.2 tok/s, 863 s
+[maya] answering: 24535 of max 105316 tokens, 29.2 tok/s, 864 s
+[maya] answering: 24572 of max 105316 tokens, 29.2 tok/s, 865 s
+[maya] answering: 24606 of max 105316 tokens, 29.2 tok/s, 866 s
+[maya] answering: 24645 of max 105316 tokens, 29.2 tok/s, 867 s
+[maya] answering: 24682 of max 105316 tokens, 29.2 tok/s, 868 s
+[maya] answering: 24717 of max 105316 tokens, 29.2 tok/s, 869 s
+[maya] answering: 24754 of max 105316 tokens, 29.3 tok/s, 870 s
+[maya] answering: 24767 of max 105316 tokens, 29.2 tok/s, 871 s
+[maya] answering: 24799 of max 105316 tokens, 29.2 tok/s, 872 s
+[maya] answering: 24835 of max 105316 tokens, 29.2 tok/s, 873 s
+[maya] answering: 24867 of max 105316 tokens, 29.2 tok/s, 874 s
+[maya] answering: 24902 of max 105316 tokens, 29.3 tok/s, 875 s
+[maya] answering: 24933 of max 105316 tokens, 29.3 tok/s, 876 s
+[maya] answering: 24971 of max 105316 tokens, 29.3 tok/s, 877 s
+[maya] answering: 25006 of max 105316 tokens, 29.3 tok/s, 878 s
+[maya] answering: 25041 of max 105316 tokens, 29.3 tok/s, 879 s
+[maya] answering: 25075 of max 105316 tokens, 29.3 tok/s, 881 s
+[maya] answering: 25107 of max 105316 tokens, 29.3 tok/s, 882 s
+[maya] answering: 25139 of max 105316 tokens, 29.3 tok/s, 883 s
+[maya] answering: 25170 of max 105316 tokens, 29.3 tok/s, 884 s
+[maya] answering: 25209 of max 105316 tokens, 29.3 tok/s, 885 s
+[maya] answering: 25243 of max 105316 tokens, 29.3 tok/s, 886 s
+[maya] answering: 25278 of max 105316 tokens, 29.3 tok/s, 887 s
+[maya] answering: 25315 of max 105316 tokens, 29.3 tok/s, 888 s
+[maya] answering: 25351 of max 105316 tokens, 29.3 tok/s, 889 s
+[maya] answering: 25387 of max 105316 tokens, 29.3 tok/s, 890 s
+[maya] answering: 25422 of max 105316 tokens, 29.3 tok/s, 891 s
+[maya] answering: 25459 of max 105316 tokens, 29.3 tok/s, 892 s
+[maya] answering: 25495 of max 105316 tokens, 29.3 tok/s, 893 s
+[maya] answering: 25530 of max 105316 tokens, 29.3 tok/s, 894 s
+[maya] answering: 25564 of max 105316 tokens, 29.4 tok/s, 895 s
+[maya] answering: 25597 of max 105316 tokens, 29.4 tok/s, 896 s
+[maya] answering: 25636 of max 105316 tokens, 29.4 tok/s, 897 s
+[maya] answering: 25671 of max 105316 tokens, 29.4 tok/s, 898 s
+[maya] answering: 25702 of max 105316 tokens, 29.4 tok/s, 899 s
+[maya] answering: 25741 of max 105316 tokens, 29.4 tok/s, 900 s
+[maya] answering: 25777 of max 105316 tokens, 29.4 tok/s, 901 s
+[maya] answering: 25812 of max 105316 tokens, 29.4 tok/s, 902 s
+[maya] answering: 25848 of max 105316 tokens, 29.4 tok/s, 903 s
+[maya] answering: 25884 of max 105316 tokens, 29.4 tok/s, 904 s
+[maya] answering: 25920 of max 105316 tokens, 29.4 tok/s, 905 s
+[maya] answering: 25956 of max 105316 tokens, 29.4 tok/s, 906 s
+[maya] answering: 25993 of max 105316 tokens, 29.4 tok/s, 908 s
+[maya] answering: 26032 of max 105316 tokens, 29.4 tok/s, 909 s
+[maya] answering: 26069 of max 105316 tokens, 29.4 tok/s, 910 s
+[maya] answering: 26102 of max 105316 tokens, 29.4 tok/s, 911 s
+[maya] answering: 26138 of max 105316 tokens, 29.4 tok/s, 912 s
+[maya] answering: 26175 of max 105316 tokens, 29.5 tok/s, 913 s
+[maya] answering: 26209 of max 105316 tokens, 29.5 tok/s, 914 s
+[maya] answering: 26243 of max 105316 tokens, 29.5 tok/s, 915 s
+[maya] answering: 26279 of max 105316 tokens, 29.5 tok/s, 916 s
+[maya] answering: 26315 of max 105316 tokens, 29.5 tok/s, 917 s
+[maya] answering: 26350 of max 105316 tokens, 29.5 tok/s, 918 s
+[maya] answering: 26384 of max 105316 tokens, 29.5 tok/s, 919 s
+[maya] answering: 26419 of max 105316 tokens, 29.5 tok/s, 920 s
+[maya] answering: 26447 of max 105316 tokens, 29.5 tok/s, 921 s
+[maya] answering: 26477 of max 105316 tokens, 29.5 tok/s, 922 s
+[maya] answering: 26497 of max 105316 tokens, 29.5 tok/s, 923 s
+[maya] answering: 26544 of max 105316 tokens, 29.5 tok/s, 924 s
+[maya] answering: 26577 of max 105316 tokens, 29.5 tok/s, 925 s
+[maya] answering: 26610 of max 105316 tokens, 29.5 tok/s, 926 s
+[maya] answering: 26646 of max 105316 tokens, 29.5 tok/s, 927 s
+[maya] answering: 26681 of max 105316 tokens, 29.5 tok/s, 928 s
+[maya] answering: 26708 of max 105316 tokens, 29.5 tok/s, 929 s
+[maya] answering: 26750 of max 105316 tokens, 29.5 tok/s, 930 s
+[maya] answering: 26780 of max 105316 tokens, 29.5 tok/s, 931 s
+[maya] answering: 26816 of max 105316 tokens, 29.5 tok/s, 932 s
+[maya] answering: 26838 of max 105316 tokens, 29.5 tok/s, 934 s
+[maya] answering: 26869 of max 105316 tokens, 29.5 tok/s, 935 s
+[maya] answering: 26903 of max 105316 tokens, 29.5 tok/s, 936 s
+glm stat: decode 33.88 ms/tok (29.51 tok/s) | vram hit 89.01% | ram fetches 3.78/tok | disk 0.00 reads/tok in 0.00 waits/tok, 0.00 ms/tok | promotions 3.78/tok | cpu lane 37.51/tok in 6.83 ms/tok | prompt 0.9 ms/tok | vram 7205/7318 ram 5173/7038
+glm spec: 21817 of 26918 drafts accepted (81.0%)
+glm kv: KV streaming: 99.75% of 255338907 block reads hit VRAM, 2522.4 MiB read from RAM
+glm fast: CUDA0 CPU lane timed again in decode: an expert 0.152 ms (planned with 0.272) -> RAM-tier experts to the CPU, of 0..8: 0 1 2 3 4 4 5 6 7 (PCIe share 0.08)
+glm fast: CUDA1 CPU lane timed again in decode: an expert 0.154 ms (planned with 0.302) -> RAM-tier experts to the CPU, of 0..8: 0 1 2 3 4 4 5 6 7 (PCIe share 0.08)
+glm fast: CUDA2 CPU lane timed again in decode: an expert 0.161 ms (planned with 0.300) -> RAM-tier experts to the CPU, of 0..8: 0 1 2 3 4 4 5 6 7 (PCIe share 0.08)
+glm fast: CUDA3 CPU lane timed again in decode: an expert 0.159 ms (planned with 0.295) -> RAM-tier experts to the CPU, of 0..8: 0 1 2 3 4 4 5 6 7 (PCIe share 0.08)
+[maya] done: 26920 tokens in 936 s (29.5 tok/s) (stop, cancel=False), expert cache 89.0% hit
+[maya] stopping (SIGINT): the engine ends
+glm spec: 37215 speculative positions, 77.0% accepted

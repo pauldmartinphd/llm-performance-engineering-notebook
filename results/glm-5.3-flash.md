@@ -41,3 +41,7 @@ Automatic placement gave the highest generation rates in these tests. I did not 
 I also tested a separate PATH binary reporting `b11580-b3b711e4f`, and the larger GLM-5.3 non-Flash model. The [complete experiment record](lab-notebook/undated-glm53-flash-placement.md) includes all 15 launches, including a cache-related allocation failure. I keep these short-prompt CLI results separate from the August pp8192/tg128 baseline and from the newer Unsloth integration.
 
 [Original log](raw-logs/2026-10-21-flash-experiments/GLM-Flash%20Experiments.txt) · [All launch records](data/glm53-flash-historical.csv) · [Chronological notebook](lab-notebook/README.md)
+
+## November 9–10: two GPUs and INT8 KV
+
+I selected GPUs 2–3, a 1024 MB reserve, native MTP, 8K effective prefill chunks and INT8 streaming KV with 32K resident positions. The [reserve test](lab-notebook/2026-11-09-glm-flash-reserve-and-speculation.md) measured 21.5 tokens/s built-in mean decode with FP16 KV; speculative cancellation was slower. [Larger chunks](lab-notebook/2026-11-09-glm-flash-prefill-chunks.md) lost about 21% long-prefill throughput. The [separate KV comparison](lab-notebook/2026-11-09-to-10-glm-flash-kv-cache.md) showed about 11–13% higher average decode with INT8 and approximately 292 tokens/s long prefill. No local quality-equivalence test or 1M prompt test accompanied that choice. [Reported production layout](lab-notebook/2026-11-10-maya-dual-model-production.md).

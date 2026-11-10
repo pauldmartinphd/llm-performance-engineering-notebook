@@ -1,0 +1,74 @@
+[
+  {
+    "name": "default",
+    "overrides": {},
+    "category": "baseline"
+  },
+  {
+    "name": "tp_even",
+    "overrides": {
+      "DS4_TP_SHARES": "off"
+    },
+    "category": "placement"
+  },
+  {
+    "name": "p2p_generic",
+    "overrides": {
+      "DS4_AR_P2P": "1",
+      "DS4_AR_P2P_LOG": "1"
+    },
+    "category": "transport"
+  },
+  {
+    "name": "p2p_hip_auto",
+    "overrides": {
+      "MAYA_DS4_HIP_PEER_AR": "auto"
+    },
+    "category": "transport"
+  },
+  {
+    "name": "flow_dma",
+    "overrides": {
+      "DS4_FLOW_COPY_DMA": "1"
+    },
+    "category": "flow"
+  },
+  {
+    "name": "flow_ai",
+    "overrides": {
+      "DS4_AI_RUN": "1"
+    },
+    "category": "flow"
+  },
+  {
+    "name": "flow_chunk",
+    "overrides": {
+      "DS4_CHUNK_AUTO": "1"
+    },
+    "category": "flow_approx"
+  },
+  {
+    "name": "flow_yoco",
+    "overrides": {
+      "DS4_YOCO_FLOW": "1"
+    },
+    "category": "flow_approx"
+  },
+  {
+    "name": "flow_combined",
+    "overrides": {
+      "DS4_FLOW_COPY_DMA": "1",
+      "DS4_AI_RUN": "1",
+      "DS4_CHUNK_AUTO": "1",
+      "DS4_YOCO_FLOW": "1"
+    },
+    "category": "flow_approx"
+  },
+  {
+    "name": "expert_mmq",
+    "overrides": {
+      "MAYA_DS4_EXPERT_MMQ": "1"
+    },
+    "category": "quantized_approx"
+  }
+]

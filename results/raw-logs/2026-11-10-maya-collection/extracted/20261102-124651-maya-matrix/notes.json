@@ -1,0 +1,34 @@
+{
+  "options": {
+    "models": [
+      "deepseek",
+      "glm"
+    ],
+    "gpus": [
+      4,
+      1
+    ],
+    "modes": [
+      "full",
+      "reduced",
+      "zero"
+    ],
+    "reserve_mib": 1024,
+    "extra_reserve_mib": 8192,
+    "repeats": 3,
+    "port": 18081,
+    "load_timeout": 1200,
+    "request_timeout": 2400,
+    "skip_short": false,
+    "skip_long": false,
+    "no_gpu_samples": false,
+    "yes": false,
+    "continue_on_error": false
+  },
+  "skipped": [
+    [
+      "glm-4gpu-zero",
+      "GLM --expert-cache 0 only controls GPU 0"
+    ]
+  ]
+}

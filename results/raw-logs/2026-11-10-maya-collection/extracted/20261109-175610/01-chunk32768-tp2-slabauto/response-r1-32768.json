@@ -1,0 +1,37 @@
+{
+  "id": "chatcmpl-468909fe8cea4b1d9562cf35",
+  "object": "chat.completion",
+  "created": 1794265380,
+  "model": "deepseek-v4.1-flash",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "This document is a technical README and set of engineering notes for **Project Maya**, a system for running large open-weight language models (GLM-5.3-Flash, DeepSeek-V4.1-Flash-1017, MiniMax-M3.1-Flash) locally on consumer and prosumer hardware. Here are its key technical points:\n\n## Core System\n- **Purpose:** Run very large MoE models (up to ~748B params) on a single PC or small multi-GPU setup, using a mix of VRAM, RAM, and NVMe SSD for expert weights.\n- **Quantization"
+      },
+      "finish_reason": "length"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 32799,
+    "completion_tokens": 128,
+    "total_tokens": 32927,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 32799,
+    "prompt_ms": 72279.9,
+    "prompt_per_token_ms": 2.204,
+    "prompt_per_second": 453.8,
+    "predicted_n": 128,
+    "predicted_ms": 4669.4,
+    "predicted_per_token_ms": 36.48,
+    "predicted_per_second": 27.4,
+    "draft_n": 86,
+    "draft_n_accepted": 71
+  }
+}

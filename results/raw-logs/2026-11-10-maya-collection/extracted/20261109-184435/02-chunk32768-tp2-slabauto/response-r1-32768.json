@@ -1,0 +1,37 @@
+{
+  "id": "chatcmpl-5a5399a80d9a460d92ad47ec",
+  "object": "chat.completion",
+  "created": 1794268830,
+  "model": "deepseek-v4.1-flash",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "This document is a technical README and set of engineering notes for **Project Maya**, a local inference engine for running very large open-weight models (GLM-5.3-Flash, DeepSeek-V4.1-Flash-1017, MiniMax-M3.1-Flash) on consumer and workstation hardware. Key technical points:\n\n**Models and quantization**\n- Maya quants are tiered by expert bit-width (XS/S/M/L) and named by setup id (e.g. `glm-maya-s24`). GLM-5.3-Flash Maya quants retain 97.7\u201399"
+      },
+      "finish_reason": "length"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 32800,
+    "completion_tokens": 128,
+    "total_tokens": 32928,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 32800,
+    "prompt_ms": 55716.5,
+    "prompt_per_token_ms": 1.699,
+    "prompt_per_second": 588.7,
+    "predicted_n": 128,
+    "predicted_ms": 4312.8,
+    "predicted_per_token_ms": 33.694,
+    "predicted_per_second": 29.7,
+    "draft_n": 90,
+    "draft_n_accepted": 79
+  }
+}

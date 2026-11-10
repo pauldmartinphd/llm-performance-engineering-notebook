@@ -1,0 +1,7 @@
+case,chunk,ring_mib,tp,profile,target_tokens,samples,prefill_median,prefill_min,prefill_max,decode_median
+01-chunk32768-tp2-slabauto,32768,800,2,auto,16384,2,500.15,497.2,503.1,29.3
+01-chunk32768-tp2-slabauto,32768,800,2,auto,32768,2,590.0,589.3,590.7,28.05
+01-chunk32768-tp2-slabauto,32768,800,2,auto,8192,2,387.65,384.6,390.7,30.15
+02-chunk32768-tp2-slabauto,32768,800,2,auto,16384,2,501.95,501.1,502.8,32.2
+02-chunk32768-tp2-slabauto,32768,800,2,auto,32768,2,589.4,588.7,590.1,28.6
+02-chunk32768-tp2-slabauto,32768,800,2,auto,8192,2,389.55,389.2,389.9,29.4

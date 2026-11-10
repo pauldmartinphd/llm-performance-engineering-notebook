@@ -1,0 +1,110 @@
+Results: /opt/maya-bench-1154-20261105-142331
+Starting 10 variants, 8K/32K/64K, two repeats each
+[default] {}
+{'variant': 'default', 'kind': 'prefill', 'tokens': 8192, 'repeat': 1, 'tokens_per_s': 324.65, 'status': 'ok'}
+{'variant': 'default', 'kind': 'prefill', 'tokens': 8192, 'repeat': 2, 'tokens_per_s': 324.86, 'status': 'ok'}
+{'variant': 'default', 'kind': 'prefill', 'tokens': 32768, 'repeat': 1, 'tokens_per_s': 458.86, 'status': 'ok'}
+{'variant': 'default', 'kind': 'prefill', 'tokens': 32768, 'repeat': 2, 'tokens_per_s': 459.86, 'status': 'ok'}
+{'variant': 'default', 'kind': 'prefill', 'tokens': 65536, 'repeat': 1, 'tokens_per_s': 480.6, 'status': 'ok'}
+{'variant': 'default', 'kind': 'prefill', 'tokens': 65536, 'repeat': 2, 'tokens_per_s': 478.2, 'status': 'ok'}
+[tp_even] {'DS4_TP_SHARES': 'off'}
+{'variant': 'tp_even', 'kind': 'prefill', 'tokens': 8192, 'repeat': 1, 'tokens_per_s': 323.74, 'status': 'ok'}
+{'variant': 'tp_even', 'kind': 'prefill', 'tokens': 8192, 'repeat': 2, 'tokens_per_s': 324.49, 'status': 'ok'}
+{'variant': 'tp_even', 'kind': 'prefill', 'tokens': 32768, 'repeat': 1, 'tokens_per_s': 458.93, 'status': 'ok'}
+{'variant': 'tp_even', 'kind': 'prefill', 'tokens': 32768, 'repeat': 2, 'tokens_per_s': 458.67, 'status': 'ok'}
+{'variant': 'tp_even', 'kind': 'prefill', 'tokens': 65536, 'repeat': 1, 'tokens_per_s': 479.2, 'status': 'ok'}
+{'variant': 'tp_even', 'kind': 'prefill', 'tokens': 65536, 'repeat': 2, 'tokens_per_s': 478.43, 'status': 'ok'}
+[p2p_generic] {'DS4_AR_P2P': '1', 'DS4_AR_P2P_LOG': '1'}
+{'variant': 'p2p_generic', 'kind': 'prefill', 'tokens': 8192, 'repeat': 1, 'tokens_per_s': 324.07, 'status': 'ok'}
+{'variant': 'p2p_generic', 'kind': 'prefill', 'tokens': 8192, 'repeat': 2, 'tokens_per_s': 324.23, 'status': 'ok'}
+{'variant': 'p2p_generic', 'kind': 'prefill', 'tokens': 32768, 'repeat': 1, 'tokens_per_s': 459.12, 'status': 'ok'}
+{'variant': 'p2p_generic', 'kind': 'prefill', 'tokens': 32768, 'repeat': 2, 'tokens_per_s': 458.12, 'status': 'ok'}
+{'variant': 'p2p_generic', 'kind': 'prefill', 'tokens': 65536, 'repeat': 1, 'tokens_per_s': 480.11, 'status': 'ok'}
+{'variant': 'p2p_generic', 'kind': 'prefill', 'tokens': 65536, 'repeat': 2, 'tokens_per_s': 478.7, 'status': 'ok'}
+[p2p_hip_auto] {'MAYA_DS4_HIP_PEER_AR': 'auto'}
+{'variant': 'p2p_hip_auto', 'kind': 'prefill', 'tokens': 8192, 'repeat': 1, 'tokens_per_s': 316.12, 'status': 'ok'}
+{'variant': 'p2p_hip_auto', 'kind': 'prefill', 'tokens': 8192, 'repeat': 2, 'tokens_per_s': 323.38, 'status': 'ok'}
+{'variant': 'p2p_hip_auto', 'kind': 'prefill', 'tokens': 32768, 'repeat': 1, 'tokens_per_s': 459.94, 'status': 'ok'}
+{'variant': 'p2p_hip_auto', 'kind': 'prefill', 'tokens': 32768, 'repeat': 2, 'tokens_per_s': 458.55, 'status': 'ok'}
+{'variant': 'p2p_hip_auto', 'kind': 'prefill', 'tokens': 65536, 'repeat': 1, 'tokens_per_s': 479.22, 'status': 'ok'}
+{'variant': 'p2p_hip_auto', 'kind': 'prefill', 'tokens': 65536, 'repeat': 2, 'tokens_per_s': 478.42, 'status': 'ok'}
+[flow_dma] {'DS4_FLOW_COPY_DMA': '1'}
+{'variant': 'flow_dma', 'kind': 'prefill', 'tokens': 8192, 'repeat': 1, 'tokens_per_s': 323.56, 'status': 'ok'}
+{'variant': 'flow_dma', 'kind': 'prefill', 'tokens': 8192, 'repeat': 2, 'tokens_per_s': 325.21, 'status': 'ok'}
+{'variant': 'flow_dma', 'kind': 'prefill', 'tokens': 32768, 'repeat': 1, 'tokens_per_s': 458.99, 'status': 'ok'}
+{'variant': 'flow_dma', 'kind': 'prefill', 'tokens': 32768, 'repeat': 2, 'tokens_per_s': 458.41, 'status': 'ok'}
+{'variant': 'flow_dma', 'kind': 'prefill', 'tokens': 65536, 'repeat': 1, 'tokens_per_s': 479.14, 'status': 'ok'}
+{'variant': 'flow_dma', 'kind': 'prefill', 'tokens': 65536, 'repeat': 2, 'tokens_per_s': 478.71, 'status': 'ok'}
+[flow_ai] {'DS4_AI_RUN': '1'}
+{'variant': 'flow_ai', 'kind': 'prefill', 'tokens': 8192, 'repeat': 1, 'tokens_per_s': 324.74, 'status': 'ok'}
+{'variant': 'flow_ai', 'kind': 'prefill', 'tokens': 8192, 'repeat': 2, 'tokens_per_s': 307.15, 'status': 'ok'}
+{'variant': 'flow_ai', 'kind': 'prefill', 'tokens': 32768, 'repeat': 1, 'tokens_per_s': 460.64, 'status': 'ok'}
+{'variant': 'flow_ai', 'kind': 'prefill', 'tokens': 32768, 'repeat': 2, 'tokens_per_s': 461.24, 'status': 'ok'}
+{'variant': 'flow_ai', 'kind': 'prefill', 'tokens': 65536, 'repeat': 1, 'tokens_per_s': 481.43, 'status': 'ok'}
+{'variant': 'flow_ai', 'kind': 'prefill', 'tokens': 65536, 'repeat': 2, 'tokens_per_s': 480.34, 'status': 'ok'}
+[flow_chunk] {'DS4_CHUNK_AUTO': '1'}
+{'variant': 'flow_chunk', 'kind': 'prefill', 'tokens': 8192, 'repeat': 1, 'tokens_per_s': 287.27, 'status': 'ok'}
+{'variant': 'flow_chunk', 'kind': 'prefill', 'tokens': 8192, 'repeat': 2, 'tokens_per_s': 285.42, 'status': 'ok'}
+{'variant': 'flow_chunk', 'kind': 'prefill', 'tokens': 32768, 'repeat': 1, 'tokens_per_s': 419.15, 'status': 'ok'}
+{'variant': 'flow_chunk', 'kind': 'prefill', 'tokens': 32768, 'repeat': 2, 'tokens_per_s': 422.49, 'status': 'ok'}
+{'variant': 'flow_chunk', 'kind': 'prefill', 'tokens': 65536, 'repeat': 1, 'tokens_per_s': 458.27, 'status': 'ok'}
+{'variant': 'flow_chunk', 'kind': 'prefill', 'tokens': 65536, 'repeat': 2, 'tokens_per_s': 458.02, 'status': 'ok'}
+[flow_yoco] {'DS4_YOCO_FLOW': '1'}
+{'variant': 'flow_yoco', 'kind': 'prefill', 'tokens': 8192, 'repeat': 1, 'tokens_per_s': 324.14, 'status': 'ok'}
+{'variant': 'flow_yoco', 'kind': 'prefill', 'tokens': 8192, 'repeat': 2, 'tokens_per_s': 324.57, 'status': 'ok'}
+{'variant': 'flow_yoco', 'kind': 'prefill', 'tokens': 32768, 'repeat': 1, 'tokens_per_s': 459.57, 'status': 'ok'}
+{'variant': 'flow_yoco', 'kind': 'prefill', 'tokens': 32768, 'repeat': 2, 'tokens_per_s': 458.29, 'status': 'ok'}
+{'variant': 'flow_yoco', 'kind': 'prefill', 'tokens': 65536, 'repeat': 1, 'tokens_per_s': 479.23, 'status': 'ok'}
+{'variant': 'flow_yoco', 'kind': 'prefill', 'tokens': 65536, 'repeat': 2, 'tokens_per_s': 478.09, 'status': 'ok'}
+[flow_combined] {'DS4_FLOW_COPY_DMA': '1', 'DS4_AI_RUN': '1', 'DS4_CHUNK_AUTO': '1', 'DS4_YOCO_FLOW': '1'}
+{'variant': 'flow_combined', 'kind': 'prefill', 'tokens': 8192, 'repeat': 1, 'tokens_per_s': 287.24, 'status': 'ok'}
+{'variant': 'flow_combined', 'kind': 'prefill', 'tokens': 8192, 'repeat': 2, 'tokens_per_s': 285.71, 'status': 'ok'}
+{'variant': 'flow_combined', 'kind': 'prefill', 'tokens': 32768, 'repeat': 1, 'tokens_per_s': 425.22, 'status': 'ok'}
+{'variant': 'flow_combined', 'kind': 'prefill', 'tokens': 32768, 'repeat': 2, 'tokens_per_s': 424.77, 'status': 'ok'}
+{'variant': 'flow_combined', 'kind': 'prefill', 'tokens': 65536, 'repeat': 1, 'tokens_per_s': 460.44, 'status': 'ok'}
+{'variant': 'flow_combined', 'kind': 'prefill', 'tokens': 65536, 'repeat': 2, 'tokens_per_s': 459.85, 'status': 'ok'}
+[expert_mmq] {'MAYA_DS4_EXPERT_MMQ': '1'}
+{'variant': 'expert_mmq', 'kind': 'prefill', 'tokens': 8192, 'repeat': 1, 'tokens_per_s': 324.17, 'status': 'ok'}
+{'variant': 'expert_mmq', 'kind': 'prefill', 'tokens': 8192, 'repeat': 2, 'tokens_per_s': 325.03, 'status': 'ok'}
+{'variant': 'expert_mmq', 'kind': 'prefill', 'tokens': 32768, 'repeat': 1, 'tokens_per_s': 458.98, 'status': 'ok'}
+{'variant': 'expert_mmq', 'kind': 'prefill', 'tokens': 32768, 'repeat': 2, 'tokens_per_s': 459.66, 'status': 'ok'}
+{'variant': 'expert_mmq', 'kind': 'prefill', 'tokens': 65536, 'repeat': 1, 'tokens_per_s': 480.23, 'status': 'ok'}
+{'variant': 'expert_mmq', 'kind': 'prefill', 'tokens': 65536, 'repeat': 2, 'tokens_per_s': 479.63, 'status': 'ok'}
+Project Maya v1.1.54 DeepSeek HIP benchmarks
+Results:
+default      8192 tokens:    324.8 t/s (n=2)
+default     32768 tokens:    459.4 t/s (n=2)
+default     65536 tokens:    479.4 t/s (n=2)
+tp_even      8192 tokens:    324.1 t/s (n=2)
+tp_even     32768 tokens:    458.8 t/s (n=2)
+tp_even     65536 tokens:    478.8 t/s (n=2)
+p2p_generic   8192 tokens:    324.1 t/s (n=2)
+p2p_generic  32768 tokens:    458.6 t/s (n=2)
+p2p_generic  65536 tokens:    479.4 t/s (n=2)
+p2p_hip_auto   8192 tokens:    319.8 t/s (n=2)
+p2p_hip_auto  32768 tokens:    459.2 t/s (n=2)
+p2p_hip_auto  65536 tokens:    478.8 t/s (n=2)
+flow_dma     8192 tokens:    324.4 t/s (n=2)
+flow_dma    32768 tokens:    458.7 t/s (n=2)
+flow_dma    65536 tokens:    478.9 t/s (n=2)
+flow_ai      8192 tokens:    315.9 t/s (n=2)
+flow_ai     32768 tokens:    460.9 t/s (n=2)
+flow_ai     65536 tokens:    480.9 t/s (n=2)
+flow_chunk   8192 tokens:    286.3 t/s (n=2)
+flow_chunk  32768 tokens:    420.8 t/s (n=2)
+flow_chunk  65536 tokens:    458.1 t/s (n=2)
+flow_yoco    8192 tokens:    324.4 t/s (n=2)
+flow_yoco   32768 tokens:    458.9 t/s (n=2)
+flow_yoco   65536 tokens:    478.7 t/s (n=2)
+flow_combined   8192 tokens:    286.5 t/s (n=2)
+flow_combined  32768 tokens:    425.0 t/s (n=2)
+flow_combined  65536 tokens:    460.1 t/s (n=2)
+expert_mmq   8192 tokens:    324.6 t/s (n=2)
+expert_mmq  32768 tokens:    459.3 t/s (n=2)
+expert_mmq  65536 tokens:    479.9 t/s (n=2)
+Transport verification (log-based, not hardware-counter proof):
+  p2p_generic: ds4: DS4_AR_P2P: the group CUDA0 BAR1 0 MiB CUDA1 BAR1 0 MiB stays host-mapped (BAR1 under 1 GiB, or no peer access) | ds4: DS4_AR_P2P: the group CUDA0 BAR1 0 MiB CUDA1 BAR1 0 MiB stays host-mapped (BAR1 under 1 GiB, or no peer access) | ds4: DS4_AR_P2P: the group CUDA0 BAR1 0 MiB CUDA1 BAR1 0 MiB stays host-mapped (BAR1 under 1 GiB, or no peer access) | ds4: DS4_AR_P2P: the group CUDA0 BAR1 0 MiB CUDA1 BAR1 0 MiB stays host-mapped (BAR1 under 1 GiB, or no peer access) | ds4: DS4_AR_P2P: the group CUDA2 BAR1 0 MiB CUDA3 BAR1 0 MiB stays host-mapped (BAR1 under 1 GiB, or no peer access) | ds4: DS4_AR_P2P: the group CUDA2 BAR1 0 MiB CUDA3 BAR1 0 MiB stays host-mapped (BAR1 under 1 GiB, or no peer access) | ds4: DS4_AR_P2P: the group CUDA2 BAR1 0 MiB CUDA3 BAR1 0 MiB stays host-mapped (BAR1 under 1 GiB, or no peer access) | ds4: DS4_AR_P2P: the group CUDA2 BAR1 0 MiB CUDA3 BAR1 0 MiB stays host-mapped (BAR1 under 1 GiB, or no peer access)
+  p2p_hip_auto: ds4: peer prefill all-reduce unavailable on GPU0/GPU1 (GPU0 has 1026 MiB free, needs 1984 (auto: + the probe's input row)); retaining host transport | ds4: peer prefill all-reduce unavailable on GPU2/GPU3 (GPU2 has 1006 MiB free, needs 1984 (auto: + the probe's input row)); retaining host transport
+Approximate variants (flow_chunk, flow_yoco, flow_combined, expert_mmq) require numerical quality validation before deployment.
+The MMQ flag on Q8_K_XL may be a no-op; compare logs/kernels before attributing a speed difference to MMQ.
+No original configuration was modified. Production engine remains stopped after benchmarking.

@@ -1,0 +1,4 @@
+From https://github.com/mw00/project-maya
+ * tag               v1.1.54    -> FETCH_HEAD
+ * [new tag]         v1.1.55    -> v1.1.55
+HEAD is now at c167004 CHANGELOG v1.1.54: the speed-ups are prompt reading (prefill) against v1.1.53, decode unchanged; Qwen chats as a fix

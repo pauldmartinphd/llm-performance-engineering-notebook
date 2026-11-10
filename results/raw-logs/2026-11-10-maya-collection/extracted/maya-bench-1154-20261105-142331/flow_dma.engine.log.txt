@@ -1,0 +1,71 @@
+ds4: CUDA0 (gfx1030): layer streams at the default priority (RDNA 2; DS4_STREAM_PRIO=1 to raise them)
+ds4: CUDA1 (gfx1030): layer streams at the default priority (RDNA 2; DS4_STREAM_PRIO=1 to raise them)
+ds4: CUDA2 (gfx1030): layer streams at the default priority (RDNA 2; DS4_STREAM_PRIO=1 to raise them)
+ds4: CUDA3 (gfx1030): layer streams at the default priority (RDNA 2; DS4_STREAM_PRIO=1 to raise them)
+ds4: the one-GPU decode path (in-place pulls, windows streamed, landings): off (v1.1.27's path: not NVIDIA + one GPU)
+ds4: DSpark blocks spread over the drafter's group (the experts do not all fit the GPUs): block 0 on CUDA0, 1 on CUDA1, 2 on CUDA1 (MAYA_DS4_DRAFT_SPREAD=0: all on the lead)
+ds4: Engram RAM file 7 locked 0.27 / 101.38 GB
+ds4: Engram RAM file 7 locked 8.86 / 101.38 GB
+ds4: Engram RAM file 7 locked 17.45 / 101.38 GB
+ds4: Engram RAM file 7 locked 26.04 / 101.38 GB
+ds4: Engram RAM file 7 locked 34.63 / 101.38 GB
+ds4: Engram RAM file 7 locked 43.22 / 101.38 GB
+ds4: Engram RAM file 7 locked 51.81 / 101.38 GB
+ds4: Engram RAM file 7 locked 60.40 / 101.38 GB
+ds4: Engram RAM file 7 locked 68.99 / 101.38 GB
+ds4: Engram RAM file 7 locked 77.58 / 101.38 GB
+ds4: Engram RAM file 7 locked 86.17 / 101.38 GB
+ds4: Engram RAM file 7 locked 94.76 / 101.38 GB
+ds4: Engram RAM file 7 locked 101.38 / 101.38 GB
+ds4: Engram RAM file 7 locked 0.27 / 101.38 GB
+ds4: Engram RAM file 7 locked 8.86 / 101.38 GB
+ds4: Engram RAM file 7 locked 17.45 / 101.38 GB
+ds4: Engram RAM file 7 locked 26.04 / 101.38 GB
+ds4: Engram RAM file 7 locked 34.63 / 101.38 GB
+ds4: Engram RAM file 7 locked 43.22 / 101.38 GB
+ds4: Engram RAM file 7 locked 51.81 / 101.38 GB
+ds4: Engram RAM file 7 locked 60.40 / 101.38 GB
+ds4: Engram RAM file 7 locked 68.99 / 101.38 GB
+ds4: Engram RAM file 7 locked 77.58 / 101.38 GB
+ds4: Engram RAM file 7 locked 86.17 / 101.38 GB
+ds4: Engram RAM file 7 locked 94.76 / 101.38 GB
+ds4: Engram RAM file 7 locked 101.38 / 101.38 GB
+ds4: Engram RAM ONLY: 2 complete tables (Q6_K/Q5_K/IQ4_NL/FP8), 202.758 GB locked; reads use memcpy
+ds4: the experts VRAM leaves over (~229.5 GB) are read in place from the model's files (copied into RAM after the GPUs' share when the RAM holds them all; --mmap-experts on keeps them in place) (2131.1 GB of RAM free to keep them: the most-routed 229.5 GB read ahead; prompts in chunks of 32768)
+ds4: strict RAM: all 12258 CPU experts selected, no disk fallback
+ds4: copied expert cache: DONTNEED hints accepted for 230.308 GB of whole source pages (eviction is advisory)
+ds4: the copied experts pinned (231.3 GB in 19.1 s): the prompt path DMAs them in place
+ds4: 12258 of the CPU lane's 12258 experts copied into RAM (230.5 GB, 1 NUMA part) in 217.9 s
+ds4: CUDA0 layers [0, 40] (tensor parallel 2, part 0) + blocks 0: weights 4.62 GB, experts 16.17 GB (1591 of 7808 in VRAM), caches 0.58 GB, 1024 MiB free
+ds4: CUDA1 layers [0, 42] (tensor parallel 2, part 1) + blocks 1,2: weights 4.79 GB, experts 16.02 GB (1582 of 7936 in VRAM), caches 0.58 GB, 1010 MiB free
+ds4: CUDA2 layers [20, 39] (tensor parallel 2, part 0) + head: weights 4.55 GB, experts 17.08 GB (1797 of 7680 in VRAM), caches 0.39 GB, 1006 MiB free
+ds4: CUDA3 layers [20, 39] (tensor parallel 2, part 1): weights 4.42 GB, experts 17.08 GB (1797 of 7680 in VRAM), caches 0.39 GB, 1142 MiB free
+ds4: 12258 routed experts on the CPU lane (230.5 GB): 12258 copied into RAM (1 NUMA parts), the rest in place in the model's files; 64 threads
+maya ds4 serve: GEN <max_new> [keys] <ids>; GENI <max_new> [keys] <pictures> <ids>; STOP, QUIT
+maya ds4 serve: prompt read: 10 tokens in 0.4 s; VRAM free CUDA0 1.0 of 30.0, CUDA1 1.0 of 30.0, CUDA2 1.0 of 30.0, CUDA3 1.1 of 30.0 GB before, 0.9, 0.9, 0.9, 1.1 after
+maya ds4 serve: prompt 10 tokens = 0 reused + 10 read in 389 ms (25.7 tok/s), 61 generated in 1921 ms (31.75 tok/s); CPU lane 64.4% of the experts
+maya ds4 serve: drafts 46 of 52 kept; per position (kept / reached): 1: 15/15 100% 2: 13/13 100% 3: 9/12 75% 4: 6/6 100% 5: 3/4 75%
+maya ds4 serve: prompt read: 28 tokens in 0.5 s; VRAM free CUDA0 0.9 of 30.0, CUDA1 0.9 of 30.0, CUDA2 0.9 of 30.0, CUDA3 1.1 of 30.0 GB before, 0.9, 0.9, 0.9, 1.1 after
+maya ds4 serve: prompt 28 tokens = 0 reused + 28 read in 528 ms (53.0 tok/s), 256 generated in 8056 ms (31.78 tok/s); CPU lane 53.7% of the experts
+maya ds4 serve: drafts 184 of 217 kept; per position (kept / reached): 1: 65/69 94% 2: 47/56 84% 3: 35/37 95% 4: 25/26 96% 5: 12/13 92%
+maya ds4 serve: prompt read: 19 tokens in 0.4 s; VRAM free CUDA0 0.9 of 30.0, CUDA1 0.9 of 30.0, CUDA2 0.9 of 30.0, CUDA3 1.1 of 30.0 GB before, 0.9, 0.9, 0.9, 1.1 after
+maya ds4 serve: prompt 19 tokens = 0 reused + 19 read in 401 ms (47.4 tok/s), 256 generated in 9491 ms (26.97 tok/s); CPU lane 42.8% of the experts
+maya ds4 serve: drafts 139 of 178 kept; per position (kept / reached): 1: 70/88 80% 2: 40/48 83% 3: 17/22 77% 4: 8/8 100% 5: 4/5 80%
+
+rocblaslt error: Cannot read "/opt/rocm-7.2.0/lib/hipblaslt/library/TensileLibrary_lazy_gfx1030.dat": No such file or directory
+
+rocblaslt error: Could not load "/opt/rocm-7.2.0/lib/hipblaslt/library/TensileLibrary_lazy_gfx1030.dat"
+maya ds4 serve: prompt read: 8192 tokens in 25.2 s; VRAM free CUDA0 0.9 of 30.0, CUDA1 0.9 of 30.0, CUDA2 0.9 of 30.0, CUDA3 1.1 of 30.0 GB before, 0.9, 0.8, 0.8, 1.0 after
+maya ds4 serve: prompt 8192 tokens = 0 reused + 8192 read in 25160 ms (325.6 tok/s), 1 generated in 6 ms (160.70 tok/s); CPU lane 0.0% of the experts
+maya ds4 serve: prompt read: 8192 tokens in 25.3 s; VRAM free CUDA0 0.9 of 30.0, CUDA1 0.8 of 30.0, CUDA2 0.8 of 30.0, CUDA3 1.0 of 30.0 GB before, 0.9, 0.8, 0.8, 1.0 after
+maya ds4 serve: prompt 8192 tokens = 0 reused + 8192 read in 25318 ms (323.6 tok/s), 1 generated in 6 ms (156.83 tok/s); CPU lane 0.0% of the experts
+maya ds4 serve: prompt read: 8192 tokens in 25.2 s; VRAM free CUDA0 0.9 of 30.0, CUDA1 0.8 of 30.0, CUDA2 0.8 of 30.0, CUDA3 1.0 of 30.0 GB before, 0.9, 0.8, 0.8, 1.0 after
+maya ds4 serve: prompt 8192 tokens = 0 reused + 8192 read in 25190 ms (325.2 tok/s), 1 generated in 6 ms (154.71 tok/s); CPU lane 0.0% of the experts
+maya ds4 serve: prompt read: 32768 tokens in 71.4 s; VRAM free CUDA0 0.9 of 30.0, CUDA1 0.8 of 30.0, CUDA2 0.8 of 30.0, CUDA3 1.0 of 30.0 GB before, 0.9, 0.8, 0.8, 1.0 after
+maya ds4 serve: prompt 32768 tokens = 0 reused + 32768 read in 71392 ms (459.0 tok/s), 1 generated in 7 ms (134.09 tok/s); CPU lane 0.0% of the experts
+maya ds4 serve: prompt read: 32768 tokens in 71.5 s; VRAM free CUDA0 0.9 of 30.0, CUDA1 0.8 of 30.0, CUDA2 0.8 of 30.0, CUDA3 1.0 of 30.0 GB before, 0.9, 0.8, 0.8, 1.0 after
+maya ds4 serve: prompt 32768 tokens = 0 reused + 32768 read in 71483 ms (458.4 tok/s), 1 generated in 7 ms (135.75 tok/s); CPU lane 0.0% of the experts
+maya ds4 serve: prompt read: 65536 tokens in 136.8 s; VRAM free CUDA0 0.9 of 30.0, CUDA1 0.8 of 30.0, CUDA2 0.8 of 30.0, CUDA3 1.0 of 30.0 GB before, 0.9, 0.8, 0.8, 1.0 after
+maya ds4 serve: prompt 65536 tokens = 0 reused + 65536 read in 136780 ms (479.1 tok/s), 1 generated in 9 ms (113.25 tok/s); CPU lane 0.0% of the experts
+maya ds4 serve: prompt read: 65536 tokens in 136.9 s; VRAM free CUDA0 0.9 of 30.0, CUDA1 0.8 of 30.0, CUDA2 0.8 of 30.0, CUDA3 1.0 of 30.0 GB before, 0.9, 0.8, 0.8, 1.0 after
+maya ds4 serve: prompt 65536 tokens = 0 reused + 65536 read in 136900 ms (478.7 tok/s), 1 generated in 9 ms (114.01 tok/s); CPU lane 0.0% of the experts

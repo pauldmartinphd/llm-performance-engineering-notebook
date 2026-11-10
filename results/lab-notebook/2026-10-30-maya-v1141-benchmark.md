@@ -104,3 +104,7 @@ The working conclusion is that the updated installation completed all four uncac
 The preceding discussion concerned moving a detached v1.1.36 checkout to a newer release. A detached HEAD at a release tag is valid. The suggested tag-based update was `git fetch origin --tags` followed by `git switch --detach v1.1.41`, after preserving any local changes. Checking out `main` would instead track development beyond a release.
 
 The discussion proposed `./setup.sh` and then `./setup.sh --rebuild --no-start`. No update-command transcript or build log was supplied, so this entry does not claim which command was executed, that every engine was rebuilt, or that all earlier claims about setup flags and model preservation were verified. The observed outcome is that the v1.1.41 banner appeared and the pasted short benchmark completed.
+
+## November 10 evidence recovery
+
+The [November 10 collection](../raw-logs/2026-11-10-maya-collection/README.md) now retains both `20261030-114549-production-recheck` and `20261030-115003-production-recheck`, including all four full response JSONs and their request payloads. This supersedes the original statements above that these files had not been collected. It adds the underlying artifacts without introducing another run or proving a server restart between passes.

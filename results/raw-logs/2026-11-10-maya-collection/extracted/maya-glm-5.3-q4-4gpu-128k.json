@@ -1,0 +1,54 @@
+{
+  "exe": "/opt/project-maya/build-hip/maya",
+  "args": [
+    "--glm-pack",
+    "/models/GLM-5.3/UD-Q4_K_XL/pack",
+    "--max-context",
+    "131072",
+    "--expert-cache",
+    "auto",
+    "--prefill",
+    "auto",
+    "--kv-streaming",
+    "off",
+    "--expert-profile",
+    "/opt/project-maya/data/expert-profile-glm53.bin"
+  ],
+  "cwd": "/opt/project-maya",
+  "tokenizer": "/models/GLM-5.3/UD-Q4_K_XL/pack/tokenizer",
+  "model_name": "glm-5.3",
+  "gpu": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "sampling": {
+    "temperature": 1.0,
+    "top_p": 0.95
+  },
+  "reasoning_effort": "max",
+  "lib_dirs": [
+    "/opt/rocm-7.2.0/lib"
+  ],
+  "port": 8082,
+  "backend": "hip",
+  "env": {
+    "MAYA_GLM_RESERVE_MB": "3072",
+    "MAYA_GLM_RAM_HEADROOM_GB": "16",
+    "MAYA_GLM_SPLIT": "auto",
+    "MAYA_GLM_PREFILL_SUB": "1024",
+    "MAYA_GLM_PREFILL_MB": "4096",
+    "MAYA_GLM_SPLIT_LOG": "1",
+    "MAYA_GLM_KV_INT8": "1"
+  },
+  "log": "/opt/project-maya/maya-glm-5.3-ud-q4_k_xl-hip.log",
+  "installer": {
+    "models_dir": "/opt/Maya-data/models",
+    "quant": "GLM-5.3-UD-Q4_K_XL",
+    "gguf": "/models/GLM-5.3/UD-Q4_K_XL/GLM-5.3-UD-Q4_K_XL-00001-of-00011.gguf",
+    "gguf_dir": "/models/GLM-5.3/UD-Q4_K_XL",
+    "draft": "mtp",
+    "written": "2026-11-09 19:11"
+  }
+}

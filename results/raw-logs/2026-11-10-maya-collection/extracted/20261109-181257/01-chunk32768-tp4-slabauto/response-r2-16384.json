@@ -1,0 +1,37 @@
+{
+  "id": "chatcmpl-d29e8154f8e04db19ecca3a1",
+  "object": "chat.completion",
+  "created": 1794266565,
+  "model": "deepseek-v4.1-flash",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "# Project Maya \u2014 Technical Summary\n\n## Overview\nProject Maya is an open-source (MIT) local inference engine for running three large MoE models on consumer/prosumer hardware:\n- **GLM-5.3-Flash** (321B, 18B active, up to 1M context)\n- **DeepSeek-V4.1-Flash-1017** (748B)\n- **MiniMax-M3.1-Flash** (428B, 23B active)\n\nCreated by Peasant Smith (@mw00), co-maintained by @needmorevram.\n\n## Core Architecture\n- **T"
+      },
+      "finish_reason": "length"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 16416,
+    "completion_tokens": 128,
+    "total_tokens": 16544,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 16416,
+    "prompt_ms": 41663.6,
+    "prompt_per_token_ms": 2.538,
+    "prompt_per_second": 394.0,
+    "predicted_n": 128,
+    "predicted_ms": 3721.0,
+    "predicted_per_token_ms": 29.07,
+    "predicted_per_second": 34.4,
+    "draft_n": 95,
+    "draft_n_accepted": 91
+  }
+}

@@ -1,8 +1,14 @@
 # LLM Performance Engineering Notebook
 
+## November 10: two resident models on Galactus
+
+I now host **GLM-5.3-Flash UD-Q4_K_XL with INT8 KV on GPUs 2–3** alongside **DeepSeek-V4.1-Flash-1017 UD-Q8_K_XL on GPUs 0–1**, using separate Maya services. DeepSeek's selected configuration enables FP16-output prefill; this does not make its Q8 weights a 16-bit model. The [deployment record](results/lab-notebook/2026-11-10-maya-dual-model-production.md) connects thirteen new entries covering the November 2 GPU/cache matrix, November 5 evidence recovery, and November 9–10 model and cache tests.
+
+DeepSeek's optimized run reached **389.55 / 501.95 / 589.70 tokens/s median prefill at 8K / 16K / 32K targets**. GLM-Flash's INT8 KV comparison retained roughly **292 tokens/s at 32K–64K targets**, with higher average decode than its paired FP16 KV control. The [complete evidence ledger](results/raw-logs/2026-11-10-maya-collection/README.md) retains all 343 archive files and individual observations. These are individual-model measurements; simultaneous request throughput and local numerical-quality equivalence remain unmeasured. DeepSeek's logs also report early-row prompt skipping, which the detailed record keeps visible.
+
 ## November 5: Maya v1.1.54 prefill and peer transport
 
-The ten-variant four-V620 sweep measured **324.8 / 459.4 / 479.4 tokens/s at 8K / 32K / 64K** with defaults. Automatic chunk selection was slower; neither requested P2P path activated. A focused larger-reserve test then failed in the HIP startup probe with zero completed samples. The [experiment record](results/lab-notebook/2026-11-05-maya-v1154-prefill-and-peer-ar.md) retains the complete printed summary, 47 individual observations, the benchmark script, and the distinction between transport fallback and probe failure. No tested switch established a useful prefill improvement.
+The ten-variant four-V620 sweep measured **324.8 / 459.4 / 479.4 tokens/s at 8K / 32K / 64K** with defaults. Automatic chunk selection was slower; neither requested P2P path activated. A focused larger-reserve test then failed in the HIP startup probe with zero completed samples. The [experiment record](results/lab-notebook/2026-11-05-maya-v1154-prefill-and-peer-ar.md) retains the complete printed summary, the original 47-observation transcription, the benchmark script, and the distinction between transport fallback and probe failure. No tested switch established a useful prefill improvement. The November 10 collection now adds all 60 prefill observations, 20 decode cases, and the effective configs.
 
 ## November 2: Gufo on SilverSurfer
 
@@ -116,7 +122,7 @@ The [March build entry](results/lab-notebook/2026-03-23-galactus-build.md) prese
 
 The October 22 GLM benchmarks identify their revisions, while the DeepSeek cache capture still lacks one. The October 23 Maya tests establish a GLM speculation A/B result and record the head and MTP-expert measurements. The KEEP=4 capture lacks its final summary. Longer-context workloads, repeated tuning trials, and a prefill-patch A/B test remain open.
 
-The later configuration cleanup, both Maya configuration renames, and GLM’s requested move to port 8082 lack confirming output. GLM’s port 8100 setting is printed in the October 23 record; the October 24 dashboard subsequently shows DeepSeek’s endpoint on port 8081.
+The October configuration cleanup and renames still lack confirming output for that date. The November collection now directly records GLM-Flash on port 8082 and DeepSeek on 8081 in the two-GPU configs; the final production-named copies remain absent. See the [November 10 deployment record](results/lab-notebook/2026-11-10-maya-dual-model-production.md) for the later operating state.
 
 As of the August 16 entry, the next comparison was the prefill patch against the stock build on the four retained models. An upstream patch submission, investigation of speculative-run timing variance, a choice between Kimi K2.6 and K2.7-Code, and a Kimi K3 evaluation remain open. The August speculative runs supersede the Session 10 rerun protocol.
 

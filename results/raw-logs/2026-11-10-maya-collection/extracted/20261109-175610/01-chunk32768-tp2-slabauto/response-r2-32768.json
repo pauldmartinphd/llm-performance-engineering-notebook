@@ -1,0 +1,37 @@
+{
+  "id": "chatcmpl-9ed6355dca114cc6b8105c48",
+  "object": "chat.completion",
+  "created": 1794265487,
+  "model": "deepseek-v4.1-flash",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "This document is a technical overview of Project Maya, a system for running large open models (GLM-5.3-Flash, DeepSeek-V4.1-Flash, MiniMax-M3.1-Flash) locally. Key points:\n\n**Quantization & Quality**\n- Maya quants retain 97.7\u201399.2% of FP8 zero-shot accuracy; next-token agreement 83\u201390% (GLM), 92.6% (DeepSeek), 87.6% (MiniMax).\n\n**Performance**\n- Extensive user benchmark tables across NVIDIA (RTX 3090/409"
+      },
+      "finish_reason": "length"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 32800,
+    "completion_tokens": 128,
+    "total_tokens": 32928,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 32800,
+    "prompt_ms": 72513.0,
+    "prompt_per_token_ms": 2.211,
+    "prompt_per_second": 452.3,
+    "predicted_n": 128,
+    "predicted_ms": 4669.2,
+    "predicted_per_token_ms": 36.478,
+    "predicted_per_second": 27.4,
+    "draft_n": 109,
+    "draft_n_accepted": 78
+  }
+}

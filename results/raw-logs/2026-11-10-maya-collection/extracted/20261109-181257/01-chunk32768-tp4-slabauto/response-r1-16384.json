@@ -1,0 +1,37 @@
+{
+  "id": "chatcmpl-4de4dc2998814c38920fcadb",
+  "object": "chat.completion",
+  "created": 1794266304,
+  "model": "deepseek-v4.1-flash",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "This document is a README for **Project Maya**, a system for running large open models (GLM-5.3-Flash, DeepSeek-V4.1-Flash, MiniMax-M3.1-Flash) locally on consumer/prosumer hardware. Key technical points:\n\n**Models & Quantization**\n- Three model families with Maya quants (XS/S/M/L sizes) ranging ~75 GB to ~470 GB; run on NVIDIA (V100/RTX 20+), AMD (RX 7900, Radeon AI PRO, Strix Halo), and experimentally Apple Metal.\n- Quality:"
+      },
+      "finish_reason": "length"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 16416,
+    "completion_tokens": 128,
+    "total_tokens": 16544,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 16416,
+    "prompt_ms": 41356.5,
+    "prompt_per_token_ms": 2.519,
+    "prompt_per_second": 396.9,
+    "predicted_n": 128,
+    "predicted_ms": 5045.1,
+    "predicted_per_token_ms": 39.415,
+    "predicted_per_second": 25.4,
+    "draft_n": 96,
+    "draft_n_accepted": 75
+  }
+}

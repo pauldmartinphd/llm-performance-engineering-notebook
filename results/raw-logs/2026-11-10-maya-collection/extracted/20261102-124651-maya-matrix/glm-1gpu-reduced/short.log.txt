@@ -1,0 +1,8 @@
+Project Maya v1.1.49 - GLM-5.3-Flash, DeepSeek-V4.1-Flash-1017 or MiniMax-M3.1-Flash on your own GPU(s).
+
+=== Step 1: benchmark: config.json (loading the model first - a minute or a few) ===
+
+  [X]  the engine stopped while loading
+       its log: /opt/project-maya/maya-bench.log
+
+Setup stopped. Fix the item above and run it again - everything already done is kept and skipped.

@@ -1,0 +1,65 @@
+{
+  "exe": "/opt/project-maya/build-hip/maya",
+  "args": [
+    "--glm-pack",
+    "/models/GLM-5.3-Flash/UD-Q4_K_XL/pack",
+    "--expert-cache",
+    "auto",
+    "--prefill",
+    "auto",
+    "--expert-profile",
+    "/opt/project-maya/data/expert-profile-glm.bin",
+    "--max-context",
+    "1048576",
+    "--kv-streaming",
+    "on",
+    "--kv-resident",
+    "32768",
+    "--kv",
+    "fp16"
+  ],
+  "cwd": "/opt/project-maya",
+  "tokenizer": "/models/GLM-5.3-Flash/UD-Q4_K_XL/pack/tokenizer",
+  "model_name": "glm-5.3-flash",
+  "gpu": [
+    2,
+    3
+  ],
+  "sampling": {
+    "temperature": 1.0,
+    "top_p": 0.95
+  },
+  "reasoning_effort": "max",
+  "lib_dirs": [
+    "/opt/rocm-7.2.0/lib"
+  ],
+  "port": 8082,
+  "backend": "hip",
+  "env": {
+    "MAYA_GLM_RESERVE_MB": "1024",
+    "MAYA_GLM_RAM_HEADROOM_GB": "16",
+    "MAYA_GLM_PREFILL_SUB": "1024",
+    "MAYA_GLM_PREFILL_MB": "4096",
+    "MAYA_GLM_SPLIT": "auto",
+    "MAYA_GLM_SPLIT_LOG": "1",
+    "MAYA_GLM_KV_INT8": "0",
+    "MAYA_GLM_NO_MTP": "0",
+    "MAYA_GLM_NO_SPEC": "0"
+  },
+  "vision": {
+    "exe": "/opt/project-maya/build-vision/bin/maya-vision",
+    "mmproj": "/models/GLM-5.3-Flash/UD-Q4_K_XL/vision/mmproj-GLM-5.3-Flash-F16.gguf",
+    "model": "/models/GLM-5.3-Flash/UD-Q4_K_XL/vision/GLM-5.3-Flash-vocab.gguf",
+    "gpu": true
+  },
+  "log": "/opt/project-maya/maya-ud-q4_k_xl-hip.log",
+  "installer": {
+    "models_dir": "/opt/Maya-data/models",
+    "quant": "UD-Q4_K_XL",
+    "gguf": "/models/GLM-5.3-Flash/UD-Q4_K_XL/GLM-5.3-Flash-UD-Q4_K_XL-00001-of-00006.gguf",
+    "gguf_dir": "/models/GLM-5.3-Flash/UD-Q4_K_XL",
+    "draft": "mtp",
+    "written": "2026-11-02 09:49"
+  },
+  "layer_split": "auto"
+}

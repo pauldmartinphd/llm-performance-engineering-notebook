@@ -1,0 +1,37 @@
+{
+  "id": "chatcmpl-22227cafc65142eda15ff532",
+  "object": "chat.completion",
+  "created": 1794266935,
+  "model": "deepseek-v4.1-flash",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "# Summary\n\nThis document is a warm-up/reference guide covering Maya's operation, configuration, and platform-specific details. Key points:\n\n## Running & Lifecycle\n- **Startup**: `maya-<model>.sh` starts immediately with no duplicate downloads; dashboard shows Monitor stats, Tab shows logs. Ctrl"
+      },
+      "finish_reason": "length"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 8206,
+    "completion_tokens": 64,
+    "total_tokens": 8270,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 8206,
+    "prompt_ms": 26017.4,
+    "prompt_per_token_ms": 3.171,
+    "prompt_per_second": 315.4,
+    "predicted_n": 64,
+    "predicted_ms": 3178.4,
+    "predicted_per_token_ms": 49.663,
+    "predicted_per_second": 20.1,
+    "draft_n": 47,
+    "draft_n_accepted": 30
+  }
+}

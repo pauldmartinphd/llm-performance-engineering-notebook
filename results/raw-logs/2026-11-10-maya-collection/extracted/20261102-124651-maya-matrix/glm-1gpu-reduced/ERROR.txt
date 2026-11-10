@@ -1,0 +1,1 @@
+RuntimeError('Exit 1; inspect /opt/maya-test-results/20261102-124651-maya-matrix/glm-1gpu-reduced/short.log')

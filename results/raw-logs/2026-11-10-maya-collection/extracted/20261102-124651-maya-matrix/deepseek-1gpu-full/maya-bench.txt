@@ -1,0 +1,51 @@
+Project Maya v1.1.49 benchmark, 2026-11-02 13:43
+GPUs: AMD RADEON PRO V620 Azure 30 GB; RAM 2004 GB; CPU AMD EPYC 7713 64-Core Processor
+setup: config.json, context 1048576, GPUs [0]
+decode (writing the answer): mean 22.2 tokens/s over 3 answers of up to 256 tokens (greedy, thinking off)
+    22.1 tokens/s  Write a Python function that parses a CSV file into a list of dictionaries, with type hints and a docstring.
+    18.7 tokens/s  Explain how photosynthesis works, step by step, for a high-school student.
+    25.7 tokens/s  Write a complete HTML page with a canvas that draws a bouncing ball animation in JavaScript.
+prefill (reading the prompt): 127 tokens/s, 2048 tokens
+prefill (reading the prompt): 235 tokens/s, 8192 tokens
+
+engine lines:
+ds4: Engram RAM file 7 locked 43.22 / 101.38 GB
+ds4: Engram RAM file 7 locked 51.81 / 101.38 GB
+ds4: Engram RAM file 7 locked 60.40 / 101.38 GB
+ds4: Engram RAM file 7 locked 68.99 / 101.38 GB
+ds4: Engram RAM file 7 locked 77.58 / 101.38 GB
+ds4: Engram RAM file 7 locked 86.17 / 101.38 GB
+ds4: Engram RAM file 7 locked 94.76 / 101.38 GB
+ds4: Engram RAM file 7 locked 101.38 / 101.38 GB
+ds4: Engram RAM file 7 locked 0.27 / 101.38 GB
+ds4: Engram RAM file 7 locked 8.86 / 101.38 GB
+ds4: Engram RAM file 7 locked 17.45 / 101.38 GB
+ds4: Engram RAM file 7 locked 26.04 / 101.38 GB
+ds4: Engram RAM file 7 locked 34.63 / 101.38 GB
+ds4: Engram RAM file 7 locked 43.22 / 101.38 GB
+ds4: Engram RAM file 7 locked 51.81 / 101.38 GB
+ds4: Engram RAM file 7 locked 60.40 / 101.38 GB
+ds4: Engram RAM file 7 locked 68.99 / 101.38 GB
+ds4: Engram RAM file 7 locked 77.58 / 101.38 GB
+ds4: Engram RAM file 7 locked 86.17 / 101.38 GB
+ds4: Engram RAM file 7 locked 94.76 / 101.38 GB
+ds4: Engram RAM file 7 locked 101.38 / 101.38 GB
+ds4: Engram RAM ONLY: 2 complete tables (Q6_K/Q5_K/IQ4_NL/FP8), 202.758 GB locked; reads use memcpy
+ds4: the experts VRAM leaves over (~285.0 GB) are read in place from the model's files (copied into RAM after the GPUs' share when the RAM holds them all; --mmap-experts on keeps them in place) (2151.2 GB of RAM free to keep them: the most-routed 285.0 GB read ahead; prompts in chunks of 32768)
+ds4: strict RAM: all 15569 CPU experts selected, no disk fallback
+ds4: copied expert cache: DONTNEED hints accepted for 292.516 GB of whole source pages (eviction is advisory)
+ds4: the copied experts pinned (292.7 GB in 3.9 s): the prompt path DMAs them in place
+ds4: 15569 of the CPU lane's 15569 experts copied into RAM (292.7 GB, 1 NUMA part) in 243.3 s
+ds4: PCIe lane: CUDA0 MXFP4/MXFP4/MXFP4 18800640 B: an expert 0.321 ms on the CPU lane (+0.023 a call), 1.058 streamed (+1.511 a request), 0.030 on the GPU, 9.40 from the disk -> of 0..6 picks in RAM it streams 0 0 0 0 0 0 0 (decode's check of streaming - picks all in RAM: being measured, some from the disk: none can be, every expert in VRAM or RAM)
+ds4: PCIe lane: 0 layers on 0 GPU(s) stream some of a token's CPU-lane experts (2 reading threads; timed, 345 ms)
+ds4: CUDA0 layers [0, 42] + head: weights 16.26 GB, experts 3.31 GB (175 of 15744 in VRAM), caches 0.97 GB, 1126 MiB free
+ds4: 15569 routed experts on the CPU lane (292.7 GB): 15569 copied into RAM (1 NUMA parts), the rest in place in the model's files; 64 threads
+maya ds4 serve: prompt read: 10 tokens in 0.4 s; VRAM free CUDA0 1.1 of 30.0 GB before, 1.1 after
+maya ds4 serve: prompt read: 28 tokens in 0.7 s; VRAM free CUDA0 1.0 of 30.0 GB before, 1.0 after
+maya ds4 serve: prompt read: 19 tokens in 0.6 s; VRAM free CUDA0 1.0 of 30.0 GB before, 1.0 after
+maya ds4 serve: prompt read: 21 tokens in 0.6 s; VRAM free CUDA0 1.0 of 30.0 GB before, 1.0 after
+rocblaslt error: Cannot read "/opt/rocm-7.2.0/lib/hipblaslt/library/TensileLibrary_lazy_gfx1030.dat": No such file or directory
+rocblaslt error: Could not load "/opt/rocm-7.2.0/lib/hipblaslt/library/TensileLibrary_lazy_gfx1030.dat"
+maya ds4 serve: prompt read: 2048 tokens in 15.7 s; VRAM free CUDA0 1.0 of 30.0 GB before, 0.9 after
+maya ds4 serve: prompt read: 2048 tokens in 16.1 s; VRAM free CUDA0 0.9 of 30.0 GB before, 0.9 after
+maya ds4 serve: prompt read: 8192 tokens in 34.8 s; VRAM free CUDA0 0.9 of 30.0 GB before, 0.9 after

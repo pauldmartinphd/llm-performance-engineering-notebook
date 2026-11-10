@@ -1,0 +1,3920 @@
+2026-11-02T13:16:02-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 9.0
+GPU[1]		: Average Graphics Package Power (W): 9.0
+GPU[2]		: Average Graphics Package Power (W): 8.0
+GPU[3]		: Average Graphics Package Power (W): 10.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 2
+GPU[1]		: GPU use (%): 1
+GPU[2]		: GPU use (%): 10
+GPU[3]		: GPU use (%): 11
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 69
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 50
+GPU[1]		: GPU Memory Read/Write Activity (%): 0
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 7
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 8
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:16:04-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 49.0
+GPU[1]		: Average Graphics Package Power (W): 230.0
+GPU[2]		: Average Graphics Package Power (W): 47.0
+GPU[3]		: Average Graphics Package Power (W): 232.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 26
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 25
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:16:06-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 49.0
+GPU[1]		: Average Graphics Package Power (W): 236.0
+GPU[2]		: Average Graphics Package Power (W): 47.0
+GPU[3]		: Average Graphics Package Power (W): 236.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 31
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 26
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:16:08-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 49.0
+GPU[1]		: Average Graphics Package Power (W): 239.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 239.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 7
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 10
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:16:10-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 49.0
+GPU[1]		: Average Graphics Package Power (W): 129.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 139.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 6
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 6
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:16:12-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 50.0
+GPU[1]		: Average Graphics Package Power (W): 248.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 249.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 6
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 6
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:16:14-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 50.0
+GPU[1]		: Average Graphics Package Power (W): 246.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 245.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 2
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 7
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:16:16-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 50.0
+GPU[1]		: Average Graphics Package Power (W): 112.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 116.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 6
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 11
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:16:19-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 50.0
+GPU[1]		: Average Graphics Package Power (W): 236.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 236.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 6
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 6
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:16:21-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 50.0
+GPU[1]		: Average Graphics Package Power (W): 245.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 245.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 8
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 8
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:16:23-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 50.0
+GPU[1]		: Average Graphics Package Power (W): 233.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 234.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 19
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 18
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:16:25-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 50.0
+GPU[1]		: Average Graphics Package Power (W): 249.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 249.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 18
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 6
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:16:27-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 50.0
+GPU[1]		: Average Graphics Package Power (W): 149.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 155.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 5
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 6
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:16:29-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 50.0
+GPU[1]		: Average Graphics Package Power (W): 243.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 246.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 19
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 19
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:16:31-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 51.0
+GPU[1]		: Average Graphics Package Power (W): 240.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 240.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 5
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 5
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:16:33-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 51.0
+GPU[1]		: Average Graphics Package Power (W): 217.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 216.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 4
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 5
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:16:35-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 51.0
+GPU[1]		: Average Graphics Package Power (W): 249.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 250.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 7
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 7
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:16:37-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 51.0
+GPU[1]		: Average Graphics Package Power (W): 251.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 252.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 11
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 11
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:16:40-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 51.0
+GPU[1]		: Average Graphics Package Power (W): 183.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 186.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 24
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 25
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:16:42-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 51.0
+GPU[1]		: Average Graphics Package Power (W): 237.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 235.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 10
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 9
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:16:44-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 51.0
+GPU[1]		: Average Graphics Package Power (W): 244.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 243.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 10
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 13
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:16:46-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 51.0
+GPU[1]		: Average Graphics Package Power (W): 247.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 247.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 8
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 7
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:16:48-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 52.0
+GPU[1]		: Average Graphics Package Power (W): 128.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 128.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 6
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 6
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:16:50-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 52.0
+GPU[1]		: Average Graphics Package Power (W): 249.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 248.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 3
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 2
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:16:52-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 52.0
+GPU[1]		: Average Graphics Package Power (W): 249.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 249.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 6
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 6
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:16:54-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 52.0
+GPU[1]		: Average Graphics Package Power (W): 172.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 171.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 4
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 7
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:16:56-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 52.0
+GPU[1]		: Average Graphics Package Power (W): 246.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 245.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 19
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 23
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:16:59-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 231.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 229.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 24
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 25
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:17:01-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 233.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 232.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 22
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 22
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:17:03-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 251.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 250.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 7
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 7
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:17:05-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 54.0
+GPU[1]		: Average Graphics Package Power (W): 152.0
+GPU[2]		: Average Graphics Package Power (W): 49.0
+GPU[3]		: Average Graphics Package Power (W): 164.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 1
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 21
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 4
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 0
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 4
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 0
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:17:07-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 222.0
+GPU[1]		: Average Graphics Package Power (W): 9.0
+GPU[2]		: Average Graphics Package Power (W): 220.0
+GPU[3]		: Average Graphics Package Power (W): 10.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 0
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 0
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 4
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 0
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 3
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 0
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:17:09-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 195.0
+GPU[1]		: Average Graphics Package Power (W): 8.0
+GPU[2]		: Average Graphics Package Power (W): 204.0
+GPU[3]		: Average Graphics Package Power (W): 9.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 0
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 0
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 16
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 0
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 16
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 0
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:17:11-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 221.0
+GPU[1]		: Average Graphics Package Power (W): 8.0
+GPU[2]		: Average Graphics Package Power (W): 217.0
+GPU[3]		: Average Graphics Package Power (W): 9.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 0
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 0
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 21
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 0
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 20
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 0
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:17:13-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 101.0
+GPU[1]		: Average Graphics Package Power (W): 76.0
+GPU[2]		: Average Graphics Package Power (W): 95.0
+GPU[3]		: Average Graphics Package Power (W): 86.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 92
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 97
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 3
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 54
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 1
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 51
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:17:16-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 90.0
+GPU[1]		: Average Graphics Package Power (W): 91.0
+GPU[2]		: Average Graphics Package Power (W): 87.0
+GPU[3]		: Average Graphics Package Power (W): 92.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 37
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 25
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 48
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 3
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 57
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 2
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:17:18-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 95.0
+GPU[1]		: Average Graphics Package Power (W): 65.0
+GPU[2]		: Average Graphics Package Power (W): 89.0
+GPU[3]		: Average Graphics Package Power (W): 76.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 95
+GPU[1]		: GPU use (%): 12
+GPU[2]		: GPU use (%): 96
+GPU[3]		: GPU use (%): 46
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 39
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 24
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 22
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 38
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:17:20-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 100.0
+GPU[1]		: Average Graphics Package Power (W): 82.0
+GPU[2]		: Average Graphics Package Power (W): 93.0
+GPU[3]		: Average Graphics Package Power (W): 89.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 94
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 95
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 3
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 54
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 30
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 34
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:17:22-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 102.0
+GPU[1]		: Average Graphics Package Power (W): 78.0
+GPU[2]		: Average Graphics Package Power (W): 95.0
+GPU[3]		: Average Graphics Package Power (W): 87.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 97
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 98
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 49
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 39
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:17:25-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 114.0
+GPU[1]		: Average Graphics Package Power (W): 77.0
+GPU[2]		: Average Graphics Package Power (W): 107.0
+GPU[3]		: Average Graphics Package Power (W): 85.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 92
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 96
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 1
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 36
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 1
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 35
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:17:27-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 104.0
+GPU[1]		: Average Graphics Package Power (W): 77.0
+GPU[2]		: Average Graphics Package Power (W): 101.0
+GPU[3]		: Average Graphics Package Power (W): 81.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 5
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 4
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 68
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 0
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 69
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 0
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:17:29-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 64.0
+GPU[1]		: Average Graphics Package Power (W): 34.0
+GPU[2]		: Average Graphics Package Power (W): 60.0
+GPU[3]		: Average Graphics Package Power (W): 33.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 0
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 0
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 0
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 0
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:17:31-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 55.0
+GPU[1]		: Average Graphics Package Power (W): 244.0
+GPU[2]		: Average Graphics Package Power (W): 50.0
+GPU[3]		: Average Graphics Package Power (W): 244.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 6
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 6
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:17:33-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 54.0
+GPU[1]		: Average Graphics Package Power (W): 244.0
+GPU[2]		: Average Graphics Package Power (W): 50.0
+GPU[3]		: Average Graphics Package Power (W): 243.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 30
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 25
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:17:35-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 54.0
+GPU[1]		: Average Graphics Package Power (W): 248.0
+GPU[2]		: Average Graphics Package Power (W): 50.0
+GPU[3]		: Average Graphics Package Power (W): 249.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 23
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 26
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:17:38-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 54.0
+GPU[1]		: Average Graphics Package Power (W): 124.0
+GPU[2]		: Average Graphics Package Power (W): 50.0
+GPU[3]		: Average Graphics Package Power (W): 125.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 6
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 6
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:17:40-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 54.0
+GPU[1]		: Average Graphics Package Power (W): 249.0
+GPU[2]		: Average Graphics Package Power (W): 50.0
+GPU[3]		: Average Graphics Package Power (W): 249.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 21
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 15
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:17:42-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 233.0
+GPU[2]		: Average Graphics Package Power (W): 50.0
+GPU[3]		: Average Graphics Package Power (W): 233.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 11
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 10
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:17:44-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 250.0
+GPU[2]		: Average Graphics Package Power (W): 50.0
+GPU[3]		: Average Graphics Package Power (W): 248.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 6
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 6
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:17:46-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 229.0
+GPU[2]		: Average Graphics Package Power (W): 50.0
+GPU[3]		: Average Graphics Package Power (W): 228.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 18
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 19
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:17:48-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 128.0
+GPU[2]		: Average Graphics Package Power (W): 50.0
+GPU[3]		: Average Graphics Package Power (W): 128.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 90
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 84
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:17:50-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 249.0
+GPU[2]		: Average Graphics Package Power (W): 50.0
+GPU[3]		: Average Graphics Package Power (W): 249.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 3
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 5
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:17:52-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 237.0
+GPU[2]		: Average Graphics Package Power (W): 50.0
+GPU[3]		: Average Graphics Package Power (W): 234.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 20
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 23
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:17:54-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 248.0
+GPU[2]		: Average Graphics Package Power (W): 49.0
+GPU[3]		: Average Graphics Package Power (W): 248.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 23
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 23
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:17:56-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 249.0
+GPU[2]		: Average Graphics Package Power (W): 50.0
+GPU[3]		: Average Graphics Package Power (W): 248.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 4
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 4
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:17:59-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 253.0
+GPU[2]		: Average Graphics Package Power (W): 49.0
+GPU[3]		: Average Graphics Package Power (W): 253.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 11
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 15
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:18:01-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 128.0
+GPU[2]		: Average Graphics Package Power (W): 49.0
+GPU[3]		: Average Graphics Package Power (W): 130.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 7
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 6
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:18:03-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 249.0
+GPU[2]		: Average Graphics Package Power (W): 49.0
+GPU[3]		: Average Graphics Package Power (W): 249.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 9
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 9
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:18:05-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 250.0
+GPU[2]		: Average Graphics Package Power (W): 49.0
+GPU[3]		: Average Graphics Package Power (W): 251.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 5
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 5
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:18:07-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 250.0
+GPU[2]		: Average Graphics Package Power (W): 49.0
+GPU[3]		: Average Graphics Package Power (W): 251.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 8
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 8
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:18:09-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 250.0
+GPU[2]		: Average Graphics Package Power (W): 49.0
+GPU[3]		: Average Graphics Package Power (W): 248.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 26
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 27
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:18:11-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 249.0
+GPU[2]		: Average Graphics Package Power (W): 49.0
+GPU[3]		: Average Graphics Package Power (W): 250.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 7
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 7
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:18:13-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 248.0
+GPU[2]		: Average Graphics Package Power (W): 49.0
+GPU[3]		: Average Graphics Package Power (W): 249.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 24
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 25
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:18:15-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 249.0
+GPU[2]		: Average Graphics Package Power (W): 49.0
+GPU[3]		: Average Graphics Package Power (W): 248.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 14
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 15
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:18:18-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 175.0
+GPU[2]		: Average Graphics Package Power (W): 49.0
+GPU[3]		: Average Graphics Package Power (W): 180.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 3
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 4
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:18:20-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 249.0
+GPU[2]		: Average Graphics Package Power (W): 49.0
+GPU[3]		: Average Graphics Package Power (W): 249.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 11
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 11
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:18:22-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 118.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 118.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 46
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 60
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:18:24-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 251.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 249.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 8
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 8
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:18:26-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 248.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 248.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 7
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 7
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:18:28-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 77.0
+GPU[1]		: Average Graphics Package Power (W): 102.0
+GPU[2]		: Average Graphics Package Power (W): 72.0
+GPU[3]		: Average Graphics Package Power (W): 250.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 0
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 28
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:18:30-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 251.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 248.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 27
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 26
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:18:32-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 248.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 248.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 5
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 7
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:18:34-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 250.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 250.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 6
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 6
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:18:37-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 159.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 163.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 5
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 5
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:18:39-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 249.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 249.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 5
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 5
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:18:41-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 149.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 149.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 94
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 95
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:18:43-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 249.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 251.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 23
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 22
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:18:45-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 247.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 248.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 23
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 22
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:18:47-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 195.0
+GPU[2]		: Average Graphics Package Power (W): 49.0
+GPU[3]		: Average Graphics Package Power (W): 198.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 3
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 4
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:18:49-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 249.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 249.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 7
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 7
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:18:51-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 124.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 123.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 6
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 6
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:18:53-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 249.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 249.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 22
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 6
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:18:56-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 202.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 204.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 4
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 5
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:18:58-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 247.0
+GPU[2]		: Average Graphics Package Power (W): 49.0
+GPU[3]		: Average Graphics Package Power (W): 246.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 26
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 26
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:19:00-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 248.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 248.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 6
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 26
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:19:02-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 209.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 205.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 3
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 4
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:19:04-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 249.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 249.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 6
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 6
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:19:06-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 123.0
+GPU[2]		: Average Graphics Package Power (W): 49.0
+GPU[3]		: Average Graphics Package Power (W): 124.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 38
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 55
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:19:08-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 250.0
+GPU[2]		: Average Graphics Package Power (W): 49.0
+GPU[3]		: Average Graphics Package Power (W): 250.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 18
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 18
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:19:10-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 249.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 250.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 25
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 29
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:19:12-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 249.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 249.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 7
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 8
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:19:14-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 202.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 201.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 4
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 5
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:19:17-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 252.0
+GPU[2]		: Average Graphics Package Power (W): 49.0
+GPU[3]		: Average Graphics Package Power (W): 251.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 8
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 7
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:19:19-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 245.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 242.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 4
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 4
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:19:21-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 249.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 249.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 14
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 12
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:19:23-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 248.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 249.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 2
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 2
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:19:25-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 248.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 245.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 5
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 5
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:19:27-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 249.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 250.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 26
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 23
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:19:29-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 58.0
+GPU[1]		: Average Graphics Package Power (W): 217.0
+GPU[2]		: Average Graphics Package Power (W): 62.0
+GPU[3]		: Average Graphics Package Power (W): 210.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 20
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 16
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:19:31-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 242.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 238.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 19
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 19
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:19:33-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 248.0
+GPU[2]		: Average Graphics Package Power (W): 48.0
+GPU[3]		: Average Graphics Package Power (W): 246.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 8
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 7
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:19:36-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 53.0
+GPU[1]		: Average Graphics Package Power (W): 249.0
+GPU[2]		: Average Graphics Package Power (W): 49.0
+GPU[3]		: Average Graphics Package Power (W): 247.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 99
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 99
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 3
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 2
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:19:38-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 229.0
+GPU[1]		: Average Graphics Package Power (W): 12.0
+GPU[2]		: Average Graphics Package Power (W): 224.0
+GPU[3]		: Average Graphics Package Power (W): 13.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 0
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 0
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 2
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 0
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 32
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 0
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:19:40-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 220.0
+GPU[1]		: Average Graphics Package Power (W): 9.0
+GPU[2]		: Average Graphics Package Power (W): 214.0
+GPU[3]		: Average Graphics Package Power (W): 9.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 0
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 0
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 18
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 0
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 16
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 0
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:19:42-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 208.0
+GPU[1]		: Average Graphics Package Power (W): 8.0
+GPU[2]		: Average Graphics Package Power (W): 205.0
+GPU[3]		: Average Graphics Package Power (W): 9.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 0
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 0
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 30
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 0
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 21
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 0
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:19:44-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 38.0
+GPU[1]		: Average Graphics Package Power (W): 8.0
+GPU[2]		: Average Graphics Package Power (W): 34.0
+GPU[3]		: Average Graphics Package Power (W): 9.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 0
+GPU[1]		: GPU use (%): 0
+GPU[2]		: GPU use (%): 0
+GPU[3]		: GPU use (%): 0
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 0
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 0
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 0
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 0
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:19:46-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 117.0
+GPU[1]		: Average Graphics Package Power (W): 81.0
+GPU[2]		: Average Graphics Package Power (W): 109.0
+GPU[3]		: Average Graphics Package Power (W): 89.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 88
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 93
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 3
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 46
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 1
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 40
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:19:49-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 118.0
+GPU[1]		: Average Graphics Package Power (W): 78.0
+GPU[2]		: Average Graphics Package Power (W): 114.0
+GPU[3]		: Average Graphics Package Power (W): 78.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 0
+GPU[2]		: GPU use (%): 93
+GPU[3]		: GPU use (%): 25
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 43
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 0
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 51
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 26
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:19:51-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 108.0
+GPU[1]		: Average Graphics Package Power (W): 87.0
+GPU[2]		: Average Graphics Package Power (W): 104.0
+GPU[3]		: Average Graphics Package Power (W): 87.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 5
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 3
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 65
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 0
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 62
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 0
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:19:53-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 108.0
+GPU[1]		: Average Graphics Package Power (W): 81.0
+GPU[2]		: Average Graphics Package Power (W): 104.0
+GPU[3]		: Average Graphics Package Power (W): 84.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 5
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 3
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 71
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 0
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 48
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 25
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:19:55-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 111.0
+GPU[1]		: Average Graphics Package Power (W): 80.0
+GPU[2]		: Average Graphics Package Power (W): 105.0
+GPU[3]		: Average Graphics Package Power (W): 89.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 99
+GPU[1]		: GPU use (%): 86
+GPU[2]		: GPU use (%): 99
+GPU[3]		: GPU use (%): 92
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 5
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 53
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 2
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 54
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+2026-11-02T13:19:57-05:00
+
+
+============================ ROCm System Management Interface ============================
+=================================== Power Consumption ====================================
+GPU[0]		: Average Graphics Package Power (W): 114.0
+GPU[1]		: Average Graphics Package Power (W): 74.0
+GPU[2]		: Average Graphics Package Power (W): 108.0
+GPU[3]		: Average Graphics Package Power (W): 85.0
+==========================================================================================
+=================================== % time GPU is busy ===================================
+GPU[0]		: GPU use (%): 95
+GPU[1]		: GPU use (%): 1
+GPU[2]		: GPU use (%): 96
+GPU[3]		: GPU use (%): 49
+==========================================================================================
+=================================== Current Memory Use ===================================
+GPU[0]		: GPU Memory Allocated (VRAM%): 70
+GPU[0]		: GPU Memory Read/Write Activity (%): 30
+GPU[0]		: Memory Activity: N/A
+GPU[0]		: Avg. Memory Bandwidth: 0
+GPU[1]		: GPU Memory Allocated (VRAM%): 51
+GPU[1]		: GPU Memory Read/Write Activity (%): 29
+GPU[1]		: Memory Activity: N/A
+GPU[1]		: Avg. Memory Bandwidth: 0
+GPU[2]		: GPU Memory Allocated (VRAM%): 70
+GPU[2]		: GPU Memory Read/Write Activity (%): 15
+GPU[2]		: Memory Activity: N/A
+GPU[2]		: Avg. Memory Bandwidth: 0
+GPU[3]		: GPU Memory Allocated (VRAM%): 70
+GPU[3]		: GPU Memory Read/Write Activity (%): 42
+GPU[3]		: Memory Activity: N/A
+GPU[3]		: Avg. Memory Bandwidth: 0
+==========================================================================================
+================================== End of ROCm SMI Log ===================================

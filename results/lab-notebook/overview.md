@@ -1,6 +1,6 @@
 # Performance engineering lab notebook
 
-**Period covered:** March–October 2026. I order experiments by their recorded dates and keep recovery or compilation dates separate. The [chronological index](README.md) places undated captures beside the related work and labels the uncertainty.
+**Period covered:** March–November 2026. I order experiments by their recorded dates and keep recovery or compilation dates separate. The [chronological index](README.md) places undated captures beside the related work and labels the uncertainty.
 **Investigator:** Paul Martin
 **Original subject:** Measuring and improving inference throughput for GLM-5.2 (753.86 B-parameter mixture-of-experts model) running under llama.cpp/ROCm on the server "Galactus". Later entries extend the record to other models and to oMLX on Magneto.
 **Original July notebook compiled:** July 24, 2026, from the original conversation exports, benchmark logs, and the automated diagnostic run log. All timestamps are US Eastern Time. The July entries were compiled from the saved records. Later entries list their sources and recording limitations, including the hand-collected Session 10 timings.
@@ -64,3 +64,7 @@ The [source-note index](../reference-notes/README.md) preserves that full note a
 ## Chronological records
 
 The [chronological index](README.md) links the March build, April sweeps, July scheduler investigation, August rebaseline, Magneto measurements, and October fork work. It also identifies the undated source captures. I use date-based filenames so newly recovered experiments can take their place without renumbering the existing records.
+
+## November dual-model deployment
+
+The [November 2–10 sequence](README.md#november-2–10-from-gpu-budgets-to-two-resident-maya-services) records GPU/cache allocation tests, recovered v1.1.54 measurements, DeepSeek FP16-output prefill, full GLM failures, and GLM-Flash reserve, chunk and KV tuning. It ends with the [reported two-pair production layout](2026-11-10-maya-dual-model-production.md), with individual-model measurements kept separate from unmeasured overlapping-load performance.

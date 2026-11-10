@@ -1,0 +1,2 @@
+variant,kind,tokens,repeat,tokens_per_s,status
+p2p_hip_auto,error,0,0,,FAILED: p2p_hip_auto: engine exited before READY

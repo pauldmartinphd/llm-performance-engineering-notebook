@@ -50,3 +50,7 @@ The log ends with commands for a four-way comparison of DSpark off/on and automa
 These results precede the replacement with Unsloth's V4.1-Flash-1017 implementation. They also differ from the earlier [DeepSeek-V4-Flash-0731 results](deepseek-v4-flash.md); those successful DSpark runs cannot substitute for a V4.1 measurement.
 
 [Full experiment record](lab-notebook/undated-deepseek41-dspark.md) · [Original log](raw-logs/2026-10-21-flash-experiments/DeepSeekV4Flash%20Experiments.txt) · [Chronological notebook](lab-notebook/README.md)
+
+## November 9–10: TP2 on two V620s
+
+The [two-GPU baseline](lab-notebook/2026-11-09-deepseek-tp2-and-tp4.md) measured 29.0 tokens/s built-in mean decode; requested TP4 still executed TP2. The [FP16-output prefill experiment](lab-notebook/2026-11-09-deepseek-fp16-prefill.md) reached median 389.55 / 501.95 / 589.70 tokens/s at 8K / 16K / 32K. The original baseline used v1.1.54; the optimized run used v1.1.57, while the intervening TP4-fallback observations provide same-binary TP2 context. Logs report both zero nonfinite FP16 outputs and early-row prompt skipping; no local quality equivalence follows. Weights remain UD-Q8_K_XL. The [selected deployment](lab-notebook/2026-11-10-maya-dual-model-production.md) keeps this service on GPUs 0–1 alongside GLM-Flash on 2–3.

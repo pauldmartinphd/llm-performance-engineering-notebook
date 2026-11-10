@@ -1,0 +1,164 @@
+18:44:37 [maya] this server's lines go to /opt/maya-test-results/20261109-184435/01-chunk32768-tp2-slabauto/engine.log too
+18:44:37 [maya] sampling defaults from the config: temperature=1.0, top_p=1.0
+loading the model (the first start takes a minute or two) ...
+18:44:37 [maya] layer split across GPUs [0, 1] (auto)
+18:44:37 [maya] starting the engine: reading the model's weights ...
+18:44:57 [maya] still starting (20 s) - please wait ...
+18:45:17 [maya] still starting (40 s) - please wait ...
+18:45:37 [maya] still starting (60 s) - please wait ...
+18:45:57 [maya] still starting (80 s) - please wait ...
+18:46:17 [maya] still starting (100 s) - please wait ...
+18:46:37 [maya] still starting (120 s) - please wait ...
+18:46:57 [maya] still starting (140 s) - please wait ...
+18:47:17 [maya] still starting (160 s) - please wait ...
+18:47:37 [maya] still starting (180 s) - please wait ...
+18:47:57 [maya] still starting (200 s) - please wait ...
+18:48:17 [maya] still starting (220 s) - please wait ...
+18:48:37 [maya] still starting (240 s) - please wait ...
+18:48:57 [maya] still starting (260 s) - please wait ...
+18:49:06 [maya] images: the model's vision tower runs in the engine (GPU 0: none between pictures, ~318 MiB while one is read, lent by the prompt buffers), up to 1024 tokens a picture
+18:49:06 [maya] thinking level when a request names none: high
+18:49:06 [maya] thinking budget: 32768 tokens (then the answer)
+18:49:06 [maya] model management: on (/models/load, /models/unload, /models/sse)
+ready: http://127.0.0.1:8082/v1  (OpenAI: /v1/chat/completions, /v1/responses, Anthropic: /v1/messages, context 1048576 tokens, images on)
+       open http://127.0.0.1:8082/ in a browser to chat; close this window to stop the model
+18:49:16 [maya] reading the prompt: 5,026 of 8,206 tokens, 9 s so far
+18:49:17 [maya] reading the prompt: 5,026 of 8,206 tokens, 10 s so far
+18:49:18 [maya] reading the prompt: 5,026 of 8,206 tokens, 11 s so far
+18:49:19 [maya] reading the prompt: 5,026 of 8,206 tokens, 12 s so far
+18:49:20 [maya] reading the prompt: 5,026 of 8,206 tokens, 13 s so far
+18:49:21 [maya] reading the prompt: 5,026 of 8,206 tokens, 14 s so far
+18:49:22 [maya] reading the prompt: 5,026 of 8,206 tokens, 15 s so far
+18:49:23 [maya] reading the prompt: 5,026 of 8,206 tokens, 16 s so far
+18:49:24 [maya] reading the prompt: 5,026 of 8,206 tokens, 17 s so far
+18:49:25 [maya] reading the prompt: 5,026 of 8,206 tokens, 18 s so far
+18:49:26 [maya] reading the prompt: 5,026 of 8,206 tokens, 19 s so far
+18:49:27 [maya] reading the prompt: 5,026 of 8,206 tokens, 20 s so far
+18:49:28 [maya] reading the prompt: 5,026 of 8,206 tokens, 21 s so far
+18:49:30 [maya] answering: 1 of max 64 tokens, 82241.3 tok/s, 23 s
+18:49:31 [maya] answering: 17 of max 64 tokens, 16.6 tok/s, 24 s
+18:49:32 [maya] answering: 39 of max 64 tokens, 19.1 tok/s, 25 s
+18:49:33 [maya] answering: 63 of max 64 tokens, 20.4 tok/s, 26 s
+18:49:33 [maya] done: 64 tokens in 26 s (13.8 tok/s) (length, cancel=False), expert cache 41.3% hit
+18:49:43 [maya] reading the prompt: 16,416 tokens, 10 s so far
+18:49:53 [maya] reading the prompt: 13,236 of 16,416 tokens, 20 s so far
+18:49:54 [maya] reading the prompt: 13,236 of 16,416 tokens, 21 s so far
+18:49:55 [maya] reading the prompt: 13,236 of 16,416 tokens, 22 s so far
+18:49:56 [maya] reading the prompt: 13,236 of 16,416 tokens, 23 s so far
+18:49:57 [maya] reading the prompt: 13,236 of 16,416 tokens, 24 s so far
+18:49:58 [maya] reading the prompt: 13,236 of 16,416 tokens, 25 s so far
+18:49:59 [maya] reading the prompt: 13,236 of 16,416 tokens, 26 s so far
+18:50:00 [maya] reading the prompt: 13,236 of 16,416 tokens, 27 s so far
+18:50:01 [maya] reading the prompt: 13,236 of 16,416 tokens, 28 s so far
+18:50:02 [maya] reading the prompt: 13,236 of 16,416 tokens, 29 s so far
+18:50:03 [maya] reading the prompt: 13,236 of 16,416 tokens, 30 s so far
+18:50:04 [maya] reading the prompt: 13,236 of 16,416 tokens, 31 s so far
+18:50:05 [maya] reading the prompt: 13,236 of 16,416 tokens, 32 s so far
+18:50:06 [maya] answering: 9 of max 128 tokens, 23.1 tok/s, 33 s
+18:50:07 [maya] answering: 34 of max 128 tokens, 22.8 tok/s, 34 s
+18:50:08 [maya] answering: 57 of max 128 tokens, 21.9 tok/s, 35 s
+18:50:09 [maya] answering: 89 of max 128 tokens, 24.2 tok/s, 36 s
+18:50:10 [maya] answering: 114 of max 128 tokens, 24.2 tok/s, 37 s
+18:50:11 [maya] done: 128 tokens in 38 s (24.7 tok/s) (length, cancel=False), expert cache 50.5% hit
+18:50:19 [maya] reading the prompt: 5,044 of 8,224 tokens, 9 s so far
+18:50:20 [maya] reading the prompt: 5,044 of 8,224 tokens, 10 s so far
+18:50:21 [maya] reading the prompt: 5,044 of 8,224 tokens, 11 s so far
+18:50:22 [maya] reading the prompt: 5,044 of 8,224 tokens, 12 s so far
+18:50:23 [maya] reading the prompt: 5,044 of 8,224 tokens, 13 s so far
+18:50:24 [maya] reading the prompt: 5,044 of 8,224 tokens, 14 s so far
+18:50:25 [maya] reading the prompt: 5,044 of 8,224 tokens, 15 s so far
+18:50:26 [maya] reading the prompt: 5,044 of 8,224 tokens, 16 s so far
+18:50:27 [maya] reading the prompt: 5,044 of 8,224 tokens, 17 s so far
+18:50:28 [maya] reading the prompt: 5,044 of 8,224 tokens, 18 s so far
+18:50:29 [maya] reading the prompt: 5,044 of 8,224 tokens, 19 s so far
+18:50:30 [maya] reading the prompt: 5,044 of 8,224 tokens, 20 s so far
+18:50:31 [maya] reading the prompt: 5,044 of 8,224 tokens, 21 s so far
+18:50:32 [maya] answering: 19 of max 128 tokens, 24.8 tok/s, 22 s
+18:50:33 [maya] answering: 52 of max 128 tokens, 29.0 tok/s, 23 s
+18:50:34 [maya] answering: 81 of max 128 tokens, 28.8 tok/s, 24 s
+18:50:35 [maya] answering: 107 of max 128 tokens, 27.9 tok/s, 25 s
+18:50:36 [maya] done: 128 tokens in 26 s (28.6 tok/s) (length, cancel=False), expert cache 57.5% hit
+18:50:46 [maya] reading the prompt: 32,800 tokens, 10 s so far
+18:50:56 [maya] reading the prompt: 32,800 tokens, 20 s so far
+18:51:06 [maya] reading the prompt: 32,800 tokens, 30 s so far
+18:51:16 [maya] reading the prompt: 32,800 tokens, 40 s so far
+18:51:19 [maya] reading the prompt: 29,620 of 32,800 tokens, 43 s so far
+18:51:20 [maya] reading the prompt: 29,620 of 32,800 tokens, 44 s so far
+18:51:21 [maya] reading the prompt: 29,620 of 32,800 tokens, 45 s so far
+18:51:22 [maya] reading the prompt: 29,620 of 32,800 tokens, 46 s so far
+18:51:23 [maya] reading the prompt: 29,620 of 32,800 tokens, 47 s so far
+18:51:24 [maya] reading the prompt: 29,620 of 32,800 tokens, 48 s so far
+18:51:25 [maya] reading the prompt: 29,620 of 32,800 tokens, 49 s so far
+18:51:26 [maya] reading the prompt: 29,620 of 32,800 tokens, 50 s so far
+18:51:27 [maya] reading the prompt: 29,620 of 32,800 tokens, 51 s so far
+18:51:28 [maya] reading the prompt: 29,620 of 32,800 tokens, 52 s so far
+18:51:29 [maya] reading the prompt: 29,620 of 32,800 tokens, 53 s so far
+18:51:30 [maya] reading the prompt: 29,620 of 32,800 tokens, 54 s so far
+18:51:31 [maya] reading the prompt: 29,620 of 32,800 tokens, 55 s so far
+18:51:32 [maya] answering: 4 of max 128 tokens, 27.3 tok/s, 56 s
+18:51:33 [maya] answering: 35 of max 128 tokens, 28.9 tok/s, 57 s
+18:51:34 [maya] answering: 71 of max 128 tokens, 31.8 tok/s, 58 s
+18:51:35 [maya] answering: 98 of max 128 tokens, 30.2 tok/s, 59 s
+18:51:36 [maya] answering: 128 of max 128 tokens, 30.1 tok/s, 60 s
+18:51:36 [maya] done: 128 tokens in 60 s (30.0 tok/s) (length, cancel=False), expert cache 57.7% hit
+18:51:45 [maya] reading the prompt: 5,043 of 8,223 tokens, 9 s so far
+18:51:46 [maya] reading the prompt: 5,043 of 8,223 tokens, 10 s so far
+18:51:47 [maya] reading the prompt: 5,043 of 8,223 tokens, 11 s so far
+18:51:48 [maya] reading the prompt: 5,043 of 8,223 tokens, 12 s so far
+18:51:49 [maya] reading the prompt: 5,043 of 8,223 tokens, 13 s so far
+18:51:50 [maya] reading the prompt: 5,043 of 8,223 tokens, 14 s so far
+18:51:51 [maya] reading the prompt: 5,043 of 8,223 tokens, 15 s so far
+18:51:52 [maya] reading the prompt: 5,043 of 8,223 tokens, 16 s so far
+18:51:53 [maya] reading the prompt: 5,043 of 8,223 tokens, 17 s so far
+18:51:54 [maya] reading the prompt: 5,043 of 8,223 tokens, 18 s so far
+18:51:55 [maya] reading the prompt: 5,043 of 8,223 tokens, 19 s so far
+18:51:56 [maya] reading the prompt: 5,043 of 8,223 tokens, 20 s so far
+18:51:57 [maya] reading the prompt: 5,043 of 8,223 tokens, 21 s so far
+18:51:58 [maya] answering: 19 of max 128 tokens, 28.6 tok/s, 22 s
+18:51:59 [maya] answering: 48 of max 128 tokens, 28.1 tok/s, 23 s
+18:52:00 [maya] answering: 85 of max 128 tokens, 30.8 tok/s, 24 s
+18:52:01 [maya] answering: 116 of max 128 tokens, 30.4 tok/s, 25 s
+18:52:02 [maya] done: 128 tokens in 25 s (31.7 tok/s) (length, cancel=False), expert cache 60.3% hit
+18:52:12 [maya] reading the prompt: 32,800 tokens, 10 s so far
+18:52:22 [maya] reading the prompt: 32,800 tokens, 20 s so far
+18:52:32 [maya] reading the prompt: 32,800 tokens, 30 s so far
+18:52:42 [maya] reading the prompt: 32,800 tokens, 40 s so far
+18:52:44 [maya] reading the prompt: 29,620 of 32,800 tokens, 43 s so far
+18:52:45 [maya] reading the prompt: 29,620 of 32,800 tokens, 44 s so far
+18:52:46 [maya] reading the prompt: 29,620 of 32,800 tokens, 45 s so far
+18:52:47 [maya] reading the prompt: 29,620 of 32,800 tokens, 46 s so far
+18:52:48 [maya] reading the prompt: 29,620 of 32,800 tokens, 47 s so far
+18:52:49 [maya] reading the prompt: 29,620 of 32,800 tokens, 48 s so far
+18:52:50 [maya] reading the prompt: 29,620 of 32,800 tokens, 49 s so far
+18:52:51 [maya] reading the prompt: 29,620 of 32,800 tokens, 50 s so far
+18:52:52 [maya] reading the prompt: 29,620 of 32,800 tokens, 51 s so far
+18:52:53 [maya] reading the prompt: 29,620 of 32,800 tokens, 52 s so far
+18:52:54 [maya] reading the prompt: 29,620 of 32,800 tokens, 53 s so far
+18:52:55 [maya] reading the prompt: 29,620 of 32,800 tokens, 54 s so far
+18:52:56 [maya] reading the prompt: 29,620 of 32,800 tokens, 55 s so far
+18:52:57 [maya] answering: 2 of max 128 tokens, 26.4 tok/s, 56 s
+18:52:58 [maya] answering: 31 of max 128 tokens, 26.1 tok/s, 57 s
+18:52:59 [maya] answering: 60 of max 128 tokens, 27.2 tok/s, 58 s
+18:53:00 [maya] answering: 85 of max 128 tokens, 26.0 tok/s, 59 s
+18:53:01 [maya] answering: 114 of max 128 tokens, 26.6 tok/s, 60 s
+18:53:02 [maya] done: 128 tokens in 60 s (26.1 tok/s) (length, cancel=False), expert cache 58.5% hit
+18:53:12 [maya] reading the prompt: 16,416 tokens, 10 s so far
+18:53:22 [maya] reading the prompt: 16,416 tokens, 20 s so far
+18:53:23 [maya] reading the prompt: 13,236 of 16,416 tokens, 21 s so far
+18:53:24 [maya] reading the prompt: 13,236 of 16,416 tokens, 22 s so far
+18:53:25 [maya] reading the prompt: 13,236 of 16,416 tokens, 23 s so far
+18:53:26 [maya] reading the prompt: 13,236 of 16,416 tokens, 24 s so far
+18:53:27 [maya] reading the prompt: 13,236 of 16,416 tokens, 25 s so far
+18:53:28 [maya] reading the prompt: 13,236 of 16,416 tokens, 26 s so far
+18:53:29 [maya] reading the prompt: 13,236 of 16,416 tokens, 27 s so far
+18:53:30 [maya] reading the prompt: 13,236 of 16,416 tokens, 28 s so far
+18:53:31 [maya] reading the prompt: 13,236 of 16,416 tokens, 29 s so far
+18:53:32 [maya] reading the prompt: 13,236 of 16,416 tokens, 30 s so far
+18:53:33 [maya] reading the prompt: 13,236 of 16,416 tokens, 31 s so far
+18:53:34 [maya] reading the prompt: 13,236 of 16,416 tokens, 32 s so far
+18:53:35 [maya] answering: 2 of max 128 tokens, 21.6 tok/s, 33 s
+18:53:36 [maya] answering: 33 of max 128 tokens, 29.2 tok/s, 34 s
+18:53:37 [maya] answering: 70 of max 128 tokens, 31.6 tok/s, 35 s
+18:53:38 [maya] answering: 106 of max 128 tokens, 32.9 tok/s, 36 s
+18:53:39 [maya] done: 128 tokens in 37 s (33.9 tok/s) (length, cancel=False), expert cache 55.9% hit
+18:53:39 [maya] stopping (SIGTERM): the engine ends

@@ -1,0 +1,37 @@
+{
+  "id": "chatcmpl-ebbcb8f74a0f483b9e9a88a2",
+  "object": "chat.completion",
+  "created": 1794265349,
+  "model": "deepseek-v4.1-flash",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "This document is a performance and quality report for \"Project Maya,\" a system for running quantized large language models (GLM-5.3, DeepSeek-V4.1, MiniMax-M3.1, Qwen-3.8-Flash-Next) locally. Key technical points:\n\n**Quantization & Quality**\n- Maya quants are derived from released weights and benchmarked against originals.\n- GLM-5.3 Maya quants retain 97.7\u201399.2% of FP8 zero-shot accuracy and match next-token predictions 83\u201390% of the time (Maya-L"
+      },
+      "finish_reason": "length"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 8224,
+    "completion_tokens": 128,
+    "total_tokens": 8352,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 8224,
+    "prompt_ms": 26224.2,
+    "prompt_per_token_ms": 3.189,
+    "prompt_per_second": 313.6,
+    "predicted_n": 128,
+    "predicted_ms": 4367.8,
+    "predicted_per_token_ms": 34.123,
+    "predicted_per_second": 29.3,
+    "draft_n": 106,
+    "draft_n_accepted": 84
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "status": "ok",
+  "max_context": 1048576,
+  "model": "deepseek-v4.1-flash",
+  "max_text_file": 4194304,
+  "model_label": "DeepSeek V4.1 \u00b7 UD-Q8_K_XL",
+  "images": true,
+  "api_key": false,
+  "defaults": {
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "reasoning_effort": "high"
+  },
+  "videos": false,
+  "version": "1.1.57",
+  "mcp_tools": false,
+  "unloaded": false,
+  "history_thinking": false
+}

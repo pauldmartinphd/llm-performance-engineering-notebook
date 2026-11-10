@@ -1,0 +1,37 @@
+{
+  "id": "chatcmpl-4772ac36a80340709bb1c80c",
+  "object": "chat.completion",
+  "created": 1794265564,
+  "model": "deepseek-v4.1-flash",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "This document describes **Project Maya**, a system for running three large Mixture-of-Experts (MoE) models locally on consumer/prosumer hardware, plus two technical appendices (an agent benchmark tool and RDNA HIP expert kernels).\n\n## 1. Project Maya overview\n\n**Purpose:** Run three large MoE models privately on your own GPU(s), with no data leaving the machine.\n\n**Models supported:**\n- **GLM-5.3-Flash** (zai-org, MIT, 321 B total / 18 B active, up to 1M context)\n- **DeepSeek-V4."
+      },
+      "finish_reason": "length"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 16416,
+    "completion_tokens": 128,
+    "total_tokens": 16544,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 16416,
+    "prompt_ms": 41847.4,
+    "prompt_per_token_ms": 2.549,
+    "prompt_per_second": 392.3,
+    "predicted_n": 128,
+    "predicted_ms": 4521.9,
+    "predicted_per_token_ms": 35.327,
+    "predicted_per_second": 28.3,
+    "draft_n": 96,
+    "draft_n_accepted": 76
+  }
+}

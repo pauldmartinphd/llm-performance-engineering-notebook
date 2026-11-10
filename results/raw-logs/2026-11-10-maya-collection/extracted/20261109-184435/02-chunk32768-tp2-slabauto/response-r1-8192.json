@@ -1,0 +1,37 @@
+{
+  "id": "chatcmpl-1aa37dacecbb46459eba2c78",
+  "object": "chat.completion",
+  "created": 1794268890,
+  "model": "deepseek-v4.1-flash",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "This document is the README for **Project Maya**, a local LLM inference stack. Key technical points:\n\n**What it is**\n- Runs large open models locally with an OpenAI/Anthropic-compatible API (tool calls, coding-agent ready).\n- Handles up to 8 concurrent requests via GLM-5.3-Flash, DeepSeek-V4.1-Flash, and MiniMax-M3.1-Flash.\n- Includes browser chat + live monitor, image support, thinking levels, a model manager (download/load/delete), a Turbo button, and one-command setup (`./setup.sh`"
+      },
+      "finish_reason": "length"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 8223,
+    "completion_tokens": 128,
+    "total_tokens": 8351,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "timings": {
+    "cache_n": 0,
+    "prompt_n": 8223,
+    "prompt_ms": 21090.5,
+    "prompt_per_token_ms": 2.565,
+    "prompt_per_second": 389.9,
+    "predicted_n": 128,
+    "predicted_ms": 4068.0,
+    "predicted_per_token_ms": 31.781,
+    "predicted_per_second": 31.5,
+    "draft_n": 88,
+    "draft_n_accepted": 80
+  }
+}
