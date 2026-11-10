@@ -2,7 +2,23 @@
 
 [All lab records](README.md) · [Related investigation: chapter 2](../../investigations/02-following-the-prefill-bottleneck.md)
 
-**Question:** Does larger-batch offload justify the GPUs? **Outcome:** Prompt throughput rose with effective microbatch size; examined hardware costs.
+## Purpose and reasoning
+
+Test whether larger effective microbatches let GPU expert offload repay its transfer cost. Use the result to assess the practical value of the GPUs for prompt processing.
+
+## Experimental design
+
+I kept the prompt at 8192 tokens and compared offload across microbatches from 512 to 8192. I used the CPU-expert path as a control and retained the separate hardware-cost discussion. The ladder runs while the interpretation develops, so interim explanations are preserved below.
+
+## Results
+
+The completed ladder reached 25.90 tokens/s with offload at microbatch 512 and 104.97 at 8192. The CPU-expert control changed little, from 31.88 to 33.77. Increasing configured sizes in a different, longer-prompt workload did not produce another comparable gain.
+
+## Conclusions
+
+Large-batch offload was useful for the tested pp8192 workload. The finding does not mean that the largest possible setting always wins. It also does not establish a generation gain or make the hardware-cost discussion a controlled benchmark.
+
+## Detailed record
 
 ### 15:29 — Why these GPUs were bought
 

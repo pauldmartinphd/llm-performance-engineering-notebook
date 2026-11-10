@@ -2,6 +2,24 @@
 
 [All lab records](README.md) · [Related investigation: chapter 1](../../investigations/01-establishing-a-baseline.md)
 
+## Purpose and reasoning
+
+Find useful CPU thread counts and test how resident experts, batch size, and context change performance. More threads expose more parallel work, but can also add contention; the best count need not be the same for reading prompts and generating answers.
+
+## Experimental design
+
+I ran the recorded thread sweeps across several MoE models, measuring prefill and generation separately. I compared the Qwen expert-placement configurations, then ran batch/context tests. Most short sweeps use pp512/tg128; the later context sweep uses depth 131072. Builds, quantizations, and memory speed differ across dates and are recorded below.
+
+## Results
+
+The listed thread sweeps had their best generation result at 32 threads, while prefill generally peaked at 96. Higher thread counts often reduced generation sharply. The Qwen Q6 resident-expert run reached 11.67 tokens/s at 32 threads. Several long-context attempts failed; the completed deep-context rows generated near 6.5 tokens/s.
+
+## Conclusions
+
+Choose thread counts by workload, rather than using every logical CPU. The resident-expert run worked, but its build and memory conditions also changed. The deep-context result cannot be used as the machine's short-context limit. Failed and incomplete rows do not establish zero throughput.
+
+## Detailed record
+
 **Experiments:** April 7–17, 2026, where the captures include timestamps. **Added:** October 22, 2026. I recovered these logs from `tests.tar.gz`; they predate the July scheduler patch and the later V620/model integration. [Original files and provenance](../raw-logs/2026-10-22-galactus-archive/README.md) · [Complete benchmark ledger](../data/galactus-archive-benchmarks.md).
 
 I tested how CPU thread count affected large MoE models whose routed experts exceeded GPU memory, then tried keeping some Qwen expert layers on the four V620s. The logs distinguish three variables that a single headline rate would conceal: CPU thread count, expert placement, and the amount of context already in the model. I cannot treat the fastest row from each configuration as a common benchmark.

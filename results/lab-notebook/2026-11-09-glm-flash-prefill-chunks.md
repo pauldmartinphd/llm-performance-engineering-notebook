@@ -2,6 +2,24 @@
 
 [All lab records](README.md) · [Related investigation: chapter 5](../../investigations/05-tuning-long-prompts.md)
 
+## Purpose and reasoning
+
+Test whether larger effective chunks improve GLM-Flash long-prefill throughput, as they had for DeepSeek. More work per chunk can reduce overhead, but also requires more workspace and can change expert staging.
+
+## Experimental design
+
+I first requested 16K/32K chunks with 4096 MB workspace and inspected effective allocation; then increased workspace to 8192 MB. I used the replacement long-prompt runner for an actual 8K-versus-16K comparison: one fresh start per config, warm-up, two repeats at each 8K/32K/64K target, and 128 output tokens. I excluded rows with more than 1% prefix reuse.
+
+## Results
+
+The smaller workspace kept both requested chunk sizes at an effective 8K. The larger workspace enabled a common 16K chunk. In the completed long sweep, 16K chunks were about 21% slower at 32K and 64K targets, with no useful small-prompt gain. The first runner failed before collecting throughput.
+
+## Conclusions
+
+I retained 8K effective chunks and the 4096 MB budget. The observed loss rejects transferring DeepSeek's chunk choice directly, but does not isolate the internal cause. Requested chunk size is not the measured layout, and the long-run printed status does not independently prove exactly zero cache reuse.
+
+## Detailed record
+
 **Experiments: November 9, 2026.**
 
 I tried to transfer the successful DeepSeek large-chunk approach to GLM-Flash, but the effective allocation and long-prompt measurements favored different settings. Asking for 16K or 32K with a 4096 MB workspace still produced 8K chunks. Increasing the workspace to 8192 MB produced a common 16K chunk, but that setting was substantially slower on long prompts.

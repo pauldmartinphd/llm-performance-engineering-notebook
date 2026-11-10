@@ -2,7 +2,23 @@
 
 [All lab records](README.md) · [Related investigation: chapter 2](../../investigations/02-following-the-prefill-bottleneck.md)
 
-**Question:** Why did the second diagnostic attempt crash? **Outcome:** Recorded failed phases, loading issues, and the revised diagnostic launch.
+## Purpose and reasoning
+
+Find why most v2 diagnostic phases crashed and choose a configuration that could complete the next investigation. Pinned-memory allocation, backend behavior, and graph splitting were competing explanations.
+
+## Experimental design
+
+I compared the successful and failed phase logs, buffer types, memory limits, signals, graph counts, and system readbacks. I recorded which flags and build changed. I prepared the next diagnostic run with revised loading/backend choices; the patterns do not isolate a root cause on their own.
+
+## Results
+
+B0 completed, while B1–B4 crashed and B5 was initially incomplete. Failed phases reported pinned-allocation failure and CPU-buffer fallback. The successful capture showed 155 graph splits. Several settings and the build had changed together.
+
+## Conclusions
+
+The logs identified concrete failure conditions and justified a revised diagnostic setup. They did not isolate one cause for every crash or prove a driver leak. Allocation success, a usable benchmark, and an explanation of the failure remained separate steps.
+
+## Detailed record
 
 ### 10:22 — v2 battery output arrives: B0 alone survived
 

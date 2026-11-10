@@ -2,6 +2,24 @@
 
 [All lab records](README.md) · [Related investigation: chapter 6](../../investigations/06-sharing-galactus.md)
 
+## Purpose and reasoning
+
+Test whether DeepSeek can keep useful speed on GPUs 0 and 1, freeing the other pair, and check whether a requested TP4 layout actually activates.
+
+## Experimental design
+
+I ran the v1.1.54 built-in benchmark on two GPUs, then the 32K-chunk/800 MiB-ring sweep at 8K/16K/32K targets with 128 output tokens. I retained effective layout and cache counters. The later requested-TP4 run uses v1.1.57 and still the two-device source config, so requested and observed parallelism must be distinguished.
+
+## Results
+
+The built-in generation mean was 29.0 tokens/s, with 327 at 8K prefill. The retained TP2 long-sweep start contains six zero-cache rows. Both later TP4-request starts observed TP2 and excluded all 12 rows as layout mismatches.
+
+## Conclusions
+
+Two-GPU TP2 was a useful allocation candidate. The TP4-request rows describe fallback, not TP4 performance or a successful four-device experiment. The original long baseline and later runs also differ in release, binary, and corpus.
+
+## Detailed record
+
 **Experiments: November 9, 2026.**
 
 I tested whether DeepSeek could retain useful interactive performance on GPUs 0 and 1, freeing GPUs 2 and 3 for GLM-Flash. The first built-in v1.1.54 report measured **29.0 tokens/s mean decode**, 187 tokens/s at 2K prefill, and 327 at 8K, with 1,048,576 context configured and a 298-second load. Its three 256-token answer rates were 29.1, 24.2 and 33.6. This made the two-GPU split worth pursuing; it did not demonstrate a full-context workload or simultaneous request performance.

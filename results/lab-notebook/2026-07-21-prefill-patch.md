@@ -2,7 +2,23 @@
 
 [All lab records](README.md) · [Related investigation: chapter 2](../../investigations/02-following-the-prefill-bottleneck.md)
 
-**Question:** Does removing the routing-index wait improve prefill? **Outcome:** Distribution alone barely helped; the combined patch reached 119.36 tokens/s, a 13.7% gain.
+## Purpose and reasoning
+
+Measure whether distributing offload and removing the routing-index readback wait improve GLM-5.2 prefill. Source inspection predicted that distribution alone could leave the binding dependency in place.
+
+## Experimental design
+
+I compared the original scheduler, distribution alone, and the combined two-edit patch with the recorded pp8192 configuration. I checked split distribution and throughput separately. I tested later graph/pipeline changes, reverted those that failed or did not help, then repeated prefill and compared generation with the same expert placement.
+
+## Results
+
+Prefill measured 104.97 tokens/s before the change, 105.71 with distribution alone, and 119.36 ± 0.12 with the combined patch. After the later changes were reverted, it measured 119.29 ± 0.19. The matched generation check was 5.51 tokens/s before and after.
+
+## Conclusions
+
+The combined patch established a 13.7% prefill gain on this build. Distribution alone did not explain that gain, and generation did not improve in the matched check. The earlier 6.01 generation comparison used another placement and is not the control. Unsuccessful pipeline experiments did not add a validated improvement.
+
+## Detailed record
 
 This session is the separate thread in which the scheduler patch was built and benchmarked. The transcript (`llamacpp_patch.md`, exported 07:37 ET) has no timestamps; entries below follow sequence order. A second analysis stream, whose output Paul pasted in, appears at several points. Context artifact: "Claude State Export.zip" (saved 7/21 06:53 ET) contains the openwebui system prompt and knowledge files Paul prepared for local-model use — the workload the patched machine was being tuned to serve.
 
@@ -673,4 +689,4 @@ git stash pop && cmake --build build -j64 && cmake --install build
 
 ## Original logs added October 22, 2026
 
-I added the original scheduler traces in October. They show the GPU split counts before and after distribution and a separate pp512 comparison of 28.59 versus 28.50 t/s. [the July diagnostic reconstruction](2026-07-14-diagnostic-reconstruction.md) distinguishes those traces from the pp8192 patch comparison here.
+I added the original scheduler traces in October. They show the GPU split counts before and after distribution and a separate pp512 comparison of 28.59 versus 28.50 t/s. [the July diagnostic reconstruction](2026-07-14-1108-v3-diagnostic-run.md#follow-up-tests-and-hardware-monitoring) distinguishes those traces from the pp8192 patch comparison here.

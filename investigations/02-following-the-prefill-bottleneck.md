@@ -16,7 +16,7 @@ Early tests appeared to show that sending expert operations to the GPU could hur
 
 A **microbatch** is the group of tokens the engine processes together in one part of the calculation. The distinction matters because transferring expert weights has a cost. A larger group can reuse those weights for more work before moving on.
 
-I repeated the comparison with an 8192-token prompt and verified the effective sizes. The [completed ladder](../results/lab-notebook/2026-07-14-diagnostic-reconstruction.md) showed a clear change:
+I repeated the comparison with an 8192-token prompt and verified the effective sizes. The [completed ladder](../results/lab-notebook/2026-07-14-1108-v3-diagnostic-run.md#follow-up-tests-and-hardware-monitoring) showed a clear change:
 
 | Microbatch | Expert operations offloaded to GPU | CPU-expert control |
 |---|---:|---:|
@@ -34,7 +34,7 @@ The scheduler decides which device runs each part of the computation. Its trace 
 
 A split count is a count of scheduled work segments, not a direct measure of time. Equal counts would show a change in placement, but would not prove that the cards were equally busy or that the model ran faster. I therefore measured both placement and throughput.
 
-The [placement tests](../results/lab-notebook/2026-07-14-1813-multi-card-placement.md) and [scheduler traces](../results/lab-notebook/2026-07-14-glm52-scheduler-traces.md) led to a round-robin change. It distributed the eligible work across the GPUs. The measured prefill rate moved from **104.97 to 105.71 tokens/s**—too little to establish a useful gain.
+The [placement tests](../results/lab-notebook/2026-07-14-1813-multi-card-placement.md) and [scheduler traces](../results/lab-notebook/2026-07-14-1813-multi-card-placement.md#scheduler-split-counts) led to a round-robin change. It distributed the eligible work across the GPUs. The measured prefill rate moved from **104.97 to 105.71 tokens/s**—too little to establish a useful gain.
 
 That null result mattered. The uneven distribution was visible, but fixing it alone did not remove the main delay.
 

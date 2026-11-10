@@ -2,6 +2,8 @@
 
 [All lab records](README.md) · [Related investigation: chapter 4](../../investigations/04-from-the-fork-to-maya.md)
 
+**Record type:** External reference captures and loose logs; not a dated local benchmark.
+
 **Source dates: October 5–6 and November 1–2, 2026; live log dates unverified.**
 
 The supplied archive mixes Galactus artifacts with benchmark notes from other machines. I retain all of them, but their hardware and authorship do not justify treating them as my local measurements. The three README captures identify their own hosts and protocols; their dates are source-record dates, not newly inferred Galactus test days.

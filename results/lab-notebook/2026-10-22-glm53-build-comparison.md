@@ -2,6 +2,24 @@
 
 [All lab records](README.md) · [Related investigation: chapter 4](../../investigations/04-from-the-fork-to-maya.md)
 
+## Purpose and reasoning
+
+Compare the integrated AMD fork with upstream on the same named GLM-Flash export, then test CLI placement and draft length. An executable name alone is not enough to establish which build ran.
+
+## Experimental design
+
+I ran dedicated benchmarks with printed revisions, 32 threads, CPU experts, pp8192, tg128/tg256, and two requested repetitions. I separately ran the ZFS CLI prompt with greedy decoding, 8192 context, MTP, and 256 output tokens, varying placement and draft length. I checked the runtime banners.
+
+## Results
+
+Upstream and fork pp8192 measured 284.36 and 284.20 tokens/s; tg256 measured 10.16 and 10.09. Automatic-placement CLI runs reached about 17.8–18.1, but all completed CLI banners printed the same upstream build, including commands named llamda-cli.
+
+## Conclusions
+
+The revision-identified benchmark did not establish a useful fork improvement under these conditions. The CLI names do not support a sound engine comparison. Their placement observations remain useful, but they do not isolate the scheduler patch or MTP contribution.
+
+## Detailed record
+
 **Record:** October 22, 2026, from the supplied filename; individual launches have no printed timestamps. **Machine:** Galactus, four V620s. [Source and checksums](../raw-logs/2026-10-23-maya-glm-and-builds/README.md).
 
 I built llAMDa and llama.cpp for gfx1030 with HIP, GCC 14.2.0, and Zen 3 CPU flags (`-O3 -march=znver3 -mtune=znver3`, `GGML_NATIVE=OFF`). The configuration identifies HIP Clang 22.0.0. The build records name `ca3b1fc30` for llAMDa and `184f65360` for llama.cpp, and both installations used `/usr/local`.

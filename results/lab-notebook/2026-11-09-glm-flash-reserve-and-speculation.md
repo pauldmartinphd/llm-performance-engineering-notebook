@@ -2,6 +2,24 @@
 
 [All lab records](README.md) · [Related investigation: chapter 6](../../investigations/06-sharing-galactus.md)
 
+## Purpose and reasoning
+
+Establish GLM-Flash on the second GPU pair, reclaim reserve memory for experts, and test speculative cancellation. Check that native MTP is active before attributing performance to it.
+
+## Experimental design
+
+I used GPUs 2 and 3, Q4 weights, FP16 streaming KV, a 1M configured ceiling, and the built-in greedy three-answer benchmark with up to 256 tokens per answer. I compared 3072 and 1024 MB reserve, then the cancellation option. I read draft-loading/acceptance logs. Automatic CUDA-lane calibration declines HIP tuning.
+
+## Results
+
+The baseline mean generation was 18.7 tokens/s. The smaller-reserve run measured 21.5, while the cancellation run returned to 18.7. All three measured 234 tokens/s at 8K prefill. The log confirmed block-45 MTP loading and active drafting.
+
+## Conclusions
+
+I retained the smaller reserve and default speculation, and did not carry cancellation forward. One run per setting supports an operating choice more strongly than a precise causal speedup. An active drafter is not an MTP-off comparison, and the declined calibration did not create a tuned HIP profile.
+
+## Detailed record
+
 **Experiments: November 9, 2026.**
 
 I configured GLM-5.3-Flash UD-Q4_K_XL on physical GPUs 2 and 3, leaving GPUs 0 and 1 for DeepSeek. The Flash engine used `build-hip/maya`, 1,048,576 configured context, FP16 KV with streaming on, 32,768 resident KV positions, automatic expert caching and layer splitting, and native MTP. That context setting establishes capacity configuration; the built-in benchmark measured only 2K and 8K prompts.

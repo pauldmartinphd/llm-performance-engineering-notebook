@@ -4,7 +4,7 @@
 
 I want to run the largest language models my local machines can support, and understand what makes them fast enough to use. That means testing the whole system: memory capacity and bandwidth, CPU work, GPU placement, transfers, computation kernels, caching, speculative decoding, storage, power, and the software that serves requests.
 
-This is a lab notebook of that work. It keeps the experiments and results, including failed attempts. The investigation chapters explain why I ran the tests and how the results changed my decisions.
+This is a lab notebook of that work. It keeps the experiments and results, including failed attempts. Each experimental entry states its purpose and reasoning, design, results, and conclusions. The investigation chapters explain how the tests connect and how the results changed my decisions.
 
 ## Read the notebook
 

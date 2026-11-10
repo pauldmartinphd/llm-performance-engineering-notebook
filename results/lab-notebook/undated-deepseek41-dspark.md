@@ -2,6 +2,24 @@
 
 [All lab records](README.md) · [Related investigation: chapter 3](../../investigations/03-making-speculation-useful.md)
 
+## Purpose and reasoning
+
+Establish target-only DeepSeek-V4.1 inference and then test whether its DSpark drafter can load and improve generation.
+
+## Experimental design
+
+I ran the recorded Q4_K_M target with the ZFS prompt, 32 threads, 8192 context, greedy decoding, flash attention, and a 256-token limit. I attempted the matching draft load. I kept the later four-way placement/speculation commands separate because their outputs were not captured.
+
+## Results
+
+Target-only generation completed at 11.2 tokens/s. The DSpark attempt failed while allocating 2464.20 MiB on ROCm0 during draft loading. The captured answer ended at the token limit and was not scored for correctness.
+
+## Conclusions
+
+The target ran, but this record contains no successful V4.1 DSpark timing. A draft-loading failure cannot establish the drafter's generation performance. Successful tests of the older V4 model do not fill that gap.
+
+## Detailed record
+
 **Recorded:** October 21, 2026, from an undated historical capture. [Raw record](../raw-logs/2026-10-21-flash-experiments/DeepSeekV4Flash%20Experiments.txt).
 
 **Build clarification, October 22, 2026:** I ran the V620 tests with the V620 patches, the older DeepSeek implementation, GLM-5.3 MTP support, and my round-robin prefill patch merged together. These results describe that combined build, before I replaced the DeepSeek implementation with Unsloth's newer port. The executable reports `b0-unknown`, so the log does not identify the exact commit.

@@ -2,6 +2,24 @@
 
 [All lab records](README.md) · [Related investigation: chapter 6](../../investigations/06-sharing-galactus.md)
 
+## Purpose and reasoning
+
+Measure the performance cost of giving DeepSeek and GLM-Flash fewer GPUs and smaller requested expert-cache budgets. The aim was to choose a useful allocation for keeping more than one service available.
+
+## Experimental design
+
+I generated four-GPU and single-GPU configs with full, reduced, and requested zero-cache variants. I ran built-in 2K/8K benchmarks, then three repeats of the saved 32K/64K requests, each generating 128 tokens. Reduced allocation increases reserve rather than enforcing half a cache. I excluded cached repeats from fresh-prefill comparisons; I skipped the unsupported four-GPU GLM zero-cache case.
+
+## Results
+
+Nine variants completed, producing nine short reports and 54 long observations: 18 uncached and 36 cached. Full-allocation 64K-target prefill fell from 483.4 to 316.2 tokens/s for DeepSeek and 351.2 to 169.6 for GLM when moving from four GPUs to one. The next GLM reduced single-GPU case failed loading and stopped the run.
+
+## Conclusions
+
+One GPU per model gave up substantial useful performance, making two GPUs each worth testing next. Similar prefill across some cache-budget labels did not prove cache-size independence. Repeats processing only one new token are not full-prefill repetitions, and the unfinished variants supply no performance result.
+
+## Detailed record
+
 **Experiments: November 2, 2026.**
 
 I ran DeepSeek-V4.1-Flash-1017 UD-Q8_K_XL and GLM-5.3-Flash UD-Q4_K_XL through the same orchestration, first with four GPUs and then one, while varying expert-cache controls. The retained CSV contains **54 measurements: 18 uncached rows and 36 cached repetitions**. GLM's single-GPU reduced-budget case failed during loading and ended the run. The single-GPU zero-cache case was therefore never reached.

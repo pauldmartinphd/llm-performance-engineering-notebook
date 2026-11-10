@@ -43,6 +43,14 @@ A repeated long request may reuse nearly its whole prompt. The engine then proce
 
 Some historical runners excluded any cached row; others allowed a small amount of reuse. Each entry states its rule. A printed `ok` status means the runner's checks passed, not that an independent audit proved zero reuse or numerical accuracy.
 
+## Make the experimental account explicit
+
+Each experiment entry states its purpose and reasoning, experimental design, results, and conclusions before the detailed record. This is the scientific method expressed as an account of the work, rather than a set of literal questions.
+
+The purpose explains the tested mechanism where it is documented. The design identifies what changed and what serves as the control. The results report observations without turning them into explanations. The conclusions then connect those observations to the original purpose and state the remaining uncertainty.
+
+Exploratory sweeps and baseline measurements need not have a directional prediction. If the source does not preserve one, I do not create one retrospectively. Several measurements can answer one experimental purpose, while a failed startup may leave that purpose unresolved.
+
 ## What belongs with a result
 
 A useful record identifies the model/export, machine, engine revision, effective configuration, workload, cache state, repetitions, metric, and source. Where the source lacks one of these, I state the resulting limit on the comparison rather than fill the gap from a filename or a later configuration.

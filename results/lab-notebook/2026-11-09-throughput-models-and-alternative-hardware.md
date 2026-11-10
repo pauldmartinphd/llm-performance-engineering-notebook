@@ -2,6 +2,8 @@
 
 [All lab records](README.md) · [Related investigation: chapter 6](../../investigations/06-sharing-galactus.md)
 
+**Record type:** Estimates and deployment alternatives; no local Qwen benchmark.
+
 **Discussion: November 9, 2026; no Galactus Qwen experiment in this entry.**
 
 I began with a bandwidth estimate for Qwen3.6-35B-A3B, then considered full GLM-5.3 and Qwen3.8-Flash-Next as possible uses of the available hardware. The practical question was whether four GPUs should serve one large model or several services. The subsequent DeepSeek and GLM tests answered parts of that question; the calculations and external reports remained candidate-selection material.

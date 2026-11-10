@@ -2,6 +2,24 @@
 
 [All lab records](README.md) · [Related investigation: chapter 6](../../investigations/06-sharing-galactus.md)
 
+## Purpose and reasoning
+
+Test the full GLM-5.3 Q4 model on Galactus and determine whether correcting the layer split makes it practical for the intended interactive use.
+
+## Experimental design
+
+I attempted the recorded pack load, inspected physical/process memory and GPU allocation, then used all four V620s with 128K configured context. I diagnosed automatic placement, moved manual boundaries to legal full-indexer layers, and ran the three-answer benchmark with separate 2K/8K prefill. MTP is checked in the log.
+
+## Results
+
+The first config failed loading. The automatic split loaded but generated only 3.6–4.3 tokens/s and stalled before completing prefill. The first manual boundaries were illegal. The corrected 18/38/58 split completed at 6.7 tokens/s mean generation, with 60 at 2K prefill and 47 at 8K.
+
+## Conclusions
+
+The corrected split made the benchmark complete, but the measured setup was too slow for the intended use. I stopped the remaining full-model matrix and returned to Flash. The generic initial memory error and later watchdog do not independently establish every underlying failure mechanism.
+
+## Detailed record
+
 **Experiments: November 9, 2026.**
 
 I tested the full GLM-5.3 UD-Q4_K_XL already stored as eleven GGUF shards, separately from GLM-5.3-Flash. The first configuration failed to load; automatic four-card placement then loaded but generated only 3.6–4.3 tokens/s and stalled before completing prefill. A legal manual split completed at **6.7 tokens/s mean decode**, with **60 tokens/s at 2K prefill and 47 at 8K**. I stopped the full-model investigation and returned to Flash for the two-model service.

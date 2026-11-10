@@ -2,13 +2,22 @@
 
 The [chronological index](README.md) is the complete route through the records. The [investigation chapters](../../investigations/README.md) explain how the tests connect. The [project overview](../../README.md) describes the purpose and present setup.
 
-## What a record contains
+## What an experiment entry contains
 
-Each entry concerns an experiment, a related set of tests, a failure investigation, a plan, or supporting evidence. The index labels those types. A plan can explain why I chose the next experiment, but it does not add a measurement.
+Each experimental account makes four parts explicit:
 
-The entry should make the question and outcome clear before the detailed commands and tables. Its chapter link gives the wider context. The detailed body preserves the settings, observations, reasoning, and decisions recorded at the time.
+1. **Purpose and reasoning:** what I was trying to establish, why it mattered, and the mechanism that made the test worth doing.
+2. **Experimental design:** the configuration, variable changed, comparator, workload, measurements, and repetitions. Missing controls are stated here or with their consequence.
+3. **Results:** what completed, what failed, and what was measured. A requested setting that did not activate is recorded as such.
+4. **Conclusions:** what the result supports, what it does not settle, and what decision followed.
 
-Older July entries follow the original session sequence. Their time headings preserve overlapping work: an automated diagnostic run could continue while I discussed its partial output. Session numbers refer to those historical conversations, not to a new numbering system for the whole notebook.
+These are statements about the work, not a questionnaire. I do not invent an expectation after seeing the result. Where the source records an expectation, the account can state it; where the work was an exploratory sweep or a descriptive benchmark, it is described that way.
+
+The full commands, tables, observations, and sources follow in the detailed record. A sweep can contain several related comparisons. Its account identifies those comparisons and keeps their outcomes separate; a repetition is a sample within the test, not automatically another experiment.
+
+Plans, source reviews, and deployment reports are identified by their actual type. They do not acquire invented methods or results just to look like experiments. A later source file is merged into the experiment it documents. Old filenames may remain as redirects, but they are not additional entries in the chronological index.
+
+Older July records preserve the original session sequence in their detailed bodies. An automated run could continue while I discussed partial output. The concise experimental account explains the whole test; the session sequence shows how the reasoning developed.
 
 ## Dates and later corrections
 

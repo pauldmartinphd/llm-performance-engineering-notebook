@@ -2,6 +2,24 @@
 
 [All lab records](README.md) · [Related investigation: chapter 1](../../investigations/01-establishing-a-baseline.md)
 
+## Purpose and reasoning
+
+Establish a working large-model host, then test whether memory population and expert placement limit its speed. Keeping some experts in VRAM could reduce CPU-side work, while matched DIMMs could improve sustained memory access.
+
+## Experimental design
+
+I built the ROCm/gfx1030 runtime in the recorded Proxmox LXC setup. I compared Qwen configurations with CPU experts and GPU-resident expert layers, then compared mixed and matched DIMMs. The source also records Kimi trials and unsuccessful runtime options. Repetition counts and full cache conditions were not retained.
+
+## Results
+
+The March note reports Qwen Q6 generation at 4.4 tokens/s with CPU experts and 5.5 with 16 expert layers on GPUs. The recorded Q4 configuration rose from 8.5 to 12.4–12.7 tokens/s after the DIMM change. Some larger placements and software paths failed.
+
+## Conclusions
+
+The machine could host these models, and the memory change supported a material memory-system limit. The Q6-to-Q4 comparison also changed placement, so it does not isolate quantization. The exact controller-level cause of the mixed-DIMM slowdown remains unmeasured.
+
+## Detailed record
+
 **Source period:** March 2026. **Added to this repository:** September 30, 2026.
 
 This entry recovers the early Galactus configuration from my [build notebook](../reference-notes/2026-03-23-galactus-build.md). The retained source is the September 30 edited version of that dated note, rather than a pristine March export or a raw benchmark capture. Its commands and trial tables are useful reproducibility material, but its displayed rates have no repetition counts or statistical spreads. I therefore keep them separate from the later [August common baseline](2026-08-15-to-16-common-baseline-2tb.md).

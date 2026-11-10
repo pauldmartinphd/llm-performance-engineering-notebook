@@ -2,7 +2,8 @@
 
 [All lab records](README.md) · [Related investigation: chapter 2](../../investigations/02-following-the-prefill-bottleneck.md)
 
-**Question:** Which parts of GLM should run on the CPU and GPUs? **Outcome:** Defined the offload question and initial estimates; external claims stay separate.
+**Record type:** Background and experimental plan; no local tests in this entry.
+
 
 *Conversation "Applying concepts to Galactus with GLM5.2", opened 7/13/2026 22:43. This session covers background, architecture, sizing, and the initial plan. I had not run any commands on Galactus yet. The figures come from the pasted source material or from estimates, labeled below.*
 

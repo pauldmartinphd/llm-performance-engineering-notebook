@@ -2,6 +2,8 @@
 
 [All lab records](README.md) · [Related investigation: chapter 6](../../investigations/06-sharing-galactus.md)
 
+**Record type:** Release and capacity planning; no new benchmark.
+
 **Discussion: November 2–8, 2026; no new benchmark in this entry.**
 
 The matrix changed the deployment question from maximizing one model's rate to deciding how much capacity each service should retain. I considered putting DeepSeek on a separate eight-channel DDR4 server with 512 GB RAM, one V620 and an R9700, while leaving GLM on Galactus. I also considered Qwen and speech, OCR, translation and TTS services. These were deployment proposals; the supplied material contains no matched R9700 run or simultaneous multi-service benchmark.

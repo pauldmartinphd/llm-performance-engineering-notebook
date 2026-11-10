@@ -2,6 +2,24 @@
 
 [All lab records](README.md) · [Related investigation: chapter 5](../../investigations/05-tuning-long-prompts.md)
 
+## Purpose and reasoning
+
+Confirm that the selected DeepSeek production settings complete a fresh long request at the expected prefill rate. This is a production check rather than a new sweep.
+
+## Experimental design
+
+I replayed the saved r1-65536 chat request against the recorded four-V620 v1.1.36 production service. I read actual prompt count, cache hits, prefill, and generation timing. I retained TP2, 32K chunks, the 800 MiB ring, and the historical priority-off workaround.
+
+## Results
+
+The response reports 65,568 prompt tokens, zero cache hits, 488.6 tokens/s prefill, and 24.4 tokens/s generation. The captured record does not supply every repetition or output-count detail needed for a matched release comparison.
+
+## Conclusions
+
+The long request completed near the selected approximately 480 tokens/s range. One sample does not establish a release speedup or indefinite service stability. The priority setting belongs to this historical configuration, not every later run.
+
+## Detailed record
+
 **Recorded:** October 29, 2026 (America/New_York). **Machine:** Galactus. **Source:** my pasted benchmark output in [Analyze GPU temperatures](https://chatgpt.com/c/6ae2e072-8b64-83ea-b98f-89d8e13af59f), followed by my explicit confirmation of the working production configuration when continuing that discussion. This entry records an existing run; no benchmark was repeated and no server configuration was changed to prepare it.
 
 The production configuration completed a **65,568-token prefill at 488.6 tokens/s with zero cache hits**, followed by decode at **24.4 tokens/s**. This extends the earlier successful short-prompt benchmark with stream priority disabled to the retained 64K request. I am carrying this configuration forward as the working baseline, without reopening the completed tuning sweeps or assuming that resuming the investigation requires reconfiguration.

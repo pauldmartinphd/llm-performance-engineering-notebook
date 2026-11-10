@@ -24,12 +24,12 @@ I replaced entry-number filenames with experiment dates and descriptive titles. 
 | `16-deepseek41-dspark.md` | [undated-deepseek41-dspark.md](undated-deepseek41-dspark.md) |
 | `17-bandwidth-and-placement.md` | [2026-10-21-bandwidth-and-placement.md](2026-10-21-bandwidth-and-placement.md) |
 | `18-galactus-april-thread-and-batch-tests.md` | [2026-04-07-to-17-thread-and-batch-tests.md](2026-04-07-to-17-thread-and-batch-tests.md) |
-| `19-galactus-july-diagnostics.md` | [2026-07-14-diagnostic-reconstruction.md](2026-07-14-diagnostic-reconstruction.md) |
-| `20-galactus-speculation-and-rebench-records.md` | [2026-08-16-speculation-and-rebench-records.md](2026-08-16-speculation-and-rebench-records.md) |
+| `19-galactus-july-diagnostics.md` | [2026-07-14-diagnostic-reconstruction.md](2026-07-14-1108-v3-diagnostic-run.md#follow-up-tests-and-hardware-monitoring) |
+| `20-galactus-speculation-and-rebench-records.md` | [2026-08-16-speculation-and-rebench-records.md](2026-08-15-to-16-common-baseline-2tb.md#individual-runs-and-benchmark-file-checks) |
 
 ## Dates recovered October 23
 
 | Previous filename | Dated record |
 |---|---|
-| `undated-glm52-scheduler-traces.md` | [2026-07-14-glm52-scheduler-traces.md](2026-07-14-glm52-scheduler-traces.md) |
+| `undated-glm52-scheduler-traces.md` | [2026-07-14-glm52-scheduler-traces.md](2026-07-14-1813-multi-card-placement.md#scheduler-split-counts) |
 | `undated-deepseek-v4-dspark-acceptance.md` | [2026-08-07-deepseek-v4-dspark-acceptance.md](2026-08-07-deepseek-v4-dspark-acceptance.md) |

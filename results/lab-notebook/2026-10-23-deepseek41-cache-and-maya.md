@@ -2,6 +2,24 @@
 
 [All lab records](README.md) · [Related investigation: chapter 4](../../investigations/04-from-the-fork-to-maya.md)
 
+## Purpose and reasoning
+
+Compare DeepSeek cache behavior and establish a useful Maya configuration, including whether DSpark improves sustained generation. Check RAM residency so loading behavior is not mistaken for steady-state inference.
+
+## Experimental design
+
+I retained the available llAMDa cache benchmark and distinguished it from summary-only sweep rows. I ran Maya's benchmark and DSpark calibration, comparing target-only and draft modes after warm-up. I inspected LXC limits and residency output. The two engines use different workloads and several memory settings changed together.
+
+## Results
+
+The complete 32 GiB cache capture measured 132.66 ± 0.30 pp8192 and 9.51 ± 0.07 tg1024 tokens/s. Maya's undrafted benchmark reported 282 tokens/s at 8K prefill. Its calibration increased sustained generation from 21.2 to 29.3 tokens/s with 69% draft acceptance.
+
+## Conclusions
+
+DSpark gave a useful within-calibration gain in Maya. The broader cache sweep remains weaker evidence because most rows lack their original commands/output. Residency observations support that run, but cannot establish the independent effect of every changed setting or a matched engine speedup.
+
+## Detailed record
+
 **Recorded:** October 23, 2026. Maya prints a benchmark date of October 23 at 14:55; the llAMDa cache runs lack individual timestamps. **Machine:** Galactus, Proxmox LXC, EPYC 7713, 2 TiB RAM, four Radeon Pro V620 GPUs. **Source:** [retained benchmark and configuration evidence](../raw-logs/2026-10-23-maya-comparison/README.md). The device output reports 30,704 MiB per GPU, 122,816 MiB in total, gfx1030, wave size 32, and no VMM.
 
 I am comparing llAMDa.cpp with Project Maya v1.1.24 to understand how much performance depends on the inference engine and its placement decisions. The latest DeepSeek result preserves a command and printed output for one cache setting, although the executable’s source revision remains unknown. The supplied conversations preserve a broader cache sweep, a Maya benchmark, and a successful DSpark calibration. Only the 32 GiB cache row has its full llAMDa command and output; Maya has its own benchmark and calibration output. Their workloads differ, so I keep the engine results separate.

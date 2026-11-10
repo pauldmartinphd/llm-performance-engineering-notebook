@@ -2,6 +2,24 @@
 
 [All lab records](README.md) · [Related investigation: chapter 5](../../investigations/05-tuning-long-prompts.md)
 
+## Purpose and reasoning
+
+Restore a working Maya service, tune DeepSeek long-prefill throughput, and investigate the later-release stall. Larger chunks and transfer buffers might reduce overhead, but effective layout and workspace must be checked.
+
+## Experimental design
+
+On v1.1.30, I compared three chunk sizes and three ring sizes, with an opening/closing baseline and two requests at each 8K/32K/64K target: ten starts and 60 measurements. I then tested TP/workspace combinations, retaining only verified layouts. I investigated stream priority separately; the second sweep was intentionally stopped early.
+
+## Results
+
+The selected 32K chunk and 800 MiB ring reached about 438.8 tokens/s at 32K and 480.0 at 64K, versus 406.1 and 434.0 initially. The partial second sweep retained 54 valid rows and excluded 36 TP4-to-TP2 fallback rows. Workspace changes gave no clear improvement. A v1.1.36 priority-off benchmark completed after the reported priority-on deadlock.
+
+## Conclusions
+
+The chunk/ring combination gave a useful long-prefill gain. The results did not establish real TP4 performance or justify replacing automatic workspaces. Stream priority identified a reported trigger and recorded workaround, not the exact deadlock mechanism. That workaround was no longer in use by October 30.
+
+## Detailed record
+
 **Experiments:** October 28, 2026; written October 29. **Machine:** Galactus, EPYC 7713, 2 TiB RAM (Maya reports 2004 GB), four Radeon PRO V620 GPUs, HIP/ROCm 7.2.0. **Model:** DeepSeek-V4.1-Flash-1017 UD-Q8_K_XL. **Evidence:** commands, engine excerpts, dashboard screenshots, and sweep output supplied in the conversation. The [October 29 archive](../raw-logs/2026-10-29-maya-collection/README.md) now retains the original CSVs, configs, metadata, and logs. The first-sweep table was initially transcribed from the conversation and has now been checked against the collected summary. Exact unrounded medians remain in that CSV.
 
 ## Restoring a usable installation

@@ -2,6 +2,8 @@
 
 [All lab records](README.md) · [Related investigation: chapter 4](../../investigations/04-from-the-fork-to-maya.md)
 
+**Record type:** Decision and source review; no new benchmark.
+
 **Recorded:** October 28, 2026 (America/New_York). **Status checked:** approximately 23:09 EDT, October 28 / 03:09 UTC, October 29. **Machine:** Galactus, EPYC 7713, 2 TiB RAM, four Radeon Pro V620 GPUs, Proxmox LXC. This is a synthesis and engineering decision, not a new benchmark run.
 
 I am prioritizing Project Maya for Galactus. The October measurements make it the most promising working platform for my large models, and its existing Qwen3.8 and MiniMax M3.1 execution paths substantially reduce the model-coverage argument for continuing to invest primarily in llAMDa/llama.cpp. I will retain llama.cpp as a compatibility backend and a place to evaluate upstream improvements, but I do not have evidence that the pending patches will collectively reproduce Maya's performance on this machine.

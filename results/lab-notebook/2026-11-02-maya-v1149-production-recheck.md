@@ -2,6 +2,24 @@
 
 [All lab records](README.md) · [Related investigation: chapter 5](../../investigations/05-tuning-long-prompts.md)
 
+## Purpose and reasoning
+
+Check whether the updated DeepSeek installation retains its long-prefill performance, and put the observation of alternating GPU pairs in context.
+
+## Experimental design
+
+I replayed the original saved 32K/64K request payloads against the production endpoint. I read engine timing and cache counters, keeping 128 output tokens per request. The client reads connection details from the config but does not independently prove the running engine's full settings.
+
+## Results
+
+The 32,800-token request measured 461.1 prefill and 24.7 generation tokens/s. The 65,568-token request measured 480.9 and 30.9. Both reported zero cached tokens.
+
+## Conclusions
+
+The production replay retained the established long-prefill range. Alternating activity between GPU groups did not by itself establish a new scheduler defect. One pass per length does not isolate the release's performance effect.
+
+## Detailed record
+
 **Experiments: November 2, 2026.**
 
 I updated the detached Maya checkout to v1.1.49 and replayed the original long requests against DeepSeek on Galactus. Both requests completed with zero cached tokens. The 64K result remained near the approximately 480 tokens/s range established in the October tuning, so the observation that only one pair of V620s appeared active at a time did not identify a new regression.

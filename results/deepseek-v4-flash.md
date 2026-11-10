@@ -72,4 +72,4 @@ V4-Flash speculates better than GLM-5.2 MTP (+45% at n=3 against +31% at n=2), b
 
 ## Original captures added October 22, 2026
 
-I added the original V4-Flash-0731 DSpark server logs with acceptance counts and the August CLI transcripts. [the speculation and rebenchmark records](lab-notebook/2026-08-16-speculation-and-rebench-records.md) records the n-max settings and final rates, including a second n-max 5 result at 12.22 t/s. These are not V4.1 tests.
+I added the original V4-Flash-0731 DSpark server logs with acceptance counts and the August CLI transcripts. [the speculation and rebenchmark records](lab-notebook/2026-08-15-to-16-common-baseline-2tb.md#individual-runs-and-benchmark-file-checks) records the n-max settings and final rates, including a second n-max 5 result at 12.22 t/s. These are not V4.1 tests.

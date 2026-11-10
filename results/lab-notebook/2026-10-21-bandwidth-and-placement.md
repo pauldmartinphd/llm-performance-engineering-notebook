@@ -2,6 +2,8 @@
 
 [All lab records](README.md) · [Related investigation: chapter 1](../../investigations/01-establishing-a-baseline.md)
 
+**Record type:** Analysis of existing measurements; no new benchmark.
+
 **Recorded:** October 21, 2026. I compared the [July scheduler experiment](2026-07-21-prefill-patch.md), [2 TB STREAM record](2026-08-15-stream-rebaseline-2tb.md), and historical [GLM](undated-glm53-flash-placement.md) and [DeepSeek](undated-deepseek41-dspark.md) captures to understand why decode throughput remained below my bandwidth-based estimate.
 
 My initial expectation was that a machine sustaining roughly 150 GB/s in STREAM should generate tokens at a rate close to that bandwidth divided by the active expert weights. That ratio is a useful bound for an assumed memory-traffic model. It is not a measured inference rate. STREAM exercises long, regular memory operations; quantized MoE inference must select experts, read and decode their weights, perform arithmetic, and complete the rest of the model before the next dependent token can finish.

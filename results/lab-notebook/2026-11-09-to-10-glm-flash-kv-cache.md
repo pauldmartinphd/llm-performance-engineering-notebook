@@ -2,6 +2,24 @@
 
 [All lab records](README.md) · [Related investigation: chapter 6](../../investigations/06-sharing-galactus.md)
 
+## Purpose and reasoning
+
+Compare FP16 and INT8 attention KV caches for GLM-Flash after selecting 8K effective chunks. The cache change can free memory and affect runtime, while also changing the stored attention state's precision.
+
+## Experimental design
+
+I kept Q4 weights, GPUs 2 and 3, native MTP, 1024 MB reserve, streaming KV with 32K resident positions, and the 4096 MB workspace. I ran FP16 then INT8 with two repeats at 8K/32K/64K targets. The runner excludes more than 1% prefix reuse. The retained result is the twelve-row terminal output; the named result directory is absent.
+
+## Results
+
+INT8 average generation was about 12.1%, 12.8%, and 11.2% higher at the three targets. Prefill changed by about +3.4%, −1.4%, and −0.9%. The longer INT8 prompts processed near 292 tokens/s. Individual generation samples varied substantially.
+
+## Conclusions
+
+The timings supported choosing INT8 with an FP16 fallback. Two samples and fixed run order do not establish a stable universal gain, and no local quality-equivalence evaluation was supplied. The largest measured target was 64K, not the configured 1M ceiling; weight quantization stayed Q4.
+
+## Detailed record
+
 **Run directory dated November 9; results supplied November 10, 2026.**
 
 I compared GLM-5.3-Flash with FP16 and INT8 attention KV caches after selecting 8K effective prefill chunks. Both configurations kept the same Q4 model weights, two GPUs, 1M configured context, streaming KV with 32K resident positions, 1024 MB reserve, native MTP and 4096 MB prefill budget. This changes cached attention state, not the GGUF weight quantization.

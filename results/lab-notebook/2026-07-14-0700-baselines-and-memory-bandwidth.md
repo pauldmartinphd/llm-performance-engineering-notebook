@@ -2,7 +2,23 @@
 
 [All lab records](README.md) · [Related investigation: chapter 1](../../investigations/01-establishing-a-baseline.md)
 
-**Question:** Is the memory system limiting generation? **Outcome:** Established a July baseline and measured memory bandwidth near 152 GB/s.
+## Purpose and reasoning
+
+Establish a GLM-5.2 baseline and compare it with the memory system's sustained bandwidth. This separates a hardware traffic limit from extra time spent in routing, arithmetic, transfers, and synchronization.
+
+## Experimental design
+
+I ran the recorded five-repetition llama-bench baseline in the container, with CPU-resident experts, pp512/tg128, and the stated build. I inspected placement and topology, then measured STREAM on the host and compared host/container behavior. I checked the effective workload rather than relying only on requested batch flags.
+
+## Results
+
+The initial benchmark measured 37.63 ± 3.69 prefill and 5.15 ± 0.40 generation tokens/s. Corrected STREAM measurements established a July reference near 152 GB/s. The requested 4096 microbatch did not make the 512-token prompt a large-batch test.
+
+## Conclusions
+
+The measured memory reference was useful, but bandwidth divided by estimated weight traffic did not account for all token time. The short prompt also left the intended large-batch offload regime untested. Later tests needed to check both execution costs and effective batch size.
+
+## Detailed record
 
 *Executed 07:00–08:46. Work begins at the `root@openwebui` container prompt (where llama.cpp and the model live) and moves to the bare-metal host `root@galactus` at 08:04. llama.cpp build f84a51940 (9942), backends ROCm,ZenDNN; model at `/models/GLM-5.2/UD-Q4_K_XL/GLM-5.2-UD-Q4_K_XL-00001-of-00011.gguf` (11 shards).*
 

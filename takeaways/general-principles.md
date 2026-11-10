@@ -16,7 +16,7 @@ In the July GLM-5.2 ladder, GPU operation offload processed an 8192-token prompt
 
 Larger batches let the engine reuse transferred weights for more work. The important finding was not simply “use the largest batch.” It was that the original tests had exercised a smaller effective batch than intended. Correcting that measurement changed which optimization was worth pursuing.
 
-[Complete ladder](../results/lab-notebook/2026-07-14-diagnostic-reconstruction.md) · [Scheduler investigation](../investigations/02-following-the-prefill-bottleneck.md)
+[Complete ladder](../results/lab-notebook/2026-07-14-1108-v3-diagnostic-run.md#follow-up-tests-and-hardware-monitoring) · [Scheduler investigation](../investigations/02-following-the-prefill-bottleneck.md)
 
 ## 3. Removing a wait helped where distribution alone did not
 

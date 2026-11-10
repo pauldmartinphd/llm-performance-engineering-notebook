@@ -30,7 +30,7 @@ Later production requests confirmed roughly the same long-prefill range. A fresh
 
 The [November 5 ten-variant sweep](../results/lab-notebook/2026-11-05-maya-v1154-prefill-and-peer-ar.md) tested automatic chunks, flow options, expert MMQ, and peer all-reduce. Defaults reached about 479.4 tokens/s at 64K. Automatic chunk selection was slower. Neither requested peer path activated in the completed runs; both used host transport.
 
-A separate larger-reserve peer test failed during startup. It completed no transport samples and produced no throughput result. That is different from a successful host fallback. The [recovered evidence](../results/lab-notebook/2026-11-05-maya-v1154-recovered-decode.md) now includes all 60 prefill measurements, 20 decode cases, configs, and logs.
+A separate larger-reserve peer test failed during startup. It completed no transport samples and produced no throughput result. That is different from a successful host fallback. The [complete sweep](../results/lab-notebook/2026-11-05-maya-v1154-prefill-and-peer-ar.md#decode-results-from-the-same-sweep) includes all 60 prefill measurements, 20 decode cases, configs, and logs.
 
 ## GLM-Flash needed a different chunk size
 

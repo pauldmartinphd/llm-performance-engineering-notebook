@@ -2,6 +2,24 @@
 
 [All lab records](README.md) · [Related investigation: chapter 4](../../investigations/04-from-the-fork-to-maya.md)
 
+## Purpose and reasoning
+
+Document GLM-Flash performance with an 80 GiB requested expert cache and determine what evidence would establish whether that cache helps.
+
+## Experimental design
+
+I used the retained llamda-bench output for build 754aa4151: forced CPU expert placement, 32 threads, flash attention, batch/microbatch 8192, pp8192/tg256, two repetitions, and requested cache 81920 MiB. I kept that completed benchmark separate from proposed diagnostics and the untested larger-cache patch.
+
+## Results
+
+The benchmark reports 279.51 ± 15.37 prefill and 8.63 ± 2.84 generation tokens/s. There is no matched cache-disabled control or captured cache-hit breakdown. The later access attempt did not produce another benchmark or validated patch.
+
+## Conclusions
+
+The configuration has a measured rate, but this record does not establish a cache benefit or a cause for its variable generation timing. Different earlier builds are not a substitute for the missing control. The proposed patch remains untested.
+
+## Detailed record
+
 **Added:** October 29, 2026. **Run dates:** not printed in the supplied benchmark captures. **Hardware:** four AMD Radeon Pro V620 GPUs, consistent with the Galactus configuration. **Source:** [Original benchmark captures](../raw-logs/2026-10-29-glm53-expert-cache/benchmark-captures.md), followed by the October 29 continuation in Work mode. The original conversation is `6adace95-5744-83e9-8348-9e84b6b03966`.
 
 ## Recorded measurement

@@ -2,6 +2,8 @@
 
 [All lab records](README.md) · [Related investigation: chapter 6](../../investigations/06-sharing-galactus.md)
 
+**Record type:** Research proposals; no experiments completed here.
+
 **Recorded:** October 29, 2026 (America/New_York). **Status:** research ideas and proposed experiments; no experiments run. **Source:** [Merging Sparse Attention Architectures](https://chatgpt.com/c/6add5a03-c34c-83ea-b385-07288fc12cd3) and the October 29 notebook continuation.
 
 These notes preserve four research questions from the architectural discussion, separately from the memo, *Toward a More Efficient Trillion-Parameter Language Model: Predicting the Architecture of the Next Wave of Large Open Models*. They describe experiments that could test the ideas, rather than predictions about a particular future model.

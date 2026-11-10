@@ -2,6 +2,24 @@
 
 [All lab records](README.md) · [Related investigation: chapter 7](../../investigations/07-other-local-machines.md)
 
+## Purpose and reasoning
+
+Test Qwen3.8-27B on the M2 Max and examine ANE prefill, MTP, DFlash, and the difference from an external leaderboard. Requested acceleration needs to be checked against the work the runtime actually performs.
+
+## Experimental design
+
+I used the recorded oMLX context sweeps and settings on the 14-inch, 64 GB M2 Max. I compared initial MTP, tuned ANE, and the attempted DFlash combination. I inspected operation counts and thermal observations. Some source exports and exact recipes are missing, and thermal state was not matched across every run.
+
+## Results
+
+The initial 4K result was 156.1 prefill and 16.4 generation tokens/s. Tuned ANE measured 170.1 prefill at 4K and 165.6 at 16K, with slower generation in those trials. The DFlash trial was slower and recorded no ANE MLP/GDN work. A later screenshot retains additional measured rows.
+
+## Conclusions
+
+The ANE trials showed faster prefill in the recorded comparison, but not the full gain predicted by the tuner. The failed intended ANE-plus-DFlash combination does not measure a correctly running combination. Chassis and thermal effects remain possible explanations for the leaderboard gap, not demonstrated causes.
+
+## Detailed record
+
 **Date:** September 30, 2026 (record compiled; exact timestamps for the earlier baseline are unavailable). **Machine:** Magneto, 14-inch M2 Max MacBook Pro, 38 GPU cores, 64 GB.
 **Object:** Record local oMLX results and determine what can explain their difference from a high M2 Max leaderboard submission.
 

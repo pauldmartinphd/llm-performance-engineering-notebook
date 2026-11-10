@@ -2,6 +2,8 @@
 
 [All lab records](README.md) · [Related investigation: chapter 6](../../investigations/06-sharing-galactus.md)
 
+**Record type:** Reported deployment state; measurements are linked to their experiments.
+
 **Deployment status reported November 10, 2026.**
 
 The testing led me to host **GLM-5.3-Flash UD-Q4_K_XL with INT8 KV on GPUs 2 and 3**, alongside **DeepSeek-V4.1-Flash-1017 UD-Q8_K_XL on GPUs 0 and 1**, using separate Project Maya services on Galactus. This operating state is confirmed by my November 10 notebook-update request. The supplied files establish each pair's configuration and individual performance; they do not contain a synchronized two-process readback or an overlapping-request benchmark.

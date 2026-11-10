@@ -83,4 +83,4 @@ At the July compilation, the loader flagged blk.78 as TENSOR_SKIP, so `--spec-ty
 
 ## Original captures added October 22, 2026
 
-I added the original July diagnostic and scheduler traces in [the July diagnostic reconstruction](lab-notebook/2026-07-14-diagnostic-reconstruction.md). The August archive also contains a distinct 96.17/5.21 benchmark pair; [the speculation and rebenchmark records](lab-notebook/2026-08-16-speculation-and-rebench-records.md) preserves it separately from the existing common baseline.
+I added the original July diagnostic and scheduler traces in [the July diagnostic reconstruction](lab-notebook/2026-07-14-1108-v3-diagnostic-run.md#follow-up-tests-and-hardware-monitoring). The August archive also contains a distinct 96.17/5.21 benchmark pair; [the speculation and rebenchmark records](lab-notebook/2026-08-15-to-16-common-baseline-2tb.md#individual-runs-and-benchmark-file-checks) preserves it separately from the existing common baseline.

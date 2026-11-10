@@ -2,7 +2,23 @@
 
 [All lab records](README.md) · [Related investigation: chapter 2](../../investigations/02-following-the-prefill-bottleneck.md)
 
-**Question:** Where does the scheduler send the work? **Outcome:** Found concentrated offload and tested device placement; some attempts failed.
+## Purpose and reasoning
+
+Test whether the expert-offload work is concentrated on one GPU and whether distributing it changes throughput. A more even split is an intermediate observation; the useful outcome is a faster completed prompt.
+
+## Experimental design
+
+I inspected scheduler traces and effective allocations, then tried the recorded tensor/device placements and distribution change. I retained loading and context-allocation failures separately. I compared split counts with measured throughput; the trace capture times are file-write times, not independently logged run starts.
+
+## Results
+
+The original trace placed 731 of 1186 splits on ROCm0. Distribution spread the work more evenly, but distribution alone later measured 105.71 versus 104.97 tokens/s, with little practical gain. Some manual placements did not reach inference.
+
+## Conclusions
+
+The placement problem was real, but balancing the trace did not remove the main delay. The next test had to examine the routing-index synchronization as well. The incorporated split-count table is evidence for this placement experiment, not a separate test.
+
+## Detailed record
 
 ### 18:13 — newtest.txt named; first read of an incomplete log
 
@@ -829,3 +845,28 @@ hipcc /tmp/h2d4.hip -o /tmp/h2d4 && /tmp/h2d4
 - The h2d4 four-stream pinned host→device probe is queued to decide the next step (~80+ / ~40 / ~22 GB/s thresholds). Current numbers: prefill 104.97 t/s, decode 6.01 t/s.
 
 ---
+
+## Scheduler split counts
+
+### The scheduler traces show distribution, not a speedup
+
+The two scheduler captures make the placement change visible:
+
+| Backend | Original split count | Distributed split count |
+|---|---:|---:|
+| CPU | 308 | 308 |
+| ROCm0 | 731 | 285 |
+| ROCm1 | 133 | 300 |
+| ROCm2 | 175 | 294 |
+| ROCm3 | 147 | 292 |
+
+The GPU split totals differ slightly because the scheduler partitions the graphs differently. These counts describe graph splits, not bytes transferred or time spent on each GPU. They establish that I spread the offloaded work much more evenly.
+
+The pp512 rows, however, report **28.59 ± 0.00 t/s before and 28.50 ± 0.00 after**. Redistributing this workload did not improve its throughput. The allocation records show the cost: the original trace reserves roughly 4260 MiB on ROCm0 but only 205, 205, and 339 MiB on the other GPUs; the distributed trace reserves roughly 4260, 4260, 3852, and 3852 MiB. Using more GPUs required more scratch space without producing a gain in this small-prompt test.
+
+These traces complement the later [pp8192 patch experiment](2026-07-21-prefill-patch.md), where distribution alone again made little difference and combining it with the routing readback bypass raised throughput to 119.36 t/s. The 28.59/28.50 rows are not the 104.97/105.71 comparison and should not replace it.
+
+
+### Source dates
+
+**Capture date:** July 14, 2026, inferred from the original files' modification times. **Added:** October 22, 2026. I recovered the timestamps on October 23: `sched_full.txt` was last written at 19:07:54 EDT and `sched_patched.txt` at 19:58:26 EDT. These are file-write times, not run-start times. [Timestamp evidence](../raw-logs/2026-10-22-galactus-archive/source-timestamps.md).

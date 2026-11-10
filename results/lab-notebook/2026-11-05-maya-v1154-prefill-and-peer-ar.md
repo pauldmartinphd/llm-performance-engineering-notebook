@@ -2,6 +2,24 @@
 
 [All lab records](README.md) · [Related investigation: chapter 5](../../investigations/05-tuning-long-prompts.md)
 
+## Purpose and reasoning
+
+Test whether new prefill, kernel, and transport switches improve DeepSeek on four V620s, then isolate the HIP peer-probe limitation with more reserve memory.
+
+## Experimental design
+
+I ran ten variants on v1.1.54, with two measured requests at each 8K/32K/64K length after warm-up. I retained two separate 256-token decode cases per variant. I checked transport activation in the logs. I then ran a focused HIP peer case requesting 3072 MiB reserve. All measurements and source details from this sweep are collected in this one entry.
+
+## Results
+
+The completed sweep contains 60 prefill rows and 20 decode cases. Default prefill means were 324.8, 459.4, and 479.4 tokens/s. Automatic chunk selection was slower; neither requested peer path activated. The focused retest completed no startup-probe samples and never reached a ready engine.
+
+## Conclusions
+
+No tested switch established a useful improvement over the retained prefill choice. Completed host fallback is not successful peer transport, and the later startup failure has no throughput result. Two distinct decode cases per variant do not establish a repeatable decode gain. The complete CSV is the result set; partial terminal output is not another experiment.
+
+## Detailed record
+
 **Experiments:** November 5, 2026. **Added:** November 6, 2026 (America/New_York). **Sources:** the supplied *Fast Card Prefill Acceleration* conversation export and `maya_benchmark_1154_fixed.py`. Conversation timestamps and result-directory names establish the run date; the host timezone is not independently captured. [Retained evidence and hashes](../raw-logs/2026-11-05-maya-v1154/README.md).
 
 I tested ten Maya v1.1.54 configurations at 8K, 32K, and 64K prompt lengths, with two repetitions per length. The default measured **324.8, 459.4, and 479.4 tokens/s**. None of the switches established a useful prefill improvement in this sweep. Automatic chunk selection reduced throughput at all three lengths, while both requested peer transports retained host transport. A separate test requesting 3072 MiB of reserve reached the HIP transport probe but failed before the engine became ready, so it produced no throughput result.
@@ -26,7 +44,7 @@ It reported `/opt/maya-bench-1154-20261105-142331`. The [supplied runner](../../
 
 The runner builds prompts from the checked-out README, documentation, and benchmark-result Markdown. It tokenizes this corpus, rotates the token sequence by prompt length and repetition, and repeats/truncates it to exactly 8192, 32768, or 65536 tokens. Each process performs a short decode warm-up, two 256-token decode cases, and an 8K prefill warm-up before the six measured prefill requests. Prefill requests generate one token; the recorded rate is the requested token count divided by the engine's reported prompt time. Rotated leading tokens are intended to avoid prefix reuse, but these printed records contain no cache-hit counter. I therefore do not label the sweep independently verified zero-cache prefill.
 
-The original export retained 47 unique complete individual prefill records and the full 30-row summary. The November 10 collection now supplies all 60 individual prefill measurements. The runner records decode rows in its server-side CSV but does not print them individually or include them in the final summary; the original export alone did not support a decode comparison. The [recovered-decode entry](2026-11-05-maya-v1154-recovered-decode.md) now reports all 20 saved decode cases. The [individual CSV](../data/maya-v1154-prefill-observations.csv) and [summary CSV](../data/maya-v1154-prefill-summary.csv) preserve this distinction and cite source line numbers. Repeated pasted output is counted once.
+The complete run contains 60 prefill measurements and 20 decode cases. The original [run CSV](../raw-logs/2026-11-10-maya-collection/extracted/maya-bench-1154-20261105-142331/results.csv) retains them all. The [conversation-derived CSV](../data/maya-v1154-prefill-observations.csv) contains only the 47 prefill observations printed in the earlier export; it is a partial transcription, not the full run. The [printed-summary CSV](../data/maya-v1154-prefill-summary.csv) retains all 30 prefill means. Repeated pasted output is counted once.
 
 ## Completed prefill comparison
 
@@ -108,8 +126,37 @@ A quoted September 24 W4A8 report motivated the kernel investigation. It reports
 
 Two screenshot attachments are absent from the export. The assistant's reading reports an interactive request with 48,794 total prompt tokens, 47,087 cached tokens, 1,707 new tokens in 10,020.1 ms (170.4 tokens/s), and 4,602 generated tokens at 31.2 tokens/s with 71.9% draft acceptance. It also reports 3,102 experts in VRAM, 12,258 in RAM, and an 82.3% VRAM hit rate. These remain screenshot-summary-only observations, not recovered timing JSON. The reported usage total of 27,517 conflicts with the 53,396 sum of prompt and completion counts. Neither the accounting nor the cache metric can be resolved without the original response or image. This cached-suffix workload is not comparable to fresh 32K/64K prefill.
 
-The original result directories and configs have now been collected. The remaining experimental work is to instrument or isolate the HIP peer probe and verify kernel dispatch before attributing performance to MMQ or flow flags. Any future larger-reserve comparison needs a matched host-transport control at that reserve, because changing reserve also changes expert residency. Quality checks and decode results are needed before adopting approximate settings or trading residency for faster prefill. None of that follow-up was completed by the supplied evidence.
+The original result directories and configs have now been collected. The remaining experimental work is to instrument or isolate the HIP peer probe and verify kernel dispatch before attributing performance to MMQ or flow flags. Any future larger-reserve comparison needs a matched host-transport control at that reserve, because changing reserve also changes expert residency. Quality checks and repeated decode comparisons are needed before adopting approximate settings or trading residency for faster prefill. None of that follow-up was completed by the supplied evidence.
 
-## November 10 evidence recovery
 
-The [new collection](../raw-logs/2026-11-10-maya-collection/README.md) supplies the full 80-row CSV (60 prefill, 20 decode), all ten effective configs and engine logs, and the focused peer-retest config and runner. These supersede the missing-artifact limitations above: the reserve of 3072 MiB is directly captured, and all individual prefill observations are retained. The [recovered-decode entry](2026-11-05-maya-v1154-recovered-decode.md) reports the newly available decode cases. The peer retest still has no completed measurement and does not establish a successful transport. The earlier partial transcription remains a historical view of the evidence then available.
+## Decode results from the same sweep
+
+Each variant has two distinct 256-token decode cases after a warm-up; these are different workloads, not repetitions of one prompt. Rates are tokens/s. The arithmetic mean here is derived from the two raw observations, not Maya's separate three-answer built-in benchmark.
+
+| Variant | Case 1 | Case 2 | Derived mean |
+|---|---|---|---|
+| default | 31.31 | 27.08 | 29.20 |
+| tp_even | 30.86 | 27.11 | 28.98 |
+| p2p_generic | 31.24 | 26.19 | 28.71 |
+| p2p_hip_auto | 27.66 | 26.89 | 27.27 |
+| flow_dma | 31.78 | 26.97 | 29.38 |
+| flow_ai | 31.77 | 26.36 | 29.06 |
+| flow_chunk | 32.16 | 27.62 | 29.89 |
+| flow_yoco | 31.09 | 26.25 | 28.67 |
+| flow_combined | 32.14 | 27.36 | 29.75 |
+| expert_mmq | 32.06 | 26.19 | 29.12 |
+
+
+The results do not establish a reliable decode gain from any switch. Case content, engine warm-up and fixed run order matter, and two cases per variant do not measure run-to-run variance. The benchmark's primary finding remains that the default 32K chunk reaches about 479.4 tokens/s at 64K while automatic chunk selection is slower.
+
+### Source files
+
+All ten config copies, engine logs, the experiment plan, skipped-case notes, summary and update logs are retained under [the completed run](../raw-logs/2026-11-10-maya-collection/extracted/maya-bench-1154-20261105-142331/). They complement the supplied script, rather than replacing the earlier conversation transcription. Three preceding directories retain the failed setup attempts. The separate `201458` directory retains the focused peer retest config and log, so the requested 3072 MiB reserve is now directly inspectable.
+
+The original [P2P runner](../raw-logs/2026-11-10-maya-collection/extracted/maya_benchmark_p2p_test.py) is also recovered. The retest CSV has a header and no completed measurements; its startup probe ended without a ready engine. The earlier distinction between successful host fallback in the main sweep and failure before readiness in the retest still holds.
+
+The decode cases are part of the same ten-variant sweep. They do not add a numerical-quality test or a successful HIP peer-transport result.
+
+### Sources and recording dates
+
+**Added:** November 10, 2026 (America/New_York). **Sources:** the supplied November 10 Maya archive and conversation exports; [source ledger and retained evidence](../raw-logs/2026-11-10-maya-collection/README.md). Historical commands describe the experiments; this documentation update ran no inference tests.

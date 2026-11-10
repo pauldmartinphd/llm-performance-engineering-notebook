@@ -2,7 +2,7 @@
 
 I want to host large language models on local hardware and understand what limits their speed. The experiments began with basic setup and memory placement. They led to a scheduler patch, tests of speculative decoding, an experimental fork, and a move to Project Maya. Later tests asked how two large models could share the same machine.
 
-These chapters explain that progression. Each starts with a question, follows the tests that mattered, and ends with the decision they supported. The [lab notebook](../results/lab-notebook/README.md) keeps every dated record, including failures, supporting captures, and work that stopped early.
+These chapters explain that progression. Each starts with a question, follows the tests that mattered, and ends with the decision they supported. The [lab notebook](../results/lab-notebook/README.md) keeps every dated record, including failures, work that stopped early.
 
 | Chapter | Question | Where the work led |
 |---|---|---|

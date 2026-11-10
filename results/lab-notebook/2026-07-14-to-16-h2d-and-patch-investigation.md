@@ -2,7 +2,23 @@
 
 [All lab records](README.md) · [Related investigation: chapter 2](../../investigations/02-following-the-prefill-bottleneck.md)
 
-**Question:** Are transfers or synchronization the remaining limit? **Outcome:** Measured 65.7 GB/s across four host-to-device streams and developed the patch hypothesis.
+## Purpose and reasoning
+
+Compare the available transfer bandwidth with the engine's observed behavior, then determine whether a scheduler change could use that headroom. The proposed mechanism changed as source inspection revealed which copies were already asynchronous.
+
+## Experimental design
+
+I measured concurrent host-to-device streams, inspected the copy/synchronization path, and attempted the proposed patch builds and launches. I checked device memory when an allocation failed. I kept later reports from the separate patch test distinguishable from the measurements made in this thread.
+
+## Results
+
+Four concurrent host-to-device streams reached 65.7 GB/s in aggregate. The patch attempts encountered build and allocation problems; a live service was later found occupying the cards. The thread subsequently received a report of roughly 120 tokens/s from the separate patch investigation.
+
+## Conclusions
+
+The hardware probe showed transfer headroom, but it did not prove that the inference scheduler could use all of it. Build/runtime state had to be fixed before timing the patch. The completed controlled patch results are documented in the July 21 entry; the larger early projections were not measurements.
+
+## Detailed record
 
 ### 19:25 — Four-stream H2D: 65.7 GB/s; the copy-mechanism diagnosis changes again
 

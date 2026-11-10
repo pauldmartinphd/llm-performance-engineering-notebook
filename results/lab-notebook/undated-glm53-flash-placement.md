@@ -2,6 +2,24 @@
 
 [All lab records](README.md) · [Related investigation: chapter 4](../../investigations/04-from-the-fork-to-maya.md)
 
+## Purpose and reasoning
+
+Compare GLM-5.3-Flash expert placement, cache budgets, and draft settings on Galactus. Automatic placement could use GPU memory differently from forcing all routed experts into RAM.
+
+## Experimental design
+
+I used the retained short ZFS-prompt CLI runs with 32 threads, 8192 context, greedy decoding, flash attention, MTP, and a 256-token limit. I compared automatic and forced-RAM placement and requested cache sizes. The V620 build reports an unknown revision; no patch-off or MTP-off control was captured.
+
+## Results
+
+Automatic placement reached 19.1–19.4 generation tokens/s. Forced RAM without an explicit cache allocation measured roughly 13.7–14.4. Requested larger caches did not improve consistently; some configurations failed to allocate memory.
+
+## Conclusions
+
+Placement affected the observed rate more than the executable label established. Missing effective tensor placement and incomplete build identity prevent a kernel-level explanation or an isolated patch gain. Requested cache capacity is not a measured allocation.
+
+## Detailed record
+
 **Recorded:** October 21, 2026, from an undated historical capture. **Machine:** Galactus, EPYC 7713P, 2 TB eight-channel DDR4, four V620 GPUs. [Raw log](../raw-logs/2026-10-21-flash-experiments/GLM-Flash%20Experiments.txt) · [All launch records as CSV](../data/glm53-flash-historical.csv).
 
 **Build clarification, October 22, 2026:** I ran the V620 tests with the V620 patches, the older DeepSeek implementation, GLM-5.3 MTP support, and my round-robin prefill patch merged together. These results describe that combined build, before I replaced the DeepSeek implementation with Unsloth's newer port. The executable reports `b0-unknown`, so the log does not identify the exact commit.

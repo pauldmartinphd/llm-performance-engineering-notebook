@@ -2,6 +2,24 @@
 
 [All lab records](README.md) · [Related investigation: chapter 1](../../investigations/01-establishing-a-baseline.md)
 
+## Purpose and reasoning
+
+Check whether expanding Galactus from 1 TB to 2 TB changed the sustained memory bandwidth used in inference estimates. More capacity need not produce more bandwidth.
+
+## Experimental design
+
+I repeated the eleven-count STREAM thread sweep on the 2 TB population. I replaced a failing DIMM and reran the sweep, using the repaired system for the retained result. I compared kernel traffic on the same correction basis as July.
+
+## Results
+
+The repaired system measured about 148–151 GB/s after correction, compared with roughly 152 in July. Saturation remained near 16 threads. All eleven counts completed in the retained rerun; the per-kernel difference from July was about 1.2–3.9%.
+
+## Conclusions
+
+The upgrade increased capacity with only a small bandwidth change. I accepted the repaired population at its recorded speed. The earlier missing rows and timing outliers cannot be causally attributed to the removed DIMM from these captures alone.
+
+## Detailed record
+
 **Date:** Friday, August 15, 2026. **Machine:** Galactus, bare-metal host, `~/STREAM`.
 **Object:** Close the open item from the August RAM upgrade. Re-measure the platform DRAM bandwidth on the new population (8 × 256 GB DDR4-2933 3DS RDIMM at rated speed) with the identical July sweep, to use the measured bandwidth of the current DIMMs in the decode estimates.
 

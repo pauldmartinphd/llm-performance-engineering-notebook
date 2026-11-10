@@ -2,6 +2,8 @@
 
 [All lab records](README.md) · [Related investigation: chapter 6](../../investigations/06-sharing-galactus.md)
 
+**Record type:** Service configuration discussion; not an inference benchmark.
+
 **Discussion:** October 29, 2026; status and documentation updated November 5 (America/New_York). **System:** containerized Open WebUI serving DeepSeek through Project Maya on Galactus. **Sources:** [OpenWebUI Settings Guide](https://chatgpt.com/c/6ae340c7-e834-83ea-ad5f-1efcce5088ec), its retained screenshot, the November 5 continuation, and the notebook entries linked below. [Evidence ledger](../raw-logs/2026-10-29-openwebui-settings/README.md).
 
 Open WebUI now runs quite well. I am pausing further interface changes to preserve the working configuration and record what we resolved. The important functional finding was that Code Interpreter caused the blank-response problem: disabling it restored normal responses. Web research remains part of the intended workflow. The remaining interface problem is that the tool activity occupies too much of the response area, making the substantive answer difficult to read.

@@ -39,7 +39,7 @@ In [August I repeated speculation on the same build used for the five-model base
 | GLM-5.2 | 5.30 | 6.6 ± 0.3 | 25% |
 | DeepSeek-V4-Flash-0731 | 10.34 | 14.1 ± 0.7 | 36% |
 
-Rates are tokens/s. The speculative spreads summarize two repetitions; they are not confidence intervals. Timing varied by about 9%, so close settings could not be ranked from one run. [The recovered commands and repetitions](../results/lab-notebook/2026-08-16-speculation-and-rebench-records.md) preserve the underlying evidence.
+Rates are tokens/s. The speculative spreads summarize two repetitions; they are not confidence intervals. Timing varied by about 9%, so close settings could not be ranked from one run. [The recovered commands and repetitions](../results/lab-notebook/2026-08-15-to-16-common-baseline-2tb.md#individual-runs-and-benchmark-file-checks) preserve the underlying evidence.
 
 These results made speculation worth carrying into later testing. They did not establish a universal draft length or a gain on every kind of answer.
 
