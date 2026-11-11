@@ -1,14 +1,14 @@
 # DeepSeek RDNA 2 FP16-output prefill: measured speedup and fidelity limits
 
-[All lab records](README.md) · [Related investigation: chapter 5](../../investigations/05-tuning-long-prompts.md)
+[All lab records](README.md) · [Related experiment: 5](../../investigations/05-tuning-long-prompts.md)
 
 ## Purpose and reasoning
 
-Measure whether the RDNA 2 FP16-output path speeds DeepSeek dense prefill operations. Keeping those outputs in FP16 before widening to FP32 can change both kernel speed and rounding.
+We measure whether the RDNA 2 FP16-output path speeds DeepSeek dense prefill operations. Keeping those outputs in FP16 before widening to FP32 can change both kernel speed and rounding.
 
 ## Experimental design
 
-I enabled MAYA_DS4_PROMPT_F16 and its nonfinite check on the two-GPU v1.1.57 setup. I used TP2, 32K chunks, an 800 MiB ring, 1024 MiB reserve, and 128 output tokens. Two starts provide four observations per length. I compared the earlier v1.1.54 baseline separately from the intervening same-version run that requested TP4 but actually used TP2.
+We enabled MAYA_DS4_PROMPT_F16 and its nonfinite check on the two-GPU v1.1.57 setup. We used TP2, 32K chunks, an 800 MiB ring, 1024 MiB reserve, and 128 output tokens. Two starts provide four observations per length. We compared the earlier v1.1.54 baseline separately from the intervening same-version run that requested TP4 but actually used TP2.
 
 ## Results
 
@@ -22,7 +22,7 @@ The observed timing gain supports the faster path, with an imperfect control and
 
 **Experiments: November 9, 2026.**
 
-I enabled `MAYA_DS4_PROMPT_F16=1` with `MAYA_DS4_PROMPT_F16_CHECK=1` on DeepSeek TP2. The dense prompt projections produce FP16 output and widen it to FP32, taking a faster RDNA 2 path while changing rounding. This is a prefill computation setting, separate from DeepSeek's Q8 model weights and its attention-cache representation.
+We enabled `MAYA_DS4_PROMPT_F16=1` with `MAYA_DS4_PROMPT_F16_CHECK=1` on DeepSeek TP2. The dense prompt projections produce FP16 output and widen it to FP32, taking a faster RDNA 2 path while changing rounding. This is a prefill computation setting, separate from DeepSeek's Q8 model weights and its attention-cache representation.
 
 ## Configuration and comparison limits
 
@@ -52,7 +52,7 @@ Zero nonfinite outputs checks overflow, not semantic accuracy, perplexity, or eq
 
 ## Configuration decision
 
-I requested two production profiles, one with this prefill route and one without, keeping TP2 on GPUs 0 and 1. The archive retains `maya-ds4-tp2-fp16.json` and `maya-ds4-tp2-baseline.json`; the final production-named copies are requested in the conversation but absent from the collection. The [deployment record](2026-11-10-maya-dual-model-production.md) distinguishes those retained settings from the later reported operating state.
+We requested two production profiles, one with this prefill route and one without, keeping TP2 on GPUs 0 and 1. The archive retains `maya-ds4-tp2-fp16.json` and `maya-ds4-tp2-baseline.json`; the final production-named copies are requested in the conversation but absent from the collection. The [deployment record](2026-11-10-maya-dual-model-production.md) distinguishes those retained settings from the later reported operating state.
 
 ## Sources and recording dates
 

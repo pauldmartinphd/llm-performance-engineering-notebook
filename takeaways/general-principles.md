@@ -1,6 +1,6 @@
-# Important findings
+# Findings
 
-The experiments established useful gains on specific local configurations. This page gives the result, the reason it matters, and the boundary of the evidence. The [investigation chapters](../investigations/README.md) explain the full sequence. The [lab notebook](../results/lab-notebook/README.md) retains every test.
+The experiments established useful gains on specific local configurations. This page gives the result, the reason it matters, and the boundary of the evidence. The [Experiments](../investigations/README.md) explain the full sequence. The [lab notebook](../results/lab-notebook/README.md) retains every test.
 
 ## 1. Large models can be useful without fitting in GPU memory
 

@@ -1,20 +1,20 @@
 # Galactus: prioritizing Maya and reassessing upstream performance work
 
-[All lab records](README.md) · [Related investigation: chapter 4](../../investigations/04-from-the-fork-to-maya.md)
+[All lab records](README.md) · [Related experiment: 4](../../investigations/04-from-the-fork-to-maya.md)
 
 **Record type:** Decision and source review; no new benchmark.
 
 **Recorded:** October 28, 2026 (America/New_York). **Status checked:** approximately 23:09 EDT, October 28 / 03:09 UTC, October 29. **Machine:** Galactus, EPYC 7713, 2 TiB RAM, four Radeon Pro V620 GPUs, Proxmox LXC. This is a synthesis and engineering decision, not a new benchmark run.
 
-I am prioritizing Project Maya for Galactus. The October measurements make it the most promising working platform for my large models, and its existing Qwen3.8 and MiniMax M3.1 execution paths substantially reduce the model-coverage argument for continuing to invest primarily in llAMDa/llama.cpp. I will retain llama.cpp as a compatibility backend and a place to evaluate upstream improvements, but I do not have evidence that the pending patches will collectively reproduce Maya's performance on this machine.
+We are prioritizing Project Maya for Galactus. The October measurements make it the most promising working platform for our large models, and its existing Qwen3.8 and MiniMax M3.1 execution paths substantially reduce the model-coverage argument for continuing to invest primarily in llAMDa/llama.cpp. We will retain llama.cpp as a compatibility backend and a place to evaluate upstream improvements, but we do not have evidence that the pending patches will collectively reproduce Maya's performance on this machine.
 
-For Qwen, I will use **base Qwen3.8-Flash-Next, not CYBER-FROST**. Maya already implements the model family through its packaged CYBER-FROST configuration, which makes base-checkpoint compatibility a reasonable expectation. Loading, conversion, template handling, and output correctness with the base checkpoint still need validation; this entry does not claim that I have run that configuration successfully.
+For Qwen, we will use **base Qwen3.8-Flash-Next, not CYBER-FROST**. Maya already implements the model family through its packaged CYBER-FROST configuration, which makes base-checkpoint compatibility a reasonable expectation. Loading, conversion, template handling, and output correctness with the base checkpoint still need validation; this entry does not claim that we have run that configuration successfully.
 
 ## Evidence and scope
 
-This entry memorializes the October 27–28 discussion, [VLLM RAM Offload Support](https://chatgpt.com/c/6ae151e4-b7cc-83e9-9dbc-c2bcf2b10600), together with my subsequent clarification about using base Qwen. The accessible conversation retrieval was partial and supplied no older-page cursor. I therefore use the notebook's retained benchmark captures for measurements and the upstream sources below for integration and review status. Assistant statements in the conversation are leads to verify, not primary experimental evidence.
+This entry memorializes the October 27–28 discussion, [VLLM RAM Offload Support](https://chatgpt.com/c/6ae151e4-b7cc-83e9-9dbc-c2bcf2b10600), together with our subsequent clarification about using base Qwen. The accessible conversation retrieval was partial and supplied no older-page cursor. We therefore use the notebook's retained benchmark captures for measurements and the upstream sources below for integration and review status. Assistant statements in the conversation are leads to verify, not primary experimental evidence.
 
-Dates on upstream events below are UTC unless otherwise stated. The status snapshot uses my local October 28 date, so an update shortly after midnight UTC on October 29 can still belong to this entry. PR descriptions and discussions can change after this record; the head revisions at the end identify the versions examined. Review activity and GitHub's mergeability flag do not establish that every required check passed or that a maintainer will merge a change.
+Dates on upstream events below are UTC unless otherwise stated. The status snapshot uses our local October 28 date, so an update shortly after midnight UTC on October 29 can still belong to this entry. PR descriptions and discussions can change after this record; the head revisions at the end identify the versions examined. Review activity and GitHub's mergeability flag do not establish that every required check passed or that a maintainer will merge a change.
 
 ## What Galactus actually measured
 
@@ -34,9 +34,9 @@ All rates are tokens/s. The linked entries retain commands, logs, and the distin
 
 The strongest acceleration evidence is within Maya: the GLM comparison is approximately **58.8%** faster at 31.6 versus 19.9, and the DeepSeek calibration is approximately **38.2%** faster at 29.3 versus 21.2. These percentages are arithmetic comparisons of the recorded rates, not confidence intervals. GLM's two default runs differ by about 7.5%, which is a reason to retain both measurements rather than promote the faster one to a universal rate.
 
-The cross-engine numbers describe useful operating configurations, but they do not isolate an engine-only effect. Prompts, generated lengths, context allocations, effective placement, cache warm-up, speculation, and timing methods differ. Separate llama-bench pp and tg rows do not measure generation following that pp prompt. The DeepSeek export name describes mixed quantization, and the actual Maya model path and effective residency settings still need capture. Even for GLM's same named export, file identity and effective runtime settings should be recorded for a controlled comparison. The dedicated GLM llama-bench prefill numbers are numerically higher than Maya's; the claim is therefore not that Maya wins every metric.
+The cross-engine numbers describe useful operating configurations, but they do not isolate an engine-only effect. Prompts, generated lengths, context allocations, effective placement, cache warm-up, speculation, and timing methods differ. We separate llama-bench pp and tg rows do not measure generation following that pp prompt. The DeepSeek export name describes mixed quantization, and the actual Maya model path and effective residency settings still need capture. Even for GLM's same named export, file identity and effective runtime settings should be recorded for a controlled comparison. The dedicated GLM llama-bench prefill numbers are numerically higher than Maya's; the claim is therefore not that Maya wins every metric.
 
-The memlock investigation also changed several settings together. Unlimited shell limits and a requested locked load do not prove how much memory the inference process locked. Neither SSD bottlenecks nor memlock alone can be assigned responsibility for the earlier poor performance without process residency and I/O evidence. These limits are preserved in the [DeepSeek record](2026-10-23-deepseek41-cache-and-maya.md).
+The memlock investigation also changed several settings together. Unlimited shell limits and a requested locked load do not prove how much memory the inference process locked. Neither SSD bottlenecks nor memlock alone can be assigned responsibility for the earlier poor performance without process residency and we/O evidence. These limits are preserved in the [DeepSeek record](2026-10-23-deepseek41-cache-and-maya.md).
 
 ## Upstream model support is distinct from the performance work
 
@@ -46,7 +46,7 @@ The memlock investigation also changed several settings together. Unlimited shel
 
 ## Core performance PRs and merge readiness
 
-These are source-verified states followed by my assessment of their relevance to Galactus. No row predicts a measured V620 speedup.
+These are source-verified states followed by our assessment of their relevance to Galactus. No row predicts a measured V620 speedup.
 
 | PR | State at snapshot and readiness evidence | Expected relevance; still a hypothesis on Galactus |
 |---|---|---|
@@ -60,13 +60,13 @@ These are source-verified states followed by my assessment of their relevance to
 | [#31156: per-size graphs and schedulers](https://github.com/ggml-org/llama.cpp/pull/31156) | Open **draft**, API mergeable; retained as draft for feedback. | Addresses repeated graph/scheduler work when verification batch sizes vary, at additional memory cost. Strong mechanism to investigate, but CUDA results do not establish HIP/V620 benefit. |
 | [#31233: ClassLRU expert replacement](https://github.com/ggml-org/llama.cpp/pull/31233) | Open **draft**, API mergeable. | Author reports warm-cache improvements of 6–7% and fewer uploads, while noting small-cache limitations. Useful incremental evidence on the author's workloads, not a Galactus result. |
 
-The remaining mergeable flags mean GitHub could construct a merge at inspection, not that reviews, correctness, or all required checks were complete. I did not perform a full CI/review-thread audit. The CPU/cache proposals are also not a validated additive patch stack: they address related execution paths, and integration and performance interactions need testing. Summing their reported percentages would be unjustified.
+The remaining mergeable flags mean GitHub could construct a merge at inspection, not that reviews, correctness, or all required checks were complete. We did not perform a full CI/review-thread audit. The CPU/cache proposals are also not a validated additive patch stack: they address related execution paths, and integration and performance interactions need testing. Summing their reported percentages would be unjustified.
 
 ## Why speculation can still lose
 
 Draft acceptance is only one term in the cost. A useful accounting model is time per committed token approximately equal to draft work, target verification, and scheduling/transfer overhead divided by the number of committed tokens. It is a model for investigation, not a fitted explanation of the Galactus timings. More accepted tokens help only when the extra work per window is sufficiently small.
 
-[#31156](https://github.com/ggml-org/llama.cpp/pull/31156) specifically retains graphs for small batch sizes and gives them separate schedulers to avoid repeated capture, construction, and splitting. Its description reports about 400 MB additional VRAM for one configuration. The [October 27 comparison](https://github.com/ggml-org/llama.cpp/pull/31156#issuecomment-6451382035) reports different benefits across NVIDIA devices and raises scheduler-memory concerns. This supports a concrete overhead hypothesis, not a claim that graph rebuilding accounts for a measured fraction of my V620 runtime.
+[#31156](https://github.com/ggml-org/llama.cpp/pull/31156) specifically retains graphs for small batch sizes and gives them separate schedulers to avoid repeated capture, construction, and splitting. Its description reports about 400 MB additional VRAM for one configuration. The [October 27 comparison](https://github.com/ggml-org/llama.cpp/pull/31156#issuecomment-6451382035) reports different benefits across NVIDIA devices and raises scheduler-memory concerns. This supports a concrete overhead hypothesis, not a claim that graph rebuilding accounts for a measured fraction of our V620 runtime.
 
 Locally, increasing GLM's requested CLI draft maximum from two to four reduced the observed rate from roughly 18 to 16.2 tokens/s. Maya's balanced two-GPU speculative head group gave 31.6, compared with 24.6 for one head GPU and 22.9 for three. These observations show that more speculative resources need not improve throughput, but neither experiment separately measured drafting, verification, transfer, and synchronization costs. The [GLM record](2026-10-23-maya-glm53-speculation.md) also preserves the MTP expert sweep and its missing final summary rather than implying a universal optimum.
 
@@ -76,19 +76,19 @@ The next useful comparison must capture those component times, accepted tokens p
 
 The [Maya source at `f031a23b9682551e744e29d0e9f8d527df49f282` (v1.1.36)](https://github.com/mw00/project-maya/blob/f031a23b9682551e744e29d0e9f8d527df49f282/README.md), committed October 28, documents GLM-5.3-Flash, DeepSeek-V4.1-Flash-1017, MiniMax-M3.1-Flash, and a Qwen3.8 path. This is newer than the **v1.1.24** used in the retained benchmarks; current documentation is not evidence that those benchmarks used later optimizations.
 
-The [pinned settings](https://github.com/mw00/project-maya/blob/f031a23b9682551e744e29d0e9f8d527df49f282/docs/SETTINGS.md) describe MiniMax setup, CPU experts, residency controls, and DSpark calibration, as well as Qwen's native path and MTP packaging. The README still describes AMD as experimental and lists V620/W6800 as not yet validated upstream. My local GLM and DeepSeek results are evidence for those configurations; they do not validate every backend, quantization, or model on V620.
+The [pinned settings](https://github.com/mw00/project-maya/blob/f031a23b9682551e744e29d0e9f8d527df49f282/docs/SETTINGS.md) describe MiniMax setup, CPU experts, residency controls, and DSpark calibration, as well as Qwen's native path and MTP packaging. The README still describes AMD as experimental and lists V620/W6800 as not yet validated upstream. Our local GLM and DeepSeek results are evidence for those configurations; they do not validate every backend, quantization, or model on V620.
 
-I will concentrate on validating **base Qwen3.8-Flash-Next** and MiniMax M3.1 on Maya, recording exact checkpoint revisions and file hashes, conversion steps, templates, effective settings, and correctness checks. The packaged CYBER-FROST path establishes architecture coverage but does not prove that swapping checkpoints is sufficient. I will then compare the engines with identical prompts, token budgets, context, sampling, and quantization where possible, and with speculation both enabled and disabled. Repeated interleaved trials should report prefill, time to first token, sustained generation, and total request time separately.
+We will concentrate on validating **base Qwen3.8-Flash-Next** and MiniMax M3.1 on Maya, recording exact checkpoint revisions and file hashes, conversion steps, templates, effective settings, and correctness checks. The packaged CYBER-FROST path establishes architecture coverage but does not prove that swapping checkpoints is sufficient. We will then compare the engines with identical prompts, token budgets, context, sampling, and quantization where possible, and with speculation both enabled and disabled. Repeated interleaved trials should report prefill, time to first token, sustained generation, and total request time separately.
 
 This is an allocation-of-effort decision based on a working platform and observed rates. It is not a conclusion that upstream performance work is unimportant. The CPU/GPU expert split and speculative scheduling changes are particularly relevant candidates for later controlled tests.
 
 ## CYBER-FROST: evidence considered, checkpoint rejected
 
-The [publisher's model card](https://huggingface.co/Blackfrost-AI/CYBER-FROST-3.8-BF16) identifies a Qwen3.8-Flash-Next derivative with security fine-tuning and a behavioral modification stage. It does not establish a standardized cybersecurity capability result for the exact BF16 checkpoint. Its refusal results are described as development evidence from an earlier suite subsequently corrected; I do not carry the conversation's exact refusal percentages forward as independently verified results.
+The [publisher's model card](https://huggingface.co/Blackfrost-AI/CYBER-FROST-3.8-BF16) identifies a Qwen3.8-Flash-Next derivative with security fine-tuning and a behavioral modification stage. It does not establish a standardized cybersecurity capability result for the exact BF16 checkpoint. Its refusal results are described as development evidence from an earlier suite subsequently corrected; we do not carry the conversation's exact refusal percentages forward as independently verified results.
 
 The card's harness experiment used the NVFP4 sibling, with unchanged weights: verified solves rose from one to five, with ten valid attempts and two infrastructure-invalid tasks. That supports a harness comparison, not superiority of fine-tuned weights over base Qwen, and does not automatically transfer to BF16.
 
-My skepticism is therefore an evidence requirement, not a finding that all fine-tuning is ineffective. I found no matched base-versus-fine-tune capability comparison in the material checked. A persuasive result would hold prompts, tools, inference settings, and scoring constant, distinguish refusals from incorrect answers, and assess regressions. I will use base Qwen; CYBER-FROST is not part of the deployment plan.
+Our skepticism is therefore an evidence requirement, not a finding that all fine-tuning is ineffective. We found no matched base-versus-fine-tune capability comparison in the material checked. A persuasive result would hold prompts, tools, inference settings, and scoring constant, distinguish refusals from incorrect answers, and assess regressions. We will use base Qwen; CYBER-FROST is not part of the deployment plan.
 
 ## Source revision ledger
 

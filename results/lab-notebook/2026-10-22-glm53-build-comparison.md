@@ -1,14 +1,14 @@
 # GLM-5.3-Flash: revision-identified builds and placement tests
 
-[All lab records](README.md) · [Related investigation: chapter 4](../../investigations/04-from-the-fork-to-maya.md)
+[All lab records](README.md) · [Related experiment: 4](../../investigations/04-from-the-fork-to-maya.md)
 
 ## Purpose and reasoning
 
-Compare the integrated AMD fork with upstream on the same named GLM-Flash export, then test CLI placement and draft length. An executable name alone is not enough to establish which build ran.
+We compare the integrated AMD fork with upstream on the same named GLM-Flash export, then test CLI placement and draft length. An executable name alone is not enough to establish which build ran.
 
 ## Experimental design
 
-I ran dedicated benchmarks with printed revisions, 32 threads, CPU experts, pp8192, tg128/tg256, and two requested repetitions. I separately ran the ZFS CLI prompt with greedy decoding, 8192 context, MTP, and 256 output tokens, varying placement and draft length. I checked the runtime banners.
+We ran dedicated benchmarks with printed revisions, 32 threads, CPU experts, pp8192, tg128/tg256, and two requested repetitions. We separately ran the ZFS CLI prompt with greedy decoding, 8192 context, MTP, and 256 output tokens, varying placement and draft length. We checked the runtime banners.
 
 ## Results
 
@@ -22,9 +22,9 @@ The revision-identified benchmark did not establish a useful fork improvement un
 
 **Record:** October 22, 2026, from the supplied filename; individual launches have no printed timestamps. **Machine:** Galactus, four V620s. [Source and checksums](../raw-logs/2026-10-23-maya-glm-and-builds/README.md).
 
-I built llAMDa and llama.cpp for gfx1030 with HIP, GCC 14.2.0, and Zen 3 CPU flags (`-O3 -march=znver3 -mtune=znver3`, `GGML_NATIVE=OFF`). The configuration identifies HIP Clang 22.0.0. The build records name `ca3b1fc30` for llAMDa and `184f65360` for llama.cpp, and both installations used `/usr/local`.
+We built llAMDa and llama.cpp for gfx1030 with HIP, GCC 14.2.0, and Zen 3 CPU flags (`-O3 -march=znver3 -mtune=znver3`, `GGML_NATIVE=OFF`). The configuration identifies HIP Clang 22.0.0. The build records name `ca3b1fc30` for llAMDa and `184f65360` for llama.cpp, and both installations used `/usr/local`.
 
-The direct benchmark outputs distinguish those revisions, but the CLI captures expose a provenance problem: commands named both `llama-cli` and `llamda-cli` print **b11829-184f65360**. I cannot treat those names alone as proof that the CLI runs exercised different implementations. Shared installation paths or libraries are possible explanations; the capture does not identify the cause.
+The direct benchmark outputs distinguish those revisions, but the CLI captures expose a provenance problem: commands named both `llama-cli` and `llamda-cli` print **b11829-184f65360**. We cannot treat those names alone as proof that the CLI runs exercised different implementations. Shared installation paths or libraries are possible explanations; the capture does not identify the cause.
 
 ## Dedicated benchmarks
 
@@ -48,7 +48,7 @@ The second command is identical apart from the executable name, `llamda-bench`. 
 
 ## CLI placement and draft-length tests
 
-The completed CLI runs use the ZFS explanation prompt, 32 threads, context 8192, flash attention, greedy decoding, a 256-token output limit, and `--spec-type draft-mtp`. I report generation only. “Forced RAM” means `-ngl all -cmoe`; “automatic” means both options were omitted. Effective tensor placement and draft acceptance are not captured.
+The completed CLI runs use the ZFS explanation prompt, 32 threads, context 8192, flash attention, greedy decoding, a 256-token output limit, and `--spec-type draft-mtp`. We report generation only. “Forced RAM” means `-ngl all -cmoe`; “automatic” means both options were omitted. Effective tensor placement and draft acceptance are not captured.
 
 | Source command line | Executable name | Requested placement | Draft n-max | Generation, tokens/s |
 |---|---|---|---:|---:|

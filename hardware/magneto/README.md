@@ -1,8 +1,8 @@
 # Magneto — platform
 
-Magneto is my Apple Silicon laptop, alongside [Galactus](../galactus/README.md) and [Borg](../borg/README.md). It is a unified-memory machine: the CPU, the GPU, and the model weights share one LPDDR5 pool, so the discrete-GPU offload split that Galactus uses (routed experts in system RAM, dense path on the GPU) does not exist here. The measurement principles in the [methodology](../../results/methodology.md) transfer, but the backend-specific procedure must be adapted; the memory-bandwidth limit (§1) and decode two-term model remain unmeasured here. Figures marked unmeasured have no benchmark on record yet.
+Magneto is our Apple Silicon laptop, alongside [Galactus](../galactus/README.md) and [Borg](../borg/README.md). It is a unified-memory machine: the CPU, the GPU, and the model weights share one LPDDR5 pool, so the discrete-GPU offload split that Galactus uses (routed experts in system RAM, dense path on the GPU) does not exist here. The measurement principles in the [methodology](../../results/methodology.md) transfer, but the backend-specific procedure must be adapted; the memory-bandwidth limit (§1) and decode two-term model remain unmeasured here. Figures marked unmeasured have no benchmark on record yet.
 
-I edit this notebook on Magneto (`magneto-local`).
+We edit this notebook on Magneto (`magneto-local`).
 
 ## Compute
 
@@ -12,7 +12,7 @@ The processor is an Apple M2 Max (2023) in a 14-inch MacBook Pro, with a 12-core
 
 The memory is 64 GB of unified LPDDR5, shared by the CPU and the GPU.
 
-The theoretical bandwidth is about 400 GB/s. This is Apple's published figure, and a 512-bit LPDDR5-6400 bus computes to 409.6 GB/s (64 bytes × 6400 MT/s). It is a spec-sheet number, not a STREAM result. I have no local bandwidth measurement or efficiency ratio. Galactus's 81% does not transfer to Apple's different memory subsystem. For scale only: about 400 GB/s on paper is roughly 2.6× Galactus's about 150 GB/s real DRAM bandwidth, which is the main reason to test MoE decode on this class of part.
+The theoretical bandwidth is about 400 GB/s. This is Apple's published figure, and a 512-bit LPDDR5-6400 bus computes to 409.6 GB/s (64 bytes × 6400 MT/s). It is a spec-sheet number, not a STREAM result. We have no local bandwidth measurement or efficiency ratio. Galactus's 81% does not transfer to Apple's different memory subsystem. For scale only: about 400 GB/s on paper is roughly 2.6× Galactus's about 150 GB/s real DRAM bandwidth, which is the main reason to test MoE decode on this class of part.
 
 ## GPU
 
@@ -32,4 +32,4 @@ The September investigation captured Heavy thermal pressure with about 21.6 W GP
 
 ## Current configuration
 
-I’m running `Qwen3.8-27B-oQ4e-fp16-mtp` under oMLX 0.6.4 build 2529. Lightning MTP and ANE Prefill are on; DFlash, VLM MTP, TurboQuant KV, and CPU prefill sharing are off. SpecPrefill is saved as on without a draft model recorded, so its execution and benefit remain unverified. The [model note](../../results/qwen-3.8-27b.md#final-settings-for-now-september-30-2026) has the full settings. I’m stopping further measurements for now.
+We are running `Qwen3.8-27B-oQ4e-fp16-mtp` under oMLX 0.6.4 build 2529. Lightning MTP and ANE Prefill are on; DFlash, VLM MTP, TurboQuant KV, and CPU prefill sharing are off. SpecPrefill is saved as on without a draft model recorded, so its execution and benefit remain unverified. The [model note](../../results/qwen-3.8-27b.md#final-settings-for-now-september-30-2026) has the full settings. We are stopping further measurements for now.

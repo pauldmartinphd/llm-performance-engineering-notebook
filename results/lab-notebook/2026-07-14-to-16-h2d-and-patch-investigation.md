@@ -1,14 +1,14 @@
 # evening, July 14 – July 16, 2026 — The H2D result and the patch, interrupted
 
-[All lab records](README.md) · [Related investigation: chapter 2](../../investigations/02-following-the-prefill-bottleneck.md)
+[All lab records](README.md) · [Related experiment: 2](../../investigations/02-following-the-prefill-bottleneck.md)
 
 ## Purpose and reasoning
 
-Compare the available transfer bandwidth with the engine's observed behavior, then determine whether a scheduler change could use that headroom. The proposed mechanism changed as source inspection revealed which copies were already asynchronous.
+We compare the available transfer bandwidth with the engine's observed behavior, then determine whether a scheduler change could use that headroom. The proposed mechanism changed as source inspection revealed which copies were already asynchronous.
 
 ## Experimental design
 
-I measured concurrent host-to-device streams, inspected the copy/synchronization path, and attempted the proposed patch builds and launches. I checked device memory when an allocation failed. I kept later reports from the separate patch test distinguishable from the measurements made in this thread.
+We measured concurrent host-to-device streams, inspected the copy/synchronization path, and attempted the proposed patch builds and launches. We checked device memory when an allocation failed. We kept later reports from the separate patch test distinguishable from the measurements made in this thread.
 
 ## Results
 
@@ -518,7 +518,7 @@ Paul: "I already handled that in another thread. the short answer is that PP got
 **Observations**
 
 - **Confirmed:** the ~130 bound; the cap is host-thread copy serialization, not a flag or card fix.
-- **Decision (investigation closed):** decode 6.01 t/s at the 152 GB/s DDR4 wall, every software lever dead — only fewer bytes (smaller quant, ruled out) or more bandwidth (Genoa, at absurd RAM prices) moves it. Prefill ~120 t/s, 3.2× measured, capped by host-thread copy serialization. Build config: `-DGGML_ZENDNN=OFF`, fits VRAM, `-t 32`, `-ub 8192`, op_offload on (free for decode).
+- **Decision (investigation closed):** decode 6.01 t/s at the 152 GB/s DDR4 wall, every software lever dead — only fewer bytes (smaller quant, ruled out) or more bandwidth (Genoa, at absurd RAM prices) moves it. Prefill ~120 t/s, 3.2× measured, capped by host-thread copy serialization. Build configuration: `-DGGML_ZENDNN=OFF`, fits VRAM, `-t 32`, `-ub 8192`, op_offload on (free for decode).
 - The next increment — making copies concurrent by removing per-split syncs — is a real scheduler rewrite, ~120 → maybe ~200 (an 8K prompt from 68 s to 41 s), estimated a week in delicate code. Issue #20757 is where the maintainers discuss the copy subsystem.
 
 ### 10:44 — The comparison with hosted models: ~10x

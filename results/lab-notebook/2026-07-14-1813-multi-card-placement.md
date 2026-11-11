@@ -1,14 +1,14 @@
 # July 14, 2026 (evening) — Multi-card placement experiments and the split histogram
 
-[All lab records](README.md) · [Related investigation: chapter 2](../../investigations/02-following-the-prefill-bottleneck.md)
+[All lab records](README.md) · [Related experiment: 2](../../investigations/02-following-the-prefill-bottleneck.md)
 
 ## Purpose and reasoning
 
-Test whether the expert-offload work is concentrated on one GPU and whether distributing it changes throughput. A more even split is an intermediate observation; the useful outcome is a faster completed prompt.
+We test whether the expert-offload work is concentrated on one GPU and whether distributing it changes throughput. A more even split is an intermediate observation; the useful outcome is a faster completed prompt.
 
 ## Experimental design
 
-I inspected scheduler traces and effective allocations, then tried the recorded tensor/device placements and distribution change. I retained loading and context-allocation failures separately. I compared split counts with measured throughput; the trace capture times are file-write times, not independently logged run starts.
+We inspected scheduler traces and effective allocations, then tried the recorded tensor/device placements and distribution change. We retained loading and context-allocation failures separately. We compared split counts with measured throughput; the trace capture times are file-write times, not independently logged run starts.
 
 ## Results
 
@@ -727,7 +727,7 @@ Second edit — add to `struct ggml_backend_sched {`:
     int off_rr; // round-robin cursor for op_offload target selection
 ```
 
-Zero-initialized if the struct is calloc'd (verify: `grep -n 'calloc\|ggml_backend_sched_new' ggml/src/ggml-backend.cpp`; if not, add `sched->off_rr = 0;` in init). Build and verify placement moved:
+Zero-initialized if the struct is calloc'd (verify: `grep -n 'calloc\|ggml_backend_sched_new' ggml/src/ggml-backend.cpp`; if not, add `sched->off_rr = 0;` in init). We build and verify placement moved:
 
 ```bash
 cd /root/llama.cpp
@@ -764,7 +764,7 @@ Paul pasted a detailed technical review from a separate analysis session (referr
 - Bound from the fitted decomposition: 8192 tokens at 104.97 t/s ≈ 78 s; perfectly hiding a 15 s streaming term yields ~63 s ≈ ~130 t/s. "Worth having, but not 250–350."
 - The dramatic version requires concurrent copies (async host→device with a pinned source, `memcpyAsync` on each backend's own stream, an event before compute launch, or a copy-thread pool). Before writing that: a ten-minute standalone test — `hipMemcpyAsync` from pinned host to all four cards on four streams from one thread. If the root complex or RAM bandwidth caps aggregate H2D near 22–40 GB/s rather than ~88, no scheduler change can reach the target.
 - On the patch itself: the struct is calloc'd in `ggml_backend_sched_new` in every known version (keep the grep step); make `off_rr` unsigned. Per-op round-robin splits gate/up/down of one layer across three cards — two extra multi-hundred-MB peer hops per layer at ub 8192 and roughly double the split count. Prefer keying on the layer: `sscanf(src->name, "blk.%d.", &il); pick = il % n_elig`, falling back to the cursor if parsing fails — same size, keeps each layer's three expert matmuls local, stable across ubatches, needs no struct field.
-- Expect each of ROCm1–3 to newly allocate roughly one layer's expert staging in its compute buffer; check VRAM headroom on first run. Compare total split count before/after, not just shares. Decode untouched (`offload_op` requires batch ≥ 32). Caveat on its own claims: the `cpy_tensor_async` rejection and calloc details date from mid-2025 — confirm the fallback still performs the destination sync before the copy in this checkout, "that stall is where this patch's entire gain comes from."
+- Expect each of ROCm1–3 to newly allocate roughly one layer's expert staging in its compute buffer; check VRAM headroom on first run. We compare total split count before/after, not just shares. Decode untouched (`offload_op` requires batch ≥ 32). Caveat on its own claims: the `cpy_tensor_async` rejection and calloc details date from mid-2025 — confirm the fallback still performs the destination sync before the copy in this checkout, "that stall is where this patch's entire gain comes from."
 
 **Observations**
 
@@ -860,7 +860,7 @@ The two scheduler captures make the placement change visible:
 | ROCm2 | 175 | 294 |
 | ROCm3 | 147 | 292 |
 
-The GPU split totals differ slightly because the scheduler partitions the graphs differently. These counts describe graph splits, not bytes transferred or time spent on each GPU. They establish that I spread the offloaded work much more evenly.
+The GPU split totals differ slightly because the scheduler partitions the graphs differently. These counts describe graph splits, not bytes transferred or time spent on each GPU. They establish that we spread the offloaded work much more evenly.
 
 The pp512 rows, however, report **28.59 ± 0.00 t/s before and 28.50 ± 0.00 after**. Redistributing this workload did not improve its throughput. The allocation records show the cost: the original trace reserves roughly 4260 MiB on ROCm0 but only 205, 205, and 339 MiB on the other GPUs; the distributed trace reserves roughly 4260, 4260, 3852, and 3852 MiB. Using more GPUs required more scratch space without producing a gain in this small-prompt test.
 
@@ -869,4 +869,4 @@ These traces complement the later [pp8192 patch experiment](2026-07-21-prefill-p
 
 ### Source dates
 
-**Capture date:** July 14, 2026, inferred from the original files' modification times. You recovered the timestamps on October 23: `sched_full.txt` was last written at 19:07:54 EDT and `sched_patched.txt` at 19:58:26 EDT. These are file-write times, not run-start times. [Timestamp evidence](../raw-logs/2026-10-22-galactus-archive/source-timestamps.md).
+**Capture date:** July 14, 2026, inferred from the original files' modification times. We recovered the timestamps on October 23: `sched_full.txt` was last written at 19:07:54 EDT and `sched_patched.txt` at 19:58:26 EDT. These are file-write times, not run-start times. [Timestamp evidence](../raw-logs/2026-10-22-galactus-archive/source-timestamps.md).

@@ -1,14 +1,14 @@
 # July 21, 2026 — Building and benchmarking the patch
 
-[All lab records](README.md) · [Related investigation: chapter 2](../../investigations/02-following-the-prefill-bottleneck.md)
+[All lab records](README.md) · [Related experiment: 2](../../investigations/02-following-the-prefill-bottleneck.md)
 
 ## Purpose and reasoning
 
-Measure whether distributing offload and removing the routing-index readback wait improve GLM-5.2 prefill. Source inspection predicted that distribution alone could leave the binding dependency in place.
+We measure whether distributing offload and removing the routing-index readback wait improve GLM-5.2 prefill. Source inspection predicted that distribution alone could leave the binding dependency in place.
 
 ## Experimental design
 
-I compared the original scheduler, distribution alone, and the combined two-edit patch with the recorded pp8192 configuration. I checked split distribution and throughput separately. I tested later graph/pipeline changes, reverted those that failed or did not help, then repeated prefill and compared generation with the same expert placement.
+We compared the original scheduler, distribution alone, and the combined two-edit patch with the recorded pp8192 configuration. We checked split distribution and throughput separately. We tested later graph/pipeline changes, reverted those that failed or did not help, then repeated prefill and compared generation with the same expert placement.
 
 ## Results
 
@@ -443,7 +443,7 @@ Verify: the load log prints `pipeline parallelism enabled` and `sched copies = 4
 
 **Observations**
 
-- Failure modes pre-registered: `n_copies=4` quadruples staging (~4 GiB/layer → ~16 GiB vs 30 GiB/card) — it fails safe at line 619, logging `compute buffer allocation failed, retrying without pipeline parallelism`; the fallback is a rebuild with `-DGGML_SCHED_MAX_COPIES=2` (the `#ifndef` at ggml-backend.cpp:764). Check that pp8192 output is still coherent, not just fast.
+- Failure modes pre-registered: `n_copies=4` quadruples staging (~4 GiB/layer → ~16 GiB vs 30 GiB/card) — it fails safe at line 619, logging `compute buffer allocation failed, retrying without pipeline parallelism`; the fallback is a rebuild with `-DGGML_SCHED_MAX_COPIES=2` (the `#ifndef` at ggml-backend.cpp:764). We check that pp8192 output is still coherent, not just fast.
 
 ### the GLM-5.3-Flash experiments — pp16384 = 86.11; the attention decomposition; pp32768 predicted at 55.3
 
@@ -689,4 +689,4 @@ git stash pop && cmake --build build -j64 && cmake --install build
 
 ## Original logs added October 22, 2026
 
-I added the original scheduler traces in October. They show the GPU split counts before and after distribution and a separate pp512 comparison of 28.59 versus 28.50 t/s. [the July diagnostic reconstruction](2026-07-14-1108-v3-diagnostic-run.md#follow-up-tests-and-hardware-monitoring) distinguishes those traces from the pp8192 patch comparison here.
+We added the original scheduler traces in October. They show the GPU split counts before and after distribution and a separate pp512 comparison of 28.59 versus 28.50 t/s. [the July diagnostic reconstruction](2026-07-14-1108-v3-diagnostic-run.md#follow-up-tests-and-hardware-monitoring) distinguishes those traces from the pp8192 patch comparison here.

@@ -1,14 +1,14 @@
 # DeepSeek-V4 DSpark investigation and interval notes
 
-[All lab records](README.md) · [Related investigation: chapter 3](../../investigations/03-making-speculation-useful.md)
+[All lab records](README.md) · [Related experiment: 3](../../investigations/03-making-speculation-useful.md)
 
 ## Purpose and reasoning
 
-Investigate DSpark settings and preserve the interval between the July patch work and the August common benchmark. Drafting was intended to reduce the cost of sequential target-model generation.
+We investigate DSpark settings and preserve the interval between the July patch work and the August common benchmark. Drafting was intended to reduce the cost of sequential target-model generation.
 
 ## Experimental design
 
-I compared the hand-collected DeepSeek-V4-Flash-0731 draft-length and confidence-threshold results, and recorded the attempted terminal-capture method. I kept hardware changes, uncompleted plans, and the later common-build checks separate. Exact run times and some acceptance counters were not retained.
+We compared the hand-collected DeepSeek-V4-Flash-0731 draft-length and confidence-threshold results, and recorded the attempted terminal-capture method. We kept hardware changes, uncompleted plans, and the later common-build checks separate. Exact run times and some acceptance counters were not retained.
 
 ## Results
 
@@ -22,7 +22,7 @@ The early observations justified a cleaner repeated test; they did not establish
 
 *Later results: [the 2 TB STREAM rebaseline](2026-08-15-stream-rebaseline-2tb.md) completed the memory rebaseline, and [the August common baseline](2026-08-15-to-16-common-baseline-2tb.md) repeated speculative decode on a common build. The table below remains provisional, with the p-min conflict unresolved. The description of 14.7 t/s as the fastest result on any model overlooks the April MiniMax resident-offload result of 17.37 t/s.*
 
-*Continuation of the Galactus Lab Notebook (Sessions 1–9, July 13–21, 2026). Run dates are unknown. Benchmark figures in Session 10 were hand-collected from your terminal — the log-capture instrumentation failed (recorded below as its own finding). Times of day were not recorded, so the entries follow the order of the conversation, as in Session 9.*
+*Continuation of the Galactus Lab Notebook (Sessions 1–9, July 13–21, 2026). We run dates are unknown. Benchmark figures in Session 10 were hand-collected from our terminal — the log-capture instrumentation failed (recorded below as its own finding). Times of day were not recorded, so the entries follow the order of the conversation, as in Session 9.*
 
 ---
 
@@ -73,7 +73,7 @@ huggingface-cli download am17an/DeepseekV4-Flash-20260731-DSpark \
   --local-dir /models/DeepSeek-V4-Flash/DSpark
 ```
 
-Check with gguf_dump before loading:
+We check with gguf_dump before loading:
 
 ```
 general.architecture = 'dflash'

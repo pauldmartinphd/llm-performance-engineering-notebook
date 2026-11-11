@@ -1,14 +1,14 @@
 # Galactus build record — March 23, 2026
 
-[All lab records](README.md) · [Related investigation: chapter 1](../../investigations/01-establishing-a-baseline.md)
+[All lab records](README.md) · [Related experiment: 1](../../investigations/01-establishing-a-baseline.md)
 
 ## Purpose and reasoning
 
-Establish a working large-model host, then test whether memory population and expert placement limit its speed. Keeping some experts in VRAM could reduce CPU-side work, while matched DIMMs could improve sustained memory access.
+We establish a working large-model host, then test whether memory population and expert placement limit its speed. Keeping some experts in VRAM could reduce CPU-side work, while matched DIMMs could improve sustained memory access.
 
 ## Experimental design
 
-I built the ROCm/gfx1030 runtime in the recorded Proxmox LXC setup. I compared Qwen configurations with CPU experts and GPU-resident expert layers, then compared mixed and matched DIMMs. The source also records Kimi trials and unsuccessful runtime options. Repetition counts and full cache conditions were not retained.
+We built the ROCm/gfx1030 runtime in the recorded Proxmox LXC setup. We compared Qwen configurations with CPU experts and GPU-resident expert layers, then compared mixed and matched DIMMs. The source also records Kimi trials and unsuccessful runtime options. Repetition counts and full cache conditions were not retained.
 
 ## Results
 
@@ -20,9 +20,9 @@ The machine could host these models, and the memory change supported a material 
 
 ## Detailed record
 
-**Source period:** March 2026. This entry recovers the early Galactus configuration from your [build notebook](../reference-notes/2026-03-23-galactus-build.md). The saved source is the September 30 edited version of that dated note, rather than a pristine March export or a raw benchmark capture. Its commands and trial tables are useful reproducibility material, but its displayed rates have no repetition counts or statistical spreads. You therefore keep them separate from the later [August common baseline](2026-08-15-to-16-common-baseline-2tb.md).
+**Source period:** March 2026. This entry recovers the early Galactus configuration from our [build notebook](../reference-notes/2026-03-23-galactus-build.md). The saved source is the September 30 edited version of that dated note, rather than a pristine March export or a raw benchmark capture. Its commands and trial tables are useful reproducibility material, but its displayed rates have no repetition counts or statistical spreads. We therefore keep them separate from the later [August common baseline](2026-08-15-to-16-common-baseline-2tb.md).
 
-This entry recovers the early Galactus configuration from my [build notebook](../reference-notes/2026-03-23-galactus-build.md). The retained source is the September 30 edited version of that dated note, rather than a pristine March export or a raw benchmark capture. Its commands and trial tables are useful reproducibility material, but its displayed rates have no repetition counts or statistical spreads. I therefore keep them separate from the later [August common baseline](2026-08-15-to-16-common-baseline-2tb.md).
+This entry recovers the early Galactus configuration from our [build notebook](../reference-notes/2026-03-23-galactus-build.md). The retained source is the September 30 edited version of that dated note, rather than a pristine March export or a raw benchmark capture. Its commands and trial tables are useful reproducibility material, but its displayed rates have no repetition counts or statistical spreads. We therefore keep them separate from the later [August common baseline](2026-08-15-to-16-common-baseline-2tb.md).
 
 ## The initial installation
 
@@ -30,7 +30,7 @@ The March system used an EPYC 7713 and four V620 GPUs under Proxmox VE 9.1.1, ke
 
 These conditions differ from the July investigation's ZFS/SATA storage, later binary, and unrestricted container. The shared machine name does not make the two software environments one continuous benchmark recipe.
 
-The setup script exposed the render devices but omitted `/dev/kfd`. I added the bind mount recorded in the source and used a world-accessible device permission as a workaround. That solved the installation's access problem while granting every host user access to the device; it is a historical setup choice, rather than a general permission recommendation.
+The setup script exposed the render devices but omitted `/dev/kfd`. We added the bind mount recorded in the source and used a world-accessible device permission as a workaround. That solved the installation's access problem while granting every host user access to the device; it is a historical setup choice, rather than a general permission recommendation.
 
 Debian's system clang could not read the installed ROCm device bitcode. Building with ROCm's bundled compiler resolved the mismatch. The source retains the CMake command, install command, and hostname-migration incident. Nothing in this import reruns those commands or changes a machine configuration.
 

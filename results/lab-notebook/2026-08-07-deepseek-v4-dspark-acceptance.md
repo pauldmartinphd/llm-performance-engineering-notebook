@@ -1,14 +1,14 @@
 # DeepSeek-V4-Flash-0731: DSpark acceptance and generation speed
 
-[All lab records](README.md) · [Related investigation: chapter 3](../../investigations/03-making-speculation-useful.md)
+[All lab records](README.md) · [Related experiment: 3](../../investigations/03-making-speculation-useful.md)
 
 ## Purpose and reasoning
 
-Compare draft length, accepted tokens, and actual generation time for DeepSeek-V4-Flash-0731. Longer drafts can save target steps, but also make drafting and verification more expensive.
+We compare draft length, accepted tokens, and actual generation time for DeepSeek-V4-Flash-0731. Longer drafts can save target steps, but also make drafting and verification more expensive.
 
 ## Experimental design
 
-I used the retained DSpark server captures at requested maximum draft lengths 1, 2, and 5. I read the final 256-token generation timing and acceptance counts, rather than a rolling display rate. The full launch commands and exact build are missing, and the baseline log is empty.
+We used the retained DSpark server captures at requested maximum draft lengths 1, 2, and 5. We read the final 256-token generation timing and acceptance counts, rather than a rolling display rate. The full launch commands and exact build are missing, and the baseline log is empty.
 
 ## Results
 
@@ -20,7 +20,7 @@ Acceptance percentage and accepted length did not rank performance on their own.
 
 ## Detailed record
 
-**Capture date:** August 7, 2026, inferred from the original files' modification times. The logs contain elapsed times only, but the saved source files place nmax1, nmax2, and nmax5 at 19:47:02, 19:47:46, and 19:48:34 EDT; the armed-test file was last written at 19:55:26 EDT. You recovered these timestamps on October 23. They establish a file-write sequence, not necessarily the order in which you ran the tests. [Timestamp evidence](../raw-logs/2026-10-22-galactus-archive/source-timestamps.md).
+**Capture date:** August 7, 2026, inferred from the original files' modification times. The logs contain elapsed times only, but the saved source files place nmax1, nmax2, and nmax5 at 19:47:02, 19:47:46, and 19:48:34 EDT; the armed-test file was last written at 19:55:26 EDT. We recovered these timestamps on October 23. They establish a file-write sequence, not necessarily the order in which we ran the tests. [Timestamp evidence](../raw-logs/2026-10-22-galactus-archive/source-timestamps.md).
 
 ## DeepSeek-V4 DSpark: accepted tokens versus generation speed
 
@@ -33,10 +33,10 @@ Four server logs explicitly load `DeepSeek-V4-Flash-0731-UD-Q8_K_XL` and the mat
 | nmax2 | 2 | 14.45 | 146 / 216 | 67.593% | 2.35 |
 | nmax5 | 5 | 12.22 | 169 / 423 | 39.953% | 2.99 |
 
-Each final timing covers 256 generated tokens after a 28-token prompt. I used the final `eval time` rate, not the rolling `tg` or `tg_3s` values printed during generation. The files do not retain the full launch command or an exact build revision, so I cannot establish that every other setting stayed fixed.
+Each final timing covers 256 generated tokens after a 28-token prompt. We used the final `eval time` rate, not the rolling `tg` or `tg_3s` values printed during generation. The files do not retain the full launch command or an exact build revision, so we cannot establish that every other setting stayed fixed.
 
 Increasing n-max from 1 to 2 reduced the acceptance fraction but increased throughput. Increasing it to 5 produced a longer accepted sequence per step while reducing throughput. Acceptance percentage and mean length therefore do not measure the performance benefit on their own: drafting and verification also consume time. The two n-max 5 captures have identical acceptance counts but different elapsed times, which further shows why acceptance counts cannot substitute for repeated timing.
 
-`dspark-baseline.log` is empty. I cannot calculate a target-only speedup from this group of server files. The raw 12.22 t/s result adds an n-max 5 observation to the earlier 11.35 t/s armed test; it does not invalidate the earlier measurement.
+`dspark-baseline.log` is empty. We cannot calculate a target-only speedup from this group of server files. The raw 12.22 t/s result adds an n-max 5 observation to the earlier 11.35 t/s armed test; it does not invalidate the earlier measurement.
 
 Related dated results: [August 16 speculation tests](2026-08-15-to-16-common-baseline-2tb.md#individual-runs-and-benchmark-file-checks).

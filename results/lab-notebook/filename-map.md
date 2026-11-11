@@ -1,6 +1,6 @@
 # Notebook filename changes
 
-I replaced entry-number filenames with experiment dates and descriptive titles. Files prefixed `undated-` retain an unknown run date. This map preserves the old names for readers following earlier links.
+We replaced entry-number filenames with experiment dates and descriptive titles. Files prefixed `undated-` retain an unknown run date. This map preserves the old names for readers following earlier links.
 
 | Previous filename | Current record |
 |---|---|

@@ -8,18 +8,18 @@ The main workload is a large MoE model with the routed experts in system RAM (`-
 
 ## Benchmark faults
 
-These behaviors were observed in the llama.cpp builds used for the experiments. Check them when reproducing the work on a different build.
+These behaviors were observed in the llama.cpp builds used for the experiments. We check them when reproducing the work on a different build.
 
-- The `-p N` option limits `n_ubatch` to N. This was the largest error in the project: every op_offload test before I found it had run at ub 512, not the ub 8192 I intended. Set `-ub` directly, keep `-p` large enough, and confirm the effective micro-batch size.
+- The `-p N` option limits `n_ubatch` to N. This was the largest error in the project: every op_offload test before we found it had run at ub 512, not the ub 8192 we intended. Set `-ub` directly, keep `-p` large enough, and confirm the effective micro-batch size.
 - `llama-bench` separates `-ot` rules with semicolons, and commas create separate benchmark configurations — the opposite of `llama-server`. A comma-separated rule set drops the `exps=CPU` catch-all from every configuration after the first, so the GPU tries to allocate the full expert tensor and runs out of memory. The failure is recorded in [../results/raw-logs/llama-bench-ot-oom-failure.txt](../results/raw-logs/llama-bench-ot-oom-failure.txt).
 - `llama-bench` installs a null log callback, so `GGML_SCHED_DEBUG` output appears only with `-v`.
-- `llama-fit-params` turns off if you pass any of `-ngl`, `-ts`, `-ot`, or `-ncmoe`.
-- On a 1M-context model, `llama-cli` takes the context length from the model unless you pass `-c`. It then fills VRAM with the KV cache and runs out of memory. `llama-bench` hides this, because it sizes the context per test.
+- `llama-fit-params` turns off if we pass any of `-ngl`, `-ts`, `-ot`, or `-ncmoe`.
+- On a 1M-context model, `llama-cli` takes the context length from the model unless we pass `-c`. It then fills VRAM with the KV cache and runs out of memory. `llama-bench` hides this, because it sizes the context per test.
 - Capture llama-cli through a pseudo-terminal or the server interface: piping it through `tee` breaks its terminal display, and `--log-file` clamps the log to error level and drops the timing lines. Capture with `script -q`, or read the JSON timings from `llama-server`.
 
 ## Diagnosing placement and bandwidth
 
-- Run STREAM with the RFO correction to find your true memory bandwidth: multiply Scale by 1.5 and Add and Triad by 4/3, and apply no correction to Copy if it compiled to non-temporal stores. Check the generated stores before applying the correction; an adjusted result above the theoretical limit indicates a problem with the assumed traffic model. See [../experiments/galactus-diag.sh](../experiments/galactus-diag.sh) and [../hardware/galactus/galactus_triad.txt](../hardware/galactus/galactus_triad.txt).
+- Run STREAM with the RFO correction to find our true memory bandwidth: multiply Scale by 1.5 and Add and Triad by 4/3, and apply no correction to Copy if it compiled to non-temporal stores. We check the generated stores before applying the correction; an adjusted result above the theoretical limit indicates a problem with the assumed traffic model. See [../experiments/galactus-diag.sh](../experiments/galactus-diag.sh) and [../hardware/galactus/galactus_triad.txt](../hardware/galactus/galactus_triad.txt).
 - Run `GGML_SCHED_DEBUG=2 ... -v` and count the split histogram (`grep '## SPLIT' | sort | uniq -c`). This shows whether the scheduler concentrates the offload on one card, and whether the placement behavior addressed by the [prefill patch](../patches/prefill/README.md) is present. It does not establish a throughput gain.
 - Check the histogram and throughput separately. Equal placement establishes that the scheduler changed; it does not establish that prefill became faster.
 
@@ -35,10 +35,10 @@ Confidence truncation with `--spec-draft-p-min` did not establish an improvement
 
 ## Models to test on another system
 
-- The decode two-term model is `time_per_token ≈ C + (bytes_read_per_token ÷ your_bandwidth)`. `C` is a GPU-side constant, about 90 ms on Galactus. `bytes_read_per_token` is your active-expert size at your quantization. On Galactus the model predicted 5.5 / 6.2 / 3.9 t/s against measured values of 5.53 / 6.01 / 3.87. Measure your own bandwidth with STREAM and your own bytes per token. Treat the two-term form as an approximation to check against measurements.
-- The prefill ubatch ladder is `t_ubatch ≈ (fixed streaming term) + (linear GEMM term × ub)`. On Galactus both terms came from the single card that the unpatched scheduler used. Test whether those two terms explain your measured ladder.
-- Prompt-length scaling is a quadratic attention term plus the linear expert terms. Attention was 72% of a 32k prefill pass here. Your split depends on your attention implementation and your context depth.
-- For cost, the $/GB and $/decode-token method in [the hardware note's cost section](../hardware/galactus/README.md) is a template. Your prices and your parts will differ.
+- The decode two-term model is `time_per_token ≈ C + (bytes_read_per_token ÷ your_bandwidth)`. `C` is a GPU-side constant, about 90 ms on Galactus. `bytes_read_per_token` is our active-expert size at our quantization. On Galactus the model predicted 5.5 / 6.2 / 3.9 t/s against measured values of 5.53 / 6.01 / 3.87. We measure our own bandwidth with STREAM and our own bytes per token. Treat the two-term form as an approximation to check against measurements.
+- The prefill ubatch ladder is `t_ubatch ≈ (fixed streaming term) + (linear GEMM term × ub)`. On Galactus both terms came from the single card that the unpatched scheduler used. We test whether those two terms explain our measured ladder.
+- Prompt-length scaling is a quadratic attention term plus the linear expert terms. Attention was 72% of a 32k prefill pass here. Our split depends on our attention implementation and our context depth.
+- For cost, the $/GB and $/decode-token method in [the hardware note's cost section](../hardware/galactus/README.md) is a template. Our prices and our parts will differ.
 
 ---
 
@@ -52,6 +52,6 @@ The notebook also records pinned-buffer and ZenDNN crashes during v2 testing, an
 
 ## Limits of the evidence
 
-- These Galactus numbers come from one machine and mostly one prompt (a technical-prose ZFS explainer for the decode and speculation tests), with greedy decoding. An instrumentation failure prevented me from capturing acceptance rates for the Session 10 DSpark runs, as recorded in the notebook.
+- These Galactus numbers come from one machine and mostly one prompt (a technical-prose ZFS explainer for the decode and speculation tests), with greedy decoding. An instrumentation failure prevented us from capturing acceptance rates for the Session 10 DSpark runs, as recorded in the notebook.
 - The record spans April through August and includes different llama.cpp builds, model exports, memory populations, and benchmark settings. [the August common baseline](../results/lab-notebook/2026-08-15-to-16-common-baseline-2tb.md) provides a common August baseline; earlier results are historical comparisons.
-- I label estimates from a model separately from measurements in the source documents.
+- we label estimates from a model separately from measurements in the source documents.

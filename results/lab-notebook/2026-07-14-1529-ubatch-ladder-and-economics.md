@@ -1,14 +1,14 @@
 # July 14, 2026 (late afternoon) — The ubatch ladder and the economics of the build
 
-[All lab records](README.md) · [Related investigation: chapter 2](../../investigations/02-following-the-prefill-bottleneck.md)
+[All lab records](README.md) · [Related experiment: 2](../../investigations/02-following-the-prefill-bottleneck.md)
 
 ## Purpose and reasoning
 
-Test whether larger effective microbatches let GPU expert offload repay its transfer cost. Use the result to assess the practical value of the GPUs for prompt processing.
+We test whether larger effective microbatches let GPU expert offload repay its transfer cost. We use the result to assess the practical value of the GPUs for prompt processing.
 
 ## Experimental design
 
-I kept the prompt at 8192 tokens and compared offload across microbatches from 512 to 8192. I used the CPU-expert path as a control and retained the separate hardware-cost discussion. The ladder runs while the interpretation develops, so interim explanations are preserved below.
+We kept the prompt at 8192 tokens and compared offload across microbatches from 512 to 8192. We used the CPU-expert path as a control and retained the separate hardware-cost discussion. The ladder runs while the interpretation develops, so interim explanations are preserved below.
 
 ## Results
 

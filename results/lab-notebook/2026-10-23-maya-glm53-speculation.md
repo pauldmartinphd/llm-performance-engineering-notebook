@@ -1,14 +1,14 @@
 # Two large MoE models at roughly 30 tokens/s on four V620s
 
-[All lab records](README.md) · [Related investigation: chapter 4](../../investigations/04-from-the-fork-to-maya.md)
+[All lab records](README.md) · [Related experiment: 4](../../investigations/04-from-the-fork-to-maya.md)
 
 ## Purpose and reasoning
 
-Test Maya with the existing GLM-Flash export, measure the effect of its speculative path, and check whether head grouping or draft-expert settings improve on the defaults.
+We test Maya with the existing GLM-Flash export, measure the effect of its speculative path, and check whether head grouping or draft-expert settings improve on the defaults.
 
 ## Experimental design
 
-I used four V620s, the recorded Q4 pack, 32768 context, greedy decoding, and three 256-token answers. I compared default speculation with NO_SPEC=1, then varied the head GPU count and MTP_KEEP. I measured 2K/8K prefill separately. DeepSeek's DSpark calibration is a distinct workload linked in this entry.
+We used four V620s, the recorded Q4 pack, 32768 context, greedy decoding, and three 256-token answers. We compared default speculation with NO_SPEC=1, then varied the head GPU count and MTP_KEEP. We measured 2K/8K prefill separately. DeepSeek's DSpark calibration is a distinct workload linked in this entry.
 
 ## Results
 
@@ -22,7 +22,7 @@ GLM speculation gave a 58.8% within-test gain, and the working defaults were wor
 
 **Measured:** October 23, 2026. **Machine:** Galactus, EPYC 7713, 2 TiB RAM, four Radeon Pro V620 GPUs in Proxmox LXC. **Engine:** Project Maya v1.1.24, HIP. [GLM source record](../raw-logs/2026-10-23-maya-glm-and-builds/README.md) · [DeepSeek benchmark and calibration](2026-10-23-deepseek41-cache-and-maya.md).
 
-This is a substantial milestone for Galactus. I now have **GLM-5.3-Flash UD-Q4_K_XL at 31.6 generated tokens/s** and **DeepSeek-V4.1-Flash-1017 UD-Q8_K_XL at 29.3 tokens/s with DSpark** on the same four V620s. Both models exceed the available GPU memory, yet the recorded configurations reach approximately 30 tokens/s using the server's GPU and system memory together. I am using Maya for this stage of the investigation.
+This is a substantial milestone for Galactus. We now have **GLM-5.3-Flash UD-Q4_K_XL at 31.6 generated tokens/s** and **DeepSeek-V4.1-Flash-1017 UD-Q8_K_XL at 29.3 tokens/s with DSpark** on the same four V620s. Both models exceed the available GPU memory, yet the recorded configurations reach approximately 30 tokens/s using the server's GPU and system memory together. We are using Maya for this stage of the investigation.
 
 The GLM result uses the existing Unsloth Q4_K_XL export. The DeepSeek conversation identifies UD-Q8_K_XL as the intended export; the retained Maya output does not print its actual model path. That filename describes a mixed-format model, not uniform eight-bit weights. The measurements are separate runs, not evidence that both models sustain these rates concurrently. The GLM result is for Flash, not the larger GLM-5.3 flagship.
 
@@ -64,7 +64,7 @@ The second configuration was prepared with `MAYA_GLM_NO_SPEC=1`. The source reco
 | 16:29 | Default speculative path | 78 | 30.7 / 31.1 / 33.1 | 31.6 | 238 | 242 |
 | 16:32 | `MAYA_GLM_NO_SPEC=1` | 78 | 19.7 / 20.2 / 19.8 | 19.9 | 239 | 241 |
 
-Speculation improves generation substantially in this comparison while the dedicated prefill rates remain nearly unchanged. The two default runs also differ by about 7.5%, so I retain both rather than present 31.6 as an invariant rate. These are benchmark means across different prompts, not repeated measurements of one identical request, and I did not perform a long-context quality evaluation or sustained service-load test.
+Speculation improves generation substantially in this comparison while the dedicated prefill rates remain nearly unchanged. The two default runs also differ by about 7.5%, so we retain both rather than present 31.6 as an invariant rate. These are benchmark means across different prompts, not repeated measurements of one identical request, and we did not perform a long-context quality evaluation or sustained service-load test.
 
 ## Speculative-head sweep
 
@@ -92,7 +92,7 @@ The same version's documentation gives `MAYA_GLM_MTP_KEEP` a default of two. It 
 
 The final KEEP=4 capture stops before the summary; 28.6 is the arithmetic mean of its three printed rates, not a printed benchmark mean. The default row is reused from the A/B test, not an additional repetition. All variant loads report 78 seconds.
 
-The defaults gave the highest observed result in both sweeps, so I retained them. KEEP=0 and KEEP=3 were close enough to the default that repeated interleaved trials would be needed to rank them reliably. The evidence supports retaining a working configuration more strongly than it supports calling that configuration a universal optimum.
+The defaults gave the highest observed result in both sweeps, so we retained them. KEEP=0 and KEEP=3 were close enough to the default that repeated interleaved trials would be needed to rank them reliably. The evidence supports retaining a working configuration more strongly than it supports calling that configuration a universal optimum.
 
 ## Operational findings
 
@@ -106,7 +106,7 @@ The conversation ends with requests to rename the configurations to `maya-glm5.3
 
 The [October 22 dedicated benchmarks](2026-10-22-glm53-build-comparison.md) measured approximately 284 tokens/s at pp8192 and 10 tokens/s at tg128/tg256 for both llama.cpp and llAMDa. Their CLI runs reached 17.8–18.1 generated tokens/s with automatic placement and requested MTP. Maya now delivers roughly 30 tokens/s from the same named GLM export, with a speculation-off control that explains a substantial part of its own generation improvement.
 
-The engines still differ in context allocation, prompts, speculation paths, and placement. I therefore do not treat the ratio between Maya generation and a llama-bench tg row as an isolated engine speedup. Nor does Maya lead every metric: the dedicated llama-bench pp8192 rates are numerically higher than Maya's 240–242. The practical milestone is that both large models now generate at roughly 30 tokens/s in the recorded Maya configurations, with the GLM A/B result and DeepSeek calibration showing why speculative execution is worth retaining.
+The engines still differ in context allocation, prompts, speculation paths, and placement. We therefore do not treat the ratio between Maya generation and a llama-bench tg row as an isolated engine speedup. Nor does Maya lead every metric: the dedicated llama-bench pp8192 rates are numerically higher than Maya's 240–242. The practical milestone is that both large models now generate at roughly 30 tokens/s in the recorded Maya configurations, with the GLM A/B result and DeepSeek calibration showing why speculative execution is worth retaining.
 
 
 ## Setup choices and proposals retained from the source discussion

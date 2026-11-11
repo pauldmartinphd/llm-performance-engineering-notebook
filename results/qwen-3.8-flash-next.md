@@ -2,9 +2,9 @@
 
 These are Gufo measurements on SilverSurfer. One on-battery completion has direct timing evidence; the later Jan prefill figures have a weaker source. They are not a matched Gufo-versus-Maya comparison.
 
-[Related investigation: chapter 7](../investigations/07-other-local-machines.md) · [All model results](README.md)
+[Related experiment: 7](../investigations/07-other-local-machines.md) · [All model results](README.md)
 
-On November 2, 2026, I ran the UD-Q4_K_XL model with its shared Q8_0 MTP predictor under Gufo 0.28.1 on SilverSurfer's Ryzen AI Max+ PRO 395 and 128 GB unified memory. The configured context was 262,144 tokens, with one session and up to seven draft tokens.
+On November 2, 2026, we ran the UD-Q4_K_XL model with its shared Q8_0 MTP predictor under Gufo 0.28.1 on SilverSurfer's Ryzen AI Max+ PRO 395 and 128 GB unified memory. The configured context was 262,144 tokens, with one session and up to seven draft tokens.
 
 | Observation | Result | Evidence |
 |---|---|---|

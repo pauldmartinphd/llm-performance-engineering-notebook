@@ -1,6 +1,6 @@
 # Results by model and machine
 
-This page helps locate a result. The [lab notebook](lab-notebook/README.md) keeps the full experiments; the [investigation chapters](../investigations/README.md) explain why the tests were run. The [important findings](../takeaways/general-principles.md) give the short conclusions.
+This page helps locate a result. The [lab notebook](lab-notebook/README.md) keeps the full experiments; the [Experiments](../investigations/README.md) explain why the tests were run. The [Findings](../takeaways/general-principles.md) give the short conclusions.
 
 ## Models in the November 10 Galactus setup
 
@@ -13,7 +13,7 @@ Both models use Project Maya, with a separate pair of V620s for each. Their test
 
 The [deployment record](lab-notebook/2026-11-10-maya-dual-model-production.md) gives the reported operating state and retained settings. A configured one-million-token ceiling is not a measured million-token result. The FP16-output and INT8-KV tests also lack a local answer-quality comparison.
 
-The [full GLM-5.3 experiment](lab-notebook/2026-11-09-full-glm53-placement.md) is separate from Flash. Its corrected four-GPU split completed at 6.7 tokens/s mean generation and 47 tokens/s at 8K prefill. I returned to Flash for the intended daily use.
+The [full GLM-5.3 experiment](lab-notebook/2026-11-09-full-glm53-placement.md) is separate from Flash. Its corrected four-GPU split completed at 6.7 tokens/s mean generation and 47 tokens/s at 8K prefill. We returned to Flash for the intended daily use.
 
 ## Earlier Galactus common baseline
 

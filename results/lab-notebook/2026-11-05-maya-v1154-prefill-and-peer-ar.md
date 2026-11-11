@@ -1,14 +1,14 @@
 # Maya v1.1.54: prefill sweep and HIP peer all-reduce failure
 
-[All lab records](README.md) · [Related investigation: chapter 5](../../investigations/05-tuning-long-prompts.md)
+[All lab records](README.md) · [Related experiment: 5](../../investigations/05-tuning-long-prompts.md)
 
 ## Purpose and reasoning
 
-Test whether new prefill, kernel, and transport switches improve DeepSeek on four V620s, then isolate the HIP peer-probe limitation with more reserve memory.
+We test whether new prefill, kernel, and transport switches improve DeepSeek on four V620s, then isolate the HIP peer-probe limitation with more reserve memory.
 
 ## Experimental design
 
-I ran ten variants on v1.1.54, with two measured requests at each 8K/32K/64K length after warm-up. I retained two separate 256-token decode cases per variant. I checked transport activation in the logs. I then ran a focused HIP peer case requesting 3072 MiB reserve. All measurements and source details from this sweep are collected in this one entry.
+We ran ten variants on v1.1.54, with two measured requests at each 8K/32K/64K length after warm-up. We retained two separate 256-token decode cases per variant. We checked transport activation in the logs. We then ran a focused HIP peer case requesting 3072 MiB reserve. All measurements and source details from this sweep are collected in this one entry.
 
 ## Results
 
@@ -22,7 +22,7 @@ No tested switch established a useful improvement over the retained prefill choi
 
 **Experiments:** November 5, 2026. **Sources:** the supplied *Fast Card Prefill Acceleration* conversation export and `maya_benchmark_1154_fixed.py`. Conversation timestamps and result-directory names establish the run date; the host timezone is not independently captured. [Retained evidence and hashes](../raw-logs/2026-11-05-maya-v1154/README.md).
 
-I tested ten Maya v1.1.54 configurations at 8K, 32K, and 64K prompt lengths, with two repetitions per length. The default measured **324.8, 459.4, and 479.4 tokens/s**. None of the switches established a useful prefill improvement in this sweep. Automatic chunk selection reduced throughput at all three lengths, while both requested peer transports retained host transport. A separate test requesting 3072 MiB of reserve reached the HIP transport probe but failed before the engine became ready, so it produced no throughput result.
+We tested ten Maya v1.1.54 configurations at 8K, 32K, and 64K prompt lengths, with two repetitions per length. The default measured **324.8, 459.4, and 479.4 tokens/s**. None of the switches established a useful prefill improvement in this sweep. Automatic chunk selection reduced throughput at all three lengths, while both requested peer transports retained host transport. A separate test requesting 3072 MiB of reserve reached the HIP transport probe but failed before the engine became ready, so it produced no throughput result.
 
 This continues the [October 28 prefill investigation](2026-10-28-maya-prefill-and-regression.md), [October 29 production confirmation](2026-10-29-maya-production-64k.md), and [October 30 v1.1.41 tests](2026-10-30-maya-v1141-benchmark.md). No new inference run or production change accompanied this notebook update.
 
@@ -42,7 +42,7 @@ cd /opt/project-maya
 
 It reported `/opt/maya-bench-1154-20261105-142331`. The [supplied runner](../../experiments/maya_benchmark_1154_fixed.py) fetches tag `v1.1.54`, switches the supplied checkout to its detached commit, refreshes the HIP engine, and launches a separate engine process for each variant. It does not create a separate checkout, despite an earlier description in the conversation. It copies configuration data and removes the tested environment overrides from each child before applying that variant. Thus “default” means defaults for the tested switches with the remaining supplied configuration retained, not an independently verified stock configuration.
 
-The runner builds prompts from the checked-out README, documentation, and benchmark-result Markdown. It tokenizes this corpus, rotates the token sequence by prompt length and repetition, and repeats/truncates it to exactly 8192, 32768, or 65536 tokens. Each process performs a short decode warm-up, two 256-token decode cases, and an 8K prefill warm-up before the six measured prefill requests. Prefill requests generate one token; the recorded rate is the requested token count divided by the engine's reported prompt time. Rotated leading tokens are intended to avoid prefix reuse, but these printed records contain no cache-hit counter. I therefore do not label the sweep independently verified zero-cache prefill.
+The runner builds prompts from the checked-out README, documentation, and benchmark-result Markdown. It tokenizes this corpus, rotates the token sequence by prompt length and repetition, and repeats/truncates it to exactly 8192, 32768, or 65536 tokens. Each process performs a short decode warm-up, two 256-token decode cases, and an 8K prefill warm-up before the six measured prefill requests. Prefill requests generate one token; the recorded rate is the requested token count divided by the engine's reported prompt time. Rotated leading tokens are intended to avoid prefix reuse, but these printed records contain no cache-hit counter. We therefore do not label the sweep independently verified zero-cache prefill.
 
 The complete run contains 60 prefill measurements and 20 decode cases. The original [run CSV](../raw-logs/2026-11-10-maya-collection/extracted/maya-bench-1154-20261105-142331/results.csv) retains them all. The [conversation-derived CSV](../data/maya-v1154-prefill-observations.csv) contains only the 47 prefill observations printed in the earlier export; it is a partial transcription, not the full run. The [printed-summary CSV](../data/maya-v1154-prefill-summary.csv) retains all 30 prefill means. Repeated pasted output is counted once.
 
@@ -105,7 +105,7 @@ Model loading had progressed further: the log reports two complete Engram tables
 
 ## Setup failures and production correction
 
-Before the completed sweep, one launch collided with an existing second-resolution output directory, and another failed importing `regex` through `strata_tokenizer`. The latter occurred after the script's tag checkout step. The later successful command uses `.benchmark-venv/bin/python`. The conversation suggested a `tempfile.mkdtemp` patch for directory collisions, but the supplied script still uses second-resolution directory names; I have retained it without silently applying that historical suggestion.
+Before the completed sweep, one launch collided with an existing second-resolution output directory, and another failed importing `regex` through `strata_tokenizer`. The latter occurred after the script's tag checkout step. The later successful command uses `.benchmark-venv/bin/python`. The conversation suggested a `tempfile.mkdtemp` patch for directory collisions, but the supplied script still uses second-resolution directory names; we have retained it without silently applying that historical suggestion.
 
 The runner preserves the input JSON but changes the supplied Maya checkout, rebuilds the engine, runs experiments, and leaves production stopped. It has blocking reads without startup/request deadlines and captures no numerical-quality test. It also saves configuration copies that may contain an API key. These properties matter for reproducing the experiment; the file is retained as a historical artifact, not presented as a revised unattended runner. Its `--max-context >= 65536` check also does not reserve additional room for the generated token. The optional `DS4_LENT_RAM_GB=8` case is conditional on explicit borrowing configuration and is absent from this ten-variant result; server-level prompt memoization is outside the engine protocol.
 

@@ -1,6 +1,6 @@
 # July 14, 2026 — Diagnostic runs: batches, placement, and hardware monitoring
 
-[All lab records](README.md) · [Related investigation: chapter 2](../../investigations/02-following-the-prefill-bottleneck.md)
+[All lab records](README.md) · [Related experiment: 2](../../investigations/02-following-the-prefill-bottleneck.md)
 
 ## Purpose and reasoning
 
@@ -8,7 +8,7 @@ Locate the causes of slow GLM-5.2 inference by testing the execution path rather
 
 ## Experimental design
 
-I ran the v3 diagnostic phases on the recorded July build, retaining individual benchmarks and monitors. I followed with the v4 pp8192 microbatch ladder and placement/workspace tests. I compared offloaded expert operations with the CPU-expert control, and kept completed phases separate from planned or interrupted ones.
+We ran the v3 diagnostic phases on the recorded July build, retaining individual benchmarks and monitors. We followed with the v4 pp8192 microbatch ladder and placement/workspace tests. We compared offloaded expert operations with the CPU-expert control, and kept completed phases separate from planned or interrupted ones.
 
 ## Results
 
@@ -20,7 +20,7 @@ Effective batch size changed whether offload helped. The original small-prompt t
 
 ## Detailed record
 
-This entry follows the machine log from the 16-phase `galactus-diag.sh` run. It ran unattended on Galactus from 11:08:13 to 14:25:10 ET (total runtime 3h16m), while the conversation in Sessions 3 and 5 continued in parallel. Run directory `/root/diag-20260714-110813`; MAIN.log (uploaded as results.txt, 175,463 lines) is the source for everything below. Build under test: `657e01125 (10001)`. Hang guard: 10800 s per invocation; deadline: none. Wall-clock times below are mapped from the log's elapsed markers against the 11:08 start.
+This entry follows the machine log from the 16-phase `galactus-diag.sh` run. It ran unattended on Galactus from 11:08:13 to 14:25:10 ET (total runtime 3h16m), while the conversation in Sessions 3 and 5 continued in parallel. We run directory `/root/diag-20260714-110813`; MAIN.log (uploaded as results.txt, 175,463 lines) is the source for everything below. We build under test: `657e01125 (10001)`. Hang guard: 10800 s per invocation; deadline: none. Wall-clock times below are mapped from the log's elapsed markers against the 11:08 start.
 
 **Artifacts:** the script `galactus-diag.sh` (756 lines) was saved at 11:05:36 ET; `results.txt` (the copy of MAIN.log) was saved at 14:33:44 ET.
 
@@ -39,7 +39,7 @@ GB/s:    ~150   152    150    143    145    140    141     <- all four kernels a
   The platform delivers ~152 GB/s (81% of theoretical for 8-channel DDR4-2933) and saturates at 16 threads. Packed placement (OMP_PROC_BIND=close) at 16 threads collapses to ~90 GB/s Copy / 68 GB/s Triad — CCD spread is worth ~2×; each Milan CCD reaches the IOD over one GMI2 link, and 3–4+ CCDs must be active to saturate DRAM. Container STREAM equals host STREAM within 1%.
 - **The model — measured, not estimated.** GLM-5.2, Unsloth UD-Q4_K_XL, 11 shards, 435.19 GiB, 753.86 B params; llama.cpp arch `glm-dsa`. 78 layers (blk.0–blk.77); first_k_dense_replace=3, so blk.3–blk.77 are the 75 MoE layers; 256 routed experts, 8 active, 1 shared expert; MLA attention (kv_lora_rank=512, q_lora_rank=2048); 1M context. blk.78 = MTP/NextN, flagged TENSOR_SKIP, never allocated — `--spec-type draft-mtp` cannot work for glm-dsa. `-sm tensor` is not supported for glm-dsa (throws); `-sm row` is allowed. Expert tensor types verified by gguf_dump and load log: gate 1728 MiB Q4_K, up 1728 MiB Q4_K (both CPU_REPACK-capable), down 2112 MiB Q5_K (not repackable); exceptions blk.8 (Q5_K gate/up + Q6_K down) and blk.75/76/77 (Q6_K down). CPU_REPACK (AVX2 q4_K_8x8_q8_K) covers 3456 of 5568 MiB per layer = 62% of expert bytes. Measured buffers at `-ngl 99 -ot exps=CPU`: ROCm0 4987.08, ROCm1 4431.34, ROCm2 4431.34, ROCm3 4952.45 MiB (18.36 GiB on GPU); ROCm_Host 420964.22 MiB (411 GiB of routed experts). Decode reads per token: 13,125 MiB = 12.82 GiB = 13.77 GB from DDR4.
 - **The budget — and the hole.** Measured hybrid (`-ngl 99 -ot exps=CPU -mmp 0 -t 64 -nopo 1`, build 9942): pp512 = 37.6 t/s, tg128 = 5.15 t/s (= 201 ms/token). CPU 13.77 GB @ 152 GB/s → 91 ms; GPU ~18.7 GB dense path read serially one card at a time under `-sm layer` at ~400 GB/s effective → ~47 ms; ideal ~138 ms (7.2 t/s); actual 201 ms (5.0 t/s); unaccounted ~63 ms (31%). Graph splits = 155 per token (verified via GGML_SCHED_DEBUG=1), 6063 nodes; boundary payload at tg 24 KB — pure latency (~155 stream syncs + ~76 threadpool fork/joins per token); 63 ms / 155 splits = 0.4 ms per split, "exactly what a sleeping 64-thread pool costs to wake." **"FINDING THAT 63 ms IS THE POINT OF THIS SCRIPT."**
-- **Why every v2 phase crashed.** Cause 1 — ZenDNN: registers as an ACCEL backend; rejects the routed experts (256 > its 32-expert cap; Q4_K unsupported) but accepts Q8_0 MUL_MAT, and all 872 Q8_0 attention tensors are CPU-resident at `-ngl 0` → splits 1088 (bs=512, shredded) versus 155 (`-ngl 99`); every crashed run printed the LIBXSMM banner; B0 survived only because `-n 1 --no-warmup` never built a 512-token graph. Rebuilt with `-DGGML_ZENDNN=OFF`; Phase 0.9 verifies. Cause 2 — the 411 GiB pinned host buffer: with `-mmp 0`, `make_cpu_buft_list()` puts the GPU's pinned host buffer ahead of CPU_REPACK, so llama.cpp attempts `hipHostMalloc(420964 MiB)` — 14-minute loads (only ~5 min of it I/O), AnonHugePages stuck at 0 kB (the huge-page hypothesis was never actually tested), and after one run took and released 411 GiB the next failed and fell back to a plain CPU buffer. With `-nopo 1` the pin buys nothing. v3 therefore uses `-mmp 1` almost everywhere ("this is why v3 can afford ~15 invocations where v2 could only afford 14").
+- **Why every v2 phase crashed.** Cause 1 — ZenDNN: registers as an ACCEL backend; rejects the routed experts (256 > its 32-expert cap; Q4_K unsupported) but accepts Q8_0 MUL_MAT, and all 872 Q8_0 attention tensors are CPU-resident at `-ngl 0` → splits 1088 (bs=512, shredded) versus 155 (`-ngl 99`); every crashed run printed the LIBXSMM banner; B0 survived only because `-n 1 --no-warmup` never built a 512-token graph. Rebuilt with `-DGGML_ZENDNN=OFF`; Phase 0.9 verifies. Cause 2 — the 411 GiB pinned host buffer: with `-mmp 0`, `make_cpu_buft_list()` puts the GPU's pinned host buffer ahead of CPU_REPACK, so llama.cpp attempts `hipHostMalloc(420964 MiB)` — 14-minute loads (only ~5 min of it we/O), AnonHugePages stuck at 0 kB (the huge-page hypothesis was never actually tested), and after one run took and released 411 GiB the next failed and fell back to a plain CPU buffer. With `-nopo 1` the pin buys nothing. v3 therefore uses `-mmp 1` almost everywhere ("this is why v3 can afford ~15 invocations where v2 could only afford 14").
 - **The three model configurations** (a reload happens only when `-m -ngl -ncmoe -sm -mg -ts -mmp -dio -dev --no-host -ot` change; everything else — `-t -C --cpu-strict --poll -b -ub -p -n -d -fa -nopo -ctk -ctv` — sweeps free inside one load): M1 = `-mmp 1` (CPU_Mapped, no pin, no THP, no repack, loads in seconds — the iteration workhorse); M2 = `-mmp 0 --no-host 1` (CPU_REPACK 62% + plain CPU, anonymous memory so THP-eligible, no pin — the production candidate); M3 = `-mmp 0` default (ROCm_Host, 411 GiB pinned, slow load — the only config with fast H2D for op_offload). op_offload fires from any host buffer (the scheduler checks `ggml_backend_buffer_is_host`), so it works under M1 too, just with slower bounce-buffered H2D; M3 exists to measure that cost.
 - **`-C`/`--cpu-strict` semantics** (verified in `ggml_thread_cpumask_next`): strict 0 (default) gives every thread the full mask and lets the kernel migrate freely; strict 1 pins thread i to the i-th set bit in ascending CPU order. One mask therefore means different things at different `-t`:
 
@@ -377,7 +377,7 @@ llama_bench: error: failed to load model '/models/GLM-5.2/UD-Q4_K_XL/GLM-5.2-UD-
 
 - **Dead end:** ROCm on these V620s reports `VMM: no`, and llama.cpp's row-split buffer type requires it — `-sm row` is impossible on this hardware/stack. The ~47 ms serial-GPU dense cost under `-sm layer` cannot be attacked this way.
 
-### ~13:11 (elapsed 2h03m) — Phase I: GGML_CUDA_GRAPH_OPT=1
+### ~13:11 (elapsed 2h03m) — Phase we: GGML_CUDA_GRAPH_OPT=1
 
 Purpose: "Enables ggml-cuda's graph optimisation / concurrent stream-event launching (off by default)... second-order. Compare against the -t 64 --poll 100 row of PHASE B."
 
@@ -615,7 +615,7 @@ ARTIFACTS        : /root/diag-20260714-110813/MAIN.log
 === END OF RUN 2026-07-14T14:25:10-04:00 ===
 ```
 
-After teardown: VRAM back to ~16.4 MiB used per GPU; 436 GiB of model still resident in buff/cache. I uploaded MAIN.log as results.txt at 14:34 (artifact saved 14:33:44 ET).
+After teardown: VRAM back to ~16.4 MiB used per GPU; 436 GiB of model still resident in buff/cache. We uploaded MAIN.log as results.txt at 14:34 (artifact saved 14:33:44 ET).
 
 ### State of knowledge at end of session
 
@@ -634,15 +634,15 @@ After teardown: VRAM back to ~16.4 MiB used per GPU; 436 GiB of model still resi
 
 ## Original logs added October 22, 2026
 
-I added the original v3 log and hardware monitors from the October archive. Its 94 benchmark rows match the existing extraction in order and rate. [the July diagnostic reconstruction](2026-07-14-1108-v3-diagnostic-run.md#follow-up-tests-and-hardware-monitoring) links the raw files and reconstructs the v4 follow-up.
+We added the original v3 log and hardware monitors from the October archive. Its 94 benchmark rows match the existing extraction in order and rate. [the July diagnostic reconstruction](2026-07-14-1108-v3-diagnostic-run.md#follow-up-tests-and-hardware-monitoring) links the raw files and reconstructs the v4 follow-up.
 
 ## Follow-up tests and hardware monitoring
 
 ### Diagnostic records and monitoring
 
-The v3 capture contains 94 benchmark rows. Their test labels and rates match the existing `diag-run-llama-bench-results.csv` in order, so I have not counted them as additional repetitions. The larger original log adds detailed allocation and scheduler output; its line numbers differ from the earlier extraction. I kept both sources and generated a separate ledger for this archive.
+The v3 capture contains 94 benchmark rows. Their test labels and rates match the existing `diag-run-llama-bench-results.csv` in order, so we have not counted them as additional repetitions. The larger original log adds detailed allocation and scheduler output; its line numbers differ from the earlier extraction. We kept both sources and generated a separate ledger for this archive.
 
-The monitor timestamps cover 11:09:23–14:25:06 on July 14. Across 1,175 vmstat samples, the reported swap usage, swap-in, swap-out, I/O wait, and steal columns remain zero. The CPU-frequency capture spans 1,171 samples and reports average frequency between 2038 and 3100 MHz. These observations narrow the investigation: they show no swapping or reported CPU steal during the sampled interval, but an average clock reading cannot prove that every core sustained a particular frequency.
+The monitor timestamps cover 11:09:23–14:25:06 on July 14. Across 1,175 vmstat samples, the reported swap usage, swap-in, swap-out, we/O wait, and steal columns remain zero. The CPU-frequency capture spans 1,171 samples and reports average frequency between 2038 and 3100 MHz. These observations narrow the investigation: they show no swapping or reported CPU steal during the sampled interval, but an average clock reading cannot prove that every core sustained a particular frequency.
 
 ### The real microbatch ladder
 
@@ -658,27 +658,27 @@ The v4 run began later that afternoon. For an 8,192-token prompt and batch 8192,
 
 Rates are tokens/s. At microbatch 512, operation offload was slower than the CPU-expert control. At microbatch 8192, it was about 3.11 times as fast. Increasing the microbatch gave the GPU enough work to amortize the offload cost; disabling offload left throughput almost flat. This is why the earlier small-prompt tests did not expose the same opportunity.
 
-The improvement did not continue indefinitely. With a 16,384-token prompt and batch 16384, microbatches 8192 and 16384 reached 75.15 ± 1.55 and 80.48 ± 0.19 t/s. Those are different prompt workloads, so I do not treat their lower rates as a reversal of the pp8192 ladder. They do show that increasing the configured sizes alone did not produce another throughput gain.
+The improvement did not continue indefinitely. With a 16,384-token prompt and batch 16384, microbatches 8192 and 16384 reached 75.15 ± 1.55 and 80.48 ± 0.19 t/s. Those are different prompt workloads, so we do not treat their lower rates as a reversal of the pp8192 ladder. They do show that increasing the configured sizes alone did not produce another throughput gain.
 
 At microbatch 4096, the v4 prefill thread sweep stayed around 84.69–87.31 t/s from 8 through 96 threads. Once the GPU offload path carried the substantial matrix work, additional CPU threads had little effect in this configuration.
 
 ### Placement and fitter experiments
 
-I also tried reserving ROCm0 for offload scratch space with the phase labeled `-ts 0,1,1,1`. The first three rows in that phase reached 62.70, 87.28, and 104.95 t/s at microbatches 2048, 4096, and 8192. The largest result essentially matched the ordinary ladder's 104.97 t/s. The table abbreviates the split vector, so the phase heading and original command context matter when interpreting these rows.
+We also tried reserving ROCm0 for offload scratch space with the phase labeled `-ts 0,1,1,1`. The first three rows in that phase reached 62.70, 87.28, and 104.95 t/s at microbatches 2048, 4096, and 8192. The largest result essentially matched the ordinary ladder's 104.97 t/s. The table abbreviates the split vector, so the phase heading and original command context matter when interpreting these rows.
 
 The fitter experiments changed both placement and available workspace. With pp8192 and microbatch 4096, fitter margins of 2048, 8192, and 16384 MiB produced 91.85 ± 3.62, 89.48 ± 3.75, and 70.96 ± 18.83 t/s. The largest margin did not help, and its spread was much larger.
 
-For decode with fitter margin 2048 MiB and fit context 16384, 24 and 32 threads reached 6.12 and 6.11 t/s. Disabling operation offload gave 6.16 and 6.15 t/s at those thread counts. A later 512 MiB margin test reached 6.19 ± 0.01 t/s, while the 1024 MiB test reached 5.86 ± 0.23. I would not infer a smooth margin-to-throughput relationship from these individual configurations.
+For decode with fitter margin 2048 MiB and fit context 16384, 24 and 32 threads reached 6.12 and 6.11 t/s. Disabling operation offload gave 6.16 and 6.15 t/s at those thread counts. A later 512 MiB margin test reached 6.19 ± 0.01 t/s, while the 1024 MiB test reached 5.86 ± 0.23. We would not infer a smooth margin-to-throughput relationship from these individual configurations.
 
-The v4 capture contains 50 completed benchmark rows and then ends partway through another run, at `llama-bench: be`. The plan printed at the top lists more work than the surviving output completes. I kept the completed rows and did not turn planned phases into results.
+The v4 capture contains 50 completed benchmark rows and then ends partway through another run, at `llama-bench: be`. The plan printed at the top lists more work than the surviving output completes. We kept the completed rows and did not turn planned phases into results.
 
 ### Hardware monitoring and failed placements
 
-The v4 vmstat capture spans 15:01:17–19:54:11 and contains 1,758 samples, again with zero reported swap usage, swap traffic, I/O wait, and steal. ROCm monitoring records each GPU reaching 99% utilization at some point. Peak sampled package powers were 223/230/226/169 W in v3 and 252/251/251/254 W in v4, ordered ROCm0–3. Those are whole-run maxima, not simultaneous readings or a phase-specific load balance measurement. I cannot use them to claim a thermal cause or balanced execution throughout the run.
+The v4 vmstat capture spans 15:01:17–19:54:11 and contains 1,758 samples, again with zero reported swap usage, swap traffic, we/O wait, and steal. ROCm monitoring records each GPU reaching 99% utilization at some point. Peak sampled package powers were 223/230/226/169 W in v3 and 252/251/251/254 W in v4, ordered ROCm0–3. Those are whole-run maxima, not simultaneous readings or a phase-specific load balance measurement. We cannot use them to claim a thermal cause or balanced execution throughout the run.
 
-The smaller placement captures also matter. `ot3` fails during model loading; `ot6` and `ts` fail while creating the context. `ts2` contains only the four-device list. The successful `ot7` configuration explicitly places some expert layers on ROCm1 and ROCm2 and reports pp2048 at 51.74 ± 0.00 t/s. I kept these outcomes separate because fitting the weights, allocating the compute graph, and completing inference are different stages of the experiment.
+The smaller placement captures also matter. `ot3` fails during model loading; `ot6` and `ts` fail while creating the context. `ts2` contains only the four-device list. The successful `ot7` configuration explicitly places some expert layers on ROCm1 and ROCm2 and reports pp2048 at 51.74 ± 0.00 t/s. We kept these outcomes separate because fitting the weights, allocating the compute graph, and completing inference are different stages of the experiment.
 
-I discuss the undated [scheduler traces](2026-07-14-1813-multi-card-placement.md#scheduler-split-counts) alongside the July patch investigation.
+We discuss the undated [scheduler traces](2026-07-14-1813-multi-card-placement.md#scheduler-split-counts) alongside the July patch investigation.
 
 
 ### Source dates

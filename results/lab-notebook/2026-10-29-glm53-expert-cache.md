@@ -1,14 +1,14 @@
 # GLM-5.3-Flash: 80 GiB expert-cache benchmark and investigation
 
-[All lab records](README.md) · [Related investigation: chapter 4](../../investigations/04-from-the-fork-to-maya.md)
+[All lab records](README.md) · [Related experiment: 4](../../investigations/04-from-the-fork-to-maya.md)
 
 ## Purpose and reasoning
 
-Document GLM-Flash performance with an 80 GiB requested expert cache and determine what evidence would establish whether that cache helps.
+We document GLM-Flash performance with an 80 GiB requested expert cache and determine what evidence would establish whether that cache helps.
 
 ## Experimental design
 
-I used the retained llamda-bench output for build 754aa4151: forced CPU expert placement, 32 threads, flash attention, batch/microbatch 8192, pp8192/tg256, two repetitions, and requested cache 81920 MiB. I kept that completed benchmark separate from proposed diagnostics and the untested larger-cache patch.
+We used the retained llamda-bench output for build 754aa4151: forced CPU expert placement, 32 threads, flash attention, batch/microbatch 8192, pp8192/tg256, two repetitions, and requested cache 81920 MiB. We kept that completed benchmark separate from proposed diagnostics and the untested larger-cache patch.
 
 ## Results
 
@@ -24,7 +24,7 @@ The configuration has a measured rate, but this record does not establish a cach
 
 ## Recorded measurement
 
-The completed run requested an 81,920 MiB (80 GiB) MoE expert cache and reported **279.51 ± 15.37 tokens/s for pp8192** and **8.63 ± 2.84 tokens/s for tg256**. It used two repetitions. I retain the ± values as printed; they are not confidence intervals. The reported generation dispersion is about 32.9% of the mean, so these two repetitions provide little evidence about sustained cache performance.
+The completed run requested an 81,920 MiB (80 GiB) MoE expert cache and reported **279.51 ± 15.37 tokens/s for pp8192** and **8.63 ± 2.84 tokens/s for tg256**. It used two repetitions. We retain the ± values as printed; they are not confidence intervals. The reported generation dispersion is about 32.9% of the mean, so these two repetitions provide little evidence about sustained cache performance.
 
 ```sh
 llamda-bench -m /models/GLM-5.3-Flash/UD-Q4_K_XL/GLM-5.3-Flash-UD-Q4_K_XL-00001-of-00006.gguf -ngl 99 -ot "exps=CPU" --moe-cache-mib 81920 -fa on -t 32 -b 8192 -ub 8192 -p 8192 -n 256 -r 2 -o md
@@ -118,11 +118,11 @@ A separate, longer-generation proposal used `-b 2048 -ub 512 -p 512 -n 1024 -r 2
 
 The investigation requested for `/root/llama.cpp` was to examine the implementation, verify cache statistics, and propose or implement minimal fixes with controlled benchmarks. The following work remains open:
 
-1. Identify the checkout revision, local modifications, executable path, linked libraries, and model files. Reconcile `llamda-bench` with the requested llama.cpp checkout before assigning behavior to either implementation.
+1. We identify the checkout revision, local modifications, executable path, linked libraries, and model files. Reconcile `llamda-bench` with the requested llama.cpp checkout before assigning behavior to either implementation.
 2. Trace the option from parsing to allocation and establish actual cache capacity per device, cache lifetime across warmup and repetitions, and the execution paths for small and large batches.
-3. Verify the units and increment sites for hits, misses, and uploaded bytes. Determine whether counts describe expert requests, unique experts, tensor transfers, or another event; separate bypasses and failed insertions from ordinary misses. Use interval deltas so initialization, warmup, prompt processing, and generation are not silently combined.
-4. Run the paired zero-cache and 80 GiB cases on the same binary and workload, retaining individual repetitions and startup time. Repeat in alternating order and document cache state and competing GPU activity before interpreting a difference. Measure cold and sustained behavior separately.
-5. Add minimal instrumentation only where existing counters cannot answer these questions. Test any proposed cache-path fix against the unchanged binary with the same workload, including output correctness. Thread, batch, and capacity sweeps follow the initial control rather than changing all three at once.
+3. Verify the units and increment sites for hits, misses, and uploaded bytes. We determine whether counts describe expert requests, unique experts, tensor transfers, or another event; separate bypasses and failed insertions from ordinary misses. We use interval deltas so initialization, warmup, prompt processing, and generation are not silently combined.
+4. We run the paired zero-cache and 80 GiB cases on the same binary and workload, retaining individual repetitions and startup time. Repeat in alternating order and document cache state and competing GPU activity before interpreting a difference. We measure cold and sustained behavior separately.
+5. Add minimal instrumentation only where existing counters cannot answer these questions. We test any proposed cache-path fix against the unchanged binary with the same workload, including output correctness. Thread, batch, and capacity sweeps follow the initial control rather than changing all three at once.
 
 These are proposed checks, not completed experiments or confirmed defects.
 

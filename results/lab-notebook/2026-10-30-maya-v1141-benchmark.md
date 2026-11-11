@@ -1,14 +1,14 @@
 # Maya v1.1.41: short benchmark and uncached 32K/64K production tests
 
-[All lab records](README.md) · [Related investigation: chapter 5](../../investigations/05-tuning-long-prompts.md)
+[All lab records](README.md) · [Related experiment: 5](../../investigations/05-tuning-long-prompts.md)
 
 ## Purpose and reasoning
 
-Check that Maya v1.1.41 completes both its built-in benchmark and the saved long requests without a meaningful loss of the working prefill performance.
+We check that Maya v1.1.41 completes both its built-in benchmark and the saved long requests without a meaningful loss of the working prefill performance.
 
 ## Experimental design
 
-I ran the three-answer 256-token built-in benchmark and separate 2K/8K prefill tests. I replayed the unchanged 32K/64K payloads twice against the production server, reading actual prompt and cached-token counts. Each long request generates 128 tokens. A restart between passes is not established.
+We ran the three-answer 256-token built-in benchmark and separate 2K/8K prefill tests. We replayed the unchanged 32K/64K payloads twice against the production server, reading actual prompt and cached-token counts. Each long request generates 128 tokens. A restart between passes is not established.
 
 ## Results
 
@@ -20,9 +20,9 @@ The update completed the tested fresh long workloads with prefill near the selec
 
 ## Detailed record
 
-**Recorded:** October 30, 2026 (America/New_York). **Source:** my pasted terminal output in the update and benchmark discussion. The benchmark prints `2026-10-30 11:34` without a timezone. No benchmark was executed by the notebook editor, and no live server settings were changed.
+**Recorded:** October 30, 2026 (America/New_York). **Source:** our pasted terminal output in the update and benchmark discussion. The benchmark prints `2026-10-30 11:34` without a timezone. No benchmark was executed by the notebook editor, and no live server settings were changed.
 
-I ran the built-in benchmark after updating from v1.1.36, then made two passes replaying the original saved 32K and 64K requests against the production server. All tests completed. All four long requests reported zero cached tokens and generated 128 tokens. The 64K prefill measured 469.6 and 485.6 tokens/s; the second pass is approximately 0.6% below the October 29 result of 488.6. The two-pass median is 477.6 tokens/s, approximately 2.3% below that single historical result. The historical stream-priority workaround is no longer in use, and the measurements do not isolate a release regression.
+We ran the built-in benchmark after updating from v1.1.36, then made two passes replaying the original saved 32K and 64K requests against the production server. All tests completed. All four long requests reported zero cached tokens and generated 128 tokens. The 64K prefill measured 469.6 and 485.6 tokens/s; the second pass is approximately 0.6% below the October 29 result of 488.6. The two-pass median is 477.6 tokens/s, approximately 2.3% below that single historical result. The historical stream-priority workaround is no longer in use, and the measurements do not isolate a release regression.
 
 ## Command and results
 
@@ -57,9 +57,9 @@ The appropriate preceding record is the [October 29 v1.1.36 production confirmat
 
 The short results are numerically close: mean decode is approximately 2.9% higher, 2K prefill approximately 0.5% lower, and 8K prefill unchanged at the printed precision. One benchmark per version, with the current config contents uncollected, cannot establish a release speedup or regression.
 
-The initial discussion instead compared today's 334 tokens/s at 8K with an older 271.7 result and suggested an approximately 23% improvement. That comparison is superseded here. The older row belongs to the v1.1.30 sweep with 16K chunks and an 800 MiB ring; its 32K and 64K rates were 432.3 and 464.2. I subsequently selected **32K chunks, an 800 MiB ring, TP2, and automatic workspaces**, with approximately 480 tokens/s at 64K. The October 29 production request then measured 488.6 tokens/s with zero cache hits.
+The initial discussion instead compared today's 334 tokens/s at 8K with an older 271.7 result and suggested an approximately 23% improvement. That comparison is superseded here. The older row belongs to the v1.1.30 sweep with 16K chunks and an 800 MiB ring; its 32K and 64K rates were 432.3 and 464.2. We subsequently selected **32K chunks, an 800 MiB ring, TP2, and automatic workspaces**, with approximately 480 tokens/s at 64K. The October 29 production request then measured 488.6 tokens/s with zero cache hits.
 
-The October 29 v1.1.36 record used `maya-ds4-production-no-stream-prio.json`, with `DS4_STREAM_PRIO=0` and API port 8081. Disabling stream priority was a historical bug workaround. I explicitly clarified on October 30 that we do not use that workaround in the current production configuration; it must not be carried forward as a benchmark requirement or tuning recommendation. Today's command uses `maya-ds4-production.json`. The supplied output does not print the current stream-priority value, and removing the old workaround does not by itself establish a particular environment value or the upstream fix mechanism. It also does not print chunk, ring, TP, or workspace settings.
+The October 29 v1.1.36 record used `maya-ds4-production-no-stream-prio.json`, with `DS4_STREAM_PRIO=0` and API port 8081. Disabling stream priority was a historical bug workaround. We explicitly clarified on October 30 that we do not use that workaround in the current production configuration; it must not be carried forward as a benchmark requirement or tuning recommendation. Today's command uses `maya-ds4-production.json`. The supplied output does not print the current stream-priority value, and removing the old workaround does not by itself establish a particular environment value or the upstream fix mechanism. It also does not print chunk, ring, TP, or workspace settings.
 
 ## Recovering the long-prompt comparison
 
@@ -79,7 +79,7 @@ It posted the request to `http://127.0.0.1:8081/v1/chat/completions` with a 1200
 
 The first replay attempt stopped at the file-existence check because `/opt/maya-test-results/20261028-223138/requests/r1-32768.json` was missing. No inference request was sent by that attempt. The supplied recovery command downloaded both original request JSON files from the notebook's extracted archive and checked their Git blob hashes before writing them back to the original request directory. The recorded hashes are `77e60039ecb80393ebfbb092fbc31c9e7aa95e61` for 32K and `ad624e4658a6acf85493a5a9dcbb13c73ccfbde5` for 64K.
 
-I then ran the replay client from `/opt/project-maya` using `.venv/bin/python`. It loaded `maya-ds4-production.json` for the port and API key, and posted the saved requests unchanged to `http://127.0.0.1:8081/v1/chat/completions` with a 1200-second timeout. This client uses the running server; reading the config for connection details does not independently verify the server's effective engine settings. It changes no tuning settings and does not restore the old stream-priority workaround.
+We then ran the replay client from `/opt/project-maya` using `.venv/bin/python`. It loaded `maya-ds4-production.json` for the port and API key, and posted the saved requests unchanged to `http://127.0.0.1:8081/v1/chat/completions` with a 1200-second timeout. This client uses the running server; reading the config for connection details does not independently verify the server's effective engine settings. It changes no tuning settings and does not restore the old stream-priority workaround.
 
 | Request | Actual prompt tokens | Cached tokens | Output tokens | Prefill tokens/s | Decode tokens/s |
 |---|---:|---:|---:|---:|---:|
@@ -101,7 +101,7 @@ Calculated prefill durations are approximately 75.2 seconds at 32K and 139.6 sec
 
 ### Second pass
 
-I repeated the same client and supplied a second result directory, `/opt/maya-test-results/20261030-115003-production-recheck`. Both requests again report zero cached tokens and 128 output tokens. The second capture does not establish whether the server was restarted between passes, so I do not describe these as independent fresh-start trials or assign the increase to warm-up.
+We repeated the same client and supplied a second result directory, `/opt/maya-test-results/20261030-115003-production-recheck`. Both requests again report zero cached tokens and 128 output tokens. The second capture does not establish whether the server was restarted between passes, so we do not describe these as independent fresh-start trials or assign the increase to warm-up.
 
 | Request | Actual prompt tokens | Cached tokens | Output tokens | Prefill tokens/s | Decode tokens/s |
 |---|---:|---:|---:|---:|---:|

@@ -1,14 +1,14 @@
 # Full GLM-5.3 Q4: allocation failures, legal layer boundaries, and a slow working split
 
-[All lab records](README.md) · [Related investigation: chapter 6](../../investigations/06-sharing-galactus.md)
+[All lab records](README.md) · [Related experiment: 6](../../investigations/06-sharing-galactus.md)
 
 ## Purpose and reasoning
 
-Test the full GLM-5.3 Q4 model on Galactus and determine whether correcting the layer split makes it practical for the intended interactive use.
+We test the full GLM-5.3 Q4 model on Galactus and determine whether correcting the layer split makes it practical for the intended interactive use.
 
 ## Experimental design
 
-I attempted the recorded pack load, inspected physical/process memory and GPU allocation, then used all four V620s with 128K configured context. I diagnosed automatic placement, moved manual boundaries to legal full-indexer layers, and ran the three-answer benchmark with separate 2K/8K prefill. MTP is checked in the log.
+We attempted the recorded pack load, inspected physical/process memory and GPU allocation, then used all four V620s with 128K configured context. We diagnosed automatic placement, moved manual boundaries to legal full-indexer layers, and ran the three-answer benchmark with separate 2K/8K prefill. MTP is checked in the log.
 
 ## Results
 
@@ -16,19 +16,19 @@ The first config failed loading. The automatic split loaded but generated only 3
 
 ## Conclusions
 
-The corrected split made the benchmark complete, but the measured setup was too slow for the intended use. I stopped the remaining full-model matrix and returned to Flash. The generic initial memory error and later watchdog do not independently establish every underlying failure mechanism.
+The corrected split made the benchmark complete, but the measured setup was too slow for the intended use. We stopped the remaining full-model matrix and returned to Flash. The generic initial memory error and later watchdog do not independently establish every underlying failure mechanism.
 
 ## Detailed record
 
 **Experiments: November 9, 2026.**
 
-I tested the full GLM-5.3 UD-Q4_K_XL already stored as eleven GGUF shards, separately from GLM-5.3-Flash. The first configuration failed to load; automatic four-card placement then loaded but generated only 3.6–4.3 tokens/s and stalled before completing prefill. A legal manual split completed at **6.7 tokens/s mean decode**, with **60 tokens/s at 2K prefill and 47 at 8K**. I stopped the full-model investigation and returned to Flash for the two-model service.
+We tested the full GLM-5.3 UD-Q4_K_XL already stored as eleven GGUF shards, separately from GLM-5.3-Flash. The first configuration failed to load; automatic four-card placement then loaded but generated only 3.6–4.3 tokens/s and stalled before completing prefill. A legal manual split completed at **6.7 tokens/s mean decode**, with **60 tokens/s at 2K prefill and 47 at 8K**. We stopped the full-model investigation and returned to Flash for the two-model service.
 
 ## Loading and memory diagnosis
 
 The initial setup used `build-hip/maya`, `MAYA_GLM_SPLIT=0`, a 4096 MB prefill budget, 1024-token mixer sub-batches and 3072 MB reserve. A port-8080 guard initially blocked the benchmark; changing a requested port did not isolate GPU memory, and the guard still triggered. The next attempt ended with `maya generate: pack: out of memory`.
 
-Physical-memory checks showed about 2 TiB available, unlimited memlock and address space, no swap, no cgroup memory ceiling and no recorded cgroup OOM kill. This weakens the explanation that system RAM capacity was exhausted. The generic pack error did not identify the allocation; the conversation's GPU/KV explanation remained a hypothesis. I explicitly corrected the intended context to 128K and requested all four GPUs. The initial failed log's 1M context line is preserved rather than retroactively changed.
+Physical-memory checks showed about 2 TiB available, unlimited memlock and address space, no swap, no cgroup memory ceiling and no recorded cgroup OOM kill. This weakens the explanation that system RAM capacity was exhausted. The generic pack error did not identify the allocation; the conversation's GPU/KV explanation remained a hypothesis. We explicitly corrected the intended context to 128K and requested all four GPUs. The initial failed log's 1M context line is preserved rather than retroactively changed.
 
 ## Automatic split and prefill failure
 
@@ -56,7 +56,7 @@ The benchmark prints 19:51; the paste is timestamped 20:51. Both identify Novemb
 
 The conversation compared the result with earlier approximately 6.1–6.3 tokens/s MTP results. Without matched model hashes, prompts, contexts and builds, that is historical context rather than a measured Maya-versus-llama.cpp improvement. Likewise, short prompts may fail to amortize setup, but the supplied evidence does not prove that shortness explains the 47 tokens/s 8K prefill result.
 
-I judged this full-model setup unsuitable for my intended interactive use and ended its remaining KV/MTP matrix. That decision applies to this configuration, not every possible implementation of full GLM. I then moved to [GLM-Flash on GPUs 2 and 3](2026-11-09-glm-flash-reserve-and-speculation.md).
+We judged this full-model setup unsuitable for our intended interactive use and ended its remaining KV/MTP matrix. That decision applies to this configuration, not every possible implementation of full GLM. We then moved to [GLM-Flash on GPUs 2 and 3](2026-11-09-glm-flash-reserve-and-speculation.md).
 
 ## Sources and recording dates
 

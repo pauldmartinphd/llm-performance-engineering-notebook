@@ -1,12 +1,12 @@
 # Throughput bounds and alternative Qwen deployments
 
-[All lab records](README.md) · [Related investigation: chapter 6](../../investigations/06-sharing-galactus.md)
+[All lab records](README.md) · [Related experiment: 6](../../investigations/06-sharing-galactus.md)
 
 **Record type:** Estimates and deployment alternatives; no local Qwen benchmark.
 
 **Discussion: November 9, 2026; no Galactus Qwen experiment in this entry.**
 
-I began with a bandwidth estimate for Qwen3.6-35B-A3B, then considered full GLM-5.3 and Qwen3.8-Flash-Next as possible uses of the available hardware. The practical question was whether four GPUs should serve one large model or several services. The subsequent DeepSeek and GLM tests answered parts of that question; the calculations and external reports remained candidate-selection material.
+We began with a bandwidth estimate for Qwen3.6-35B-A3B, then considered full GLM-5.3 and Qwen3.8-Flash-Next as possible uses of the available hardware. The practical question was whether four GPUs should serve one large model or several services. The subsequent DeepSeek and GLM tests answered parts of that question; the calculations and external reports remained candidate-selection material.
 
 ## Bounds versus end-to-end throughput
 
@@ -16,19 +16,19 @@ The conversation's full GLM estimate of 15–30 tokens/s generation and approxim
 
 ## External reference material
 
-The conversation cited single-V620 Vulkan Qwen3.6 UD-Q5_K_XL results around 78 tokens/s without speculation and 92–137 with MTP, plus context-dependent prefill results; it also cited R9700 Qwen and EPYC/R9700 Strata reports. These are assistant-retrieved claims preserved in the supplied export, not independently reproduced Galactus measurements. No original external benchmark datasets were included for those claims, so I have not promoted them into the notebook's measured comparison tables.
+The conversation cited single-V620 Vulkan Qwen3.6 UD-Q5_K_XL results around 78 tokens/s without speculation and 92–137 with MTP, plus context-dependent prefill results; it also cited R9700 Qwen and EPYC/R9700 Strata reports. These are assistant-retrieved claims preserved in the supplied export, not independently reproduced Galactus measurements. No original external benchmark datasets were included for those claims, so we have not promoted them into the notebook's measured comparison tables.
 
-The Qwen3.8-Flash-Next proposal assumed CPU-resident routed experts with GPU attention, dense/shared work, prefill and a hot-expert cache. Its quoted 1.50 GB of routed-expert reads per token and assumed 150 GB/s give a memory-only 100 tokens/s ceiling before other work; cache hits and speculative execution alter the relationship. The proposed 65–105 generation and 1,100–1,800 tokens/s 32K prefill ranges were engineering targets derived from another host, not observations on my EPYC 7713.
+The Qwen3.8-Flash-Next proposal assumed CPU-resident routed experts with GPU attention, dense/shared work, prefill and a hot-expert cache. Its quoted 1.50 GB of routed-expert reads per token and assumed 150 GB/s give a memory-only 100 tokens/s ceiling before other work; cache hits and speculative execution alter the relationship. The proposed 65–105 generation and 1,100–1,800 tokens/s 32K prefill ranges were engineering targets derived from another host, not observations on our EPYC 7713.
 
 ## Decision boundary
 
-I considered a fast 35B model on one card, Flash-Next on an R9700, and separate speech/OCR services. None of those alternatives was deployed or benchmarked in the supplied evidence. I instead tested DeepSeek TP2 and GLM-Flash on the four existing V620s. The archive also contains upstream V100 reports, recorded [separately](undated-maya-reference-benchmarks-and-live-logs.md), which must not be mistaken for Galactus results.
+We considered a fast 35B model on one card, Flash-Next on an R9700, and separate speech/OCR services. None of those alternatives was deployed or benchmarked in the supplied evidence. We instead tested DeepSeek TP2 and GLM-Flash on the four existing V620s.
 
 ## Weight-quantization discussion retained as unverified planning evidence
 
-The exported assistant response reported GLM-Flash Q4/Q6 sizes of 199.71 / 291.83 GB, mean KLD versus BF16 of 0.049294 / 0.019007, and top-token agreement of 92.22% / 95.23%. It attributed these to external quantization reports, not my tests. It also reported Q4 perplexity 3.3038 ± 0.042 without a matched Q6 value. No underlying evaluation data is supplied here, so these remain source claims and cannot establish a local quality difference. The suggested 15–35% Q6 decode penalty was an estimate; no Q6 deployment or speed test followed.
+The exported assistant response reported GLM-Flash Q4/Q6 sizes of 199.71 / 291.83 GB, mean KLD versus BF16 of 0.049294 / 0.019007, and top-token agreement of 92.22% / 95.23%. It attributed these to external quantization reports, not our tests. It also reported Q4 perplexity 3.3038 ± 0.042 without a matched Q6 value. No underlying evaluation data is supplied here, so these remain source claims and cannot establish a local quality difference. The suggested 15–35% Q6 decode penalty was an estimate; no Q6 deployment or speed test followed.
 
-EXL3 Q4 was discussed as a separate weight format, not an alias for the GGUF UD-Q4_K_XL pack tested here. Neither this discussion nor the external quality figures measures FP16-versus-INT8 KV behavior. I kept the existing Q4 weights during the local cache experiment.
+EXL3 Q4 was discussed as a separate weight format, not an alias for the GGUF UD-Q4_K_XL pack tested here. Neither this discussion nor the external quality figures measures FP16-versus-INT8 KV behavior. We kept the existing Q4 weights during the local cache experiment.
 
 ## Sources and recording dates
 

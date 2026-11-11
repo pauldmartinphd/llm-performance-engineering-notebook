@@ -1,16 +1,16 @@
-# 5. Tuning long prompts
+# 5. Long-Prompt Tuning
 
-[Previous: the fork and Maya](04-from-the-fork-to-maya.md) · [Chapter index](README.md) · [Next: sharing Galactus](06-sharing-galactus.md)
+[Previous: the fork and Maya](04-from-the-fork-to-maya.md) · [Experiments](README.md) · [Next: sharing Galactus](06-sharing-galactus.md)
 
-## The question
+## Objective
 
-Fast generation does not make a long document fast to read. A model may produce an answer at 30 tokens/s while spending minutes processing the input first. I wanted to reduce that wait without assuming that a setting from one engine would work in another.
+Fast generation does not make a long document fast to read. A model may produce an answer at 30 tokens/s while spending minutes processing the input first. We wanted to reduce that wait without assuming that a setting from one engine would work in another.
 
 The main variables were prompt chunks, transfer buffers, temporary GPU workspace, and numerical precision. A **chunk** is a group of prompt tokens processed together. A transfer **ring** holds data while it moves between memory and the GPU. Larger buffers can help reuse and overlap, but they also consume memory that could hold model data.
 
-## DeepSeek benefited from a combination of larger chunks and a larger ring
+## DeepSeek Chunk and Ring Sizes
 
-After recovering from a later-release stall, I used Maya v1.1.30 for the [October 28 sweep](../results/lab-notebook/2026-10-28-maya-prefill-and-regression.md). It tested three chunk sizes against three ring sizes, plus a repeated baseline. Ten starts produced 60 valid measurements across 8K, 32K, and 64K prompt targets.
+After recovering from a later-release stall, we used Maya v1.1.30 for the [October 28 sweep](../results/lab-notebook/2026-10-28-maya-prefill-and-regression.md). It tested three chunk sizes against three ring sizes, plus a repeated baseline. Ten starts produced 60 valid measurements across 8K, 32K, and 64K prompt targets.
 
 | Configuration | 8K prefill | 32K prefill | 64K prefill |
 |---|---:|---:|---:|
@@ -20,9 +20,9 @@ After recovering from a later-release stall, I used Maya v1.1.30 for the [Octobe
 
 Rates are tokens/s; each cell is the median of two requests. The selected combination improved 32K prefill by about 8% and 64K by about 11%, at a small cost on the 8K prompt. At 64K, the rounded rates imply about 14 seconds less prefill time. The closing baseline stayed near the opening one, which made the comparison more useful.
 
-The gain depended on the combination. A larger ring alone did not make the 8K chunk faster at 64K. I carried forward the 32K chunk and 800 MiB ring, then tested parallel layout and workspace separately.
+The gain depended on the combination. A larger ring alone did not make the 8K chunk faster at 64K. We carried forward the 32K chunk and 800 MiB ring, then tested parallel layout and workspace separately.
 
-## More settings did not produce another clear gain
+## Additional Settings
 
 The second October sweep stopped after 15 completed cases. TP1 was slower. Requested TP4 fell back to TP2, so those rows did not measure TP4. Workspace changes produced differences too small to justify replacing the automatic choice.
 
@@ -32,9 +32,9 @@ The [November 5 ten-variant sweep](../results/lab-notebook/2026-11-05-maya-v1154
 
 A separate larger-reserve peer test failed during startup. It completed no transport samples and produced no throughput result. That is different from a successful host fallback. The [complete sweep](../results/lab-notebook/2026-11-05-maya-v1154-prefill-and-peer-ar.md#decode-results-from-the-same-sweep) includes all 60 prefill measurements, 20 decode cases, configs, and logs.
 
-## GLM-Flash needed a different chunk size
+## GLM-Flash Chunk Size
 
-On November 9 I tried the large-chunk approach with GLM-Flash on two V620s. The first tests requested 16K or 32K chunks, but the logs showed an effective size of 8K. The 4096 MB workspace budget could not support the requested larger allocation.
+On November 9 we tried the large-chunk approach with GLM-Flash on two V620s. The first tests requested 16K or 32K chunks, but the logs showed an effective size of 8K. The 4096 MB workspace budget could not support the requested larger allocation.
 
 Increasing the budget to 8192 MB allowed a common 16K chunk across the two devices. That made the larger-chunk experiment real, but did not make it faster:
 
@@ -46,9 +46,9 @@ Increasing the budget to 8192 MB allowed a common 16K chunk across the two devic
 
 Rates are medians in tokens/s, rounded to one decimal. The larger chunks lost about 21% at the two longer prompts. The [full record](../results/lab-notebook/2026-11-09-glm-flash-prefill-chunks.md) retains both repetitions, effective allocations, and the failed first benchmark runner.
 
-I kept 8K effective chunks for GLM. The tests did not isolate which internal cost caused the loss, but they were enough to reject copying DeepSeek's chunk size directly.
+We kept 8K effective chunks for GLM. The tests did not isolate which internal cost caused the loss, but they were enough to reject copying DeepSeek's chunk size directly.
 
-## DeepSeek's FP16-output route was a larger later improvement
+## DeepSeek FP16-Output Prefill
 
 The November 9 DeepSeek test enabled a faster RDNA 2 route for dense prompt projections. It keeps the inputs and outputs of those matrix operations in FP16, then widens the outputs to FP32. This changes rounding. It is separate from the model's Q8 weight quantization and from its attention cache.
 
@@ -64,9 +64,9 @@ The original baseline used v1.1.54. The optimized run used v1.1.57 with a differ
 
 That is useful timing evidence, with an imperfect control: the same-version comparison comes from a fallback configuration and the runs were not interleaved. The log reports zero nonfinite FP16 outputs. That checks overflow, not answer quality. No local held-out quality evaluation accompanied the speed test. The [dated entry](../results/lab-notebook/2026-11-09-deepseek-fp16-prefill.md) preserves these limits and every measurement.
 
-## What I learned about measuring long prompts
+## Measurement Limits
 
-A repeated prompt can reuse nearly all of its stored state. In the November 2 matrix, some “32K” repeats processed only one new token. Their low printed prefill rates measured that tiny suffix and its overhead, not a fresh 32K read. I therefore track new tokens and cached tokens separately.
+A repeated prompt can reuse nearly all of its stored state. In the November 2 matrix, some “32K” repeats processed only one new token. Their low printed prefill rates measured that tiny suffix and its overhead, not a fresh 32K read. We therefore track new tokens and cached tokens separately.
 
 A configured context ceiling is also different from a measured prompt. Setting one million tokens does not test a one-million-token request. Most controlled long tests in this investigation stopped at 64K; the optimized DeepSeek sweep stopped at 32K.
 

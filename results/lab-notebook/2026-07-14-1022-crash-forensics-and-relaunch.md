@@ -1,6 +1,6 @@
 # July 14, 2026 (mid-day) — v2 crash forensics and the v3 relaunch
 
-[All lab records](README.md) · [Related investigation: chapter 2](../../investigations/02-following-the-prefill-bottleneck.md)
+[All lab records](README.md) · [Related experiment: 2](../../investigations/02-following-the-prefill-bottleneck.md)
 
 ## Purpose and reasoning
 
@@ -8,7 +8,7 @@ Find why most v2 diagnostic phases crashed and choose a configuration that could
 
 ## Experimental design
 
-I compared the successful and failed phase logs, buffer types, memory limits, signals, graph counts, and system readbacks. I recorded which flags and build changed. I prepared the next diagnostic run with revised loading/backend choices; the patterns do not isolate a root cause on their own.
+We compared the successful and failed phase logs, buffer types, memory limits, signals, graph counts, and system readbacks. We recorded which flags and build changed. We prepared the next diagnostic run with revised loading/backend choices; the patterns do not isolate a root cause on their own.
 
 ## Results
 
@@ -22,7 +22,7 @@ The logs identified concrete failure conditions and justified a revised diagnost
 
 ### 10:22 — v2 battery output arrives: B0 alone survived
 
-I pasted the output of the v2 diagnostic battery ("Here's the current status:"). Phase B0 succeeded; B1–B4 all crashed; B5 was still running with its log cut off at `done_getting_tensors:`.
+We pasted the output of the v2 diagnostic battery ("Here's the current status:"). Phase B0 succeeded; B1–B4 all crashed; B5 was still running with its log cut off at `done_getting_tensors:`.
 
 The logs showed:
 
@@ -81,11 +81,11 @@ ffn_down_exps   2112 MiB   Q5_K   <- NOT repackable
 
 - **Confirmed:** the premise of hypothesis H1 — 155 graph splits per token, alternating CPU/GPU, latency-dominated boundaries.
 - **Correction:** the unaccounted decode gap is ~60 ms, not the 75 ms previously stated (working figures 62–63 ms, ~31% overhead, ~0.4 ms per split).
-- Root cause, part one — the 411 GiB pinned buffer (`hipHostMalloc` page-locked `ROCm_Host` buffer). Three consequences: (1) 14-minute loads — of `load time = 858989 ms`, only ~5 min is I/O at 1.5 GB/s for 435 GiB; the other ~9 min is page-locking at ~780 MB/s effective pinning (B0 overall ~490 MB/s); (2) THP never applied — driver-pinned pages are not THP-eligible, hence `AnonHugePages: 0 kB` everywhere. **Correction:** "H5 has been untestable this entire time and I did not realise it." (3) B1–B4 crashes — the pin fails against the 497.8 GiB GTT pool, the loader falls back to a plain CPU buffer, then SIGILL/SIGSEGV follows. B0 is the only run in which the pin succeeded.
+- Root cause, part one — the 411 GiB pinned buffer (`hipHostMalloc` page-locked `ROCm_Host` buffer). Three consequences: (1) 14-minute loads — of `load time = 858989 ms`, only ~5 min is we/O at 1.5 GB/s for 435 GiB; the other ~9 min is page-locking at ~780 MB/s effective pinning (B0 overall ~490 MB/s); (2) THP never applied — driver-pinned pages are not THP-eligible, hence `AnonHugePages: 0 kB` everywhere. **Correction:** "H5 has been untestable this entire time and I did not realise it." (3) B1–B4 crashes — the pin fails against the 497.8 GiB GTT pool, the loader falls back to a plain CPU buffer, then SIGILL/SIGSEGV follows. B0 is the only run in which the pin succeeded.
 - **Hypothesis:** after B0 took and released 411 GiB, B3 failed at the identical size — "The pages aren't coming back" (driver leak / TTM accounting / GTT fragmentation).
 - With `-nopo 1` the pinned buffer buys nothing; its sole purpose is fast H2D for op_offload.
 - **Correction:** "ZenDNN is not inert at `-ngl 0`." It rejects the routed experts (256 experts, Q4_K) but accepts Q8_0 `MUL_MAT`, and all 872 Q8_0 attention tensors sit on the CPU at `-ngl 0` — hence `graph splits = 1088` (bs=512) versus 1 (bs=1). ZenDNN is a separate ACCEL backend, so every op it claims is a split boundary. **Hypothesis:** that shredded graph threw the SIGILL (LIBXSMM JITs; its banner printed on every abort). At `-ngl 99` attention is on GPU, ZenDNN sees nothing, and the graph is a clean 155.
-- **Correction:** I had rebuilt llama.cpp that morning — `libggml-*.so.0.16.0` dated Jul 14 08:28 (files 08:28–08:32); `build: 657e01125 (10001)` versus the prior working `f84a51940 (9942)`, 59 commits back; the new build adds fused Gated Delta Net and Lightning Indexer paths for glm-dsa. Three variables moved at once (new build, THP=always, C-states off), and the script itself introduced `-C`/`--cpu-strict`.
+- **Correction:** we had rebuilt llama.cpp that morning — `libggml-*.so.0.16.0` dated Jul 14 08:28 (files 08:28–08:32); `build: 657e01125 (10001)` versus the prior working `f84a51940 (9942)`, 59 commits back; the new build adds fused Gated Delta Net and Lightning Indexer paths for glm-dsa. Three variables moved at once (new build, THP=always, C-states off), and the script itself introduced `-C`/`--cpu-strict`.
 - Supporting notes: the `-C` mask parse is safe (128 hex digits → 512 boolmask entries = GGML_MAX_N_THREADS; a 32-hex mask starts at index 127); earlier stable runs measured `--no-host 1` at 37.29/4.97 and default at 37.63/5.15; a plain 439 GB malloc/free test left MemFree unchanged; the crash signals are SIGILL/SIGSEGV, not SIGKILL (so not the OOM killer); the 1088-split `-ngl 0` graph "seems worth reporting upstream."
 - **Decision:** kill the battery and pivot to mmap:
 
@@ -115,7 +115,7 @@ llama-bench -m … -ngl 99 -ot "exps=CPU" -mmp 1 -nopo 1 -fa 1 \
   -b 2048 -ub 2048 -p 0 -n 64 -r 3 --progress
 ```
 
-  Then the production candidate `-mmp 0 --no-host 1` — anonymous memory (THP-eligible) plus `CPU_REPACK` on the Q4_K gate/up tensors, with no 411 GiB pin. Confirm from the load log:
+  Then the production candidate `-mmp 0 --no-host 1` — anonymous memory (THP-eligible) plus `CPU_REPACK` on the Q4_K gate/up tensors, with no 411 GiB pin. We confirm from the load log:
 
 ```
 load_tensors: CPU_REPACK model buffer size = …   <- Q4_K gate+up (62% of expert bytes)
@@ -203,7 +203,7 @@ Want `[size=32G]`, not `[size=256M]`; if small, enable Above 4G Decoding and Res
 
 ### 10:57 — Directives: full rerun; IOMMU flags added; ZenDNN-free rebuild
 
-I decided to rerun the full script: "Just put it all into the script. I'm going to delete the output and rerun from scratch. Ignore the p2p stuff for now then. I also just rebooted the container before running. I'll rerun all tests including the diagnostics." I had also made two system changes: "I added amd_iommu=on iommu=pt." and "I rebuilt with -DGGML_ZENDNN=OFF."
+We decided to rerun the full script: "Just put it all into the script. I'm going to delete the output and rerun from scratch. Ignore the p2p stuff for now then. I also just rebooted the container before running. I'll rerun all tests including the diagnostics." we had also made two system changes: "I added amd_iommu=on iommu=pt." and "I rebuilt with -DGGML_ZENDNN=OFF."
 
 ### 11:03 — v3 script written: galactus-diag.sh (16 phases, three model configurations)
 
@@ -238,7 +238,7 @@ The three model configurations (a "reload" happens only when these change):
 
 ### 11:56 — Two upload attempts arrive empty; triage and digest commands
 
-I attached the in-progress results file twice ("How does this look now?", "This is where it is"); both uploads arrived with no content and an empty `/mnt/user-data/uploads/`. **Dead end:** "The upload came through empty... Twice now, so it's not a fluke." Two candidate causes: the file too large for the attachment path, or genuinely zero bytes. Triage commands supplied:
+We attached the in-progress results file twice ("How does this look now?", "This is where it is"); both uploads arrived with no content and an empty `/mnt/user-data/uploads/`. **Dead end:** "The upload came through empty... Twice now, so it's not a fluke." Two candidate causes: the file too large for the attachment path, or genuinely zero bytes. Triage commands supplied:
 
 ```bash
 D=$(ls -dt /root/diag-*/ | head -1); echo "$D"
@@ -277,7 +277,7 @@ grep -B2 -A30 '^## B '          "$D/MAIN.log"              # the -t x --poll tab
 
 ### 11:57 — results.txt arrives (244k lines, mid-Phase B)
 
-On the third attempt the file landed: results.txt, 244k lines, 6.8 MB — the run still in progress, the log ending mid-Phase B. My message was: "HEre you go."
+On the third attempt the file landed: results.txt, 244k lines, 6.8 MB — the run still in progress, the log ending mid-Phase B. Our message was: "HEre you go."
 
 ### 12:00 — Partial v3 read: both crash causes dead; H1 dead; the CPU is at the memory wall; C = 90 ms
 
@@ -310,7 +310,7 @@ Implied CPU bandwidth versus STREAM, from the model `t_total = C + t_cpu(n)` wit
 
 - **Confirmed:** both crash causes have been eliminated — `A1 exit=0`, `A2 exit=0`. `ldd` shows no `libggml-zendnn`; `--list-devices` shows only ROCm0–3; the benchmark backend column reads plain `ROCm` (previously `ROCm,ZenDNN`). "ZenDNN was the crash." `-C`/`--cpu-strict` was never the problem — A2 ran clean with the full 128-bit mask. (Phase 0.9's `GGML_ZENDNN:BOOL=ON` in CMakeCache.txt is stale text from an old build directory; `ldd` is authoritative.)
 - **Confirmed:** `-mmp 1` worked as designed — `CPU_Mapped model buffer size`, no `ROCm_Host`, no 411 GiB pin. A1 took 25 min (cold; wall ~24.7 min, page-faulting 435 GiB from ZFS); A2 took 1 minute (cached). IOMMU passthrough took: 96 `identity` groups.
-- Load-path detail: the prewarm read ran at 1.4 GB/s over 435 GiB, yet the Linux page cache did not grow (377 MB before and after) — the ZFS ARC holds the data instead (visible as `SReclaimable`/`Slab`, not `Cached`), which is why A2 loaded in a minute. The cumulative load-time prints (44 s, 65 s, 81 s … up to 579 s) are misleading; `llama_perf_context_print` values are all zeros (llama-bench does not populate them). 16,380 distinct CUDA graph IDs (HIP graphs active and reused). VRAM barely touched: ~5.2 GiB of 30 GiB per card; compute buffers tiny (205 MiB max). pp512 = 34.65 t/s at t=64. Build 657e01125 confirmed.
+- Load-path detail: the prewarm read ran at 1.4 GB/s over 435 GiB, yet the Linux page cache did not grow (377 MB before and after) — the ZFS ARC holds the data instead (visible as `SReclaimable`/`Slab`, not `Cached`), which is why A2 loaded in a minute. The cumulative load-time prints (44 s, 65 s, 81 s … up to 579 s) are misleading; `llama_perf_context_print` values are all zeros (llama-bench does not populate them). 16,380 distinct CUDA graph IDs (HIP graphs active and reused). VRAM barely touched: ~5.2 GiB of 30 GiB per card; compute buffers tiny (205 MiB max). pp512 = 34.65 t/s at t=64. We build 657e01125 confirmed.
 - **Refuted (H1, dead end):** `--poll` does nothing — "Identical at every thread count. The gap is not threadpool sleep/wake across the 155 splits. Scratch that hypothesis entirely."
 - The plateau across t=24…48 indicates that the CPU expert path has saturated memory bandwidth: `t_cpu(24) = 13.77 GB ÷ 152 GB/s = 90.6 ms` → **C = 180.5 − 90.6 = 90 ms**. From 24 threads up, llama.cpp's Q4_K/Q5_K expert path runs at full platform memory bandwidth — even reproducing STREAM's own decay at 48/64. Below 24 threads it is compute-limited (AVX2 unpack). "There is nothing left to win on the CPU. It is at the memory wall."
 - Therefore 90 of the 180 ms is the GPU side; the GPUs only remove ~87 ms of CPU work (the 13.5 GB dense path they hold) — "roughly a wash."
@@ -329,7 +329,7 @@ wc -c /root/diag-clean.log
 
 ### 12:02 — Log-spam stripping agreed; the run stays alive
 
-I offered to remove the `CUDA Graph id … reused` lines before sending the log. The better fix was to filter them at source, since the 232k lines contain no useful result and would continue to accumulate.
+We offered to remove the `CUDA Graph id … reused` lines before sending the log. The better fix was to filter them at source, since the 232k lines contain no useful result and would continue to accumulate.
 
 ```bash
 D=$(ls -dt /root/diag-*/ | head -1)

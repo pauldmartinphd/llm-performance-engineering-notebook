@@ -1,14 +1,14 @@
 # DeepSeek-V4.1: expert-cache capacity and Maya DSpark results
 
-[All lab records](README.md) · [Related investigation: chapter 4](../../investigations/04-from-the-fork-to-maya.md)
+[All lab records](README.md) · [Related experiment: 4](../../investigations/04-from-the-fork-to-maya.md)
 
 ## Purpose and reasoning
 
-Compare DeepSeek cache behavior and establish a useful Maya configuration, including whether DSpark improves sustained generation. Check RAM residency so loading behavior is not mistaken for steady-state inference.
+We compare DeepSeek cache behavior and establish a useful Maya configuration, including whether DSpark improves sustained generation. We check RAM residency so loading behavior is not mistaken for steady-state inference.
 
 ## Experimental design
 
-I retained the available llAMDa cache benchmark and distinguished it from summary-only sweep rows. I ran Maya's benchmark and DSpark calibration, comparing target-only and draft modes after warm-up. I inspected LXC limits and residency output. The two engines use different workloads and several memory settings changed together.
+We retained the available llAMDa cache benchmark and distinguished it from summary-only sweep rows. We ran Maya's benchmark and DSpark calibration, comparing target-only and draft modes after warm-up. We inspected LXC limits and residency output. The two engines use different workloads and several memory settings changed together.
 
 ## Results
 
@@ -22,7 +22,7 @@ DSpark gave a useful within-calibration gain in Maya. The broader cache sweep re
 
 **Recorded:** October 23, 2026. Maya prints a benchmark date of October 23 at 14:55; the llAMDa cache runs lack individual timestamps. **Machine:** Galactus, Proxmox LXC, EPYC 7713, 2 TiB RAM, four Radeon Pro V620 GPUs. **Source:** [retained benchmark and configuration evidence](../raw-logs/2026-10-23-maya-comparison/README.md). The device output reports 30,704 MiB per GPU, 122,816 MiB in total, gfx1030, wave size 32, and no VMM.
 
-I am comparing llAMDa.cpp with Project Maya v1.1.24 to understand how much performance depends on the inference engine and its placement decisions. The latest DeepSeek result preserves a command and printed output for one cache setting, although the executable’s source revision remains unknown. The supplied conversations preserve a broader cache sweep, a Maya benchmark, and a successful DSpark calibration. Only the 32 GiB cache row has its full llAMDa command and output; Maya has its own benchmark and calibration output. Their workloads differ, so I keep the engine results separate.
+We are comparing llAMDa.cpp with Project Maya v1.1.24 to understand how much performance depends on the inference engine and its placement decisions. The latest DeepSeek result preserves a command and printed output for one cache setting, although the executable’s source revision remains unknown. The supplied conversations preserve a broader cache sweep, a Maya benchmark, and a successful DSpark calibration. Only the 32 GiB cache row has its full llAMDa command and output; Maya has its own benchmark and calibration output. Their workloads differ, so we keep the engine results separate.
 
 ## DeepSeek cache sweep
 
@@ -35,7 +35,7 @@ The model is DeepSeek-V4.1-Flash-1017 UD-Q8_K_XL. The printed benchmark describe
 | 64 GiB | 132.82 | 11.54 | Conversation summary only |
 | 80 GiB | — | — | OOM reported in summary; failure stage not captured |
 
-The reported generation rates are not monotonic: 32 GiB is about 6.8% below the cache-disabled result, while 64 GiB is about 13.1% above it. The three reported prompt rates span only 0.28 tokens/s. This makes 64 GiB a useful provisional baseline for the next run, but does not identify an optimal capacity. Cache misses, replacement work, and transfers could explain the difference; without hit rates, placement records, or matched repeated captures, I cannot identify the cause.
+The reported generation rates are not monotonic: 32 GiB is about 6.8% below the cache-disabled result, while 64 GiB is about 13.1% above it. The three reported prompt rates span only 0.28 tokens/s. This makes 64 GiB a useful provisional baseline for the next run, but does not identify an optimal capacity. Cache misses, replacement work, and transfers could explain the difference; without hit rates, placement records, or matched repeated captures, we cannot identify the cause.
 
 The complete command available for the 32 GiB run is:
 
@@ -62,11 +62,11 @@ The supplied container configuration shows an unprivileged Debian LXC with `core
 
 The conversation identifies an earlier 8 MiB memlock limit and proposes `lxc.prlimit.memlock: unlimited` in the container configuration. After reconnecting, both `ulimit -Sl` and `ulimit -Hl` print `unlimited`. Those are direct checks of the login shell's limits, not a measurement of how many bytes the inference process actually locked. The original low-limit output and updated container configuration are not included.
 
-The next proposed Maya configuration sets `DS4_ENGRAM_RAM=1`, `DS4_REQUIRE_ALL_RAM=1`, and `MAYA_DS4_Q8_BATCH=1`, with `--mmap-experts off`. The later discussion describes the benchmark as running after these residency changes. I have retained that sequence, but the final JSON and engine residency diagnostics are still needed to confirm every effective setting.
+The next proposed Maya configuration sets `DS4_ENGRAM_RAM=1`, `DS4_REQUIRE_ALL_RAM=1`, and `MAYA_DS4_Q8_BATCH=1`, with `--mmap-experts off`. The later discussion describes the benchmark as running after these residency changes. We have retained that sequence, but the final JSON and engine residency diagnostics are still needed to confirm every effective setting.
 
 Maya v1.1.24's [release notes](https://github.com/mw00/project-maya/releases/tag/v1.1.24) document the locked-Engram and required-RAM options, along with the Q8 batching option. The discussion proposes several settings together, but their effective application is not fully captured. The improvement cannot be assigned to memlock alone. The release's new RDNA 4 attention path also does not establish acceleration on the gfx1030 V620s.
 
-For llAMDa, `-lm mlock` in the command is not evidence that locking succeeded. A failed locking request would also not, by itself, prove that SSD reads limited inference. I need the loader warnings, process limits and locked-memory counters, and I/O measurements before attributing its performance to the container limit.
+For llAMDa, `-lm mlock` in the command is not evidence that locking succeeded. A failed locking request would also not, by itself, prove that SSD reads limited inference. We need the loader warnings, process limits and locked-memory counters, and we/O measurements before attributing its performance to the container limit.
 
 ## Maya benchmark and DSpark calibration
 
@@ -90,17 +90,17 @@ The attempted `--speed-calibration --no-start` command did **not** run a DSpark 
 | Without drafting | 169 s | 20.9 / 21.3 / 21.2 | 21.2 | — |
 | DSpark | 202 s | 30.8 / 27.2 / 30.1 | 29.3 | 69% |
 
-Each mode first read a 512-token document and answered once as an uncounted warm-up, then generated three 384-token answers. Although the progress messages target 1024 tokens, the sustained summary explicitly reports **1152 tokens** per mode: 54 seconds without drafting and 39 seconds with DSpark, rounded as printed. I retain the tool's sustained rates rather than recompute them from rounded seconds.
+Each mode first read a 512-token document and answered once as an uncounted warm-up, then generated three 384-token answers. Although the progress messages target 1024 tokens, the sustained summary explicitly reports **1152 tokens** per mode: 54 seconds without drafting and 39 seconds with DSpark, rounded as printed. We retain the tool's sustained rates rather than recompute them from rounded seconds.
 
 DSpark improved sustained generation by **38%** within this calibration, and the tool reports selecting it for the configuration. This is the clearest measured comparison in the record. The initial 3.1 tokens/s without drafting and 1.3 with drafting appear only in conversation summaries. They provide context for the retest, but not a controlled before/after measurement of the memory changes. Likewise, the shorter calibration load times cannot be attributed to a particular change without controlling the cache state.
 
-The older discussion cites a 64 GiB llAMDa result of **132.11 / 11.56 tokens/s**, while the later cache summary gives **132.82 / 11.54**. I retain both as distinct summary records, rather than silently substitute one for the other. Neither includes its printed output in the supplied material. Maya's three-prompt benchmark and its DSpark calibration also differ from llAMDa's separate pp8192/tg1024 tests. The rates make Maya worth pursuing, but do not establish an engine-only speedup. The conversation describes the intended common weights as UD-Q8_K_XL; the actual Maya model path and effective configuration still need capture.
+The older discussion cites a 64 GiB llAMDa result of **132.11 / 11.56 tokens/s**, while the later cache summary gives **132.82 / 11.54**. We retain both as distinct summary records, rather than silently substitute one for the other. Neither includes its printed output in the supplied material. Maya's three-prompt benchmark and its DSpark calibration also differ from llAMDa's separate pp8192/tg1024 tests. The rates make Maya worth pursuing, but do not establish an engine-only speedup. The conversation describes the intended common weights as UD-Q8_K_XL; the actual Maya model path and effective configuration still need capture.
 
 
 
 ## Configuration recovered from shell history on October 28
 
-I recovered the setup and configuration-edit commands from my exported `zsh_history`. The timestamps below are the history's Unix timestamps converted to America/New_York (EDT, UTC−04:00). History records commands entered, not their exit status or output; I therefore distinguish these commands from the benchmark and calibration output retained above. I have included the relevant settings and sequence here without publishing unrelated shell history.
+We recovered the setup and configuration-edit commands from our exported `zsh_history`. The timestamps below are the history's Unix timestamps converted to America/New_York (EDT, UTC−04:00). History records commands entered, not their exit status or output; we therefore distinguish these commands from the benchmark and calibration output retained above. We have included the relevant settings and sequence here without publishing unrelated shell history.
 
 At **13:51:33 on October 23** (1792777893), the recorded setup command selected:
 
@@ -160,7 +160,7 @@ A v1.1.34 rebuild can explicitly restore the recovered 32K, four-GPU, text-only,
 
 The verified v1.1.34 tag resolves to `b04264526e93a3c7d3c051cb9cec97af86ae8a37`. Its [settings documentation](https://github.com/mw00/project-maya/blob/b04264526e93a3c7d3c051cb9cec97af86ae8a37/docs/SETTINGS.md) documents the three recovered environment settings and the relationship between `DS4_REQUIRE_ALL_RAM=1` and `--mmap-experts off`.
 
-For the next run, I will preserve the old checkout, raw results, tuned configurations, and existing model pack before rebuilding. Model shards and DSpark files remain in place. I will record the Maya and llama.cpp revisions, package versions, build log, ROCm version, GPU inventory, shell and process memlock limits, generated JSON, and model file identities. Model sizes and modification times provide an inventory; content hashes are needed to verify identical weights. Benchmark output and calibration output remain separate, with configuration snapshots before and after calibration.
+For the next run, we will preserve the old checkout, raw results, tuned configurations, and existing model pack before rebuilding. Model shards and DSpark files remain in place. We will record the Maya and llama.cpp revisions, package versions, build log, ROCm version, GPU inventory, shell and process memlock limits, generated JSON, and model file identities. Model sizes and modification times provide an inventory; content hashes are needed to verify identical weights. Benchmark output and calibration output remain separate, with configuration snapshots before and after calibration.
 
 
 
@@ -199,7 +199,7 @@ The intended route is **Hermes on `magneto` → authenticated Open WebUI API →
 | DeepSeek configuration | `maya-ds4.1-flash-hip.json`, port **8081** | Rename and port edit appear in shell history; dashboard separately confirms port 8081 |
 | GLM configuration | `maya-glm5.3-flash-hip.json`, proposed port **8082** | Requested deployment arrangement; the original run used a temporary **8100** benchmark port, and the retained source does not confirm the final listener on 8082 |
 
-On `magneto`, run `hermes model`, select the custom OpenAI-compatible endpoint, and use the API base above. Supply the Open WebUI account's API key privately. Use the exact model ID returned by `/api/models`; `deepseek-v4.1-flash` is the proposed ID, pending discovery. API-key enablement is recorded, but a successful authenticated model listing, completed Hermes configuration, and end-to-end tool call have not yet been demonstrated in the available exchange.
+On `magneto`, run `hermes model`, select the custom OpenAI-compatible endpoint, and use the API base above. Supply the Open WebUI account's API key privately. We use the exact model ID returned by `/api/models`; `deepseek-v4.1-flash` is the proposed ID, pending discovery. API-key enablement is recorded, but a successful authenticated model listing, completed Hermes configuration, and end-to-end tool call have not yet been demonstrated in the available exchange.
 
 The model-list check uses zsh's hidden-input syntax. This procedure holds the key in a temporary shell variable and clears it afterward; the notebook contains no key value.
 
@@ -243,6 +243,6 @@ The successful retest used DSpark, not the DFlash2 name mentioned in the initial
 
 The proposed llAMDa retest used the same DeepSeek shard path as the measured 32 GiB command, `-ngl 99`, `-ot 'engram_embd=CPU;exps=CPU'`, `--moe-cache-mib 65536`, `-lm mlock -lzm off`, `-fa on`, `-t 32`, `-b 8192 -ub 8192`, `-p 8192 -n 1024 -r 2 -o md`. Unlike the retained 32 GiB command, it did not explicitly include `-sm layer`. The earlier reference was 132.11/11.56 tokens/s; the later summary's 132.82/11.54 remains distinct. Filesystem cache state and simultaneous Maya activity would need control before attributing a change to memlock.
 
-A second proposal changed threads from 32 to 64 after extracting Maya's `gpu`, `args`, and `env` fields from `maya-ds4-hip.json`. It aimed for the same four GPUs, weights, 32K context, resident CPU experts/Engram, and initially no speculation, but neither Maya's worker count nor equivalent context handling was established by that suggestion. A 64 GiB dynamic expert cache is not equivalent to Maya's proposed popularity-based preload/adaptive residency and CPU lane, nor does a 3 GiB-per-GPU reserve translate directly into that cache capacity. Separate llama-bench PP/TG tests also differ from generation following Maya's actual prompts. A 48–60 GiB cache sweep was suggested as a possible follow-up, with hit rates, PCIe traffic, and GPU execution measured before assigning a cause.
+A second proposal changed threads from 32 to 64 after extracting Maya's `gpu`, `args`, and `env` fields from `maya-ds4-hip.json`. It aimed for the same four GPUs, weights, 32K context, resident CPU experts/Engram, and initially no speculation, but neither Maya's worker count nor equivalent context handling was established by that suggestion. A 64 GiB dynamic expert cache is not equivalent to Maya's proposed popularity-based preload/adaptive residency and CPU lane, nor does a 3 GiB-per-GPU reserve translate directly into that cache capacity. We separate llama-bench PP/TG tests also differ from generation following Maya's actual prompts. A 48–60 GiB cache sweep was suggested as a possible follow-up, with hit rates, PCIe traffic, and GPU execution measured before assigning a cause.
 
 The original Flash llAMDa proposal used the six-shard GLM path, CPU expert override, 64 GiB cache, locked loading/lazy mode off, 32 threads, and PP8192/TG1024 with batch and microbatch 8192 and two repetitions. The flagship proposal retained that workload but required checking its actual tensor structure before choosing placement. Neither proposal supplies a new result here. Later native-quant and flagship suggestions are retained in the [GLM setup record](2026-10-23-maya-glm53-speculation.md#setup-choices-and-proposals-retained-from-the-source-discussion).

@@ -1,8 +1,8 @@
-# 3. Making speculation useful
+# 3. Speculative Decoding
 
-[Previous: the prefill bottleneck](02-following-the-prefill-bottleneck.md) · [Chapter index](README.md) · [Next: the fork and Maya](04-from-the-fork-to-maya.md)
+[Previous: the prefill bottleneck](02-following-the-prefill-bottleneck.md) · [Experiments](README.md) · [Next: the fork and Maya](04-from-the-fork-to-maya.md)
 
-## The question
+## Objective
 
 The scheduler work made prompts faster to read, but generation remained slow. Each new token normally depends on the previous one. Could a cheaper predictor draft tokens ahead, allowing the main model to verify several positions together?
 
@@ -10,15 +10,15 @@ This is **speculative decoding**. A draft path proposes tokens. The target model
 
 The notebook tests two approaches: MTP, a model's multi-token prediction path, and DSpark drafting for DeepSeek. Model support, draft loading, and a measured speedup are separate milestones.
 
-## The first practical barrier was getting the draft to run
+## Drafter Compatibility
 
 Some exports and builds could not initialize the required path. Qwen's MTP failed to initialize in the August common-baseline record. An earlier DeepSeek-V4.1 attempt completed target-only generation at 11.2 tokens/s, then failed to allocate about 2464 MiB while loading the drafter.
 
 Those failures do not measure a speculative speedup or slowdown. They show that the tested configuration did not reach the comparison. The [V4.1 record](../results/lab-notebook/undated-deepseek41-dspark.md) keeps that distinction explicit.
 
-## Draft acceptance alone did not predict speed
+## Acceptance and Throughput
 
-The [August 7 DeepSeek-V4-Flash-0731 captures](../results/lab-notebook/2026-08-07-deepseek-v4-dspark-acceptance.md) show why I had to measure time as well as acceptance:
+The [August 7 DeepSeek-V4-Flash-0731 captures](../results/lab-notebook/2026-08-07-deepseek-v4-dspark-acceptance.md) show why we had to measure time as well as acceptance:
 
 | Maximum draft length | Draft acceptance | Generation, tokens/s |
 |---|---:|---:|
@@ -30,9 +30,9 @@ Each timing covers 256 generated tokens. The logs do not establish an exact buil
 
 A longer draft can yield more accepted tokens per cycle while making that cycle more expensive. The same set also contains a second length-five capture at 11.35 tokens/s with the same acceptance counts. Counts cannot replace elapsed time or repeated trials.
 
-## The common-build tests established useful gains
+## Common-Build Results
 
-In [August I repeated speculation on the same build used for the five-model baseline](../results/lab-notebook/2026-08-15-to-16-common-baseline-2tb.md). The ordinary baseline used llama-bench. The speculative runs used a ZFS explanation prompt in llama-cli with greedy decoding. They are separate workloads, which limits the precision of the comparison.
+In [August we repeated speculation on the same build used for the five-model baseline](../results/lab-notebook/2026-08-15-to-16-common-baseline-2tb.md). The ordinary baseline used llama-bench. The speculative runs used a ZFS explanation prompt in llama-cli with greedy decoding. They are separate workloads, which limits the precision of the comparison.
 
 | Model | Ordinary baseline | Speculative generation | Approximate gain over baseline |
 |---|---:|---:|---:|
@@ -43,7 +43,7 @@ Rates are tokens/s. The speculative spreads summarize two repetitions; they are 
 
 These results made speculation worth carrying into later testing. They did not establish a universal draft length or a gain on every kind of answer.
 
-## Maya later provided a clearer within-engine comparison
+## Maya Results
 
 The October 23 Maya tests used a different engine and newer models. They should not be merged into the August baseline, but their controls answered the same question more directly.
 
@@ -54,11 +54,11 @@ The October 23 Maya tests used a different engine and newer models. They should 
 
 The GLM run generated three distinct answers of up to 256 tokens. The DeepSeek calibration measured 1152 tokens per mode after warm-up and reported 69% draft acceptance. These are separate tests, not a model-to-model ranking.
 
-GLM's default run also measured 29.4 tokens/s on an earlier pass. Changing its speculative head from two GPUs to one or three reduced the observed rate. Several draft-expert settings were close to the default, but none established a better choice. I kept the working defaults rather than treating one favorable run as a precise optimum.
+GLM's default run also measured 29.4 tokens/s on an earlier pass. Changing its speculative head from two GPUs to one or three reduced the observed rate. Several draft-expert settings were close to the default, but none established a better choice. We kept the working defaults rather than treating one favorable run as a precise optimum.
 
-## What I carried forward
+## Conclusions
 
-Speculation gave useful generation gains in the successful GLM and DeepSeek tests. I retained it where loading and throughput had been verified. I also kept three checks separate: whether the draft loaded, whether it was used, and whether it improved the full request's timing.
+Speculation gave useful generation gains in the successful GLM and DeepSeek tests. We retained it where loading and throughput had been verified. We also kept three checks separate: whether the draft loaded, whether it was used, and whether it improved the full request's timing.
 
 The later [two-GPU GLM-Flash tests](../results/lab-notebook/2026-11-09-glm-flash-reserve-and-speculation.md) confirmed active native MTP. They did not include an MTP-off control, so they add evidence of operation rather than another independent speedup measurement.
 

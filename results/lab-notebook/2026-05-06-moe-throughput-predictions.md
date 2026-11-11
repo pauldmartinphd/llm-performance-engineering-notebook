@@ -1,12 +1,12 @@
 # Throughput predictions for eight MoE models: speculation and layer offload
 
-[All lab records](README.md) · [Related investigation: chapter 1](../../investigations/01-establishing-a-baseline.md)
+[All lab records](README.md) · [Related experiment: 1](../../investigations/01-establishing-a-baseline.md)
 
 **Record type:** Analysis of predictions; no new benchmark.
 
 **Date:** May 6, 2026. **Source:** *Speculative Decoding and Layer Offload on Galactus: Throughput Analysis Across Eight MoE Models*, a report written by Claude; its document metadata gives the creation date as May 6, 2026. **Status:** AI-summarized analysis and predictions; no new benchmark. The original document is kept outside this repository.
 
-The report combined my April measurements with a structural model of speculative decoding and expert-layer offload, and predicted decode throughput for eight MoE models on Galactus with 1 TB of DDR4, before the August 2 TB upgrade. This entry keeps its measured inputs, model, predictions, and proposed test order, and compares them with what I measured later. The report's predictions are not measurements. Its literature and engine-status claims (the GLM-5 paper's QAT description, arXiv 2602.15763; the Qwen 3.6-35B-A3B speculation benchmarks; llama.cpp issue #22319; the antirez DeepSeek V4 fork; SGLang and vLLM support for MiMo V2.5) are leads I have not verified here.
+The report combined our April measurements with a structural model of speculative decoding and expert-layer offload, and predicted decode throughput for eight MoE models on Galactus with 1 TB of DDR4, before the August 2 TB upgrade. This entry keeps its measured inputs, model, predictions, and proposed test order, and compares them with what we measured later. The report's predictions are not measurements. Its literature and engine-status claims (the GLM-5 paper's QAT description, arXiv 2602.15763; the Qwen 3.6-35B-A3B speculation benchmarks; llama.cpp issue #22319; the antirez DeepSeek V4 fork; SGLang and vLLM support for MiMo V2.5) are leads we have not verified here.
 
 ## Measured inputs
 
@@ -18,7 +18,7 @@ The report combined my April measurements with a structural model of speculative
 | MiniMax M2.7 Q5_K_M, 14.76 t/s, no offload; 17.37 with 42 layers | [MiniMax M2.7](../minimax-m2.7.md) | `-ngl 42` across four GPUs. |
 | STREAM: DDR4-2666 Triad 104.5, Copy 140.6 GB/s; DDR4-2933 Triad 109.5, Copy 150.7 GB/s | Not retained elsewhere | The [March build entry](2026-03-23-galactus-build.md) records 141 GB/s Copy and 107 GB/s Triad for the matched DDR4-2933 DIMMs. |
 
-The report places the Kimi and Qwen no-offload baselines at DDR4-2666. That is correct: the 1 TB memory ran at 2666 MT/s until April 10, and the April 10 Qwen run was the first after I overclocked it to 2933 MT/s. The 2 TB population that replaced it in August runs at its rated 2933 MT/s. The model notes' System lines were corrected on November 2.
+The report places the Kimi and Qwen no-offload baselines at DDR4-2666. That is correct: the 1 TB memory ran at 2666 MT/s until April 10, and the April 10 Qwen run was the first after we overclocked it to 2933 MT/s. The 2 TB population that replaced it in August runs at its rated 2933 MT/s. The model notes' System lines were corrected on November 2.
 
 ## The report's model
 
@@ -61,10 +61,10 @@ Proposed test order: Qwen 397B with 20-layer offload plus speculation; MiniMax M
 ## Later results
 
 - **DeepSeek V4 Flash:** the [August common baseline](2026-08-15-to-16-common-baseline-2tb.md) measured V4-Flash-0731 UD-Q8_K_XL with MXFP4 experts at 10.34 t/s and 14.1 ± 0.7 with DSpark n=3, below the predicted 13–16 and 18–23. That run used the 2 TB population and a different build. With Maya on October 23, DeepSeek-V4.1-Flash-1017 reached 29.3 t/s with speculation and 21.2 without ([record](2026-10-23-maya-glm53-speculation.md)); that is a different model revision and engine.
-- **Qwen 397B:** the report's first test did not run as planned. In August, Qwen MTP did not arm, and decode was 9.37 t/s with all routed experts in RAM. The April 16- and 20-layer placements no longer fit beside the ub-8192 compute buffers, so I abandoned the offload reruns.
+- **Qwen 397B:** the report's first test did not run as planned. In August, Qwen MTP did not arm, and decode was 9.37 t/s with all routed experts in RAM. The April 16- and 20-layer placements no longer fit beside the ub-8192 compute buffers, so we abandoned the offload reruns.
 - **Speculation ceiling:** measured gains exceed the report's 1.10–1.40× range: GLM-5.3-Flash at +58.8% with Maya. The earlier llama.cpp gains were +31% for GLM-5.2 MTP and +45% for DeepSeek V4 Flash DSpark. The [speculative decoding takeaways](../../takeaways/speculative-decoding.md) use a fitted C + S cost model for those llama.cpp results instead of the acceptance ÷ expansion ceiling.
-- **GLM:** the report predicted GLM 5.1. I measured GLM-5.2 in August at 5.30 t/s and 6.6 ± 0.3 with MTP n=2.
+- **GLM:** the report predicted GLM 5.1. We measured GLM-5.2 in August at 5.30 t/s and 6.6 ± 0.3 with MTP n=2.
 - **Kimi:** K2.6 measured 5.79 t/s in August. Kimi K2.5 offload was not measured.
-- **MiniMax M2.7:** August decode was 15.18 t/s with all routed experts in RAM. Speculation was not tested before I retired the model on August 16.
+- **MiniMax M2.7:** August decode was 15.18 t/s with all routed experts in RAM. Speculation was not tested before we retired the model on August 16.
 - **Threads:** decode collapse at 128 threads matches the SMT oversubscription row in [Negative results](../../takeaways/refuted-hypotheses.md). The NUMA explanation is refuted: Galactus runs as a single NUMA node (NPS1).
 - **Not measured:** MiMo V2.5, MiMo V2.5 Pro, DeepSeek V4 Pro.

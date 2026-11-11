@@ -1,14 +1,14 @@
 # the 2 TB common baseline (stock build)
 
-[All lab records](README.md) · [Related investigation: chapter 1](../../investigations/01-establishing-a-baseline.md)
+[All lab records](README.md) · [Related experiment: 1](../../investigations/01-establishing-a-baseline.md)
 
 ## Purpose and reasoning
 
-Establish a comparable five-model reference after the RAM upgrade, then check speculative generation on the same build. This prevents a table of best historical rates from mixing different builds, memory populations, and workloads.
+We establish a comparable five-model reference after the RAM upgrade, then check speculative generation on the same build. This prevents a table of best historical rates from mixing different builds, memory populations, and workloads.
 
 ## Experimental design
 
-I used stock build 3653e6d6d, CPU-resident routed experts, batch/microbatch 8192, pp8192, tg128, and two requested repetitions. GLM uses 32 CPU threads and the other models 64. I measured MTP/DSpark separately in llama-cli with the recorded prompt and retained each completed run and model identity check.
+We used stock build 3653e6d6d, CPU-resident routed experts, batch/microbatch 8192, pp8192, tg128, and two requested repetitions. GLM uses 32 CPU threads and the other models 64. We measured MTP/DSpark separately in llama-cli with the recorded prompt and retained each completed run and model identity check.
 
 ## Results
 
@@ -44,7 +44,7 @@ Model files:
 | Qwen 3.5 397B-A17B | Unsloth UD-Q6_K_XL | 337.43 GiB | 64 |
 | MiniMax M2.7 | Unsloth UD-Q5_K_M | 157.23 GiB | 64 |
 
-There are two qualifications about the model files. The Kimi row is K2.6, while the April rows were K2.5. I treat them as equivalent, but that is an assumption rather than a measurement. The Qwen file changed from April's bartowski Q6_K_L (319.21 GiB) to Unsloth's UD-Q6_K_XL (+5.7%). MiniMax is the only model with exact file identity to April.
+There are two qualifications about the model files. The Kimi row is K2.6, while the April rows were K2.5. We treat them as equivalent, but that is an assumption rather than a measurement. The Qwen file changed from April's bartowski Q6_K_L (319.21 GiB) to Unsloth's UD-Q6_K_XL (+5.7%). MiniMax is the only model with exact file identity to April.
 
 ## Results — baseline class
 
@@ -71,12 +71,12 @@ From here on, each result is labeled by configuration: baseline (this table), of
 - Prefill orders by active-expert size: A10B 419 > A17B 250 > DSV4 (~13B MXFP4) 143 > A40B 96 ≈ A32B 94. DSV4 sits below the trend line; MXFP4 dequant or arch overhead are candidates, not investigated.
 - Prefill repetition spread grows as active size shrinks: MiniMax ±5.8% and Qwen ±7.9% against DSV4's ±1.1%. The cause is not identified; it is noted for anyone quoting the big numbers.
 - Decode is stable everywhere (tg stddev ≤ 0.18 across all five), consistent with bandwidth-bound behavior.
-- Large-ubatch prefill and resident-expert offload compete for VRAM. The April Qwen 5-layer/card placement failed to load under the standing config, and the 4-layer/card placement loaded weights but failed at context creation: the ub-8192 compute graphs plus f16 KV now consume what April's p512-sized graphs left for resident experts. April's offload placements were only feasible because `-p 512` kept the compute buffers small. I abandoned the offload reruns on this finding.
+- Large-ubatch prefill and resident-expert offload compete for VRAM. The April Qwen 5-layer/card placement failed to load under the standing config, and the 4-layer/card placement loaded weights but failed at context creation: the ub-8192 compute graphs plus f16 KV now consume what April's p512-sized graphs left for resident experts. April's offload placements were only feasible because `-p 512` kept the compute buffers small. We abandoned the offload reruns on this finding.
 - Qwen MTP does not arm on this export. llama.cpp on this build supports qwen35moe MTP (the hybrid Qwen3.5 MTP context), but the run failed at `common_speculative_init_result: failed to create MTP context`. The cause is not isolated (NextN tensors absent from the Unsloth export, versus an allocation failure); no further Qwen speculative work is planned.
 
 ## Decisions recorded in this entry
 
-- MiniMax M2.7 is retired. The row above is its final measurement on this machine; I deleted the model after the run. Qwen 3.5 397B was considered for retirement and kept.
+- MiniMax M2.7 is retired. The row above is its final measurement on this machine; we deleted the model after the run. Qwen 3.5 397B was considered for retirement and kept.
 - The models kept for testing are GLM-5.2, DeepSeek-V4-Flash-0731, Kimi K2.6, and Qwen 3.5 397B. The prefill-patch A/B will cover these four; the retired architectures can no longer join it.
 - The headline tables now use only the normalized rows, labeled by configuration. All April and July figures remain in the per-model notes and this notebook as history.
 
@@ -119,7 +119,7 @@ Speculative runs are an order of magnitude noisier than plain decode on this bui
 
 ## Original logs added October 22, 2026
 
-I added the original August CLI captures and benchmark files in October. The CLI runs confirm the speculation tables here. The archive also contains a different GLM benchmark pair (96.17/5.21) and a DeepSeek-named file whose output matches the prior Kimi row. I preserved the original baseline and documented those differences in [the speculation and rebenchmark records](2026-08-15-to-16-common-baseline-2tb.md#individual-runs-and-benchmark-file-checks).
+We added the original August CLI captures and benchmark files in October. The CLI runs confirm the speculation tables here. The archive also contains a different GLM benchmark pair (96.17/5.21) and a DeepSeek-named file whose output matches the prior Kimi row. We preserved the original baseline and documented those differences in [the speculation and rebenchmark records](2026-08-15-to-16-common-baseline-2tb.md#individual-runs-and-benchmark-file-checks).
 
 ## Individual runs and benchmark file checks
 
@@ -147,7 +147,7 @@ The GLM file similarly changes n-max despite its `n2` filename:
 | 12:19:44 | 3 | 6.3 |
 | 12:21:35 | 1 | 5.9 |
 
-These commands use GLM-5.2, 32 threads, CPU expert overrides, and the same 8192 context/batch/microbatch and 256-token greedy prompt. The separate target-only GLM transcript reports 5.3 generation t/s. The two n-max 2 runs average 6.6 t/s, matching the earlier summary. I retain the individual rates because two observations do not establish a tight uncertainty estimate.
+These commands use GLM-5.2, 32 threads, CPU expert overrides, and the same 8192 context/batch/microbatch and 256-token greedy prompt. The separate target-only GLM transcript reports 5.3 generation t/s. The two n-max 2 runs average 6.6 t/s, matching the earlier summary. We retain the individual rates because two observations do not establish a tight uncertainty estimate.
 
 The Qwen3.5 MTP transcript ends with exit code 1 before the server becomes ready. It supplies no speculation timing. Likewise, the Qwen resident-expert benchmark fails during context creation. Neither failure should enter a throughput average as zero.
 
@@ -155,11 +155,11 @@ The Qwen3.5 MTP transcript ends with exit code 1 before the server becomes ready
 
 The MiniMax file exactly matches the existing 418.83 ± 24.11 pp8192 and 15.18 ± 0.18 tg128 rows. The Qwen file matches 249.61 ± 19.78 and 9.37 ± 0.16. The build capture identifies `3653e6d6d (10326)`, compiled with GNU 14.2.0 for Linux x86_64.
 
-The GLM benchmark file contains another pair: **96.17 ± 3.49 pp8192 and 5.21 ± 0.03 tg128**, rather than the existing common-baseline pair of 95.99 ± 3.36 and 5.30 ± 0.00. I preserved both records. Without a run timestamp or explanation tying the two together, I cannot silently replace one with the other or treat them as repetitions from a controlled series.
+The GLM benchmark file contains another pair: **96.17 ± 3.49 pp8192 and 5.21 ± 0.03 tg128**, rather than the existing common-baseline pair of 95.99 ± 3.36 and 5.30 ± 0.00. We preserved both records. Without a run timestamp or explanation tying the two together, we cannot silently replace one with the other or treat them as repetitions from a controlled series.
 
-The file named `deepseek-v4-flash.md` prints `deepseek2 671B BF16`, **553.71 GiB**, and **1026.41 B parameters**, with rates **94.23 ± 4.45** and **5.79 ± 0.01**. Those values match the Kimi K2.6 rows in the existing baseline, not its DeepSeek-V4-Flash rows. The capture does not include a model path that independently resolves the identity. I renamed the preserved file to describe that discrepancy and kept the earlier Kimi attribution as prior notebook context rather than claiming that the filename proves a DeepSeek measurement.
+The file named `deepseek-v4-flash.md` prints `deepseek2 671B BF16`, **553.71 GiB**, and **1026.41 B parameters**, with rates **94.23 ± 4.45** and **5.79 ± 0.01**. Those values match the Kimi K2.6 rows in the existing baseline, not its DeepSeek-V4-Flash rows. The capture does not include a model path that independently resolves the identity. We renamed the preserved file to describe that discrepancy and kept the earlier Kimi attribution as prior notebook context rather than claiming that the filename proves a DeepSeek measurement.
 
-I did not change the normalized baseline or infer a new model ranking from these files. They strengthen the evidence behind some existing rows, add a distinct GLM pair, and make the filename mismatch explicit. The archive also preserves the commands and failures needed to reconstruct how I reached the later configurations.
+We did not change the normalized baseline or infer a new model ranking from these files. They strengthen the evidence behind some existing rows, add a distinct GLM pair, and make the filename mismatch explicit. The archive also preserves the commands and failures needed to reconstruct how we reached the later configurations.
 
 The separate [V4-Flash-0731 DSpark acceptance logs](2026-08-07-deepseek-v4-dspark-acceptance.md) contain no wall-clock date, but their original modification times place them on August 7. They are not August 16 runs.
 

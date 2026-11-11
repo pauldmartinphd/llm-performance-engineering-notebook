@@ -2,7 +2,7 @@
 
 ## Current place in the project
 
-I host DeepSeek-V4.1-Flash-1017 UD-Q8_K_XL on Galactus's GPUs 0 and 1, leaving the other pair for GLM-Flash. The selected Maya configuration uses TP2, DSpark, 32K prefill chunks, an 800 MiB ring, and FP16-output prefill. That last setting changes a computation path; the stored weights remain Q8.
+We host DeepSeek-V4.1-Flash-1017 UD-Q8_K_XL on Galactus's GPUs 0 and 1, leaving the other pair for GLM-Flash. The selected Maya configuration uses TP2, DSpark, 32K prefill chunks, an 800 MiB ring, and FP16-output prefill. That last setting changes a computation path; the stored weights remain Q8.
 
 The [two-model chapter](../investigations/06-sharing-galactus.md) explains the GPU-allocation decision. The [long-prompt chapter](../investigations/05-tuning-long-prompts.md) explains the chunk/ring sweep and later precision test. Older records below use other builds, model exports, and GPU counts, so they should not be read as a single benchmark progression.
 
@@ -22,7 +22,7 @@ On the four-V620 configuration identified as UD-Q8_K_XL, the default measured **
 
 ### November 5: proposed style and refusal experiments
 
-I defined a [Heretic evaluation project](lab-notebook/2026-11-05-deepseek-style-and-heretic-plan.md) comparing the original, style-only, refusal-only, and combined models. The objective is to remove unwanted rhetorical prose while preserving technical depth and testing reasoning and factual accuracy directly. Unnecessary-refusal reduction is optional. No model was modified or benchmarked; compatibility with the exact checkpoint, ROCm workflow, and Maya export remains to be established.
+We defined a [Heretic evaluation project](lab-notebook/2026-11-05-deepseek-style-and-heretic-plan.md) comparing the original, style-only, refusal-only, and combined models. The objective is to remove unwanted rhetorical prose while preserving technical depth and testing reasoning and factual accuracy directly. Unnecessary-refusal reduction is optional. No model was modified or benchmarked; compatibility with the exact checkpoint, ROCm workflow, and Maya export remains to be established.
 
 ### October 29: production v1.1.36 at 488.6 tokens/s prefill
 
@@ -52,16 +52,16 @@ The [cache and Maya comparison record](lab-notebook/2026-10-23-deepseek41-cache-
 
 ### Earlier Q4_K_M and DSpark tests
 
-I tested the eleven-shard Q4_K_M export from `vcruz305/DeepSeek-V4.1-Flash-GGUF` with the DSpark export from `JigSawPT/DeepSeek-V4.1-Flash-DSpark-GGUF`. My V620 build combined the V620 patches, older DeepSeek implementation, GLM-5.3 MTP support, and my round-robin prefill patch. It reports `b0-unknown`; the captures do not establish the exact commit or run dates.
+We tested the eleven-shard Q4_K_M export from `vcruz305/DeepSeek-V4.1-Flash-GGUF` with the DSpark export from `JigSawPT/DeepSeek-V4.1-Flash-DSpark-GGUF`. Our V620 build combined the V620 patches, older DeepSeek implementation, GLM-5.3 MTP support, and our round-robin prefill patch. It reports `b0-unknown`; the captures do not establish the exact commit or run dates.
 
 | Configuration | Generation t/s | Outcome |
 | --- | ---: | --- |
 | Target only | 11.2 | Completed the 256-token generation test |
 | DSpark, n-max 2, draft GPU offload | — | Failed to allocate 2464.20 MiB on ROCm0 while loading the draft |
 
-I used 32 threads, context 8192, flash attention, `--load-mode none`, and greedy decoding for the ZFS explanation prompt. The target-only command did not explicitly specify CPU-MoE placement or tensor splitting. The output contained unfinished reasoning at the token limit; I did not score answer quality.
+We used 32 threads, context 8192, flash attention, `--load-mode none`, and greedy decoding for the ZFS explanation prompt. The target-only command did not explicitly specify CPU-MoE placement or tensor splitting. The output contained unfinished reasoning at the token limit; we did not score answer quality.
 
-The log ends with commands for a four-way comparison of DSpark off/on and automatic/forced-RAM placement, but it contains no output from those commands. I therefore have no successful V4.1 DSpark timing in this capture and no round-robin-off comparison.
+The log ends with commands for a four-way comparison of DSpark off/on and automatic/forced-RAM placement, but it contains no output from those commands. We therefore have no successful V4.1 DSpark timing in this capture and no round-robin-off comparison.
 
 These results precede the replacement with Unsloth's V4.1-Flash-1017 implementation. They also differ from the earlier [DeepSeek-V4-Flash-0731 results](deepseek-v4-flash.md); those successful DSpark runs cannot substitute for a V4.1 measurement.
 

@@ -8,7 +8,7 @@ With a large MoE in system RAM and `-ot exps=CPU`, the llama.cpp scheduler offlo
 
 ## The fix
 
-Edit 2 spreads the offload target across all eligible GPUs, keyed on the layer index, so each layer's gate, up, and down stay on one card. Edit 1 adds a fallback cursor for Edit 2. Edit 3 skips the ids read when the number of routing selections reaches its threshold, marking all experts as used. At large batches I expected nearly all experts to be selected, leaving little benefit from the selective readback. The patch may copy unused experts when routing is uneven; the threshold is a heuristic, not a guarantee that every expert was selected. The async copies can then issue at once and overlap compute across the cards.
+Edit 2 spreads the offload target across all eligible GPUs, keyed on the layer index, so each layer's gate, up, and down stay on one card. Edit 1 adds a fallback cursor for Edit 2. Edit 3 skips the ids read when the number of routing selections reaches its threshold, marking all experts as used. At large batches we expected nearly all experts to be selected, leaving little benefit from the selective readback. The patch may copy unused experts when routing is uneven; the threshold is a heuristic, not a guarantee that every expert was selected. The async copies can then issue at once and overlap compute across the cards.
 
 > The source anchors and line numbers refer to the July 21, 2026 tree. Inspect the corresponding code in your checkout before applying these edits:
 > ```bash
@@ -133,7 +133,7 @@ GGML_SCHED_DEBUG=2 llama-bench \
 grep '## SPLIT' sched_patched.txt | sed -E 's/.*: (ROCm[0-9]|CPU).*/\1/' | sort | uniq -c
 grep -c '## SPLIT' sched_patched.txt   # split count should stay near the pre-patch total, not grow
 ```
-Before: ROCm0 731, ROCm1 133, ROCm2 175, ROCm3 147. After: about equal, near 290 each. If ROCm0 is still about 731, the patch did not take effect. Confirm that `ldd $(which llama-bench) | grep ggml` points at your rebuilt library. Do not measure throughput yet.
+Before: ROCm0 731, ROCm1 133, ROCm2 175, ROCm3 147. After: about equal, near 290 each. If ROCm0 is still about 731, the patch did not take effect. We confirm that `ldd $(which llama-bench) | grep ggml` points at our rebuilt library. Do not measure throughput yet.
 
 ### Compare throughput after confirming placement
 ```bash
@@ -142,7 +142,7 @@ llama-bench \
   -ngl 99 -ot "exps=CPU" -mmp 0 -nopo 0 -fa 1 \
   -t 32 -b 8192 -ub 8192 -p 8192 -n 0 -r 2 -o md
 ```
-`-mmp 0` pins the host buffer. Async H2D from pinned pages reaches the multi-stream bandwidth limit; pageable memory uses a bounce buffer and stays lower. Confirm the load log shows the expert tensors in a `ROCm_Host` buffer. If `-mmp 0` runs out of memory on the pinned allocation, use `-mmp 1` for a working number first.
+`-mmp 0` pins the host buffer. Async H2D from pinned pages reaches the multi-stream bandwidth limit; pageable memory uses a bounce buffer and stays lower. We confirm the load log shows the expert tensors in a `ROCm_Host` buffer. If `-mmp 0` runs out of memory on the pinned allocation, use `-mmp 1` for a working number first.
 
 Regression check (one run): decode with `-n 64 -p 0` should not change. In the tested backend, offload eligibility limited distribution to batch 32 or more, and Edit 3’s condition was false at batch 1. Recheck those assumptions on other builds and backends.
 
@@ -158,4 +158,4 @@ Split histogram after the patch: ROCm0 731 → 285; distribution 285/300/294/292
 
 ## Submission status
 
-This relates to [issue #20757](https://github.com/ggml-org/llama.cpp/issues/20757) (a two-tier GPU+RAM expert cache for MoE offload). It touches the same code (`compute_splits`, the selective expert copy). I have not submitted an upstream PR for this patch; the text above is the basis for one. The proposed contributions are layer-keyed distribution and the batch-size-gated ids bypass. The distribution-only null result is part of the evidence for the combined change.
+This relates to [issue #20757](https://github.com/ggml-org/llama.cpp/issues/20757) (a two-tier GPU+RAM expert cache for MoE offload). It touches the same code (`compute_splits`, the selective expert copy). We have not submitted an upstream PR for this patch; the text above is the basis for one. The proposed contributions are layer-keyed distribution and the batch-size-gated ids bypass. The distribution-only null result is part of the evidence for the combined change.

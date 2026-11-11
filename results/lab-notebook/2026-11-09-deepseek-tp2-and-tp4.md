@@ -1,14 +1,14 @@
 # DeepSeek on two V620s: baseline and requested TP4 fallback
 
-[All lab records](README.md) · [Related investigation: chapter 6](../../investigations/06-sharing-galactus.md)
+[All lab records](README.md) · [Related experiment: 6](../../investigations/06-sharing-galactus.md)
 
 ## Purpose and reasoning
 
-Test whether DeepSeek can keep useful speed on GPUs 0 and 1, freeing the other pair, and check whether a requested TP4 layout actually activates.
+We test whether DeepSeek can keep useful speed on GPUs 0 and 1, freeing the other pair, and check whether a requested TP4 layout actually activates.
 
 ## Experimental design
 
-I ran the v1.1.54 built-in benchmark on two GPUs, then the 32K-chunk/800 MiB-ring sweep at 8K/16K/32K targets with 128 output tokens. I retained effective layout and cache counters. The later requested-TP4 run uses v1.1.57 and still the two-device source config, so requested and observed parallelism must be distinguished.
+We ran the v1.1.54 built-in benchmark on two GPUs, then the 32K-chunk/800 MiB-ring sweep at 8K/16K/32K targets with 128 output tokens. We retained effective layout and cache counters. The later requested-TP4 run uses v1.1.57 and still the two-device source config, so requested and observed parallelism must be distinguished.
 
 ## Results
 
@@ -22,7 +22,7 @@ Two-GPU TP2 was a useful allocation candidate. The TP4-request rows describe fal
 
 **Experiments: November 9, 2026.**
 
-I tested whether DeepSeek could retain useful interactive performance on GPUs 0 and 1, freeing GPUs 2 and 3 for GLM-Flash. The first built-in v1.1.54 report measured **29.0 tokens/s mean decode**, 187 tokens/s at 2K prefill, and 327 at 8K, with 1,048,576 context configured and a 298-second load. Its three 256-token answer rates were 29.1, 24.2 and 33.6. This made the two-GPU split worth pursuing; it did not demonstrate a full-context workload or simultaneous request performance.
+We tested whether DeepSeek could retain useful interactive performance on GPUs 0 and 1, freeing GPUs 2 and 3 for GLM-Flash. The first built-in v1.1.54 report measured **29.0 tokens/s mean decode**, 187 tokens/s at 2K prefill, and 327 at 8K, with 1,048,576 context configured and a 298-second load. Its three 256-token answer rates were 29.1, 24.2 and 33.6. This made the two-GPU split worth pursuing; it did not demonstrate a full-context workload or simultaneous request performance.
 
 ## Long-context baseline
 
@@ -40,15 +40,15 @@ Metadata identifies v1.1.54 commit `c1670044bbc09310f35f9d00f7596c50ae8a38f1`, b
 
 The next command requested `--tps 4` with the same two-device source config. Both starts observed TP2 and marked all 12 rows `layout-mismatch-exclude`. Their medians were 315.8, 395.65 and 454.85 tokens/s at the three lengths. These are retained observations of the fallback, not TP4 results. No engine case failed, but zero samples qualified as a verified requested layout.
 
-The archive's `20261109-181250` directory contains corpus, requests and source config only; it has no result CSV. `20261109-181257` contains the two completed fallback starts. I do not count the preparation directory as another run.
+The archive's `20261109-181250` directory contains corpus, requests and source config only; it has no result CSV. `20261109-181257` contains the two completed fallback starts. We do not count the preparation directory as another run.
 
-I had already encountered the fallback in October and reported that `MAYA_DS4_TP_GGUF_UNEVEN=1` had performed poorly. The supplied November material adds no successful uneven-TP4 measurement. Nor does a TP4 request through a two-device config establish a valid all-four-device TP4 experiment. I kept two-GPU TP2 as the working layout.
+We had already encountered the fallback in October and reported that `MAYA_DS4_TP_GGUF_UNEVEN=1` had performed poorly. The supplied November material adds no successful uneven-TP4 measurement. Nor does a TP4 request through a two-device config establish a valid all-four-device TP4 experiment. We kept two-GPU TP2 as the working layout.
 
 ## Prompt-skip diagnostics
 
 The baseline log reports `prompt skip: layers 20-39 ... early rows KV-only`, including about 29,620 early rows for a 32K target. That line records an execution choice; it does not by itself identify a quality-reducing mode.
 
-The [October investigation](2026-10-28-maya-prefill-and-regression.md#quality-constraint-and-additional-candidates) distinguishes the documented default exact-skip mode (`MAYA_DS4_PROMPT_SKIP=1`) from the more aggressive mode 2, which I excluded. The retained November configs do not request mode 2. The log message alone is therefore insufficient evidence that this test violated that constraint. Nor is a prefix-cache count a test of internal computation or answer quality.
+The [October investigation](2026-10-28-maya-prefill-and-regression.md#quality-constraint-and-additional-candidates) distinguishes the documented default exact-skip mode (`MAYA_DS4_PROMPT_SKIP=1`) from the more aggressive mode 2, which we excluded. The retained November configs do not request mode 2. The log message alone is therefore insufficient evidence that this test violated that constraint. Nor is a prefix-cache count a test of internal computation or answer quality.
 
 The runner's `ok` label checks timing, prefix reuse, and layout. It does not replace a numerical-quality evaluation. The FP16-output change has a separate rounding effect, discussed in its own entry.
 

@@ -1,24 +1,20 @@
-# Investigation chapters
+# Experiments
 
-I want to host large language models on local hardware and understand what limits their speed. The experiments began with basic setup and memory placement. They led to a scheduler patch, tests of speculative decoding, an experimental fork, and a move to Project Maya. Later tests asked how two large models could share the same machine.
+We tested hardware limits, prefill scheduling, speculative decoding, inference engines, and dual-model deployment. These accounts connect the results and decisions; the [Lab Notebook](../results/lab-notebook/README.md) contains the dated records.
 
-These chapters explain that progression. Each starts with a question, follows the tests that mattered, and ends with the decision they supported. The [lab notebook](../results/lab-notebook/README.md) keeps every dated record, including failures, work that stopped early.
-
-| Chapter | Question | Where the work led |
+| Experiment | Question | Result |
 |---|---|---|
-| [1. Establishing a baseline](01-establishing-a-baseline.md) | What can the hardware do, and which results can I compare? | A measured memory limit and a common five-model baseline |
-| [2. Following the prefill bottleneck](02-following-the-prefill-bottleneck.md) | Why were four GPUs so slow at reading a prompt? | A batch-size correction and a measured scheduler improvement |
-| [3. Making speculation useful](03-making-speculation-useful.md) | Can drafting several tokens reduce the cost of generation? | Successful MTP and DSpark tests, with limits on draft length |
-| [4. From the experimental fork to Maya](04-from-the-fork-to-maya.md) | Would integrated patches or a different engine improve daily use? | Similar fork/upstream timings, then useful Maya generation rates |
-| [5. Tuning long prompts](05-tuning-long-prompts.md) | Which changes reduce the wait before an answer starts? | Model-specific chunk choices and a faster DeepSeek prefill path |
-| [6. Sharing Galactus between two models](06-sharing-galactus.md) | How much performance must I give up to keep both models available? | Two V620s per model, with GLM-Flash INT8 KV |
-| [7. Testing other local machines](07-other-local-machines.md) | What changes when CPU and GPU share memory? | Separate oMLX and Gufo records, with hardware-specific lessons |
+| [1. Baseline Measurements](01-establishing-a-baseline.md) | What can the hardware do, and which results can we compare? | A measured memory limit and a common five-model baseline |
+| [2. Prefill Bottlenecks](02-following-the-prefill-bottleneck.md) | Why were four GPUs so slow at reading a prompt? | A batch-size correction and a measured scheduler improvement |
+| [3. Speculative Decoding](03-making-speculation-useful.md) | Can drafting several tokens reduce the cost of generation? | Successful MTP and DSpark tests, with limits on draft length |
+| [4. Engine Comparisons](04-from-the-fork-to-maya.md) | Would integrated patches or a different engine improve daily use? | Similar fork/upstream timings, then useful Maya generation rates |
+| [5. Long-Prompt Tuning](05-tuning-long-prompts.md) | Which changes reduce the wait before an answer starts? | Model-specific chunk choices and a faster DeepSeek prefill path |
+| [6. Dual-Model Deployment](06-sharing-galactus.md) | How much performance must we give up to keep both models available? | Two V620s per model, with GLM-Flash INT8 KV |
+| [7. Unified-Memory Systems](07-other-local-machines.md) | What changes when CPU and GPU share memory? | Separate oMLX and Gufo records, with hardware-specific lessons |
 
-The chapters are a reading order, not a claim that the work happened in seven clean stages. Several investigations overlap. A failed test can matter to more than one chapter, and later evidence can change how I interpret an earlier result.
+The experiments overlap in time. [Findings](../takeaways/general-principles.md), [unsuccessful approaches](../takeaways/refuted-hypotheses.md), and [measurement methods](../results/methodology.md) summarize the supporting evidence.
 
-For a shorter account, read the [project overview](../README.md) and [important findings](../takeaways/general-principles.md). The [unsuccessful approaches](../takeaways/refuted-hypotheses.md) remain separate. [Measurement terms and methods](../results/methodology.md) explain the metrics used throughout.
-
-## Questions the present evidence does not answer
+## Open Questions
 
 The selected service raises three immediate measurement questions: how the precision settings affect answer quality, what happens when both models generate at once, and how performance changes beyond the tested prompt lengths. The current configuration alone cannot answer them.
 

@@ -2,7 +2,7 @@
 
 These are historical MiniMax measurements, including its final August baseline before removal. Earlier resident-expert tests use different conditions.
 
-[Related investigation: chapter 1](../investigations/01-establishing-a-baseline.md) · [All model results](README.md)
+[Related experiment: 1](../investigations/01-establishing-a-baseline.md) · [All model results](README.md)
 
 ## Final measurement — 2 TB common baseline (2026-08-15/16, build 3653e6d6d, stock scheduler)
 
@@ -40,7 +40,7 @@ Prefill peaks near t=96, and decode is flat at 14.4 to 14.8 t/s and best at t=32
 
 ### Resident-expert offload
 
-I placed expert layers on the four GPUs (`-ngl 42`, with `blk.0–41` distributed across ROCm0–3 and the remaining experts on CPU):
+We placed expert layers on the four GPUs (`-ngl 42`, with `blk.0–41` distributed across ROCm0–3 and the remaining experts on CPU):
 
 | Config | pp512 (t/s) | tg128 (t/s) |
 |---|---|---|
@@ -57,4 +57,4 @@ Resident-expert offload is worth +53 t/s prefill and +2.6 t/s decode here, becau
 
 ## Original captures added October 22, 2026
 
-I added the original April 17 thread sweep and the preceding model-path failure. [the April thread and batch tests](lab-notebook/2026-04-07-to-17-thread-and-batch-tests.md) records the successful 32-thread decode peak and the regression at 128 threads.
+We added the original April 17 thread sweep and the preceding model-path failure. [the April thread and batch tests](lab-notebook/2026-04-07-to-17-thread-and-batch-tests.md) records the successful 32-thread decode peak and the regression at 128 threads.

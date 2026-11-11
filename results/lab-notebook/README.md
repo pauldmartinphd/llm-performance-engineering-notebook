@@ -1,10 +1,10 @@
-# Lab notebook: experiments and results
+# Lab Notebook
 
 The entries below cover the tests, failed attempts, results, and plans. Each experiment keeps its setup and measurements together. Plans state what has not been tested.
 
-Dates refer to the work when known. Undated captures stay labeled as undated; you place them near the related work without inventing a run date. Source files and individual measurements are incorporated into the relevant experiment. Collecting a log does not create another run.
+Dates refer to the work when known. Undated captures stay labeled as undated; we place them near the related work without inventing a run date. Source files and individual measurements are incorporated into the relevant experiment. Collecting a log does not create another run.
 
-For a connected account, read the [investigation chapters](../../investigations/README.md). For the shorter conclusions, read the [important findings](../../takeaways/general-principles.md). [How to read a record](overview.md) explains the terms, evidence, and navigation.
+The [Experiments](../../investigations/README.md) connect the tests and decisions. [Findings](../../takeaways/general-principles.md) summarize the results. [Notebook Structure](overview.md) explains the records and evidence.
 
 ## March–May 2026
 

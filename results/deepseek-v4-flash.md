@@ -2,7 +2,7 @@
 
 These records concern DeepSeek-V4-Flash-0731, including the August DSpark tests. They do not substitute for the later V4.1-Flash-1017 measurements.
 
-[Related investigation: chapter 3](../investigations/03-making-speculation-useful.md) · [All model results](README.md)
+[Related experiment: 3](../investigations/03-making-speculation-useful.md) · [All model results](README.md)
 
 ## August baseline and DSpark (2 TB, build 3653e6d6d, stock scheduler)
 
@@ -41,7 +41,7 @@ The initial DSpark sweep reached **14.7 ± 0.2 t/s** (n=3, p-min off), about +45
 
 ### DSpark draft-depth sweep
 
-The configuration was `-ngl 99 --cpu-moe -fa on -t 64 -c 8192 -b 8192 -ub 8192 --spec-type draft-dspark -md <drafter> -ngld 99 --spec-draft-n-max <N>`, on a single technical-prose prompt with greedy decoding. An instrumentation failure prevented me from capturing acceptance rates (see the notebook). The `--fit` state was not held constant across runs, so this sweep was provisional. I repeated the test under identical conditions on one build (2026-08-16), recorded above. That repeat supersedes `experiments/session-10-rerun.sh`.
+The configuration was `-ngl 99 --cpu-moe -fa on -t 64 -c 8192 -b 8192 -ub 8192 --spec-type draft-dspark -md <drafter> -ngld 99 --spec-draft-n-max <N>`, on a single technical-prose prompt with greedy decoding. An instrumentation failure prevented us from capturing acceptance rates (see the notebook). The `--fit` state was not held constant across runs, so this sweep was provisional. We repeated the test under identical conditions on one build (2026-08-16), recorded above. That repeat supersedes `experiments/session-10-rerun.sh`.
 
 | Configuration | tg (t/s) |
 |---|---|
@@ -60,11 +60,11 @@ The baseline progressed as follows: 7.16 t/s (July, build 9942), then about 10.1
 
 ### Analysis
 
-- The optimum is a fixed draft depth of 2 to 3, with a plateau around 14.5 to 14.8 t/s. I selected `--spec-draft-n-max 3` with p-min off, which gives **14.7 ± 0.2 t/s**.
+- The optimum is a fixed draft depth of 2 to 3, with a plateau around 14.5 to 14.8 t/s. We selected `--spec-draft-n-max 3` with p-min off, which gives **14.7 ± 0.2 t/s**.
 - The depth curve (12.8, 14.5, 14.7, and 11.4 t/s at n = 1, 2, 3, and 5) has the verify-tax shape. On a top-k-of-many MoE, the drafted tokens activate nearly disjoint expert sets, so positions 4 and 5 cost more expert-read bytes than their acceptance yields.
-- I kept p-min off. Several confidence-truncated configurations converged around 13.3 to 13.4 t/s, but the table also contains values outside that range. Session 10 records conflicting reports of 13.4 and 14.7 t/s for n=3, p-min 0.3; the later value is shown here. These data do not establish a monotonic effect across every setting.
+- we kept p-min off. Several confidence-truncated configurations converged around 13.3 to 13.4 t/s, but the table also contains values outside that range. Session 10 records conflicting reports of 13.4 and 14.7 t/s for n=3, p-min 0.3; the later value is shown here. These data do not establish a monotonic effect across every setting.
 - The cost decomposition is an estimate: about 70 ms per token for the amortizable GPU path, plus about 29 ms per token for CPU expert streaming (about 4.4 GB per token at 152 GB/s, matching the 13 B active MXFP4 experts). This implies a speculation ceiling of about 35 t/s, and a perfect-acceptance block-5 drafter at n=3 would reach about 22 t/s. Drafter acceptance is one possible explanation for the gap from 14.7 to 22 t/s, but acceptance rates were not captured, so the decomposition does not isolate its cause.
-- This establishes a working DSpark configuration on the Radeon Pro V620. The small MXFP4 expert footprint is consistent with a lower verification cost. These measurements do not establish priority over other reports, and I have not made a controlled comparison with consumer boards.
+- This establishes a working DSpark configuration on the Radeon Pro V620. The small MXFP4 expert footprint is consistent with a lower verification cost. These measurements do not establish priority over other reports, and we have not made a controlled comparison with consumer boards.
 
 ### Contrast with GLM-5.2
 
@@ -72,4 +72,4 @@ V4-Flash speculates better than GLM-5.2 MTP (+45% at n=3 against +31% at n=2), b
 
 ## Original captures added October 22, 2026
 
-I added the original V4-Flash-0731 DSpark server logs with acceptance counts and the August CLI transcripts. [the speculation and rebenchmark records](lab-notebook/2026-08-15-to-16-common-baseline-2tb.md#individual-runs-and-benchmark-file-checks) records the n-max settings and final rates, including a second n-max 5 result at 12.22 t/s. These are not V4.1 tests.
+We added the original V4-Flash-0731 DSpark server logs with acceptance counts and the August CLI transcripts. [the speculation and rebenchmark records](lab-notebook/2026-08-15-to-16-common-baseline-2tb.md#individual-runs-and-benchmark-file-checks) records the n-max settings and final rates, including a second n-max 5 result at 12.22 t/s. These are not V4.1 tests.
