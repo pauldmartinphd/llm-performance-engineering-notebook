@@ -8,9 +8,9 @@ These are historical Qwen 3.5 397B measurements. The August common baseline prov
 
 The file changed from April: Unsloth UD-Q6_K_XL (337.43 GiB) replaces bartowski Q6_K_L (319.21 GiB). The stock results are pp8192 249.61 ± 19.78, the second-fastest prefill on the machine, behind MiniMax's final measurement, and tg128 9.37 ± 0.16 (t=64), which is −2.0% relative to the April baseline of 9.56 t/s. The model export, bandwidth, and build changed, so the similar result does not isolate any one effect.
 
-Attempts to repeat the April resident-offload configuration at ub 8192 failed: the 5-layer placement failed at weight load and the 4-layer placement failed at context creation, because large-batch prefill and resident experts compete for VRAM. You set further offload testing aside for this workload.
+Attempts to repeat the April resident-offload configuration at ub 8192 failed: the 5-layer placement failed at weight load and the 4-layer placement failed at context creation, because large-batch prefill and resident experts compete for VRAM. I set further offload testing aside for this workload.
 
-Qwen MTP does not arm on this export (`failed to create MTP context`; the cause is not isolated). See [the August common baseline](lab-notebook/2026-08-15-to-16-common-baseline-2tb.md) for the complete conditions. You kept Qwen for further testing.
+Qwen MTP does not arm on this export (`failed to create MTP context`; the cause is not isolated). See [the August common baseline](lab-notebook/2026-08-15-to-16-common-baseline-2tb.md) for the complete conditions. I kept Qwen for further testing.
 
 ## Earlier measurements
 
@@ -38,7 +38,7 @@ Config: `-ngl 99 -nopo 1 -mmp 0 -ctk q8_0 -ctv q8_0 -fa 1 -b 4096 -ub 4096 -ot "
 | 96 | **87.54** | 9.42 |
 | 128 | 85.61 | 4.57 (SMT collapse) |
 
-You selected t=64 as the best prefill/decode balance at the time.
+I selected t=64 as the best prefill/decode balance at the time.
 
 ### Resident-expert offload (build 8671)
 
@@ -62,7 +62,7 @@ Increasing placement from four to five expert layers per card raised decode from
 | 96 | **110.23** | 11.34 |
 | 128 | 104.75 | 5.78 (SMT collapse) |
 
-### Conclusion from the April tests
+### Conclusions from the April tests
 
 - The best all-CPU configuration is t=32–64: about 9.7 t/s decode and 63–85 t/s prefill.
 - The best overall configuration is 5-layer resident offload at DDR4-2933: about 11.5 to 11.7 t/s decode (t=32) and about 110 t/s prefill (t=96).
@@ -70,4 +70,4 @@ Increasing placement from four to five expert layers per card raised decode from
 
 ## Original captures added October 22, 2026
 
-You added the original April CPU-thread, resident-expert, batch, and 131072-depth sweeps, including their failed attempts. [the April thread and batch tests](lab-notebook/2026-04-07-to-17-thread-and-batch-tests.md) separates the builds and workloads; the [full ledger](data/galactus-archive-benchmarks.md) retains every printed row.
+I added the original April CPU-thread, resident-expert, batch, and 131072-depth sweeps, including their failed attempts. [the April thread and batch tests](lab-notebook/2026-04-07-to-17-thread-and-batch-tests.md) separates the builds and workloads; the [full ledger](data/galactus-archive-benchmarks.md) retains every printed row.

@@ -2,22 +2,30 @@
 
 [All lab records](README.md) · [Related investigation: chapter 1](../../investigations/01-establishing-a-baseline.md)
 
-You repeated STREAM after expanding Galactus to 2 TB of RAM.
+## Purpose and reasoning
 
-## Setup
+Check whether expanding Galactus from 1 TB to 2 TB changed the sustained memory bandwidth used in inference estimates. More capacity need not produce more bandwidth.
 
-You swept eleven thread counts, replaced a failing DIMM, and repeated the sweep. The saved results are from the repaired system, with memory traffic corrected on the same basis as July.
+## Experimental design
+
+I repeated the eleven-count STREAM thread sweep on the 2 TB population. I replaced a failing DIMM and reran the sweep, using the repaired system for the retained result. I compared kernel traffic on the same correction basis as July.
 
 ## Results
 
 The repaired system measured about 148–151 GB/s after correction, compared with roughly 152 in July. Saturation remained near 16 threads. All eleven counts completed in the retained rerun; the per-kernel difference from July was about 1.2–3.9%.
 
+## Conclusions
+
+The upgrade increased capacity with only a small bandwidth change. I accepted the repaired population at its recorded speed. The earlier missing rows and timing outliers cannot be causally attributed to the removed DIMM from these captures alone.
+
+## Detailed record
+
 **Date:** Friday, August 15, 2026. **Machine:** Galactus, bare-metal host, `~/STREAM`.
 **Object:** Close the open item from the August RAM upgrade. Re-measure the platform DRAM bandwidth on the new population (8 × 256 GB DDR4-2933 3DS RDIMM at rated speed) with the identical July sweep, to use the measured bandwidth of the current DIMMs in the decode estimates.
 
-## Source details — one DIMM replaced, sweep re-run
+## Provenance — one DIMM replaced, sweep re-run
 
-The first 2 TB sweep of the day ran with a DIMM that turned out to be failing. You replaced the module the same day and re-ran the sweep on the repaired population. The figures below are from the re-run; the pre-replacement capture is superseded and removed. The two captures agreed on best rates to within 0.3% per kernel at t=16, so the fault was not costing steady-state bandwidth. A dropped channel would have read near 7/8 of these figures, so both captures had all eight channels active. Two defects of the first capture are absent from the re-run: the t=56 rung printed no rows, and t=128 showed about 3× max-time outliers (0.34–0.69 s against 0.23 s minimums). Whether those were symptoms of the failing module cannot be established now that it is out of the machine, so the record leaves their cause open.
+The first 2 TB sweep of the day ran with a DIMM that turned out to be failing. I replaced the module the same day and re-ran the sweep on the repaired population. The figures below are from the re-run; the pre-replacement capture is superseded and removed. The two captures agreed on best rates to within 0.3% per kernel at t=16, so the fault was not costing steady-state bandwidth. A dropped channel would have read near 7/8 of these figures, so both captures had all eight channels active. Two defects of the first capture are absent from the re-run: the t=56 rung printed no rows, and t=128 showed about 3× max-time outliers (0.34–0.69 s against 0.23 s minimums). Whether those were symptoms of the failing module cannot be established now that it is out of the machine, so the record leaves their cause open.
 
 ## Command
 
@@ -45,7 +53,3 @@ The kernels converge on **148–151 GB/s**, about 79% of the 187.7 GB/s theoreti
 - The re-run is clean where the first capture was not. All eleven rungs are present, including t=56 (138.7–142.3 corrected, in line with its t=48 and t=64 neighbours), and the max times are within 4% of the min times at every rung, including t=128, where the superseded capture had shown 3× outliers.
 - The revised bandwidth scales the decode estimates by about 0.98. That is smaller than benchmark run-to-run variance (±2–4% across this notebook), so no production configuration changes and the earlier numbers can stand. The platform figure is now quoted as about **150 GB/s** (152 measured on 1 TB, 148–151 on 2 TB).
 - Decision: the memory rebaseline is complete. The 2 TB population, with the replaced DIMM, is accepted at the rated 2933 MT/s with no further tuning.
-
-## Conclusion
-
-The upgrade doubled capacity with little change in bandwidth. You accepted the repaired RAM at its recorded speed. The old timing outliers cannot be pinned on the removed DIMM from these files alone.

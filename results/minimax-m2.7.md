@@ -40,7 +40,7 @@ Prefill peaks near t=96, and decode is flat at 14.4 to 14.8 t/s and best at t=32
 
 ### Resident-expert offload
 
-You placed expert layers on the four GPUs (`-ngl 42`, with `blk.0–41` distributed across ROCm0–3 and the remaining experts on CPU):
+I placed expert layers on the four GPUs (`-ngl 42`, with `blk.0–41` distributed across ROCm0–3 and the remaining experts on CPU):
 
 | Config | pp512 (t/s) | tg128 (t/s) |
 |---|---|---|
@@ -49,7 +49,7 @@ You placed expert layers on the four GPUs (`-ngl 42`, with `blk.0–41` distribu
 
 Resident-expert offload is worth +53 t/s prefill and +2.6 t/s decode here, because the model is small enough that a large share of experts fits in the about 120 GiB of VRAM.
 
-### Conclusion from the April tests
+### Conclusions from the April tests
 
 - The best all-CPU configuration is t=32: 14.76 t/s decode and 71.82 t/s prefill.
 - The best overall configuration is resident-expert offload at ngl 42: 17.37 t/s decode and 154.93 t/s prefill.
@@ -57,4 +57,4 @@ Resident-expert offload is worth +53 t/s prefill and +2.6 t/s decode here, becau
 
 ## Original captures added October 22, 2026
 
-You added the original April 17 thread sweep and the preceding model-path failure. [the April thread and batch tests](lab-notebook/2026-04-07-to-17-thread-and-batch-tests.md) records the successful 32-thread decode peak and the regression at 128 threads.
+I added the original April 17 thread sweep and the preceding model-path failure. [the April thread and batch tests](lab-notebook/2026-04-07-to-17-thread-and-batch-tests.md) records the successful 32-thread decode peak and the regression at 128 threads.

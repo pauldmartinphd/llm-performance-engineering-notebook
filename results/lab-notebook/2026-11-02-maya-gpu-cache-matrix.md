@@ -2,24 +2,33 @@
 
 [All lab records](README.md) · [Related investigation: chapter 6](../../investigations/06-sharing-galactus.md)
 
-**Experiments: November 2, 2026.**
+## Purpose and reasoning
 
-You compared one and four GPUs with several cache budgets before splitting Galactus between models.
+Measure the performance cost of giving DeepSeek and GLM-Flash fewer GPUs and smaller requested expert-cache budgets. The aim was to choose a useful allocation for keeping more than one service available.
 
-## Setup
+## Experimental design
 
-Nine variants completed built-in benchmarks and three long-request repeats at 32K/64K, with 128 output tokens. Reduced cache meant extra reserve, not exactly half a cache. Cached repeats were excluded from fresh prefill. The unsupported four-GPU GLM zero-cache case was skipped.
+I generated four-GPU and single-GPU configs with full, reduced, and requested zero-cache variants. I ran built-in 2K/8K benchmarks, then three repeats of the saved 32K/64K requests, each generating 128 tokens. Reduced allocation increases reserve rather than enforcing half a cache. I excluded cached repeats from fresh-prefill comparisons; I skipped the unsupported four-GPU GLM zero-cache case.
 
 ## Results
 
 Nine variants completed, producing nine short reports and 54 long observations: 18 uncached and 36 cached. Full-allocation 64K-target prefill fell from 483.4 to 316.2 tokens/s for DeepSeek and 351.2 to 169.6 for GLM when moving from four GPUs to one. The next GLM reduced single-GPU case failed loading and stopped the run.
 
+## Conclusions
+
+One GPU per model gave up substantial useful performance, making two GPUs each worth testing next. Similar prefill across some cache-budget labels did not prove cache-size independence. Repeats processing only one new token are not full-prefill repetitions, and the unfinished variants supply no performance result.
+
+## Detailed record
+
+**Experiments: November 2, 2026.**
+
+I ran DeepSeek-V4.1-Flash-1017 UD-Q8_K_XL and GLM-5.3-Flash UD-Q4_K_XL through the same orchestration, first with four GPUs and then one, while varying expert-cache controls. The retained CSV contains **54 measurements: 18 uncached rows and 36 cached repetitions**. GLM's single-GPU reduced-budget case failed during loading and ended the run. The single-GPU zero-cache case was therefore never reached.
 
 ## Method and allocation controls
 
 The [historical runner](../raw-logs/2026-11-10-maya-collection/extracted/maya_matrix_all_in_one.py) generated configurations, ran the built-in 2K/8K benchmark, and then posted the saved 32K/64K chat requests three times per variant. The engine used HIP on the EPYC 7713, 2 TiB RAM and V620s. The harness used port 18081, a 1024 MiB reserve, and an additional 8192 MiB reserve for `reduced`. Those labels do not mean precisely half of the expert cache or zero total GPU memory. Shared experts, attention, dense weights, KV state and temporary buffers remain separate allocations.
 
-GLM's `--expert-cache 0` controls only the first GPU, so the four-GPU zero-cache case was explicitly skipped. DeepSeek's effective expert allocations must be read from its engine logs; a `zero` label alone does not prove a GPU had no routed experts. You retain the labels as experiment identifiers rather than replacing them with stronger claims.
+GLM's `--expert-cache 0` controls only the first GPU, so the four-GPU zero-cache case was explicitly skipped. DeepSeek's effective expert allocations must be read from its engine logs; a `zero` label alone does not prove a GPU had no routed experts. I retain the labels as experiment identifiers rather than replacing them with stronger claims.
 
 ## Uncached results
 
@@ -60,7 +69,7 @@ The full-cache short reports measured 32.1 mean decode on four GPUs versus 22.2 
 
 ## Cached repetitions and the interrupted matrix
 
-Repeated DeepSeek requests reused 32,799 / 65,567 tokens and processed one new token. GLM reused 32,016 / 63,732 and likewise processed one. Their printed 7.5–19.6 prefill tokens/s describe a tiny uncached suffix and its overhead, not a fresh long-prompt throughput collapse. The original CSV labels these `cached-not-comparable`; you exclude them from the table while retaining every repetition and its decode rate in the [raw matrix](../raw-logs/2026-11-10-maya-collection/extracted/20261102-124651-maya-matrix/results.csv).
+Repeated DeepSeek requests reused 32,799 / 65,567 tokens and processed one new token. GLM reused 32,016 / 63,732 and likewise processed one. Their printed 7.5–19.6 prefill tokens/s describe a tiny uncached suffix and its overhead, not a fresh long-prompt throughput collapse. The original CSV labels these `cached-not-comparable`; I exclude them from the table while retaining every repetition and its decode rate in the [raw matrix](../raw-logs/2026-11-10-maya-collection/extracted/20261102-124651-maya-matrix/results.csv).
 
 Decode varied with prompt content, speculation and cache history. In particular, the 40.4 tokens/s DeepSeek result after the 64K first request does not show that longer context intrinsically accelerates decoding. The three 128-token continuations are not independent full-prefill repetitions.
 
@@ -68,12 +77,8 @@ Decode varied with prompt content, speculation and cache history. In particular,
 
 ## Decision
 
-Reduced reserve budgets barely changed uncached prefill in these runs, but they did not show cache-size independence. You kept the single-GPU tradeoff visible and moved toward testing two GPUs per model. The planned separate decode experiment was not completed by this matrix. [November 9](2026-11-09-deepseek-tp2-and-tp4.md) supplies the later two-GPU evidence.
+Reduced reserve budgets barely changed uncached prefill in these runs, but they did not establish cache-size independence. I kept the single-GPU tradeoff visible and moved toward testing two GPUs per model. The planned separate decode experiment was not completed by this matrix. [November 9](2026-11-09-deepseek-tp2-and-tp4.md) supplies the later two-GPU evidence.
 
-## Sources
+## Sources and recording dates
 
-**Sources:** the supplied November 10 Maya archive and conversation exports; [source ledger and retained evidence](../raw-logs/2026-11-10-maya-collection/README.md).
-
-## Conclusion
-
-One GPU per model cost substantial speed, so you moved on to two each. Similar rates across some cache labels did not prove cache size irrelevant. Cached suffixes and unfinished variants are not fresh-prefill results.
+**Sources:** the supplied November 10 Maya archive and conversation exports; [source ledger and retained evidence](../raw-logs/2026-11-10-maya-collection/README.md). Historical commands describe the experiments; this documentation update ran no inference tests.

@@ -2,19 +2,27 @@
 
 [All lab records](README.md) · [Related investigation: chapter 4](../../investigations/04-from-the-fork-to-maya.md)
 
-You tested Maya's GLM-Flash speculation and varied the head grouping and draft-expert settings.
+## Purpose and reasoning
 
-## Setup
+Test Maya with the existing GLM-Flash export, measure the effect of its speculative path, and check whether head grouping or draft-expert settings improve on the defaults.
 
-The GLM benchmark used four V620s, Q4 weights, 32768 context, and three greedy 256-token answers. You compared default speculation with NO_SPEC=1, then swept head count and MTP_KEEP. Prefill was measured separately. DeepSeek used another calibration workload.
+## Experimental design
+
+I used four V620s, the recorded Q4 pack, 32768 context, greedy decoding, and three 256-token answers. I compared default speculation with NO_SPEC=1, then varied the head GPU count and MTP_KEEP. I measured 2K/8K prefill separately. DeepSeek's DSpark calibration is a distinct workload linked in this entry.
 
 ## Results
 
-GLM mean generation was 31.6 tokens/s with speculation and 19.9 without; an earlier default pass measured 29.4. Head counts one and three were slower than the default two. The KEEP sweep did not show a better default. DeepSeek's separate calibration reached 29.3 tokens/s.
+GLM mean generation was 31.6 tokens/s with speculation and 19.9 without; an earlier default pass measured 29.4. Head counts one and three were slower than the default two. The KEEP sweep did not establish a better default. DeepSeek's separate calibration reached 29.3 tokens/s.
+
+## Conclusions
+
+GLM speculation gave a 58.8% within-test gain, and the working defaults were worth retaining. Nearby KEEP results need repeated trials to rank reliably. The GLM and DeepSeek rates do not form a matched model comparison or demonstrate simultaneous serving at those rates.
+
+## Detailed record
 
 **Measured:** October 23, 2026. **Machine:** Galactus, EPYC 7713, 2 TiB RAM, four Radeon Pro V620 GPUs in Proxmox LXC. **Engine:** Project Maya v1.1.24, HIP. [GLM source record](../raw-logs/2026-10-23-maya-glm-and-builds/README.md) · [DeepSeek benchmark and calibration](2026-10-23-deepseek41-cache-and-maya.md).
 
-This is a substantial milestone for Galactus. You now have **GLM-5.3-Flash UD-Q4_K_XL at 31.6 generated tokens/s** and **DeepSeek-V4.1-Flash-1017 UD-Q8_K_XL at 29.3 tokens/s with DSpark** on the same four V620s. Both models exceed the available GPU memory, yet the recorded configurations reach approximately 30 tokens/s using the server's GPU and system memory together. You are using Maya for this stage of the investigation.
+This is a substantial milestone for Galactus. I now have **GLM-5.3-Flash UD-Q4_K_XL at 31.6 generated tokens/s** and **DeepSeek-V4.1-Flash-1017 UD-Q8_K_XL at 29.3 tokens/s with DSpark** on the same four V620s. Both models exceed the available GPU memory, yet the recorded configurations reach approximately 30 tokens/s using the server's GPU and system memory together. I am using Maya for this stage of the investigation.
 
 The GLM result uses the existing Unsloth Q4_K_XL export. The DeepSeek conversation identifies UD-Q8_K_XL as the intended export; the retained Maya output does not print its actual model path. That filename describes a mixed-format model, not uniform eight-bit weights. The measurements are separate runs, not evidence that both models sustain these rates concurrently. The GLM result is for Flash, not the larger GLM-5.3 flagship.
 
@@ -56,7 +64,7 @@ The second configuration was prepared with `MAYA_GLM_NO_SPEC=1`. The source reco
 | 16:29 | Default speculative path | 78 | 30.7 / 31.1 / 33.1 | 31.6 | 238 | 242 |
 | 16:32 | `MAYA_GLM_NO_SPEC=1` | 78 | 19.7 / 20.2 / 19.8 | 19.9 | 239 | 241 |
 
-Speculation improves generation substantially in this comparison while the dedicated prefill rates remain nearly unchanged. The two default runs also differ by about 7.5%, so you retain both rather than present 31.6 as an invariant rate. These are benchmark means across different prompts, not repeated measurements of one identical request, and you did not perform a long-context quality evaluation or sustained service-load test.
+Speculation improves generation substantially in this comparison while the dedicated prefill rates remain nearly unchanged. The two default runs also differ by about 7.5%, so I retain both rather than present 31.6 as an invariant rate. These are benchmark means across different prompts, not repeated measurements of one identical request, and I did not perform a long-context quality evaluation or sustained service-load test.
 
 ## Speculative-head sweep
 
@@ -84,7 +92,7 @@ The same version's documentation gives `MAYA_GLM_MTP_KEEP` a default of two. It 
 
 The final KEEP=4 capture stops before the summary; 28.6 is the arithmetic mean of its three printed rates, not a printed benchmark mean. The default row is reused from the A/B test, not an additional repetition. All variant loads report 78 seconds.
 
-The defaults gave the highest observed result in both sweeps, so you kept them. KEEP=0 and KEEP=3 were close enough to the default that repeated interleaved trials would be needed to rank them reliably. The evidence supports retaining a working configuration more strongly than it supports calling that configuration a universal optimum.
+The defaults gave the highest observed result in both sweeps, so I retained them. KEEP=0 and KEEP=3 were close enough to the default that repeated interleaved trials would be needed to rank them reliably. The evidence supports retaining a working configuration more strongly than it supports calling that configuration a universal optimum.
 
 ## Operational findings
 
@@ -92,13 +100,13 @@ An initial benchmark refused to run because port 8080 was occupied. The process 
 
 The attempted HIP `--calibrate --no-start` returned that the tuning measures the CUDA engine's CPU lane and that this PC was **not tuned**. The reported GLM results therefore come from the retained HIP settings and manual sweeps, not a completed automatic hardware calibration.
 
-The conversation ends with requests to rename the configurations to `maya-glm5.3-flash-hip.json` and `maya-ds4.1-flash-hip.json`, using ports 8082 and 8081 while Open WebUI remains on 8080. Those are the requested deployment names and ports; the original conversation has no confirming output for the final changes. The later [recovered shell history](2026-10-23-deepseek41-cache-and-maya.md#changes-after-the-measured-baseline) records the DeepSeek rename and port edit, while the [operational continuation](2026-10-23-deepseek41-cache-and-maya.md#october-24-continuation-live-context-cooling-and-hermes) separates that evidence from the still-unconfirmed GLM port change and Hermes setup. Benchmark source details uses the filenames actually printed during the runs. Deleting the experimental configurations and benchmark files was also proposed without confirming output. The later [October 24 dashboard](../deepseek-v4.1-flash.md#october-24-dashboard-from-ongoing-use) shows DeepSeek on port 8081, but does not show either JSON rename or GLM’s move to 8082.
+The conversation ends with requests to rename the configurations to `maya-glm5.3-flash-hip.json` and `maya-ds4.1-flash-hip.json`, using ports 8082 and 8081 while Open WebUI remains on 8080. Those are the requested deployment names and ports; the original conversation has no confirming output for the final changes. The later [recovered shell history](2026-10-23-deepseek41-cache-and-maya.md#changes-after-the-measured-baseline) records the DeepSeek rename and port edit, while the [operational continuation](2026-10-23-deepseek41-cache-and-maya.md#october-24-continuation-live-context-cooling-and-hermes) separates that evidence from the still-unconfirmed GLM port change and Hermes setup. Benchmark provenance uses the filenames actually printed during the runs. Deleting the experimental configurations and benchmark files was also proposed without confirming output. The later [October 24 dashboard](../deepseek-v4.1-flash.md#october-24-dashboard-from-ongoing-use) shows DeepSeek on port 8081, but does not establish either JSON rename or GLM’s move to 8082.
 
 ## How this changes the earlier comparison
 
 The [October 22 dedicated benchmarks](2026-10-22-glm53-build-comparison.md) measured approximately 284 tokens/s at pp8192 and 10 tokens/s at tg128/tg256 for both llama.cpp and llAMDa. Their CLI runs reached 17.8–18.1 generated tokens/s with automatic placement and requested MTP. Maya now delivers roughly 30 tokens/s from the same named GLM export, with a speculation-off control that explains a substantial part of its own generation improvement.
 
-The engines still differ in context allocation, prompts, speculation paths, and placement. You therefore do not treat the ratio between Maya generation and a llama-bench tg row as an isolated engine speedup. Nor does Maya lead every metric: the dedicated llama-bench pp8192 rates are numerically higher than Maya's 240–242. The practical milestone is that both large models now generate at roughly 30 tokens/s in the recorded Maya configurations, with the GLM A/B result and DeepSeek calibration showing why speculative execution is worth retaining.
+The engines still differ in context allocation, prompts, speculation paths, and placement. I therefore do not treat the ratio between Maya generation and a llama-bench tg row as an isolated engine speedup. Nor does Maya lead every metric: the dedicated llama-bench pp8192 rates are numerically higher than Maya's 240–242. The practical milestone is that both large models now generate at roughly 30 tokens/s in the recorded Maya configurations, with the GLM A/B result and DeepSeek calibration showing why speculative execution is worth retaining.
 
 
 ## Setup choices and proposals retained from the source discussion
@@ -127,14 +135,10 @@ cd /opt/project-maya
   --vram-reserve-mib 3072 --no-start
 ```
 
-The source describes a writable model directory for pack creation and treats non-Maya quantizations as experimental. The subsequent inventory and benchmark verify this particular pack/configuration path; they do not show support for every GGUF. Using `tmux` during a long setup and stopping the other inference engine before benchmarks were operational suggestions, not additional measured settings.
+The source describes a writable model directory for pack creation and treats non-Maya quantizations as experimental. The subsequent inventory and benchmark verify this particular pack/configuration path; they do not establish support for every GGUF. Using `tmux` during a long setup and stopping the other inference engine before benchmarks were operational suggestions, not additional measured settings.
 
 For the A/B test, the proposed preparation copied the baseline to `maya-glm-mtp-original.json`, then set `env.MAYA_GLM_NO_SPEC` to `"1"` in `maya-glm-no-spec-hip.json`. Benchmark copies were named `maya-bench-mtp.txt` and `maya-bench-no-spec.txt`. `NO_SPEC=1` tests the default speculative execution path against decoding without speculation; it need not mean that the MTP block is removed. The baseline environment printed neither `MAYA_GLM_NO_SPEC` nor `MAYA_GLM_NO_MTP`.
 
 The head variants set `env.MAYA_GLM_SPEC_HEAD` to `"1"` or `"3"` in `maya-glm-head1-hip.json` and `maya-glm-head3-hip.json`. KEEP variants were named `maya-glm-mtp-keep{0,1,3,4}-hip.json`, with benchmark copies `maya-bench-mtp-keep{0,1,3,4}.txt`; the source includes the run loop but not a complete dump of every variant. Head=1 reduced the observed mean by 22.2% and head=3 by 27.5% relative to 31.6 tokens/s. A group imbalance is a hypothesis, not a profiled cause. KEEP changes trade draft work against potential acceptance, but no acceptance counts were captured.
 
 The final cleanup request proposed deleting those experimental JSONs, the original backup, and the named benchmark copies, while retaining the two model configurations. It has no confirming execution output. Renaming configurations also requires updating any startup scripts or services that reference their old names. The recorded route uses localhost; binding Maya to `0.0.0.0` with authentication or using SSH forwarding were alternative access proposals, not confirmed changes. GPU layer distribution, expert-cache allocation, and HIP prefill tuning remained later experiments rather than results of this sweep.
-
-## Conclusion
-
-GLM speculation improved generation by 58.8% in this test. You kept the defaults. Nearby KEEP settings need more repeats to rank; neither model's separate rate shows what happens under simultaneous load.

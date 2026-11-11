@@ -2,21 +2,29 @@
 
 [All lab records](README.md) · [Related investigation: chapter 4](../../investigations/04-from-the-fork-to-maya.md)
 
-You compared the AMD fork with upstream and tested GLM-Flash placement and draft length.
+## Purpose and reasoning
 
-## Setup
+Compare the integrated AMD fork with upstream on the same named GLM-Flash export, then test CLI placement and draft length. An executable name alone is not enough to establish which build ran.
 
-The dedicated benchmarks used printed revisions, 32 threads, CPU experts, pp8192, tg128/tg256, and two repetitions. Separate CLI tests used the ZFS prompt, MTP, and 256 output tokens. You checked the runtime banners.
+## Experimental design
+
+I ran dedicated benchmarks with printed revisions, 32 threads, CPU experts, pp8192, tg128/tg256, and two requested repetitions. I separately ran the ZFS CLI prompt with greedy decoding, 8192 context, MTP, and 256 output tokens, varying placement and draft length. I checked the runtime banners.
 
 ## Results
 
 Upstream and fork pp8192 measured 284.36 and 284.20 tokens/s; tg256 measured 10.16 and 10.09. Automatic-placement CLI runs reached about 17.8–18.1, but all completed CLI banners printed the same upstream build, including commands named llamda-cli.
 
+## Conclusions
+
+The revision-identified benchmark did not establish a useful fork improvement under these conditions. The CLI names do not support a sound engine comparison. Their placement observations remain useful, but they do not isolate the scheduler patch or MTP contribution.
+
+## Detailed record
+
 **Record:** October 22, 2026, from the supplied filename; individual launches have no printed timestamps. **Machine:** Galactus, four V620s. [Source and checksums](../raw-logs/2026-10-23-maya-glm-and-builds/README.md).
 
-You built llAMDa and llama.cpp for gfx1030 with HIP, GCC 14.2.0, and Zen 3 CPU flags (`-O3 -march=znver3 -mtune=znver3`, `GGML_NATIVE=OFF`). The configuration identifies HIP Clang 22.0.0. The build records name `ca3b1fc30` for llAMDa and `184f65360` for llama.cpp, and both installations used `/usr/local`.
+I built llAMDa and llama.cpp for gfx1030 with HIP, GCC 14.2.0, and Zen 3 CPU flags (`-O3 -march=znver3 -mtune=znver3`, `GGML_NATIVE=OFF`). The configuration identifies HIP Clang 22.0.0. The build records name `ca3b1fc30` for llAMDa and `184f65360` for llama.cpp, and both installations used `/usr/local`.
 
-The direct benchmark outputs distinguish those revisions, but the CLI captures expose a source details problem: commands named both `llama-cli` and `llamda-cli` print **b11829-184f65360**. You cannot treat those names alone as proof that the CLI runs exercised different implementations. Shared installation paths or libraries are possible explanations; the capture does not identify the cause.
+The direct benchmark outputs distinguish those revisions, but the CLI captures expose a provenance problem: commands named both `llama-cli` and `llamda-cli` print **b11829-184f65360**. I cannot treat those names alone as proof that the CLI runs exercised different implementations. Shared installation paths or libraries are possible explanations; the capture does not identify the cause.
 
 ## Dedicated benchmarks
 
@@ -40,7 +48,7 @@ The second command is identical apart from the executable name, `llamda-bench`. 
 
 ## CLI placement and draft-length tests
 
-The completed CLI runs use the ZFS explanation prompt, 32 threads, context 8192, flash attention, greedy decoding, a 256-token output limit, and `--spec-type draft-mtp`. You report generation only. “Forced RAM” means `-ngl all -cmoe`; “automatic” means both options were omitted. Effective tensor placement and draft acceptance are not captured.
+The completed CLI runs use the ZFS explanation prompt, 32 threads, context 8192, flash attention, greedy decoding, a 256-token output limit, and `--spec-type draft-mtp`. I report generation only. “Forced RAM” means `-ngl all -cmoe`; “automatic” means both options were omitted. Effective tensor placement and draft acceptance are not captured.
 
 | Source command line | Executable name | Requested placement | Draft n-max | Generation, tokens/s |
 |---|---|---|---:|---:|
@@ -56,8 +64,4 @@ The completed CLI runs use the ZFS explanation prompt, 32 threads, context 8192,
 
 Every completed CLI row prints b11829-184f65360. At source line 2600, requesting `-ngl all` without `-cmoe` failed while allocating **40844.55 MiB on ROCm0**. Two further CLI command lines at 2947–2948 have no output and are not counted as completed runs.
 
-Automatic placement produced the highest generation rates in this record, while increasing the requested draft length beyond two did not improve the observed rate. These are short runs with no acceptance counts or speculation-off control, so they do not show MTP's independent contribution. The [next day's Maya A/B test](2026-10-23-maya-glm53-speculation.md) supplies that control within Maya, using a different prompt suite and context configuration.
-
-## Conclusion
-
-The dedicated benchmark showed no useful fork improvement. The CLI names were unreliable because both printed the same upstream build. Their placement results remain useful, but do not isolate a patch or MTP gain.
+Automatic placement produced the highest generation rates in this record, while increasing the requested draft length beyond two did not improve the observed rate. These are short runs with no acceptance counts or speculation-off control, so they do not establish MTP's independent contribution. The [next day's Maya A/B test](2026-10-23-maya-glm53-speculation.md) supplies that control within Maya, using a different prompt suite and context configuration.

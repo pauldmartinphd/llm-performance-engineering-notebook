@@ -11,9 +11,9 @@ Both models use Project Maya, with a separate pair of V620s for each. Their test
 | [DeepSeek-V4.1-Flash-1017](deepseek-v4.1-flash.md) | GPUs 0–1; UD-Q8_K_XL; DSpark; FP16-output prefill | Two-GPU built-in generation mean 29.0 tokens/s; later optimized prefill medians 389.55 / 501.95 / 589.70 at 8K / 16K / 32K targets | [Two-GPU test](lab-notebook/2026-11-09-deepseek-tp2-and-tp4.md), [prefill test](lab-notebook/2026-11-09-deepseek-fp16-prefill.md) |
 | [GLM-5.3-Flash](glm-5.3-flash.md) | GPUs 2–3; UD-Q4_K_XL; MTP; INT8 streaming KV | FP16-KV reserve test reached 21.5 tokens/s built-in mean generation; separate INT8 test showed higher mean generation and about 292 tokens/s long prefill | [Reserve test](lab-notebook/2026-11-09-glm-flash-reserve-and-speculation.md), [KV test](lab-notebook/2026-11-09-glm-flash-kv-cache.md) |
 
-The [deployment record](lab-notebook/2026-11-10-maya-dual-model-production.md) gives the reported operating state and recorded settings. A configured one-million-token ceiling is not a measured million-token result. The FP16-output and INT8-KV tests also lack a local answer-quality comparison.
+The [deployment record](lab-notebook/2026-11-10-maya-dual-model-production.md) gives the reported operating state and retained settings. A configured one-million-token ceiling is not a measured million-token result. The FP16-output and INT8-KV tests also lack a local answer-quality comparison.
 
-The [full GLM-5.3 experiment](lab-notebook/2026-11-09-full-glm53-placement.md) is separate from Flash. Its corrected four-GPU split completed at 6.7 tokens/s mean generation and 47 tokens/s at 8K prefill. You returned to Flash for the intended daily use.
+The [full GLM-5.3 experiment](lab-notebook/2026-11-09-full-glm53-placement.md) is separate from Flash. Its corrected four-GPU split completed at 6.7 tokens/s mean generation and 47 tokens/s at 8K prefill. I returned to Flash for the intended daily use.
 
 ## Earlier Galactus common baseline
 

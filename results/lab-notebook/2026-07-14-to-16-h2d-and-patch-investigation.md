@@ -2,19 +2,27 @@
 
 [All lab records](README.md) · [Related investigation: chapter 2](../../investigations/02-following-the-prefill-bottleneck.md)
 
-You measured transfer bandwidth and tried scheduler changes to use more of it.
+## Purpose and reasoning
 
-## Setup
+Compare the available transfer bandwidth with the engine's observed behavior, then determine whether a scheduler change could use that headroom. The proposed mechanism changed as source inspection revealed which copies were already asynchronous.
 
-You ran concurrent host-to-device transfers, inspected the copy path, and attempted the patch builds. You also checked GPU memory after allocation failures. Later patch timings came from the separate July 21 test.
+## Experimental design
+
+I measured concurrent host-to-device streams, inspected the copy/synchronization path, and attempted the proposed patch builds and launches. I checked device memory when an allocation failed. I kept later reports from the separate patch test distinguishable from the measurements made in this thread.
 
 ## Results
 
 Four concurrent host-to-device streams reached 65.7 GB/s in aggregate. The patch attempts encountered build and allocation problems; a live service was later found occupying the cards. The thread subsequently received a report of roughly 120 tokens/s from the separate patch investigation.
 
+## Conclusions
+
+The hardware probe showed transfer headroom, but it did not prove that the inference scheduler could use all of it. Build/runtime state had to be fixed before timing the patch. The completed controlled patch results are documented in the July 21 entry; the larger early projections were not measurements.
+
+## Detailed record
+
 ### 19:25 — Four-stream H2D: 65.7 GB/s; the copy-mechanism diagnosis changes again
 
-You pasted the probe result:
+Paul pasted the probe result:
 
 ```
 20 warnings generated when compiling for host.
@@ -159,7 +167,7 @@ watch -n1 'rocm-smi --showuse | grep -E "GPU\[|use"'
 
 ### 19:37 — The build breaks on ZenDNN
 
-You pasted the build output:
+Paul pasted the build output:
 
 ```
 CMake Error at /root/llama.cpp/build/_deps/zendnn-prefix/src/zendnn-stamp/zendnn-build-Release.cmake:49 (message):
@@ -434,7 +442,7 @@ grep '## SPLIT' /root/sched_patched.txt | grep -oE 'ROCm[0-9]|Vulkan[0-9]|CPU' |
 
 ### 10:37 — A bare merge notice
 
-You pasted "Pull request successfully merged and closed / You're all set — the branch has been merged." Which PR was unclear from the notice — the ZenDNN Q8_0 PR #23414 (nothing changes; keep it off) or Paul's own round-robin patch sent upstream (would be significant, but doubted) — so the number or title was requested, reiterating the standing state: cards cleared to 17 MB, patched binary of 19:41 confirmed, an unexpected Vulkan backend, and the histogram in /root/sched_patched.txt still unseen.
+Paul pasted "Pull request successfully merged and closed / You're all set — the branch has been merged." Which PR was unclear from the notice — the ZenDNN Q8_0 PR #23414 (nothing changes; keep it off) or Paul's own round-robin patch sent upstream (would be significant, but doubted) — so the number or title was requested, reiterating the standing state: cards cleared to 17 MB, patched binary of 19:41 confirmed, an unexpected Vulkan backend, and the histogram in /root/sched_patched.txt still unseen.
 
 **Observations**
 
@@ -442,7 +450,7 @@ You pasted "Pull request successfully merged and closed / You're all set — the
 
 ### 10:38 — The full PR #23414 benchmark table; the verdict holds
 
-You pasted the PR's benchmark tables (config: threads = 96, type_k = bf16, type_v = bf16).
+Paul pasted the PR's benchmark tables (config: threads = 96, type_k = bf16, type_v = bf16).
 
 Llama-3.1-8B-Instruct Q8_0 (Prompt Size | GGML_CPU_Q8_0 t/s | ZenDNN_Q8_0 t/s | Gain):
 
@@ -581,11 +589,7 @@ Paul issued `/export`; the transcript closed with the exporter footer ("Powered 
 - The first patched histogram run OOMed at a 4322.38 MiB allocation on device 0 — traced not to the patch but to the live resident openwebui llama-server holding ~28–29 GiB on every card; a container reset cleared all four to 17 MB.
 - The reconfigure resurrected a Vulkan backend (Vulkan0–3, RADV NAVI21) alongside ROCm0–3 — flagged as a confound for `n_backends` and the split accounting; the patched histogram was never seen inside this session.
 - ZenDNN Q8_0 PR #23414 merged upstream (+54.75% to +213.38% prompt processing on Q8_0 models, tg128 flat/negative); irrelevant to GLM-5.2 (Q4_K/Q5_K experts, Q8_0 attention already GPU-resident). `-DGGML_ZENDNN=OFF` stays.
-- you reported from a separate thread that prefill plateaued at ~120 with the patches — within noise of the corrected ~130 bound. Tally: prefill 37.6 → 104.97 (ubatch unclamp) → ~120 (patch), 3.2× total; decode 6.01 t/s at the DDR4 wall. Investigation declared closed on this box.
+- Paul reported from a separate thread that prefill plateaued at ~120 with the patches — within noise of the corrected ~130 bound. Tally: prefill 37.6 → 104.97 (ubatch unclamp) → ~120 (patch), 3.2× total; decode 6.01 t/s at the DDR4 wall. Investigation declared closed on this box.
 - Comparison with hosted models: ~10x slower than hosted decode today (~10.5x end-to-end on an 8K prompt: ~54 s vs ~9.5 min); the realistic software path is ~7x, with 5x requiring DFlash (an ecosystem bet — no GLM-5.2 draft exists) and the scheduler copy rewrite; the usability threshold that matters is reading speed, ~7–10 t/s.
 
 ---
-
-## Conclusion
-
-The transfer test showed spare bandwidth, not that inference could use all of it. Build errors and a running service blocked some attempts. The larger speed projections were estimates, not results.

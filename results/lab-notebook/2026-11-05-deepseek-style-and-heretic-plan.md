@@ -2,9 +2,11 @@
 
 [All lab records](README.md) · [Related investigation: chapter 6](../../investigations/06-sharing-galactus.md)
 
+**Record type:** Proposed evaluation; no model modification or test run.
+
 **Recorded:** November 5, 2026 (America/New_York). **Status:** project definition and proposed evaluation; no model-modification experiments run. **Sources:** [Fix Writing Style](https://chatgpt.com/c/6ae4fb2e-8f04-83ea-a57d-d4acb0c41ff2), its notebook continuation, and the Heretic documentation inspected during this session.
 
-You want to reduce DeepSeek's persistent rhetorical writing habits while preserving the technical reasoning that makes the model useful. The earlier discussion reports that repeated prompt changes did not resolve the problem. This entry preserves that motivation and defines a controlled experiment; it does not show that modifying the model will succeed.
+I want to reduce DeepSeek's persistent rhetorical writing habits while preserving the technical reasoning that makes the model useful. The earlier discussion reports that repeated prompt changes did not resolve the problem. This entry preserves that motivation and defines a controlled experiment; it does not establish that modifying the model will succeed.
 
 The session produced an experimental design, not a modified checkpoint, implemented scorer, or benchmark result. The retrieved conversation contains the proposed requirements but no attached corpus of original responses and preferred rewrites. That corpus still needs to be assembled before optimization.
 
@@ -12,11 +14,11 @@ The session produced an experimental design, not a modified checkpoint, implemen
 
 The target is direct, natural technical prose with enough detail to explain the reasoning. Unwanted behaviors include theatrical analytical framing, formulaic contrasts, unnecessary enumeration and headings, stock transitions, evaluative conclusions that add no information, and excessive agreement. Shorter answers and simpler vocabulary are not objectives by themselves. Precise terminology, natural sentence variation, substantive comparisons, appropriate uncertainty, and detailed explanations must remain available.
 
-The style scorer should combine explicit phrase checks with contextual assessment of complete responses. A word or construction may be appropriate in one explanation and empty rhetoric in another. Penalizing isolated words cannot make that distinction, and a model could improve its apparent score by omitting useful content. Evaluate factual preservation and technical completeness alongside style. Your review of blinded examples should determine whether the automated rubric represents your preferences; one LLM judge should not be the sole measure of success.
+The style scorer should combine explicit phrase checks with contextual assessment of complete responses. A word or construction may be appropriate in one explanation and empty rhetoric in another. Penalizing isolated words cannot make that distinction, and a model could improve its apparent score by omitting useful content. Evaluate factual preservation and technical completeness alongside style. My review of blinded examples should determine whether the automated rubric represents my preferences; one LLM judge should not be the sole measure of success.
 
 ## Candidate method and compatibility limits
 
-Heretic documents configurable scorer plugins, simultaneous optimization of multiple scores, and two supplied modification methods: Arbitrary-Rank Ablation and directional ablation. Its default scores concern refusal rate and KL divergence, and it currently permits one modifier per processing run. These features make a custom style experiment plausible; they do not show effectiveness on this checkpoint. [Heretic documentation](https://github.com/p-e-w/heretic#controlling-what-heretic-does-using-scorer-plugins)
+Heretic documents configurable scorer plugins, simultaneous optimization of multiple scores, and two supplied modification methods: Arbitrary-Rank Ablation and directional ablation. Its default scores concern refusal rate and KL divergence, and it currently permits one modifier per processing run. These features make a custom style experiment plausible; they do not establish effectiveness on this checkpoint. [Heretic documentation](https://github.com/p-e-w/heretic#controlling-what-heretic-does-using-scorer-plugins)
 
 The earlier assistant described architecture support, community modifications, and other-model benchmark figures. Those claims were not independently validated in this session and are not compatibility or performance results for this project. Before a full-model run, identify the exact source checkpoint, weight format, model-loading implementation, Heretic revision, and supported modification points. Confirm activation collection, modification, serialization, and reload on the intended hardware.
 
@@ -61,6 +63,6 @@ After quality evaluation, measure runtime effects separately: prompt processing,
 2. Build an evaluation harness that also works without Heretic; validate its scores against human judgments.
 3. Verify the pinned Heretic interface and a small-model modification/reload workflow, then establish full-model hardware and export feasibility.
 4. Evaluate the original and prompt-only baselines, then the independent modifications before investing in the combined experiment.
-5. Preserve configurations, revisions, seeds, raw outputs, scores, and checkpoint source details for every run. Keep the original checkpoint recoverable and private material local unless separately authorized for upload.
+5. Preserve configurations, revisions, seeds, raw outputs, scores, and checkpoint provenance for every run. Keep the original checkpoint recoverable and private material local unless separately authorized for upload.
 
 No checkpoint was changed, no server configuration was altered, and no reasoning, style, refusal, or throughput improvement was measured in this session. The next deliverable is a validated evaluation system and a compatibility assessment.

@@ -2,22 +2,30 @@
 
 [All lab records](README.md) · [Related investigation: chapter 7](../../investigations/07-other-local-machines.md)
 
-You tested Qwen3.8-27B on Magneto with MTP, ANE prefill, and DFlash.
+## Purpose and reasoning
 
-## Setup
+Test Qwen3.8-27B on the M2 Max and examine ANE prefill, MTP, DFlash, and the difference from an external leaderboard. Requested acceleration needs to be checked against the work the runtime actually performs.
 
-You compared the recorded context sweeps and checked operation counts and thermal readings. Some exports and exact recipes are missing. The runs did not all start in the same thermal state.
+## Experimental design
+
+I used the recorded oMLX context sweeps and settings on the 14-inch, 64 GB M2 Max. I compared initial MTP, tuned ANE, and the attempted DFlash combination. I inspected operation counts and thermal observations. Some source exports and exact recipes are missing, and thermal state was not matched across every run.
 
 ## Results
 
 The initial 4K result was 156.1 prefill and 16.4 generation tokens/s. Tuned ANE measured 170.1 prefill at 4K and 165.6 at 16K, with slower generation in those trials. The DFlash trial was slower and recorded no ANE MLP/GDN work. A later screenshot retains additional measured rows.
+
+## Conclusions
+
+The ANE trials showed faster prefill in the recorded comparison, but not the full gain predicted by the tuner. The failed intended ANE-plus-DFlash combination does not measure a correctly running combination. Chassis and thermal effects remain possible explanations for the leaderboard gap, not demonstrated causes.
+
+## Detailed record
 
 **Run dates:** Not recorded. **Machine:** Magneto, 14-inch M2 Max MacBook Pro, 38 GPU cores, 64 GB.
 **Object:** Record local oMLX results and determine what can explain their difference from a high M2 Max leaderboard submission.
 
 ## Source ledger
 
-The full source is your **Bootstrap Model Harnesses.pdf**, 123 pages, printed September 30 at 09:53 ET from [the shared conversation](https://chatgpt.com/share/6abd142f-eb54-83ea-877e-17842567811a). SHA-256: `f9cf4dc18ffbb46f918fbc58c780da865666137c307d81199ff58cfce50fce1c`. The original chat ID is `6abc725e-fb88-83ea-9f1d-4e402a4e0c13`. Page numbers below are PDF page numbers.
+The full source is my **Bootstrap Model Harnesses.pdf**, 123 pages, printed September 30 at 09:53 ET from [the shared conversation](https://chatgpt.com/share/6abd142f-eb54-83ea-877e-17842567811a). SHA-256: `f9cf4dc18ffbb46f918fbc58c780da865666137c307d81199ff58cfce50fce1c`. The original chat ID is `6abc725e-fb88-83ea-9f1d-4e402a4e0c13`. Page numbers below are PDF page numbers.
 
 The PDF preserves conversation prose and selected quoted log lines, but original image and document attachments appear as placeholders. Consequently its numerical summaries remain conversation transcriptions. Two original screenshots were separately recovered and retained. No new inference benchmarks were run for this entry. The unrelated harness discussion and full conversation are not copied into the repository.
 
@@ -40,7 +48,7 @@ The [CSV extract](../data/magneto-omlx-qwen38.csv) preserves missing fields as b
 
 ## Sequence and corrections
 
-1. **Reported baseline:** Lightning MTP on, ANE Prefill and SpecPrefill off, DFlash off, full warm-up, Code (Python), generation 128. You confirmed AC power and an initially cold run. MTP activity is supported by quoted log statistics; no MTP-off timing followed.
+1. **Reported baseline:** Lightning MTP on, ANE Prefill and SpecPrefill off, DFlash off, full warm-up, Code (Python), generation 128. I confirmed AC power and an initially cold run. MTP activity is supported by quoted log statistics; no MTP-off timing followed.
 2. **Tuner result:** 155.7 → 196.3 PP t/s is the tuner comparison. **Correction:** it is not the serving benchmark's improvement. The proposed fractions must not be presented as a recovered complete recipe.
 3. **DFlash trial:** ANE was requested but recorded zero operations. UI TG was 15.5 at 4K and 11.2 at 16K. **Correction:** do not call this successful ANE + DFlash or a controlled DFlash-only test; do not compare internal engine rates with UI TG.
 4. **ANE + Lightning MTP:** 170.1/13.9 at 4K and 165.6/15.7 at 16K; quoted nonzero ANE operations confirm work at 16K. PP improved about 8–9% while TG fell. Thermal/runtime state was not controlled well enough to assign the entire difference to ANE.
@@ -53,12 +61,8 @@ The [CSV extract](../data/magneto-omlx-qwen38.csv) preserves missing fields as b
 
 The later local screenshot reports 25.9 GB peak memory at 4K and 28.1 GB at 16K. The conversation recalls approximately 23.3 GB for the original 4K baseline, but the original capture is not available (PDF p. 63 also gives 19.2/23.3/24.1/25.5/26.5/28.8 GB across 1K–64K). The external submission separately reports MLX active peak 20.54 GB, MLX cache peak 2.92 GB, and process peak footprint 21.33 GB. These are different metrics and possibly different allocation lifetimes. A mismatch is a reason to record definitions, versions, and model state; it does not prove different model weights or a broken installation.
 
-## Where you left it
+## Where I left it
 
-You’re done with further measurements for now. You checked the saved model settings and the active `profile-1-copy` profile: Lightning MTP and ANE Prefill are on, DFlash/VLM MTP/TurboQuant are off, and CPU prefill sharing is off. SpecPrefill is saved as on at a 20% keep rate and an 8,192-token threshold, with no draft model recorded. Its runtime benefit remains unmeasured.
+I’m done with further measurements for now. I checked the saved model settings and the active `profile-1-copy` profile: Lightning MTP and ANE Prefill are on, DFlash/VLM MTP/TurboQuant are off, and CPU prefill sharing is off. SpecPrefill is saved as on at a 20% keep rate and an 8,192-token threshold, with no draft model recorded. Its runtime benefit remains unmeasured.
 
 The [model note](../qwen-3.8-27b.md#final-settings-for-now-september-30-2026) lists the final settings; the [JSON snapshot](../data/magneto-omlx-final-settings.json) records the values read from the saved configuration on September 30. The source ledger still has gaps in original logs, exact model revision, and macOS/MLX versions. Those are limits of this record, rather than a list of more experiments to run.
-
-## Conclusion
-
-ANE prefill was faster in the recorded trials, but by less than the tuner predicted. The intended ANE-plus-DFlash path did not run correctly. The leaderboard gap still lacks a matched explanation.

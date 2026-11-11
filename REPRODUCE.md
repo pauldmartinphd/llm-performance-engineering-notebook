@@ -26,7 +26,7 @@ The second file must be a copy of the first with `MAYA_GLM_NO_SPEC=1` in its env
 
 ## Prepare and record the configuration
 
-Build llama.cpp for your GPU backend and record the commit, build options, and loaded backend libraries. The measurements here used ROCm. CUDA, Metal, and Vulkan share scheduler code, but this repository does not show the patch's performance on those backends.
+Build llama.cpp for your GPU backend and record the commit, build options, and loaded backend libraries. The measurements here used ROCm. CUDA, Metal, and Vulkan share scheduler code, but this repository does not establish the patch's performance on those backends.
 
 Choose an MoE GGUF whose routed experts must live in RAM, and record the exact export, quantization, shard names, and sizes. Compile STREAM (`stream.c`) for the machine. Record the memory population, channel count, configured transfer rate, CPU topology, GPU placement, and available VRAM. These details distinguish a repeat measurement from a comparison between different configurations.
 
@@ -77,7 +77,7 @@ The July commands use `-mmp 0` for pinned host loading. The [Session 10 interval
 
 For the tested exports, GLM-5.2 used `--spec-type draft-mtp --spec-draft-n-max 2`. DeepSeek-V4-Flash used `--spec-type draft-dspark --spec-draft-n-max 3`, with the block-5 drafter in VRAM. The [model notes](results/README.md) give the files and conditions. These are starting points for a sweep, not established optima for other models or prompts.
 
-Sweep `n-max` from 1 to 5 with the prompt, context, sampling settings, placement, and fitter state held constant. Use an explicit context size (`-c`): the tested 1M-context model otherwise attempted a KV allocation that exhausted VRAM. Record the baseline and repetitions, generated token count, acceptance rates, and timings. The Galactus tests used greedy decoding and mostly one technical-prose prompt; p-min truncation did not show an improvement for that workload.
+Sweep `n-max` from 1 to 5 with the prompt, context, sampling settings, placement, and fitter state held constant. Use an explicit context size (`-c`): the tested 1M-context model otherwise attempted a KV allocation that exhausted VRAM. Record the baseline and repetitions, generated token count, acceptance rates, and timings. The Galactus tests used greedy decoding and mostly one technical-prose prompt; p-min truncation did not establish an improvement for that workload.
 
 Use llama-server's JSON timings or capture llama-cli through a pseudo-terminal. On the Linux test host, `script -q <file> -c "<command>"` preserves terminal output; piping llama-cli or relying on its log file lost timing lines in the recorded builds. llama-bench did not support speculation in these experiments. Keep the tool difference explicit when comparing its baseline with a llama-cli result.
 
@@ -91,6 +91,6 @@ Record failed runs, unsupported configurations, and null results as well as impr
 
 The workflow above describes Galactus/llama.cpp. [Magneto's oMLX record](results/qwen-3.8-27b.md) is separate. A Mac comparison depends on the model identifier and chassis as well as chip/GPU-core count, RAM, macOS and oMLX/MLX versions, model repository/revision, and recipe. The leaderboard's chip/RAM label does not identify chassis.
 
-The recorded benchmark conditions include the corpus, context and generation lengths, full/quick warm-up, ANE-aligned prompt setting, cache state, and acceleration toggles. Single-request PP/TG and continuous-batching throughput are separate metrics. Thermal comparisons also depend on power mode, adapter, cooling conditions, and the timing of powermetrics relative to prefill and decode. A thermal snapshot does not show the state of an entire sweep.
+The recorded benchmark conditions include the corpus, context and generation lengths, full/quick warm-up, ANE-aligned prompt setting, cache state, and acceleration toggles. Single-request PP/TG and continuous-batching throughput are separate metrics. Thermal comparisons also depend on power mode, adapter, cooling conditions, and the timing of powermetrics relative to prefill and decode. A thermal snapshot does not establish the state of an entire sweep.
 
-The initial recorded configuration used Lightning MTP on and ANE Prefill, SpecPrefill, DFlash, VLM MTP, and TurboQuant KV off. It provides a reference with MTP active; no MTP-off control was recorded. Since the model/MLX revisions, macOS build, full benchmark recipes and original logs were not retained, the evidence in [the Magneto measurements](results/lab-notebook/undated-magneto-omlx-qwen38.md) does not support exact reproduction of those runs. Your settings at the end of the investigation are logged in the [model note](results/qwen-3.8-27b.md).
+The initial recorded configuration used Lightning MTP on and ANE Prefill, SpecPrefill, DFlash, VLM MTP, and TurboQuant KV off. It provides a reference with MTP active; no MTP-off control was recorded. Since the model/MLX revisions, macOS build, full benchmark recipes and original logs were not retained, the evidence in [the Magneto measurements](results/lab-notebook/undated-magneto-omlx-qwen38.md) does not support exact reproduction of those runs. My settings at the end of the investigation are logged in the [model note](results/qwen-3.8-27b.md).

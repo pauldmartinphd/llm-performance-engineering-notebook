@@ -2,17 +2,25 @@
 
 [All lab records](README.md) · [Related investigation: chapter 2](../../investigations/02-following-the-prefill-bottleneck.md)
 
-You compared the original scheduler, distributed offload, and the combined patch that also removed a routing-index wait.
+## Purpose and reasoning
 
-## Setup
+Measure whether distributing offload and removing the routing-index readback wait improve GLM-5.2 prefill. Source inspection predicted that distribution alone could leave the binding dependency in place.
 
-You measured pp8192 and checked split distribution. You also tried graph and pipeline changes, reverted the unsuccessful ones, repeated prefill, and checked generation with the same expert placement.
+## Experimental design
+
+I compared the original scheduler, distribution alone, and the combined two-edit patch with the recorded pp8192 configuration. I checked split distribution and throughput separately. I tested later graph/pipeline changes, reverted those that failed or did not help, then repeated prefill and compared generation with the same expert placement.
 
 ## Results
 
 Prefill measured 104.97 tokens/s before the change, 105.71 with distribution alone, and 119.36 ± 0.12 with the combined patch. After the later changes were reverted, it measured 119.29 ± 0.19. The matched generation check was 5.51 tokens/s before and after.
 
-This session is the separate thread in which the scheduler patch was built and benchmarked. The transcript (`llamacpp_patch.md`, exported 07:37 ET) has no timestamps; entries below follow sequence order. A second analysis stream, whose output you pasted in, appears at several points. Context artifact: "Claude State Export.zip" (saved 7/21 06:53 ET) contains the openwebui system prompt and knowledge files Paul prepared for local-model use — the workload the patched machine was being tuned to serve.
+## Conclusions
+
+The combined patch established a 13.7% prefill gain on this build. Distribution alone did not explain that gain, and generation did not improve in the matched check. The earlier 6.01 generation comparison used another placement and is not the control. Unsuccessful pipeline experiments did not add a validated improvement.
+
+## Detailed record
+
+This session is the separate thread in which the scheduler patch was built and benchmarked. The transcript (`llamacpp_patch.md`, exported 07:37 ET) has no timestamps; entries below follow sequence order. A second analysis stream, whose output Paul pasted in, appears at several points. Context artifact: "Claude State Export.zip" (saved 7/21 06:53 ET) contains the openwebui system prompt and knowledge files Paul prepared for local-model use — the workload the patched machine was being tuned to serve.
 
 ### Entry 1 — The brief: the measured split pin and round-robin patch v1
 
@@ -252,7 +260,7 @@ Replace with:
 
 ### Entry 7 — The unexpected Vulkan backend: stale CMake cache
 
-You reported a Vulkan appearance during the rebuild. Diagnosis: most likely a stale CMake cache — `cmake -B build` on an existing `build/` reuses `build/CMakeCache.txt`, whose variables are sticky; if `GGML_VULKAN` was ever ON in that directory it stays on (it defaults OFF in ggml, pointing at the cache). Alternatives to rule out: a different `llama-bench` on PATH, or dynamic backend loading picking up a stray `libggml-vulkan.so`.
+Paul reported a Vulkan appearance during the rebuild. Diagnosis: most likely a stale CMake cache — `cmake -B build` on an existing `build/` reuses `build/CMakeCache.txt`, whose variables are sticky; if `GGML_VULKAN` was ever ON in that directory it stays on (it defaults OFF in ggml, pointing at the cache). Alternatives to rule out: a different `llama-bench` on PATH, or dynamic backend loading picking up a stray `libggml-vulkan.so`.
 
 ```bash
 grep -i vulkan build/CMakeCache.txt         # cached ON?
@@ -316,7 +324,7 @@ ggml_vulkan: 0 = AMD Radeon Pro V620 (RADV NAVI21) (radv) | uma: 0 | fp16: 1 | b
 | --- | ---: | ---: | --- | --: | --: | --: | --: | --: | --- | ---: | ---: | ---: |
 | glm-dsa ?B Q4_K - Medium | 435.19 GiB | 753.86 B | ROCm,Vulkan | 99 | 32 | 8192 | 8192 | 1 | exps=CPU | 0 | pp8192 | 105.71 ± 0.56 |
 
-105.71 vs the 104.97 baseline — no movement (the gap inside ±0.56). You confirmed via the follow-up question that this binary carried Edit 2 only.
+105.71 vs the 104.97 baseline — no movement (the gap inside ±0.56). Paul confirmed via the follow-up question that this binary carried Edit 2 only.
 
 **Observations**
 
@@ -371,7 +379,7 @@ llama-bench -m /models/GLM-5.2/UD-Q4_K_XL/GLM-5.2-UD-Q4_K_XL-00001-of-00011.gguf
 
 ### the August common baseline — Discovery while waiting: -ot silently disables pipeline parallelism
 
-You asked, "Is there anything else that we can do in the code to improve prompt processing?" `src/llama-context.cpp`, fetched from master, showed:
+Paul asked, "Is there anything else that we can do in the code to improve prompt processing?" `src/llama-context.cpp`, fetched from master, showed:
 
 ```cpp
 bool pipeline_parallel =
@@ -402,7 +410,7 @@ ggml_cuda_init: found 4 ROCm devices (Total VRAM: 122816 MiB): (4x AMD Radeon Pr
 | --- | ---: | ---: | --- | --: | --: | --: | --: | --: | --- | ---: | ---: | ---: |
 | glm-dsa ?B Q4_K - Medium | 435.19 GiB | 753.86 B | ROCm | 99 | 32 | 8192 | 8192 | 1 | exps=CPU | 0 | pp8192 | 119.36 ± 0.12 |
 
-Vulkan gone (backend `ROCm`). 119.36 — the fastest prefill so far, +13.7% over stock. But the run bundled the Vulkan removal with the source change; attribution had to wait ("Vulkan removal alone is entirely capable of producing +13"). What survives regardless: 104.97 vs 105.71 was a Vulkan-matched pair, so "distribution alone does nothing" holds within that regime. You confirmed via the follow-up that this build carried Edit 2 + Edit 3.
+Vulkan gone (backend `ROCm`). 119.36 — the fastest prefill so far, +13.7% over stock. But the run bundled the Vulkan removal with the source change; attribution had to wait ("Vulkan removal alone is entirely capable of producing +13"). What survives regardless: 104.97 vs 105.71 was a Vulkan-matched pair, so "distribution alone does nothing" holds within that regime. Paul confirmed via the follow-up that this build carried Edit 2 + Edit 3.
 
 **Observations**
 
@@ -564,7 +572,7 @@ cmake --build build -j64 && cmake --install build
 
 ### the July diagnostic reconstruction — sched-copies mechanics; the guard explained; PR triage
 
-You asked "What does sched copies = 2 do." The mechanics: it is the pipeline depth — how many ubatches in flight. For every tensor crossing a device boundary (a split input), the scheduler allocates `n_copies` duplicate buffers (`ggml-backend.cpp:1358–1369`); each graph evaluation claims the next copy round-robin (`cur_copy = next_copy; next_copy = (next_copy + 1) % n_copies` at line 1873) and `compute_splits` reads/writes only that index (line 1562), so ubatch k writes buffer k mod N while k−1 still reads k−1 mod N. With `n_copies = 1` there is one buffer per input — ubatch k+1 would overwrite what k reads — so the scheduler must drain the device first: the host-blocking `ggml_backend_synchronize(split_backend)` at line 1573 "that has been serializing you all along." Multiple copies remove the hazard and populate the `events[backend][copy]` array (line 811), turning the destination wait into a stream-ordered `ggml_backend_event_wait`. The cost is linear in VRAM (as then understood): N× every split-input buffer, and split inputs include staged expert weights at ~4 GiB/layer — which is what blew the compute buffer at n_copies=4. Dropping 4 → 2 gives up depth (at most two stages at once, ~2× compute parallelism instead of 4×): pp16384 unaffected (two ubatches need two buffers), pp32768 drops to 85–100.
+Paul asked "What does sched copies = 2 do." The mechanics: it is the pipeline depth — how many ubatches in flight. For every tensor crossing a device boundary (a split input), the scheduler allocates `n_copies` duplicate buffers (`ggml-backend.cpp:1358–1369`); each graph evaluation claims the next copy round-robin (`cur_copy = next_copy; next_copy = (next_copy + 1) % n_copies` at line 1873) and `compute_splits` reads/writes only that index (line 1562), so ubatch k writes buffer k mod N while k−1 still reads k−1 mod N. With `n_copies = 1` there is one buffer per input — ubatch k+1 would overwrite what k reads — so the scheduler must drain the device first: the host-blocking `ggml_backend_synchronize(split_backend)` at line 1573 "that has been serializing you all along." Multiple copies remove the hazard and populate the `events[backend][copy]` array (line 811), turning the destination wait into a stream-ordered `ggml_backend_event_wait`. The cost is linear in VRAM (as then understood): N× every split-input buffer, and split inputs include staged expert weights at ~4 GiB/layer — which is what blew the compute buffer at n_copies=4. Dropping 4 → 2 gives up depth (at most two stages at once, ~2× compute parallelism instead of 4×): pp16384 unaffected (two ubatches need two buffers), pp32768 drops to 85–100.
 
 Paul then asked the sharper question: "There seems to be a tradeoff here that might prevent this patch from landing upstream then? Or am I wrong." The answer: "You're right, and your OOM is the evidence."
 
@@ -681,8 +689,4 @@ git stash pop && cmake --build build -j64 && cmake --install build
 
 ## Original logs added October 22, 2026
 
-You added the original scheduler traces in October. They show the GPU split counts before and after distribution and a separate pp512 comparison of 28.59 versus 28.50 t/s. [the July diagnostic reconstruction](2026-07-14-1108-v3-diagnostic-run.md#follow-up-tests-and-hardware-monitoring) distinguishes those traces from the pp8192 patch comparison here.
-
-## Conclusion
-
-The combined patch improved prefill by 13.7%. Distribution alone did not. Generation stayed at 5.51 tokens/s in the matched check; the earlier 6.01 figure used another placement.
+I added the original scheduler traces in October. They show the GPU split counts before and after distribution and a separate pp512 comparison of 28.59 versus 28.50 t/s. [the July diagnostic reconstruction](2026-07-14-1108-v3-diagnostic-run.md#follow-up-tests-and-hardware-monitoring) distinguishes those traces from the pp8192 patch comparison here.

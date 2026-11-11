@@ -6,7 +6,7 @@ This page preserves the Kimi history, including the model/export distinctions in
 
 ## K2.6 — 2 TB common baseline (2026-08-15/16, build 3653e6d6d, stock scheduler)
 
-This is the first fully documented Kimi row, measured on K2.6 (Unsloth UD-Q8_K_XL, 553.71 GiB, native-INT4 MoE weights with BF16 for the rest; the llama-bench `deepseek2 671B BF16` label is cosmetic): pp8192 94.23 ± 4.45 and tg128 5.79 ± 0.01 (t=64). The April tables below are K2.5 under April conditions and cannot serve as a controlled comparison with K2.6. For planning, you treated the models as roughly equivalent, but that was an assumption rather than a controlled comparison.
+This is the first fully documented Kimi row, measured on K2.6 (Unsloth UD-Q8_K_XL, 553.71 GiB, native-INT4 MoE weights with BF16 for the rest; the llama-bench `deepseek2 671B BF16` label is cosmetic): pp8192 94.23 ± 4.45 and tg128 5.79 ± 0.01 (t=64). The April tables below are K2.5 under April conditions and cannot serve as a controlled comparison with K2.6. For planning, I treated the models as roughly equivalent, but that was an assumption rather than a controlled comparison.
 
 The fitted decode model gives S ≈ 101 ms (about 15 GB per token of INT4 routed experts at 148 GB/s) plus C ≈ 72 ms. K2.6 decodes faster than GLM-5.2 despite its larger total size; the fitted model attributes this to the smaller GPU-side term. See [the August common baseline](lab-notebook/2026-08-15-to-16-common-baseline-2tb.md) for the complete conditions. The choice between K2.6 and K2.7-Code remains open.
 
@@ -45,9 +45,9 @@ Prefill peaks near t=96, and decode is flat at about 6.6 to 6.8 t/s and best at 
 | ROCm | 31.31 | **6.74** |
 | Vulkan (Vulkan0–3) | 29.81 | 5.44 |
 
-ROCm is about 24% faster than Vulkan on decode in this comparison (6.74 versus 5.44 t/s), and slightly faster on prefill. You used ROCm for this configuration.
+ROCm is about 24% faster than Vulkan on decode in this comparison (6.74 versus 5.44 t/s), and slightly faster on prefill. I used ROCm for this configuration.
 
-### Conclusion from the April K2.5 tests
+### Conclusions from the April K2.5 tests
 
 - The best configuration is t=32 with ROCm: 6.76 t/s decode and 31.36 t/s prefill.
 - Prefill scales with threads up to t=96; decode does not.

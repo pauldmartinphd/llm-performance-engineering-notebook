@@ -2,19 +2,27 @@
 
 [All lab records](README.md) · [Related investigation: chapter 2](../../investigations/02-following-the-prefill-bottleneck.md)
 
-You compared the failed v2 diagnostic phases with the one successful phase before trying another setup.
+## Purpose and reasoning
 
-## Setup
+Find why most v2 diagnostic phases crashed and choose a configuration that could complete the next investigation. Pinned-memory allocation, backend behavior, and graph splitting were competing explanations.
 
-You checked allocation errors, buffer types, crash signals, graph splits, flags, and system limits. You then prepared another diagnostic run with different loading and backend choices.
+## Experimental design
+
+I compared the successful and failed phase logs, buffer types, memory limits, signals, graph counts, and system readbacks. I recorded which flags and build changed. I prepared the next diagnostic run with revised loading/backend choices; the patterns do not isolate a root cause on their own.
 
 ## Results
 
 B0 completed, while B1–B4 crashed and B5 was initially incomplete. Failed phases reported pinned-allocation failure and CPU-buffer fallback. The successful capture showed 155 graph splits. Several settings and the build had changed together.
 
+## Conclusions
+
+The logs identified concrete failure conditions and justified a revised diagnostic setup. They did not isolate one cause for every crash or prove a driver leak. Allocation success, a usable benchmark, and an explanation of the failure remained separate steps.
+
+## Detailed record
+
 ### 10:22 — v2 battery output arrives: B0 alone survived
 
-You pasted the output of the v2 diagnostic battery ("Here's the current status:"). Phase B0 succeeded; B1–B4 all crashed; B5 was still running with its log cut off at `done_getting_tensors:`.
+I pasted the output of the v2 diagnostic battery ("Here's the current status:"). Phase B0 succeeded; B1–B4 all crashed; B5 was still running with its log cut off at `done_getting_tensors:`.
 
 The logs showed:
 
@@ -73,11 +81,11 @@ ffn_down_exps   2112 MiB   Q5_K   <- NOT repackable
 
 - **Confirmed:** the premise of hypothesis H1 — 155 graph splits per token, alternating CPU/GPU, latency-dominated boundaries.
 - **Correction:** the unaccounted decode gap is ~60 ms, not the 75 ms previously stated (working figures 62–63 ms, ~31% overhead, ~0.4 ms per split).
-- Root cause, part one — the 411 GiB pinned buffer (`hipHostMalloc` page-locked `ROCm_Host` buffer). Three consequences: (1) 14-minute loads — of `load time = 858989 ms`, only ~5 min is you/O at 1.5 GB/s for 435 GiB; the other ~9 min is page-locking at ~780 MB/s effective pinning (B0 overall ~490 MB/s); (2) THP never applied — driver-pinned pages are not THP-eligible, hence `AnonHugePages: 0 kB` everywhere. **Correction:** "H5 has been untestable this entire time and I did not realise it." (3) B1–B4 crashes — the pin fails against the 497.8 GiB GTT pool, the loader falls back to a plain CPU buffer, then SIGILL/SIGSEGV follows. B0 is the only run in which the pin succeeded.
+- Root cause, part one — the 411 GiB pinned buffer (`hipHostMalloc` page-locked `ROCm_Host` buffer). Three consequences: (1) 14-minute loads — of `load time = 858989 ms`, only ~5 min is I/O at 1.5 GB/s for 435 GiB; the other ~9 min is page-locking at ~780 MB/s effective pinning (B0 overall ~490 MB/s); (2) THP never applied — driver-pinned pages are not THP-eligible, hence `AnonHugePages: 0 kB` everywhere. **Correction:** "H5 has been untestable this entire time and I did not realise it." (3) B1–B4 crashes — the pin fails against the 497.8 GiB GTT pool, the loader falls back to a plain CPU buffer, then SIGILL/SIGSEGV follows. B0 is the only run in which the pin succeeded.
 - **Hypothesis:** after B0 took and released 411 GiB, B3 failed at the identical size — "The pages aren't coming back" (driver leak / TTM accounting / GTT fragmentation).
 - With `-nopo 1` the pinned buffer buys nothing; its sole purpose is fast H2D for op_offload.
 - **Correction:** "ZenDNN is not inert at `-ngl 0`." It rejects the routed experts (256 experts, Q4_K) but accepts Q8_0 `MUL_MAT`, and all 872 Q8_0 attention tensors sit on the CPU at `-ngl 0` — hence `graph splits = 1088` (bs=512) versus 1 (bs=1). ZenDNN is a separate ACCEL backend, so every op it claims is a split boundary. **Hypothesis:** that shredded graph threw the SIGILL (LIBXSMM JITs; its banner printed on every abort). At `-ngl 99` attention is on GPU, ZenDNN sees nothing, and the graph is a clean 155.
-- **Correction:** you had rebuilt llama.cpp that morning — `libggml-*.so.0.16.0` dated Jul 14 08:28 (files 08:28–08:32); `build: 657e01125 (10001)` versus the prior working `f84a51940 (9942)`, 59 commits back; the new build adds fused Gated Delta Net and Lightning Indexer paths for glm-dsa. Three variables moved at once (new build, THP=always, C-states off), and the script itself introduced `-C`/`--cpu-strict`.
+- **Correction:** I had rebuilt llama.cpp that morning — `libggml-*.so.0.16.0` dated Jul 14 08:28 (files 08:28–08:32); `build: 657e01125 (10001)` versus the prior working `f84a51940 (9942)`, 59 commits back; the new build adds fused Gated Delta Net and Lightning Indexer paths for glm-dsa. Three variables moved at once (new build, THP=always, C-states off), and the script itself introduced `-C`/`--cpu-strict`.
 - Supporting notes: the `-C` mask parse is safe (128 hex digits → 512 boolmask entries = GGML_MAX_N_THREADS; a 32-hex mask starts at index 127); earlier stable runs measured `--no-host 1` at 37.29/4.97 and default at 37.63/5.15; a plain 439 GB malloc/free test left MemFree unchanged; the crash signals are SIGILL/SIGSEGV, not SIGKILL (so not the OOM killer); the 1088-split `-ngl 0` graph "seems worth reporting upstream."
 - **Decision:** kill the battery and pivot to mmap:
 
@@ -195,7 +203,7 @@ Want `[size=32G]`, not `[size=256M]`; if small, enable Above 4G Decoding and Res
 
 ### 10:57 — Directives: full rerun; IOMMU flags added; ZenDNN-free rebuild
 
-You decided to rerun the full script: "Just put it all into the script. I'm going to delete the output and rerun from scratch. Ignore the p2p stuff for now then. I also just rebooted the container before running. I'll rerun all tests including the diagnostics." you had also made two system changes: "I added amd_iommu=on iommu=pt." and "I rebuilt with -DGGML_ZENDNN=OFF."
+I decided to rerun the full script: "Just put it all into the script. I'm going to delete the output and rerun from scratch. Ignore the p2p stuff for now then. I also just rebooted the container before running. I'll rerun all tests including the diagnostics." I had also made two system changes: "I added amd_iommu=on iommu=pt." and "I rebuilt with -DGGML_ZENDNN=OFF."
 
 ### 11:03 — v3 script written: galactus-diag.sh (16 phases, three model configurations)
 
@@ -230,7 +238,7 @@ The three model configurations (a "reload" happens only when these change):
 
 ### 11:56 — Two upload attempts arrive empty; triage and digest commands
 
-You attached the in-progress results file twice ("How does this look now?", "This is where it is"); both uploads arrived with no content and an empty `/mnt/user-data/uploads/`. **Dead end:** "The upload came through empty... Twice now, so it's not a fluke." Two candidate causes: the file too large for the attachment path, or genuinely zero bytes. Triage commands supplied:
+I attached the in-progress results file twice ("How does this look now?", "This is where it is"); both uploads arrived with no content and an empty `/mnt/user-data/uploads/`. **Dead end:** "The upload came through empty... Twice now, so it's not a fluke." Two candidate causes: the file too large for the attachment path, or genuinely zero bytes. Triage commands supplied:
 
 ```bash
 D=$(ls -dt /root/diag-*/ | head -1); echo "$D"
@@ -269,7 +277,7 @@ grep -B2 -A30 '^## B '          "$D/MAIN.log"              # the -t x --poll tab
 
 ### 11:57 — results.txt arrives (244k lines, mid-Phase B)
 
-On the third attempt the file landed: results.txt, 244k lines, 6.8 MB — the run still in progress, the log ending mid-Phase B. Your message was: "HEre you go."
+On the third attempt the file landed: results.txt, 244k lines, 6.8 MB — the run still in progress, the log ending mid-Phase B. My message was: "HEre you go."
 
 ### 12:00 — Partial v3 read: both crash causes dead; H1 dead; the CPU is at the memory wall; C = 90 ms
 
@@ -321,7 +329,7 @@ wc -c /root/diag-clean.log
 
 ### 12:02 — Log-spam stripping agreed; the run stays alive
 
-You offered to remove the `CUDA Graph id … reused` lines before sending the log. The better fix was to filter them at source, since the 232k lines contain no useful result and would continue to accumulate.
+I offered to remove the `CUDA Graph id … reused` lines before sending the log. The better fix was to filter them at source, since the 232k lines contain no useful result and would continue to accumulate.
 
 ```bash
 D=$(ls -dt /root/diag-*/ | head -1)
@@ -461,7 +469,3 @@ Estimate at this point:
 - The v3 battery (16 phases) is running as `diag-20260714-110813`; phases D, F, H, J, L are the ones that matter.
 
 ---
-
-## Conclusion
-
-The logs narrowed the causes worth testing. Several settings had changed, so they did not identify one cause for every crash or prove a driver leak.

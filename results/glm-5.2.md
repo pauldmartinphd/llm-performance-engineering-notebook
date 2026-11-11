@@ -16,7 +16,7 @@ MTP was repeated with llama-cli, the ZFS prompt, and greedy decoding on the same
 | n=2 | 6.3 / 6.9 (6.6 ± 0.3) |
 | n=3 | 6.3 |
 
-You kept n=2. Its reported gain was +25% ± 6 over baseline, compared with +31% in the earlier test, with more separation from n=1 than before.
+I kept n=2. Its reported gain was +25% ± 6 over baseline, compared with +31% in the earlier test, with more separation from n=1 than before.
 
 The repeated speculative runs varied by about 9% despite identical token streams. The selected August configuration produced **6.6 ± 0.3 t/s** with MTP n=2.
 
@@ -72,8 +72,8 @@ At the July compilation, the loader flagged blk.78 as TENSOR_SKIP, so `--spec-ty
 
 ### Configurations selected during the earlier investigation
 
-- For decode-first use (chat), you selected the fitter (no manual placement) at 6.01 t/s, or MTP n=2 at 7.1 t/s.
-- For prefill-first use (long context, RAG, agents), you selected the patched build with `-ngl 99 -ot exps=CPU -b 8192 -ub 8192 -fa 1 -t 32`, which gives 119.36 t/s at pp8192.
+- For decode-first use (chat), I selected the fitter (no manual placement) at 6.01 t/s, or MTP n=2 at 7.1 t/s.
+- For prefill-first use (long context, RAG, agents), I selected the patched build with `-ngl 99 -ot exps=CPU -b 8192 -ub 8192 -fa 1 -t 32`, which gives 119.36 t/s at pp8192.
 
 ### GLM-specific negative results
 
@@ -83,4 +83,4 @@ At the July compilation, the loader flagged blk.78 as TENSOR_SKIP, so `--spec-ty
 
 ## Original captures added October 22, 2026
 
-You added the original July diagnostic and scheduler traces in [the July diagnostic reconstruction](lab-notebook/2026-07-14-1108-v3-diagnostic-run.md#follow-up-tests-and-hardware-monitoring). The August archive also contains a distinct 96.17/5.21 benchmark pair; [the speculation and rebenchmark records](lab-notebook/2026-08-15-to-16-common-baseline-2tb.md#individual-runs-and-benchmark-file-checks) preserves it separately from the existing common baseline.
+I added the original July diagnostic and scheduler traces in [the July diagnostic reconstruction](lab-notebook/2026-07-14-1108-v3-diagnostic-run.md#follow-up-tests-and-hardware-monitoring). The August archive also contains a distinct 96.17/5.21 benchmark pair; [the speculation and rebenchmark records](lab-notebook/2026-08-15-to-16-common-baseline-2tb.md#individual-runs-and-benchmark-file-checks) preserves it separately from the existing common baseline.

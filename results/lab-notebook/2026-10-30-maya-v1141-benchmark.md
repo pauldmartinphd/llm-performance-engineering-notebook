@@ -2,19 +2,27 @@
 
 [All lab records](README.md) · [Related investigation: chapter 5](../../investigations/05-tuning-long-prompts.md)
 
-You checked short and long requests after updating Maya to v1.1.41.
+## Purpose and reasoning
 
-## Setup
+Check that Maya v1.1.41 completes both its built-in benchmark and the saved long requests without a meaningful loss of the working prefill performance.
 
-You ran the built-in benchmark, then replayed the saved 32K/64K requests twice. Each long request generated 128 tokens. The record does not show a server restart between passes.
+## Experimental design
+
+I ran the three-answer 256-token built-in benchmark and separate 2K/8K prefill tests. I replayed the unchanged 32K/64K payloads twice against the production server, reading actual prompt and cached-token counts. Each long request generates 128 tokens. A restart between passes is not established.
 
 ## Results
 
 The built-in generation mean was 32.0 tokens/s, with 334 at 8K prefill. The two 64K-target requests measured 469.6 and 485.6 prefill tokens/s; all four long responses reported zero cache hits. The actual long prompts contained 32,800 and 65,568 tokens.
 
-**Recorded:** October 30, 2026 (America/New_York). **Source:** your pasted terminal output in the update and benchmark discussion. The benchmark prints `2026-10-30 11:34` without a timezone. No benchmark was executed by the notebook editor, and no live server settings were changed.
+## Conclusions
 
-You ran the built-in benchmark after updating from v1.1.36, then made two passes replaying the original saved 32K and 64K requests against the production server. All tests completed. All four long requests reported zero cached tokens and generated 128 tokens. The 64K prefill measured 469.6 and 485.6 tokens/s; the second pass is approximately 0.6% below the October 29 result of 488.6. The two-pass median is 477.6 tokens/s, approximately 2.3% below that single historical result. The historical stream-priority workaround is no longer in use, and the measurements do not isolate a release regression.
+The update completed the tested fresh long workloads with prefill near the selected historical range. Two samples and unmatched historical conditions do not establish a stable release improvement or regression. The old stream-priority workaround was no longer in use.
+
+## Detailed record
+
+**Recorded:** October 30, 2026 (America/New_York). **Source:** my pasted terminal output in the update and benchmark discussion. The benchmark prints `2026-10-30 11:34` without a timezone. No benchmark was executed by the notebook editor, and no live server settings were changed.
+
+I ran the built-in benchmark after updating from v1.1.36, then made two passes replaying the original saved 32K and 64K requests against the production server. All tests completed. All four long requests reported zero cached tokens and generated 128 tokens. The 64K prefill measured 469.6 and 485.6 tokens/s; the second pass is approximately 0.6% below the October 29 result of 488.6. The two-pass median is 477.6 tokens/s, approximately 2.3% below that single historical result. The historical stream-priority workaround is no longer in use, and the measurements do not isolate a release regression.
 
 ## Command and results
 
@@ -34,7 +42,7 @@ You ran the built-in benchmark after updating from v1.1.36, then made two passes
 
 The report identifies four AMD RADEON PRO V620 Azure 30 GB GPUs, devices [0, 1, 2, 3], 2004 GB RAM, and an AMD EPYC 7713 64-Core Processor. It names `maya-ds4-production.json`, reports context 1048576, and says it wrote `/opt/project-maya/maya-bench.txt`. The original file has not been collected for this entry; the supplied output is the evidence.
 
-The banner lists the models supported by Maya rather than positively identifying the loaded model and quantization. The established production model is DeepSeek-V4.1-Flash-1017 UD-Q8_K_XL, but this output alone does not verify its weights.
+The banner lists the models supported by Maya rather than positively identifying the loaded model and quantization. The established production model is DeepSeek-V4.1-Flash-1017 UD-Q8_K_XL, but this output alone does not independently verify its weights.
 
 ## Comparison with the working baseline
 
@@ -49,9 +57,9 @@ The appropriate preceding record is the [October 29 v1.1.36 production confirmat
 
 The short results are numerically close: mean decode is approximately 2.9% higher, 2K prefill approximately 0.5% lower, and 8K prefill unchanged at the printed precision. One benchmark per version, with the current config contents uncollected, cannot establish a release speedup or regression.
 
-The initial discussion instead compared today's 334 tokens/s at 8K with an older 271.7 result and suggested an approximately 23% improvement. That comparison is superseded here. The older row belongs to the v1.1.30 sweep with 16K chunks and an 800 MiB ring; its 32K and 64K rates were 432.3 and 464.2. You subsequently selected **32K chunks, an 800 MiB ring, TP2, and automatic workspaces**, with approximately 480 tokens/s at 64K. The October 29 production request then measured 488.6 tokens/s with zero cache hits.
+The initial discussion instead compared today's 334 tokens/s at 8K with an older 271.7 result and suggested an approximately 23% improvement. That comparison is superseded here. The older row belongs to the v1.1.30 sweep with 16K chunks and an 800 MiB ring; its 32K and 64K rates were 432.3 and 464.2. I subsequently selected **32K chunks, an 800 MiB ring, TP2, and automatic workspaces**, with approximately 480 tokens/s at 64K. The October 29 production request then measured 488.6 tokens/s with zero cache hits.
 
-The October 29 v1.1.36 record used `maya-ds4-production-no-stream-prio.json`, with `DS4_STREAM_PRIO=0` and API port 8081. Disabling stream priority was a historical bug workaround. You explicitly clarified on October 30 that you do not use that workaround in the current production configuration; it must not be carried forward as a benchmark requirement or tuning recommendation. Today's command uses `maya-ds4-production.json`. The supplied output does not print the current stream-priority value, and removing the old workaround does not by itself establish a particular environment value or the upstream fix mechanism. It also does not print chunk, ring, TP, or workspace settings.
+The October 29 v1.1.36 record used `maya-ds4-production-no-stream-prio.json`, with `DS4_STREAM_PRIO=0` and API port 8081. Disabling stream priority was a historical bug workaround. I explicitly clarified on October 30 that we do not use that workaround in the current production configuration; it must not be carried forward as a benchmark requirement or tuning recommendation. Today's command uses `maya-ds4-production.json`. The supplied output does not print the current stream-priority value, and removing the old workaround does not by itself establish a particular environment value or the upstream fix mechanism. It also does not print chunk, ring, TP, or workspace settings.
 
 ## Recovering the long-prompt comparison
 
@@ -71,7 +79,7 @@ It posted the request to `http://127.0.0.1:8081/v1/chat/completions` with a 1200
 
 The first replay attempt stopped at the file-existence check because `/opt/maya-test-results/20261028-223138/requests/r1-32768.json` was missing. No inference request was sent by that attempt. The supplied recovery command downloaded both original request JSON files from the notebook's extracted archive and checked their Git blob hashes before writing them back to the original request directory. The recorded hashes are `77e60039ecb80393ebfbb092fbc31c9e7aa95e61` for 32K and `ad624e4658a6acf85493a5a9dcbb13c73ccfbde5` for 64K.
 
-You then ran the replay client from `/opt/project-maya` using `.venv/bin/python`. It loaded `maya-ds4-production.json` for the port and API key, and posted the saved requests unchanged to `http://127.0.0.1:8081/v1/chat/completions` with a 1200-second timeout. This client uses the running server; reading the config for connection details does not verify the server's effective engine settings. It changes no tuning settings and does not restore the old stream-priority workaround.
+I then ran the replay client from `/opt/project-maya` using `.venv/bin/python`. It loaded `maya-ds4-production.json` for the port and API key, and posted the saved requests unchanged to `http://127.0.0.1:8081/v1/chat/completions` with a 1200-second timeout. This client uses the running server; reading the config for connection details does not independently verify the server's effective engine settings. It changes no tuning settings and does not restore the old stream-priority workaround.
 
 | Request | Actual prompt tokens | Cached tokens | Output tokens | Prefill tokens/s | Decode tokens/s |
 |---|---:|---:|---:|---:|---:|
@@ -93,7 +101,7 @@ Calculated prefill durations are approximately 75.2 seconds at 32K and 139.6 sec
 
 ### Second pass
 
-You repeated the same client and supplied a second result directory, `/opt/maya-test-results/20261030-115003-production-recheck`. Both requests again report zero cached tokens and 128 output tokens. The second capture does not show whether the server was restarted between passes, so you do not describe these as independent fresh-start trials or assign the increase to warm-up.
+I repeated the same client and supplied a second result directory, `/opt/maya-test-results/20261030-115003-production-recheck`. Both requests again report zero cached tokens and 128 output tokens. The second capture does not establish whether the server was restarted between passes, so I do not describe these as independent fresh-start trials or assign the increase to warm-up.
 
 | Request | Actual prompt tokens | Cached tokens | Output tokens | Prefill tokens/s | Decode tokens/s |
 |---|---:|---:|---:|---:|---:|
@@ -109,9 +117,9 @@ The client reports saving `response-r1-32768.json` and `response-r1-65536.json` 
 
 The second-pass prefill is approximately 6.4% higher at 32K and 3.4% higher at 64K than the first pass. Against the October 29 single 64K result of 488.6, the second pass is 3.0 tokens/s lower (0.6%) and the two-pass median is 11.0 tokens/s lower (2.3%). Against the selected v1.1.30 sweep medians, the current two-pass prefill medians are approximately 2.6% higher at 32K and 0.5% lower at 64K. These summaries preserve both passes rather than selecting only the faster results.
 
-The working conclusion is that the updated installation completed all four uncached long-prompt requests with prefill near the selected historical range. The second pass substantially narrows the apparent 64K difference from the October 29 measurement. Two samples at each length and one historical production sample do not show a release regression or a stable decode improvement; effective configuration evidence and more repetitions would be needed to isolate those effects. The [collected archive](../raw-logs/2026-10-29-maya-collection/README.md) preserves the earlier scripts, request files, settings, and results.
+The working conclusion is that the updated installation completed all four uncached long-prompt requests with prefill near the selected historical range. The second pass substantially narrows the apparent 64K difference from the October 29 measurement. Two samples at each length and one historical production sample do not establish a release regression or a stable decode improvement; effective configuration evidence and more repetitions would be needed to isolate those effects. The [collected archive](../raw-logs/2026-10-29-maya-collection/README.md) preserves the earlier scripts, request files, settings, and results.
 
-## Update and build source details
+## Update and build provenance
 
 The preceding discussion concerned moving a detached v1.1.36 checkout to a newer release. A detached HEAD at a release tag is valid. The suggested tag-based update was `git fetch origin --tags` followed by `git switch --detach v1.1.41`, after preserving any local changes. Checking out `main` would instead track development beyond a release.
 
@@ -120,7 +128,3 @@ The discussion proposed `./setup.sh` and then `./setup.sh --rebuild --no-start`.
 ## November 10 evidence recovery
 
 The [November 10 collection](../raw-logs/2026-11-10-maya-collection/README.md) now retains both `20261030-114549-production-recheck` and `20261030-115003-production-recheck`, including all four full response JSONs and their request payloads. This supersedes the original statements above that these files had not been collected. It adds the underlying artifacts without introducing another run or proving a server restart between passes.
-
-## Conclusion
-
-The update completed all tested requests with prefill near the earlier range. The small sample and changed conditions do not show a stable release gain or regression. The old priority workaround was no longer in use.

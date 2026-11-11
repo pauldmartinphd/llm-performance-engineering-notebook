@@ -2,11 +2,13 @@
 
 [All lab records](README.md) · [Related investigation: chapter 6](../../investigations/06-sharing-galactus.md)
 
+**Record type:** Research proposals; no experiments completed here.
+
 **Recorded:** October 29, 2026 (America/New_York). **Status:** research ideas and proposed experiments; no experiments run. **Source:** [Merging Sparse Attention Architectures](https://chatgpt.com/c/6add5a03-c34c-83ea-b385-07288fc12cd3) and the October 29 notebook continuation.
 
 These notes preserve four research questions from the architectural discussion, separately from the memo, *Toward a More Efficient Trillion-Parameter Language Model: Predicting the Architecture of the Next Wave of Large Open Models*. They describe experiments that could test the ideas, rather than predictions about a particular future model.
 
-Galactus has 2 TiB of RAM and is not serving model components from SSD in this discussion. There are no SSD benchmarks behind this entry. Earlier assistant claims about SSD measurements and subsequent external searches are excluded; they do not show an observation from this work. The SSD ideas concern a possible future architecture whose learned tables exceed the available RAM budget, not a diagnosis or proposed reconfiguration of the current server.
+Galactus has 2 TiB of RAM and is not serving model components from SSD in this discussion. There are no SSD benchmarks behind this entry. Earlier assistant claims about SSD measurements and subsequent external searches are excluded; they do not establish an observation from this work. The SSD ideas concern a possible future architecture whose learned tables exceed the available RAM budget, not a diagnosis or proposed reconfiguration of the current server.
 
 The memo's parameter sizes and ratios were illustrative. Neither the proposed learned-memory allocation nor the active parameter budgets came from an optimization experiment. Model-specific descriptions of CSA2 and QSA also need confirmation against the chosen implementation before an architectural ablation can be specified precisely.
 
@@ -14,9 +16,9 @@ The memo's parameter sizes and ratios were illustrative. Neither the proposed le
 
 The question is whether a model could retain a large learned n-gram table on SSD while keeping its computational backbone and a bounded lookup cache in RAM or accelerator memory. The hypothesis is that sparse, predictable table accesses might permit learned capacity to grow beyond available RAM without an unacceptable increase in generation latency. This is untested here.
 
-The distinction worth preserving is between calculating an address and retrieving its contents. Deterministic addressing may avoid searching the table, but it does not show the physical cost of a read. Table size, lookup fanout, row width, locality, storage-page size, and the time available before an embedding is consumed would all affect the result.
+The distinction worth preserving is between calculating an address and retrieving its contents. Deterministic addressing may avoid searching the table, but it does not establish the physical cost of a read. Table size, lookup fanout, row width, locality, storage-page size, and the time available before an embedding is consumed would all affect the result.
 
-A first experiment would capture lookup addresses and consumption times from a compatible implementation, then replay that trace against a table with the same row layout. Compare RAM-resident access, SSD demand reads, and asynchronous SSD reads with a fixed RAM-cache budget. Separate warm-cache and cold-cache conditions and measure physical you/O; a memory-mapped file alone does not demonstrate that reads reached the SSD. A synthetic capacity sweep can test storage behavior, but cannot establish that a larger learned table improves model quality.
+A first experiment would capture lookup addresses and consumption times from a compatible implementation, then replay that trace against a table with the same row layout. Compare RAM-resident access, SSD demand reads, and asynchronous SSD reads with a fixed RAM-cache budget. Separate warm-cache and cold-cache conditions and measure physical I/O; a memory-mapped file alone does not demonstrate that reads reached the SSD. A synthetic capacity sweep can test storage behavior, but cannot establish that a larger learned table improves model quality.
 
 Record logical embedding bytes and physical bytes read per token, cache hits, read amplification, request latency, and time spent waiting for embeddings on the execution critical path. An end-to-end follow-up must also measure prompt processing and generation separately, peak RAM/VRAM use, and output correctness against the RAM-resident control. Hold table precision and model weights fixed so that a placement comparison does not also become a quantization comparison.
 
@@ -30,7 +32,7 @@ The first implementation question is when each address becomes available relativ
 
 Use three paired configurations: target-only SSD access; speculative decoding with demand reads; and the same speculative decoder with candidate-address prefetch. Keep the draft model, verification method, cache budget, and workload fixed between the last two. Their difference isolates the incremental prefetch effect; comparing only the first and third would mix ordinary speculative acceleration with storage overlap.
 
-Measure emitted tokens per second, draft acceptance, accepted tokens per verification, useful prefetches completed before consumption, unused prefetched bytes, cache eviction effects, and target wait time. Reads for rejected candidates may still be required during verification, so rejection alone is not a sufficient definition of wasted you/O. Track whether each read was consumed and whether it arrived early enough to help. Test low-acceptance workloads as well as favorable ones.
+Measure emitted tokens per second, draft acceptance, accepted tokens per verification, useful prefetches completed before consumption, unused prefetched bytes, cache eviction effects, and target wait time. Reads for rejected candidates may still be required during verification, so rejection alone is not a sufficient definition of wasted I/O. Track whether each read was consumed and whether it arrived early enough to help. Test low-acceptance workloads as well as favorable ones.
 
 Proceed only if prefetch reduces end-to-end time beyond speculation alone without changing decoding correctness. Higher IOPS or more outstanding requests would not by themselves show a benefit. This experiment is relevant only after storage waits have been demonstrated in the first experiment.
 
